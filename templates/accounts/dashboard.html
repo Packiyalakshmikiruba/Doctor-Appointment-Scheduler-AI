@@ -1,19 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Welcome {{ request.user.first_name }}</h1>
+{% block title %}Dashboard{% endblock %}
 
-    <h3>
-        Role : {{ request.user.role }}
-    </h3>
+{% block content %}
 
-    <a href="{% url 'logout' %}">
-        Logout
-    </a>
+<h2 class="mb-4">
+    Welcome, {{ request.user.first_name|default:request.user.username }}
+</h2>
 
-</body>
-</html>
+<div class="row">
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body text-center">
+                <h5>Doctors</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body text-center">
+                <h5>Patients</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-dark shadow">
+            <div class="card-body text-center">
+                <h5>Appointments</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-danger text-white shadow">
+            <div class="card-body text-center">
+                <h5>Predictions</h5>
+                <h2>0</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

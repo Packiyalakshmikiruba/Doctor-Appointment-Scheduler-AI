@@ -9,10 +9,14 @@ def register_view(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.role = "PATIENT"
+            user.save()
             login(request, user)
             messages.success(request, "Registration Successful.")
             return redirect("dashboard")
+        else:
+            print(form.errors)
 
     else:
         form = RegisterForm()
@@ -22,8 +26,6 @@ def register_view(request):
         "accounts/register.html",
         {"form": form}
     )
-from django.contrib.auth import authenticate
-
 
 def login_view(request):
 

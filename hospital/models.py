@@ -11,6 +11,8 @@ class Department(models.Model):
 
     def __str__(self):
         return self.department_name
+
+
 class Doctor(models.Model):
     user = models.OneToOneField(
         User,
@@ -48,7 +50,8 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f"Dr. {self.user.get_full_name()}"
-    
+
+
 class DoctorAvailability(models.Model):
     doctor = models.ForeignKey(
         Doctor,
@@ -62,6 +65,6 @@ class DoctorAvailability(models.Model):
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.doctor.user.get_full_name()} - {self.day_of_week}"
-

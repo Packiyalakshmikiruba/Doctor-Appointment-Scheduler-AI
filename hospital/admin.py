@@ -4,40 +4,24 @@ from .models import Department, Doctor, DoctorAvailability
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-
     list_display = (
-        "id",
         "department_name",
         "room_number",
-        "created_at",
     )
 
     search_fields = (
-        "department_name",
-    )
-
-    ordering = (
         "department_name",
     )
 
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-
     list_display = (
-        "id",
         "user",
         "department",
         "specialization",
         "consultation_fee",
-        "license_number",
         "is_active",
-    )
-
-    search_fields = (
-        "user__username",
-        "license_number",
-        "specialization",
     )
 
     list_filter = (
@@ -45,12 +29,16 @@ class DoctorAdmin(admin.ModelAdmin):
         "is_active",
     )
 
+    search_fields = (
+        "user__first_name",
+        "user__last_name",
+        "license_number",
+    )
+
 
 @admin.register(DoctorAvailability)
 class DoctorAvailabilityAdmin(admin.ModelAdmin):
-
     list_display = (
-        "id",
         "doctor",
         "day_of_week",
         "start_time",
