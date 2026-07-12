@@ -1,0 +1,29 @@
+# Virtual Environment
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# SQLite
+db.sqlite3
+
+# Environment Variables
+.env
+
+# Media Files
+media/
+
+# Static Files (optional if generated)
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
