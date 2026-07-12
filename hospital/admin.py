@@ -16,11 +16,13 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
+
     list_display = (
         "user",
         "department",
         "specialization",
         "consultation_fee",
+        "phone_number",
         "is_active",
     )
 
@@ -30,14 +32,15 @@ class DoctorAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
+        "user__username",
         "user__first_name",
-        "user__last_name",
+        "specialization",
         "license_number",
     )
 
-
 @admin.register(DoctorAvailability)
 class DoctorAvailabilityAdmin(admin.ModelAdmin):
+
     list_display = (
         "doctor",
         "day_of_week",
@@ -49,4 +52,9 @@ class DoctorAvailabilityAdmin(admin.ModelAdmin):
     list_filter = (
         "day_of_week",
         "is_available",
+    )
+
+    search_fields = (
+        "doctor__user__username",
+        "doctor__user__first_name",
     )

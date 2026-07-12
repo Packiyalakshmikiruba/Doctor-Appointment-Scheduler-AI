@@ -37,6 +37,8 @@ def login_view(request):
             login(request, user)
             messages.success(request, "Login Successful.")
             return redirect("dashboard")
+        else:
+            messages.error(request, "Invalid username or password.")
 
     else:
         form = LoginForm()

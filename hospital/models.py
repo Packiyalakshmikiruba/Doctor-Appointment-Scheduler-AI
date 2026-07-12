@@ -53,17 +53,36 @@ class Doctor(models.Model):
 
 
 class DoctorAvailability(models.Model):
+
+    DAYS = [
+        ("Monday", "Monday"),
+        ("Tuesday", "Tuesday"),
+        ("Wednesday", "Wednesday"),
+        ("Thursday", "Thursday"),
+        ("Friday", "Friday"),
+        ("Saturday", "Saturday"),
+        ("Sunday", "Sunday"),
+    ]
+
     doctor = models.ForeignKey(
         Doctor,
         on_delete=models.CASCADE,
         related_name="availabilities"
     )
 
-    day_of_week = models.CharField(max_length=10)
+    day_of_week = models.CharField(
+        max_length=20,
+        choices=DAYS
+    )
+
     start_time = models.TimeField()
+
     end_time = models.TimeField()
+
     is_available = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
+
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
