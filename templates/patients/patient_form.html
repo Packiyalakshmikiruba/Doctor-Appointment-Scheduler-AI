@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Patient{% endblock %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-info text-white">
+
+        {% if form.instance.pk %}
+            <h3>Edit Patient</h3>
+        {% else %}
+            <h3>Add Patient</h3>
+        {% endif %}
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">
+                Save
+            </button>
+
+            <a href="{% url 'patient_list' %}" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
