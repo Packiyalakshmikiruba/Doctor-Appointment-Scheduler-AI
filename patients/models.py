@@ -55,4 +55,6 @@ class Patient(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user.get_full_name()
+     if self.user.first_name:
+        return f"{self.user.first_name} {self.user.last_name}".strip()
+     return self.user.username

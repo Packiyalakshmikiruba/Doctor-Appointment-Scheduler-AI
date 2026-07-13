@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Chat Support{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-chat-dots"></i> Clinic Chat Support
+                </h4>
+                <small>Ask about appointments, timings, or general queries</small>
+            </div>
+
+            <div class="card-body">
+                <div id="chat-log" style="height: 350px; overflow-y: auto; background: #f8f9fa; border-radius: 8px; padding: 12px;"></div>
+
+                <div class="input-group mt-3">
+                    <input type="text" id="chat-input" class="form-control" placeholder="Type a message...">
+                    <button class="btn btn-primary" onclick="sendMessage()">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.chat-bubble-user { background: #0d6efd; color: #fff; padding: 8px 12px; border-radius: 14px; margin: 6px 0; display: inline-block; max-width: 80%; float: right; clear: both; }
+.chat-bubble-bot { background: #e9ecef; padding: 8px 12px; border-radius: 14px; margin: 6px 0; display: inline-block; max-width: 80%; float: left; clear: both; }
+.chat-bubble-escalated { background: #f8d7da; border: 1px solid #dc3545; }
+</style>
+
+<script>
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function appendBubble(text, sender, escalated=false) {
+    const log = document.getElementById('chat-log');
+    const div = document.createElement('div');
+    div.style.width = '100%';
+    div.style.overflow = 'auto';
+    let cls = sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot';
+    if (escalated) cls += ' chat-bubble-escalated';
+    div.innerHTML = `<span class="${cls}">${text}</span>`;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    if (!message) return;
+    appendBubble(message, 'user');
+    input.value = '';
+
+    const resp = await fetch("{% url 'chat_api' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({message: message}),
+    });
+    const data = await resp.json();
+    appendBubble(data.reply, 'bot', data.escalated);
+}
+
+document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendMessage();
+});
+
+appendBubble("Hi! I'm the clinic assistant. How can I help you today?", 'bot');
+</script>
+
+{% endblock %}

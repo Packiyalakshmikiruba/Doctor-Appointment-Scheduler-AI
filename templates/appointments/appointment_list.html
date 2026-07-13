@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-calendar-check text-primary"></i> Appointments
+        </h2>
+        <p class="text-muted mb-0">Manage patient appointments</p>
+    </div>
+    <a href="{% url 'appointment_create' %}" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle"></i> Book Appointment
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
+                    <th class="ps-4 py-3">#</th>
+                    <th class="py-3">Patient</th>
+                    <th class="py-3">Doctor</th>
+                    <th class="py-3">Date</th>
+                    <th class="py-3">Time</th>
+                    <th class="py-3">Status</th>
+                    <th class="py-3">Risk</th>
+                    <th class="py-3 text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td class="ps-4 text-muted">{{ appointment.id }}</td>
+                    <td class="fw-semibold">{{ appointment.patient }}</td>
+                    <td>Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</td>
+                    <td>{{ appointment.appointment_date }}</td>
+                    <td>{{ appointment.appointment_time }}</td>
+                    <td>
+                        {% if appointment.status == "Pending" %}
+                            <span class="badge bg-secondary-subtle text-secondary border">Pending</span>
+                        {% elif appointment.status == "Confirmed" %}
+                            <span class="badge bg-primary-subtle text-primary border">Confirmed</span>
+                        {% elif appointment.status == "Completed" %}
+                            <span class="badge bg-success-subtle text-success border">Completed</span>
+                        {% elif appointment.status == "Cancelled" %}
+                            <span class="badge bg-secondary-subtle text-secondary border">Cancelled</span>
+                        {% else %}
+                            <span class="badge bg-danger-subtle text-danger border">No Show</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if appointment.risk_level == "HIGH" %}
+                            <span class="badge bg-danger-subtle text-danger border">High ({{ appointment.risk_score|floatformat:2 }})</span>
+                        {% elif appointment.risk_level == "MEDIUM" %}
+                            <span class="badge bg-warning-subtle text-warning border">Medium ({{ appointment.risk_score|floatformat:2 }})</span>
+                        {% elif appointment.risk_level == "LOW" %}
+                            <span class="badge bg-success-subtle text-success border">Low ({{ appointment.risk_score|floatformat:2 }})</span>
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end pe-4">
+                        <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-sm btn-outline-warning me-1">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{% url 'appointment_delete' appointment.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash3"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5">
+                        <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-2 mb-3">No appointments found.</p>
+                        <a href="{% url 'appointment_create' %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle"></i> Book first appointment
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

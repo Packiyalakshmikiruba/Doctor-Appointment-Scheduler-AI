@@ -23,4 +23,14 @@ urlpatterns = [
     path("", include("accounts.urls")),
     path("", include("hospital.urls")),
     path("", include("patients.urls")),
+    path("", include("appointments.urls")),
+    path(
+    "medical-records/",
+    include("medical_records.urls")
+),
+    path("", include("prescriptions.urls")),   
+    path("", include("billing.urls")),
+    path("", include("chatbot.urls")),
+    path("dashboard/", include("dashboard.urls")),
+
 ]

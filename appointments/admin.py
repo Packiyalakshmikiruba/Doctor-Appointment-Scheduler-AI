@@ -6,28 +6,19 @@ from .models import Appointment
 class AppointmentAdmin(admin.ModelAdmin):
 
     list_display = (
-        "id",
         "patient",
         "doctor",
         "appointment_date",
         "appointment_time",
         "status",
-        "consultation_mode",
     )
 
     list_filter = (
         "status",
         "appointment_date",
-        "consultation_mode",
     )
 
     search_fields = (
-        "patient__user__username",
-        "doctor__user__username",
+        "patient__user__first_name",
+        "doctor__user__first_name",
     )
-
-    ordering = (
-        "-appointment_date",
-    )
-
-    list_per_page = 20

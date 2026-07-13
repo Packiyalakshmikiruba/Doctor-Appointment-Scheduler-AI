@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Create Medical Record{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-7">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-file-earmark-medical"></i> Create Medical Record
+                </h4>
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select Appointment</label>
+                        {{ form.appointment }}
+                        {% for error in form.appointment.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Auto-filled info -- appears after selecting appointment -->
+                    <div id="appointment-info" class="card bg-light border-0 mb-3 d-none">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Doctor</small>
+                                    <span class="fw-semibold" id="info-doctor">—</span>
+                                    <div class="text-muted small" id="info-department"></div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Patient</small>
+                                    <span class="fw-semibold" id="info-patient">—</span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <small class="text-muted d-block">Appointment Date</small>
+                                    <span id="info-date">—</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Symptoms</label>
+                        {{ form.symptoms }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Diagnosis</label>
+                        {{ form.diagnosis }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        {{ form.notes }}
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Save & Continue to Prescription
+                    </button>
+
+                    <a href="{% url 'medical_record_list' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.getElementById("id_appointment").addEventListener("change", function () {
+    const appointmentId = this.value;
+    const infoBox = document.getElementById("appointment-info");
+
+    if (!appointmentId) {
+        infoBox.classList.add("d-none");
+        return;
+    }
+
+    fetch(`/api/appointment/${appointmentId}/details/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("info-doctor").textContent = data.doctor_name;
+            document.getElementById("info-department").textContent = data.doctor_department;
+            document.getElementById("info-patient").textContent = data.patient_name;
+            document.getElementById("info-date").textContent = data.appointment_date;
+            infoBox.classList.remove("d-none");
+        })
+        .catch(() => infoBox.classList.add("d-none"));
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Billing{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-receipt text-primary"></i> Billing</h2>
+        <p class="text-muted mb-0">Patient bills and payment tracking</p>
+    </div>
+    <a href="{% url 'bill_create' %}" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle"></i> Create Bill
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
+                    <th class="ps-4 py-3">#</th>
+                    <th class="py-3">Patient</th>
+                    <th class="py-3">Doctor</th>
+                    <th class="py-3">Total</th>
+                    <th class="py-3">Status</th>
+                    <th class="py-3 text-end pe-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                <tr>
+                    <td class="ps-4 text-muted">{{ bill.id }}</td>
+                    <td class="fw-semibold">{{ bill.appointment.patient }}</td>
+                    <td>Dr. {{ bill.appointment.doctor.user.get_full_name|default:bill.appointment.doctor.user.username }}</td>
+                    <td class="fw-semibold">₹{{ bill.total_amount }}</td>
+                    <td>
+                        {% if bill.payment_status == "PAID" %}
+                            <span class="badge bg-success-subtle text-success border">Paid</span>
+                        {% elif bill.payment_status == "PENDING" %}
+                            <span class="badge bg-warning-subtle text-warning border">Pending</span>
+                        {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary border">Cancelled</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end pe-4">
+                        {% if bill.payment_status == "PENDING" %}
+                            <a href="{% url 'mark_paid' bill.id %}" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-check-circle"></i> Mark Paid
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-5">
+                        <i class="bi bi-receipt-cutoff text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-2 mb-0">No bills found.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

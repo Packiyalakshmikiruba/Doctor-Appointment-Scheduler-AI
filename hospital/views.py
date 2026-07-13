@@ -5,6 +5,7 @@ from .forms import DoctorForm
 from .models import Doctor
 from .forms import DoctorAvailabilityForm
 from .models import DoctorAvailability
+
 def department_create(request):
 
     if request.method == "POST":
