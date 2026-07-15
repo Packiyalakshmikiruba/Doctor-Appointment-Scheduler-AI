@@ -78,3 +78,21 @@ class Appointment(models.Model):
             return "Afternoon"
         else:
             return "Evening"
+class Waitlist(models.Model):
+    """
+    A patient who wants an appointment with a specific doctor but couldn't
+    get their preferred slot. When another patient cancels, the earliest
+    waitlist entry for that doctor gets offered the freed slot.
+    """
+
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="waitlist_entries")
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name="waitlist_entries")
+    preferred_date = models.DateField(null=True, blank=True)
+    notified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"{self.patient} waiting for Dr. {self.doctor}"

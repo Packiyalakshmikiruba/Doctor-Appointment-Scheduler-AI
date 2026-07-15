@@ -1,364 +1,75 @@
 {% extends "base.html" %}
 
-{% block title %}Appointments{% endblock %}
-
 {% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Appointments</h3>
+    <a href="{% url 'appointment_create' %}" class="btn btn-primary btn-sm">+ Book New</a>
+  </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h2 class="fw-bold mb-1">
-            <i class="bi bi-calendar-check text-primary"></i> Appointments
-        </h2>
-        <p class="text-muted mb-0">Manage patient appointments</p>
-    </div>
-    <a href="{% url 'appointment_create' %}" class="btn btn-primary shadow-sm">
-        <i class="bi bi-plus-circle"></i> Book Appointment
-    </a>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Risk</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appt in appointments %}
+      <tr>
+        <td>{{ appt.patient }}</td>
+        <td>Dr. {{ appt.doctor.user.get_full_name|default:appt.doctor.user.username }}</td>
+        <td>{{ appt.appointment_date }}</td>
+        <td>{{ appt.appointment_time }}</td>
+        <td>
+          <span class="badge
+            {% if appt.status == 'Confirmed' %}bg-success
+            {% elif appt.status == 'Cancelled' %}bg-secondary
+            {% elif appt.status == 'No Show' %}bg-danger
+            {% elif appt.status == 'Completed' %}bg-info
+            {% else %}bg-warning{% endif %}">
+            {{ appt.status }}
+          </span>
+        </td>
+        <td>
+          {% if appt.risk_level %}
+            <span class="badge
+              {% if appt.risk_level == 'HIGH' %}bg-danger
+              {% elif appt.risk_level == 'MEDIUM' %}bg-warning
+              {% else %}bg-success{% endif %}">
+              {{ appt.risk_level }} ({{ appt.risk_score|floatformat:2 }})
+            </span>
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'appointment_update' appt.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+          {% if appt.status == 'Pending' %}
+            <a href="{% url 'mark_confirmed' appt.pk %}" class="btn btn-sm btn-outline-success">Confirm</a>
+          {% endif %}
+          {% if appt.status != 'Cancelled' and appt.status != 'Completed' %}
+            <a href="{% url 'mark_cancelled' appt.pk %}" class="btn btn-sm btn-outline-warning">Cancel</a>
+          {% endif %}
+          <a href="{% url 'mark_noshow' appt.pk %}" class="btn btn-sm btn-outline-danger">No Show</a>
+          <a href="{% url 'appointment_delete' appt.pk %}" class="btn btn-sm btn-outline-dark">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" class="text-center">No appointments found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
-<div class="card shadow-sm mb-4">
-    <div class="card-body">
-
-        <form method="GET">
-
-            <div class="row g-3">
-
-                <div class="col-md-3">
-                    <label class="form-label">Patient</label>
-                    <input
-                        type="text"
-                        name="patient"
-                        class="form-control"
-                        placeholder="Search Patient"
-                        value="{{ patient_search }}"
-                    >
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Doctor</label>
-                    <input
-                        type="text"
-                        name="doctor"
-                        class="form-control"
-                        placeholder="Search Doctor"
-                        value="{{ doctor_search }}"
-                    >
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Department</label>
-
-                    <select
-                        name="department"
-                        class="form-select"
-                    >
-
-                        <option value="">All Departments</option>
-
-                        {% for department in departments %}
-
-                        <option
-                            value="{{ department.id }}"
-                            {% if selected_department == department.id|stringformat:"s" %}
-                            selected
-                            {% endif %}
-                        >
-                            {{ department.department_name }}
-                        </option>
-
-                        {% endfor %}
-
-                    </select>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <label class="form-label">
-                        Status
-                    </label>
-
-                    <select
-                        name="status"
-                        class="form-select"
-                    >
-
-                        <option value="">All Status</option>
-
-                        <option value="Pending"
-                            {% if selected_status == "Pending" %}
-                            selected
-                            {% endif %}
-                        >
-                            Pending
-                        </option>
-
-                        <option value="Confirmed"
-                            {% if selected_status == "Confirmed" %}
-                            selected
-                            {% endif %}
-                        >
-                            Confirmed
-                        </option>
-
-                        <option value="Completed"
-                            {% if selected_status == "Completed" %}
-                            selected
-                            {% endif %}
-                        >
-                            Completed
-                        </option>
-
-                        <option value="Cancelled"
-                            {% if selected_status == "Cancelled" %}
-                            selected
-                            {% endif %}
-                        >
-                            Cancelled
-                        </option>
-
-                        <option value="No Show"
-                            {% if selected_status == "No Show" %}
-                            selected
-                            {% endif %}
-                        >
-                            No Show
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <label class="form-label">
-                        Risk
-                    </label>
-
-                    <select
-                        name="risk"
-                        class="form-select"
-                    >
-
-                        <option value="">All Risk</option>
-
-                        <option value="LOW"
-                            {% if selected_risk == "LOW" %}
-                            selected
-                            {% endif %}
-                        >
-                            LOW
-                        </option>
-
-                        <option value="MEDIUM"
-                            {% if selected_risk == "MEDIUM" %}
-                            selected
-                            {% endif %}
-                        >
-                            MEDIUM
-                        </option>
-
-                        <option value="HIGH"
-                            {% if selected_risk == "HIGH" %}
-                            selected
-                            {% endif %}
-                        >
-                            HIGH
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <label class="form-label">
-                        From Date
-                    </label>
-
-                    <input
-                        type="date"
-                        name="from_date"
-                        class="form-control"
-                        value="{{ from_date }}"
-                    >
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <label class="form-label">
-                        To Date
-                    </label>
-
-                    <input
-                        type="date"
-                        name="to_date"
-                        class="form-control"
-                        value="{{ to_date }}"
-                    >
-
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-
-                    <button
-                        class="btn btn-primary w-100"
-                    >
-                        🔍 Search
-                    </button>
-
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end">
-
-                    <a
-                        href="{% url 'appointment_list' %}"
-                        class="btn btn-secondary w-100"
-                    >
-                        Reset
-                    </a>
-
-                </div>
-
-            </div>
-
-        </form>
-
-    </div>
-</div>
-
-<div class="card shadow-sm">
-    <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
-                    <th class="ps-4 py-3">#</th>
-                    <th class="py-3">Patient</th>
-                    <th class="py-3">Doctor</th>
-                    <th class="py-3">Date</th>
-                    <th class="py-3">Time</th>
-                    <th class="py-3">Status</th>
-                    <th class="py-3">Risk</th>
-                    <th class="py-3 text-end pe-4">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for appointment in appointments %}
-                <tr>
-                    <td class="ps-4 text-muted">{{ appointment.id }}</td>
-                    <td class="fw-semibold">{{ appointment.patient }}</td>
-                    <td>Dr. {{ appointment.doctor.user.get_full_name|default:appointment.doctor.user.username }}</td>
-                    <td>{{ appointment.appointment_date }}</td>
-                    <td>{{ appointment.appointment_time }}</td>
-                    <td>
-                        {% if appointment.status == "Pending" %}
-                            <span class="badge bg-secondary-subtle text-secondary border">Pending</span>
-                        {% elif appointment.status == "Confirmed" %}
-                            <span class="badge bg-primary-subtle text-primary border">Confirmed</span>
-                        {% elif appointment.status == "Completed" %}
-                            <span class="badge bg-success-subtle text-success border">Completed</span>
-                        {% elif appointment.status == "Cancelled" %}
-                            <span class="badge bg-secondary-subtle text-secondary border">Cancelled</span>
-                        {% else %}
-                            <span class="badge bg-danger-subtle text-danger border">No Show</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if appointment.risk_level == "HIGH" %}
-                            <span class="badge bg-danger-subtle text-danger border">High ({{ appointment.risk_score|floatformat:2 }})</span>
-                        {% elif appointment.risk_level == "MEDIUM" %}
-                            <span class="badge bg-warning-subtle text-warning border">Medium ({{ appointment.risk_score|floatformat:2 }})</span>
-                        {% elif appointment.risk_level == "LOW" %}
-                            <span class="badge bg-success-subtle text-success border">Low ({{ appointment.risk_score|floatformat:2 }})</span>
-                        {% else %}
-                            <span class="text-muted">—</span>
-                        {% endif %}
-                    </td>
-                    <td class="text-end pe-4">
-                        {% if appointment.status == "Pending" %}
-                            <a href="{% url 'mark_confirmed' appointment.id %}" class="btn btn-sm btn-primary">Confirm</a>
-                            <a href="{% url 'mark_cancelled' appointment.id %}" class="btn btn-sm btn-outline-danger">Cancel</a>
-                        {% elif appointment.status == "Confirmed" %}
-                            <a href="{% url 'mark_noshow' appointment.id %}" class="btn btn-sm btn-outline-danger">No-Show</a>
-                        {% endif %}
-                        <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-sm btn-outline-warning">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <a href="{% url 'appointment_delete' appointment.id %}" class="btn btn-sm btn-outline-danger">
-                            <i class="bi bi-trash3"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center py-5">
-                        <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
-                        <p class="text-muted mt-2 mb-3">No appointments found.</p>
-                        <a href="{% url 'appointment_create' %}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-circle"></i> Book first appointment
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-{% if appointments.has_other_pages %}
-
-<nav class="mt-4">
-
-    <ul class="pagination justify-content-center">
-
-        {% if appointments.has_previous %}
-
-        <li class="page-item">
-
-            <a
-                class="page-link"
-                href="?page={{ appointments.previous_page_number }}"
-            >
-                Previous
-            </a>
-
-        </li>
-
-        {% endif %}
-
-        {% for num in appointments.paginator.page_range %}
-
-        <li class="page-item {% if appointments.number == num %}active{% endif %}">
-
-            <a
-                class="page-link"
-                href="?page={{ num }}"
-            >
-                {{ num }}
-            </a>
-
-        </li>
-
-        {% endfor %}
-
-        {% if appointments.has_next %}
-
-        <li class="page-item">
-
-            <a
-                class="page-link"
-                href="?page={{ appointments.next_page_number }}"
-            >
-                Next
-            </a>
-
-        </li>
-
-        {% endif %}
-
-    </ul>
-
-</nav>
-
-{% endif %}
-
 {% endblock %}

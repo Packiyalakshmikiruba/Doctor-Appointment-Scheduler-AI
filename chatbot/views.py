@@ -15,9 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .agent import get_agent_response
 
+
 # Simple in-memory session store: {session_key: [{"role":..., "content":...}, ...]}
-# Fine for a student/demo project. For production, back this with Redis/DB
-# (e.g. a checkpointer, since create_agent supports LangGraph checkpointing).
+# Fine for a student/demo project. For production, back this with Redis/DB.
 _SESSION_HISTORY = {}
 
 
@@ -45,10 +45,20 @@ def chat_api(request):
 
     history = _SESSION_HISTORY.get(session_key, [])
 
+    # Extract patient_id from the logged-in user, if any -- so the agent
+    # never has to ask the user for it.
+    patient_id = None
+    if request.user.is_authenticated:
+        patient = getattr(request.user, "patient_profile", None)
+        if patient:
+            patient_id = patient.id
+
     try:
-        reply, updated_history = get_agent_response(user_message, history=history)
+        reply, updated_history = get_agent_response(
+            user_message, history=history, patient_id=patient_id
+        )
         _SESSION_HISTORY[session_key] = updated_history
-    except Exception as exc:  # noqa: BLE001 - surface a safe message to the widget
+    except Exception as exc:  # noqa: BLE001
         return JsonResponse(
             {"error": "Something went wrong talking to the assistant.", "detail": str(exc)},
             status=500,

@@ -9,7 +9,7 @@ Flow this file implements:
 import os
 import json
 from datetime import datetime
-
+from billing.models import Bill
 import joblib
 from django.conf import settings
 from django.db.models import Q
@@ -18,7 +18,7 @@ from langchain.tools import tool
 from hospital.models import Doctor, DoctorAvailability
 from patients.models import Patient
 from appointments.models import Appointment
-
+from appointments.notifications import send_appointment_confirmation
 
 # ---------------------------------------------------------------------------
 # ML model — loaded once at import time (not per-request) for performance.
@@ -187,6 +187,8 @@ def book_appointment(
         history_noshow_ratio=history_noshow_ratio,
         distance_from_clinic=float(patient.distance_from_clinic),
     )
+    send_appointment_confirmation(appt)
+
 
     return f"Appointment booked successfully. appointment_id: {appt.id}"
 
@@ -240,4 +242,29 @@ def predict_noshow_risk(appointment_id: int) -> str:
     return (
         f"Appointment {appointment_id} risk assessment: "
         f"{risk_pct}% no-show probability ({risk_level} risk)."
+    )
+@tool
+def get_billing_info(appointment_id: int) -> str:
+    """
+    Get the billing breakdown and payment status for a given appointment_id.
+    Use this when a patient asks about their bill, fees, or how much they owe.
+    """
+    try:
+        bill = Bill.objects.select_related("appointment__patient", "appointment__doctor").get(
+            appointment_id=appointment_id
+        )
+    except Bill.DoesNotExist:
+        return f"No bill has been generated yet for appointment_id {appointment_id}."
+
+    return (
+        f"Bill #{bill.id} for {bill.appointment.patient}:\n"
+        f"Consultation Fee: ₹{bill.consultation_fee}\n"
+        f"Medicine Cost: ₹{bill.medicine_cost}\n"
+        f"Lab Test Cost: ₹{bill.lab_test_cost}\n"
+        f"GST: ₹{bill.gst}\n"
+        f"Discount: -₹{bill.discount}\n"
+        f"Total Amount: ₹{bill.total_amount}\n"
+        f"Amount Paid: ₹{bill.total_paid}\n"
+        f"Balance Due: ₹{bill.balance_due}\n"
+        f"Payment Status: {bill.payment_status}"
     )

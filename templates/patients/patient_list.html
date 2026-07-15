@@ -4,70 +4,111 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <h2>Patients</h2>
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-people text-primary"></i>
+            Patients
+        </h2>
+        <p class="text-muted mb-0">Registered patient records</p>
+    </div>
 
-    <a href="{% url 'patient_create' %}" class="btn btn-primary">
-        Add Patient
+    <a href="{% url 'patient_create' %}" class="btn btn-primary shadow-sm">
+        <i class="bi bi-person-plus"></i> Add Patient
     </a>
 
 </div>
 
-<table class="table table-bordered table-hover">
+<div class="card shadow-sm">
 
-    <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Blood Group</th>
-            <th>Phone</th>
-            <th>Emergency Contact</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+    <div class="card-body p-0">
 
-    <tbody>
+        <table class="table table-hover align-middle mb-0">
 
-    {% for patient in patients %}
+            <thead>
+                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
+                    <th class="ps-4 py-3">#</th>
+                    <th class="py-3">Name</th>
+                    <th class="py-3">Gender</th>
+                    <th class="py-3">Blood Group</th>
+                    <th class="py-3">Phone</th>
+                    <th class="py-3">Emergency Contact</th>
+                    <th class="py-3 text-end pe-4">Actions</th>
+                </tr>
+            </thead>
 
-        <tr>
+            <tbody>
 
-            <td>{{ patient.id }}</td>
-            <td>{{ patient.user.get_full_name }}</td>
-            <td>{{ patient.gender }}</td>
-            <td>{{ patient.blood_group }}</td>
-            <td>{{ patient.phone_number }}</td>
-            <td>{{ patient.emergency_contact }}</td>
+                {% for patient in patients %}
+                <tr>
 
-            <td>
+                    <td class="ps-4 text-muted">{{ patient.id }}</td>
 
-                <a href="{% url 'patient_update' patient.id %}"
-                   class="btn btn-warning btn-sm">
-                    Edit
-                </a>
-                   <a href="{% url 'patient_delete' patient.id %}"
-       class="btn btn-danger btn-sm">
-        Delete
-    </a>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center"
+                                 style="width: 38px; height: 38px;">
+                                <i class="bi bi-person text-primary"></i>
+                            </div>
+                            <span class="fw-semibold">
+                                {{ patient.user.get_full_name|default:patient.user.username }}
+                            </span>
+                        </div>
+                    </td>
 
-            </td>
+                    <td>{{ patient.gender }}</td>
 
-        </tr>
+                    <td>
+                        <span class="badge bg-light text-dark border">
+                            {{ patient.blood_group|default:"—" }}
+                        </span>
+                    </td>
 
-    {% empty %}
+                    <td>{{ patient.phone_number|default:"—" }}</td>
 
-        <tr>
-            <td colspan="7" class="text-center">
-                No Patients Found
-            </td>
-        </tr>
+                    <td>{{ patient.emergency_contact|default:"—" }}</td>
 
-    {% endfor %}
+                    <td class="text-end pe-4">
+                        <a href="{% url 'patient_update' patient.id %}"
+                           class="btn btn-sm btn-outline-warning me-1"
+                           title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
 
-    </tbody>
+                        <a href="{% url 'patient_delete' patient.id %}"
+                           class="btn btn-sm btn-outline-danger"
+                           title="Delete"
+                           onclick="return confirm('Delete {{ patient.user.get_full_name|default:patient.user.username }}? This cannot be undone.');">
+                            <i class="bi bi-trash3"></i>
+                        </a>
+                    </td>
 
-</table>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-5">
+                        <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-2 mb-3">No patients found.</p>
+                        <a href="{% url 'patient_create' %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-person-plus"></i> Register first patient
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% if patients %}
+<p class="text-muted small mt-3">
+    <i class="bi bi-info-circle"></i> Showing {{ patients|length }} patient{{ patients|length|pluralize }}
+</p>
+{% endif %}
 
 {% endblock %}
