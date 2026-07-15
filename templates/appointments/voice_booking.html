@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Voice Call Appointment Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .call-card {
+            max-width: 450px;
+            margin: 50px auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            background: #ffffff;
+        }
+        .pulse-btn {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="card call-card p-4 text-center">
+    <h4 class="mb-3">📞 Hospital AI Voice Assistant</h4>
+    <p class="text-muted">Press the call button and state your booking request</p>
+
+    <div class="my-4">
+        <button id="call-btn" class="btn btn-success pulse-btn" onclick="toggleCall()">
+            📞
+        </button>
+    </div>
+
+    <div id="status" class="badge bg-secondary p-2 fs-6 mb-3">Status: Idle</div>
+
+    <div id="logs" class="p-3 bg-light text-start border rounded" style="min-height: 120px; max-height: 200px; overflow-y: auto;">
+        <p class="text-muted small mb-0">Conversation log will appear here...</p>
+    </div>
+</div>
+
+<script>
+let isCalling = false;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (!SpeechRecognition) {
+    alert("Web Speech API is not supported in this browser. Please use Google Chrome.");
+} else {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+
+    function toggleCall() {
+        const btn = document.getElementById('call-btn');
+        const status = document.getElementById('status');
+
+        if (!isCalling) {
+            isCalling = true;
+            btn.className = "btn btn-danger pulse-btn";
+            btn.innerHTML = "🛑";
+            status.className = "badge bg-danger p-2 fs-6 mb-3";
+            status.innerText = "Listening... Speak Now!";
+            
+            recognition.start();
+        } else {
+            stopCall();
+        }
+    }
+
+    function stopCall() {
+        isCalling = false;
+        const btn = document.getElementById('call-btn');
+        const status = document.getElementById('status');
+        btn.className = "btn btn-success pulse-btn";
+        btn.innerHTML = "📞";
+        status.className = "badge bg-secondary p-2 fs-6 mb-3";
+        status.innerText = "Status: Call Ended";
+        recognition.stop();
+    }
+
+    recognition.onresult = function(event) {
+        const userSpokenText = event.results[0][0].transcript;
+        appendLog("Patient (Voice)", userSpokenText);
+        
+        // Send Voice Text to Django Backend API
+        sendVoiceDataToBackend(userSpokenText);
+    };
+
+    recognition.onerror = function(event) {
+        console.error("Speech Recognition Error:", event.error);
+        stopCall();
+    };
+}
+
+function sendVoiceDataToBackend(text) {
+    document.getElementById('status').innerText = "AI Processing Booking & Risk ML...";
+
+    fetch('/api/voice-booking/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ spoken_text: text })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            appendLog("AI Assistant 🤖", data.voice_response);
+            speakAIResponse(data.voice_response);
+        } else {
+            appendLog("AI Assistant ⚠️", data.voice_response);
+        }
+        stopCall();
+    });
+}
+
+function speakAIResponse(text) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    synth.speak(utterance);
+}
+
+function appendLog(sender, text) {
+    const logs = document.getElementById('logs');
+    logs.innerHTML += `<p class="mb-1"><strong>${sender}:</strong> ${text}</p>`;
+    logs.scrollTop = logs.scrollHeight;
+}
+</script>
+</body>
+</html>

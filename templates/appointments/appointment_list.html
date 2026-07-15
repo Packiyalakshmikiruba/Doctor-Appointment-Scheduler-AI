@@ -15,6 +15,217 @@
         <i class="bi bi-plus-circle"></i> Book Appointment
     </a>
 </div>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+        <form method="GET">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label class="form-label">Patient</label>
+                    <input
+                        type="text"
+                        name="patient"
+                        class="form-control"
+                        placeholder="Search Patient"
+                        value="{{ patient_search }}"
+                    >
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Doctor</label>
+                    <input
+                        type="text"
+                        name="doctor"
+                        class="form-control"
+                        placeholder="Search Doctor"
+                        value="{{ doctor_search }}"
+                    >
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Department</label>
+
+                    <select
+                        name="department"
+                        class="form-select"
+                    >
+
+                        <option value="">All Departments</option>
+
+                        {% for department in departments %}
+
+                        <option
+                            value="{{ department.id }}"
+                            {% if selected_department == department.id|stringformat:"s" %}
+                            selected
+                            {% endif %}
+                        >
+                            {{ department.department_name }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <select
+                        name="status"
+                        class="form-select"
+                    >
+
+                        <option value="">All Status</option>
+
+                        <option value="Pending"
+                            {% if selected_status == "Pending" %}
+                            selected
+                            {% endif %}
+                        >
+                            Pending
+                        </option>
+
+                        <option value="Confirmed"
+                            {% if selected_status == "Confirmed" %}
+                            selected
+                            {% endif %}
+                        >
+                            Confirmed
+                        </option>
+
+                        <option value="Completed"
+                            {% if selected_status == "Completed" %}
+                            selected
+                            {% endif %}
+                        >
+                            Completed
+                        </option>
+
+                        <option value="Cancelled"
+                            {% if selected_status == "Cancelled" %}
+                            selected
+                            {% endif %}
+                        >
+                            Cancelled
+                        </option>
+
+                        <option value="No Show"
+                            {% if selected_status == "No Show" %}
+                            selected
+                            {% endif %}
+                        >
+                            No Show
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Risk
+                    </label>
+
+                    <select
+                        name="risk"
+                        class="form-select"
+                    >
+
+                        <option value="">All Risk</option>
+
+                        <option value="LOW"
+                            {% if selected_risk == "LOW" %}
+                            selected
+                            {% endif %}
+                        >
+                            LOW
+                        </option>
+
+                        <option value="MEDIUM"
+                            {% if selected_risk == "MEDIUM" %}
+                            selected
+                            {% endif %}
+                        >
+                            MEDIUM
+                        </option>
+
+                        <option value="HIGH"
+                            {% if selected_risk == "HIGH" %}
+                            selected
+                            {% endif %}
+                        >
+                            HIGH
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        From Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="from_date"
+                        class="form-control"
+                        value="{{ from_date }}"
+                    >
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        To Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="to_date"
+                        class="form-control"
+                        value="{{ to_date }}"
+                    >
+
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <button
+                        class="btn btn-primary w-100"
+                    >
+                        🔍 Search
+                    </button>
+
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <a
+                        href="{% url 'appointment_list' %}"
+                        class="btn btn-secondary w-100"
+                    >
+                        Reset
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
 
 <div class="card shadow-sm">
     <div class="card-body p-0">
@@ -64,7 +275,13 @@
                         {% endif %}
                     </td>
                     <td class="text-end pe-4">
-                        <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-sm btn-outline-warning me-1">
+                        {% if appointment.status == "Pending" %}
+                            <a href="{% url 'mark_confirmed' appointment.id %}" class="btn btn-sm btn-primary">Confirm</a>
+                            <a href="{% url 'mark_cancelled' appointment.id %}" class="btn btn-sm btn-outline-danger">Cancel</a>
+                        {% elif appointment.status == "Confirmed" %}
+                            <a href="{% url 'mark_noshow' appointment.id %}" class="btn btn-sm btn-outline-danger">No-Show</a>
+                        {% endif %}
+                        <a href="{% url 'appointment_update' appointment.id %}" class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil-square"></i>
                         </a>
                         <a href="{% url 'appointment_delete' appointment.id %}" class="btn btn-sm btn-outline-danger">
@@ -87,5 +304,61 @@
         </table>
     </div>
 </div>
+{% if appointments.has_other_pages %}
+
+<nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        {% if appointments.has_previous %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ appointments.previous_page_number }}"
+            >
+                Previous
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        {% for num in appointments.paginator.page_range %}
+
+        <li class="page-item {% if appointments.number == num %}active{% endif %}">
+
+            <a
+                class="page-link"
+                href="?page={{ num }}"
+            >
+                {{ num }}
+            </a>
+
+        </li>
+
+        {% endfor %}
+
+        {% if appointments.has_next %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ appointments.next_page_number }}"
+            >
+                Next
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endif %}
 
 {% endblock %}

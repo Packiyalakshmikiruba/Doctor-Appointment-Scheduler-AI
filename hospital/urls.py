@@ -14,7 +14,11 @@ urlpatterns = [
     path("doctors/add/", views.doctor_create, name="doctor_create"),
     path("doctors/<int:pk>/edit/", views.doctor_update, name="doctor_update"),
     path("doctors/<int:pk>/delete/", views.doctor_delete, name="doctor_delete"),
-
+    path(
+    "doctor/dashboard/",
+    views.doctor_dashboard,
+    name="doctor_dashboard",
+),
     # Doctor Availability URLs
     path("availability/", views.availability_list, name="availability_list"),
     path("availability/add/", views.availability_create, name="availability_create"),

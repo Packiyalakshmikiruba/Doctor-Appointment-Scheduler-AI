@@ -1,0 +1,19 @@
+Department: General Medicine. Room: 101. Description: General Medicine Department
+
+Department: Cardiology. Room: 102. Description: Heart Department
+
+Department: Neurology. Room: 103. Description: Brain Department
+
+Department: Orthopedics. Room: 104. Description: Bone Department
+
+Department: Dermatology. Room: 105. Description: Skin Department
+
+Doctor: Dr. Arun Kumar. Specialization: Neurologist. Department: Neurology. Consultation Fee: Rs.700.00. Available: Monday 09:00 AM-06:00 PM, Tuesday 09:00 AM-05:00 PM, Wednesday 09:00 AM-05:00 PM, Thursday 09:00 AM-05:00 PM, Friday 09:00 AM-05:00 PM, Saturday 09:00 AM-05:00 PM.
+
+Doctor: Dr. Saran K. Specialization: Cardiologist. Department: Cardiology. Consultation Fee: Rs.700.00. Available: Monday 09:00 AM-05:00 PM, Tuesday 09:00 AM-05:00 PM, Wednesday 09:00 AM-05:00 PM, Thursday 09:00 AM-05:00 PM, Friday 09:00 AM-05:00 PM, Saturday 09:00 AM-05:00 PM.
+
+Doctor: Dr. Devi H. Specialization: General Physician. Department: General Medicine. Consultation Fee: Rs.500.00. Available: Friday 09:00 AM-05:00 PM, Tuesday 09:00 AM-05:00 PM, Wednesday 09:00 AM-05:00 PM, Thursday 09:00 AM-05:00 PM, Saturday 09:00 AM-05:00 PM, Monday 09:00 AM-05:00 PM.
+
+Clinic General Info: OPD hours are Monday to Saturday, 9 AM to 6 PM. Patients are advised to arrive 15 minutes before their appointment. SMS reminders are sent 24 hours before scheduled appointments.
+
+Cancellation Policy: Appointments can be cancelled or rescheduled up to 2 hours before the scheduled time through the patient dashboard.

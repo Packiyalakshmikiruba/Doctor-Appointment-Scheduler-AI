@@ -23,6 +23,8 @@
                     <th class="py-3">Patient</th>
                     <th class="py-3">Doctor</th>
                     <th class="py-3">Total</th>
+                    <th class="py-3">Paid</th>
+                    <th class="py-3">Balance</th>
                     <th class="py-3">Status</th>
                     <th class="py-3 text-end pe-4">Action</th>
                 </tr>
@@ -34,26 +36,31 @@
                     <td class="fw-semibold">{{ bill.appointment.patient }}</td>
                     <td>Dr. {{ bill.appointment.doctor.user.get_full_name|default:bill.appointment.doctor.user.username }}</td>
                     <td class="fw-semibold">₹{{ bill.total_amount }}</td>
+                    <td class="text-success">₹{{ bill.total_paid }}</td>
+                    <td class="{% if bill.balance_due > 0 %}text-danger fw-semibold{% endif %}">₹{{ bill.balance_due }}</td>
                     <td>
-                        {% if bill.payment_status == "PAID" %}
+                        {% if bill.payment_status == "Paid" %}
                             <span class="badge bg-success-subtle text-success border">Paid</span>
-                        {% elif bill.payment_status == "PENDING" %}
+                        {% elif bill.payment_status == "Pending" %}
                             <span class="badge bg-warning-subtle text-warning border">Pending</span>
                         {% else %}
                             <span class="badge bg-secondary-subtle text-secondary border">Cancelled</span>
                         {% endif %}
                     </td>
                     <td class="text-end pe-4">
-                        {% if bill.payment_status == "PENDING" %}
-                            <a href="{% url 'mark_paid' bill.id %}" class="btn btn-sm btn-outline-success">
-                                <i class="bi bi-check-circle"></i> Mark Paid
+                        {% if bill.payment_status == "Pending" %}
+                            <a href="{% url 'add_payment' bill.id %}" class="btn btn-sm btn-outline-success me-1">
+                                <i class="bi bi-cash"></i> Add Payment
+                            </a>
+                            <a href="{% url 'mark_paid' bill.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-check-circle"></i> Mark Fully Paid
                             </a>
                         {% endif %}
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center py-5">
+                    <td colspan="8" class="text-center py-5">
                         <i class="bi bi-receipt-cutoff text-muted" style="font-size: 3rem;"></i>
                         <p class="text-muted mt-2 mb-0">No bills found.</p>
                     </td>

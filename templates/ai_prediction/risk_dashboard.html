@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}No-Show Risk Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4"><i class="bi bi-graph-up-arrow text-danger"></i> No-Show Risk Dashboard</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-danger text-white">
+        <i class="bi bi-exclamation-triangle"></i> High Risk Appointments ({{ high_risk|length }})
+    </div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead><tr><th class="ps-3">Patient</th><th>Doctor</th><th>Date</th><th>Risk Score</th></tr></thead>
+            <tbody>
+                {% for a in high_risk %}
+                <tr>
+                    <td class="ps-3">{{ a.patient }}</td>
+                    <td>Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}</td>
+                    <td>{{ a.appointment_date }}</td>
+                    <td><span class="badge bg-danger">{{ a.risk_score }}</span></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-3">No high-risk appointments right now.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

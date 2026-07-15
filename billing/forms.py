@@ -49,3 +49,16 @@ class BillForm(forms.ModelForm):
             }),
 
         }
+from .models import Bill, Payment
+
+
+class PaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = Payment
+        fields = ["amount_paid", "payment_mode", "transaction_reference"]
+        widgets = {
+            "amount_paid": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Amount"}),
+            "payment_mode": forms.Select(attrs={"class": "form-select"}),
+            "transaction_reference": forms.TextInput(attrs={"class": "form-control", "placeholder": "Optional reference"}),
+        }

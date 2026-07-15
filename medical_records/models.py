@@ -11,24 +11,20 @@ class MedicalRecord(models.Model):
     )
 
     symptoms = models.TextField()
-
     diagnosis = models.TextField()
-
-    prescription = models.TextField()
-
-    notes = models.TextField(
-        blank=True,
-        null=True
-    )
-
-    follow_up_date = models.DateField(
-        blank=True,
-        null=True
-    )
+    notes = models.TextField(blank=True, null=True)
+    follow_up_date = models.DateField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
-
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Medical Record - {self.appointment.patient}"
+
+    @property
+    def doctor(self):
+        return self.appointment.doctor
+
+    @property
+    def patient(self):
+        return self.appointment.patient

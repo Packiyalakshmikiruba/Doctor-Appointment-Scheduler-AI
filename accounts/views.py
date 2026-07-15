@@ -16,8 +16,8 @@ def register_view(request):
 
             user = form.save(commit=False)
 
-            # Public registration always creates a patient
-            user.role = "PATIENT"
+            # Save selected role
+            user.role = form.cleaned_data["role"]
 
             user.save()
 
@@ -28,7 +28,14 @@ def register_view(request):
                 "Registration Successful."
             )
 
-            return redirect("patient_dashboard")
+            if user.role == "ADMIN":
+                return redirect("admin_dashboard")
+
+            elif user.role == "DOCTOR":
+                return redirect("doctor_dashboard")
+
+            else:
+                return redirect("dashboard")
 
     else:
 
@@ -41,7 +48,6 @@ def register_view(request):
             "form": form
         }
     )
-
 
 def login_view(request):
 
@@ -73,7 +79,7 @@ def login_view(request):
                 return redirect("doctor_dashboard")
 
             elif user.role == "PATIENT":
-                return redirect("patient_dashboard")
+                return redirect("dashboard")
 
             else:
                 return redirect("login")
@@ -109,3 +115,70 @@ def logout_view(request):
     )
 
     return redirect("login")
+from django.contrib.auth.decorators import login_required
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.utils import timezone
+from appointments.models import Appointment
+
+
+@login_required
+def dashboard(request):
+
+    if request.user.role == "PATIENT":
+
+        if not hasattr(request.user, "patient_profile"):
+            messages.info(request, "Please complete your profile to continue.")
+            return redirect("complete_profile")
+
+        patient = request.user.patient_profile
+
+        upcoming = Appointment.objects.filter(
+            patient=patient,
+            status__in=["Pending", "Confirmed"],
+            appointment_date__gte=timezone.now().date()
+        ).select_related("doctor__user", "doctor__department").order_by("appointment_date")
+
+        history = Appointment.objects.filter(
+            patient=patient,
+            status__in=["Completed", "Cancelled", "No Show"]
+        ).select_related("doctor__user").order_by("-appointment_date")[:10]
+
+        high_risk_count = upcoming.filter(risk_level="HIGH").count()
+
+        return render(request, "accounts/patient_dashboard.html", {
+            "upcoming": upcoming,
+            "history": history,
+            "high_risk_count": high_risk_count,
+        })
+
+    elif request.user.role == "DOCTOR":
+
+        if not hasattr(request.user, "doctor_profile"):
+            messages.info(request, "Doctor profile not set up yet. Contact admin.")
+            return render(request, "accounts/dashboard.html")
+
+        doctor = request.user.doctor_profile
+        today = timezone.now().date()
+
+        todays_appointments = Appointment.objects.filter(
+            doctor=doctor,
+            appointment_date=today,
+            status__in=["Pending", "Confirmed"]
+        ).select_related("patient__user").order_by("appointment_time")
+
+        high_risk_today = todays_appointments.filter(risk_level="HIGH")
+
+        total_noshows = Appointment.objects.filter(doctor=doctor, status="No Show").count()
+
+        return render(request, "accounts/doctor_dashboard.html", {
+            "todays_appointments": todays_appointments,
+            "high_risk_today": high_risk_today,
+            "total_noshows": total_noshows,
+        })
+
+    # Admin / staff -> generic dashboard
+    return render(request, "accounts/dashboard.html")

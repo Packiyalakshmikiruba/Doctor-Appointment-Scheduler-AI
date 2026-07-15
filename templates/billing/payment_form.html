@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Record Payment{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="bi bi-cash-coin"></i> Record Payment</h4>
+            </div>
+
+            <div class="card-body">
+
+                <div class="alert alert-light border mb-3">
+                    <strong>{{ bill.appointment.patient }}</strong> — Bill #{{ bill.id }}<br>
+                    Total: ₹{{ bill.total_amount }} &nbsp;|&nbsp;
+                    Paid: ₹{{ bill.total_paid }} &nbsp;|&nbsp;
+                    <strong class="text-danger">Balance: ₹{{ bill.balance_due }}</strong>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Amount</label>
+                        {{ form.amount_paid }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Payment Mode</label>
+                        {{ form.payment_mode }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Transaction Reference (optional)</label>
+                        {{ form.transaction_reference }}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-check-circle"></i> Record Payment
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

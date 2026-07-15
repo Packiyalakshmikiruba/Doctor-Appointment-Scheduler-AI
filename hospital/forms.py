@@ -1,10 +1,13 @@
 from django import forms
+
+from accounts.models import User
 from .models import Department, Doctor, DoctorAvailability
-from .models import Doctor
+
 
 class DepartmentForm(forms.ModelForm):
 
     class Meta:
+
         model = Department
 
         fields = [
@@ -14,25 +17,36 @@ class DepartmentForm(forms.ModelForm):
         ]
 
         widgets = {
-            "department_name": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter Department Name"
-            }),
 
-            "room_number": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter Room Number"
-            }),
+            "department_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter Department Name",
+                }
+            ),
 
-            "description": forms.Textarea(attrs={
-                "class": "form-control",
-                "rows": 3,
-                "placeholder": "Enter Description"
-            }),
+            "room_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter Room Number",
+                }
+            ),
+
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Enter Description",
+                }
+            ),
+
         }
+
+
 class DoctorForm(forms.ModelForm):
 
     class Meta:
+
         model = Doctor
 
         fields = [
@@ -48,47 +62,83 @@ class DoctorForm(forms.ModelForm):
 
         widgets = {
 
-            "user": forms.Select(attrs={
-                "class": "form-select"
-            }),
+            "user": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
 
-            "department": forms.Select(attrs={
-                "class": "form-select"
-            }),
+            "department": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
 
-            "specialization": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Enter Specialization"
-            }),
+           "specialization": forms.Select(
+    attrs={
+        "class": "form-select"
+    }
+),
 
-            "consultation_fee": forms.NumberInput(attrs={
-                "class": "form-control",
-                "placeholder": "Consultation Fee"
-            }),
+            "consultation_fee": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Consultation Fee",
+                }
+            ),
 
-            "license_number": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "License Number"
-            }),
+            "license_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "License Number",
+                }
+            ),
 
-            "joining_date": forms.DateInput(attrs={
-                "class": "form-control",
-                "type": "date"
-            }),
+            "joining_date": forms.DateInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "date",
+                }
+            ),
 
-            "phone_number": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Phone Number"
-            }),
+            "phone_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Phone Number",
+                }
+            ),
 
-            "is_active": forms.CheckboxInput(attrs={
-                "class": "form-check-input"
-            }),
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
 
         }
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # Doctor role users மட்டும்
+        self.fields["user"].queryset = User.objects.filter(role="DOCTOR")
+
+        # Department list
+        self.fields["department"].queryset = Department.objects.all()
+
+        self.fields["user"].label_from_instance = (
+            lambda obj: obj.get_full_name() or obj.username
+        )
+
+        self.fields["department"].label_from_instance = (
+            lambda obj: obj.department_name
+        )
+
+
 class DoctorAvailabilityForm(forms.ModelForm):
 
     class Meta:
+
         model = DoctorAvailability
 
         fields = [
@@ -101,26 +151,46 @@ class DoctorAvailabilityForm(forms.ModelForm):
 
         widgets = {
 
-            "doctor": forms.Select(attrs={
-                "class": "form-select"
-            }),
+            "doctor": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
 
-            "day_of_week": forms.Select(attrs={
-                "class": "form-select"
-            }),
+            "day_of_week": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
 
-            "start_time": forms.TimeInput(attrs={
-                "class": "form-control",
-                "type": "time"
-            }),
+            "start_time": forms.TimeInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "time",
+                }
+            ),
 
-            "end_time": forms.TimeInput(attrs={
-                "class": "form-control",
-                "type": "time"
-            }),
+            "end_time": forms.TimeInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "time",
+                }
+            ),
 
-            "is_available": forms.CheckboxInput(attrs={
-                "class": "form-check-input"
-            }),
+            "is_available": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
 
         }
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields["doctor"].queryset = Doctor.objects.filter(is_active=True)
+
+        self.fields["doctor"].label_from_instance = (
+            lambda obj: obj.user.get_full_name() or obj.user.username
+        )

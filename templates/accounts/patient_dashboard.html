@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-1">Welcome, {{ request.user.first_name }}</h2>
+<p class="text-muted mb-4">Here's your appointment overview</p>
+
+{% if high_risk_count > 0 %}
+<div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    You have {{ high_risk_count }} upcoming appointment{{ high_risk_count|pluralize }} flagged as high no-show risk. Please confirm attendance.
+</div>
+{% endif %}
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-calendar-check"></i> Upcoming Appointments
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <thead><tr><th class="ps-3">Doctor</th><th>Date</th><th>Time</th><th>Status</th><th class="pe-3">Risk</th></tr></thead>
+                    <tbody>
+                        {% for a in upcoming %}
+                        <tr>
+                            <td class="ps-3">Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}<br>
+                                <small class="text-muted">{{ a.doctor.department.department_name }}</small></td>
+                            <td>{{ a.appointment_date }}</td>
+                            <td>{{ a.appointment_time }}</td>
+                            <td>
+                                {% if a.status == "Pending" %}
+                                    <span class="badge bg-secondary-subtle text-secondary border">Pending</span>
+                                {% else %}
+                                    <span class="badge bg-primary-subtle text-primary border">Confirmed</span>
+                                {% endif %}
+                            </td>
+                            <td class="pe-3">
+                                {% if a.risk_level == "HIGH" %}
+                                    <span class="badge bg-danger">High</span>
+                                {% elif a.risk_level == "MEDIUM" %}
+                                    <span class="badge bg-warning text-dark">Medium</span>
+                                {% else %}
+                                    <span class="badge bg-success">Low</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center text-muted py-4">No upcoming appointments.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-plus-circle"></i> Quick Actions
+            </div>
+            <div class="card-body d-grid gap-2">
+                <a href="{% url 'appointment_create' %}" class="btn btn-success">Book Appointment</a>
+                <a href="{% url 'edit_profile' %}" class="btn btn-outline-secondary">Edit Profile</a>
+                <a href="{% url 'chat_widget' %}" class="btn btn-outline-primary">Chat Support</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <i class="bi bi-clock-history"></i> Recent History
+    </div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead><tr><th class="ps-3">Doctor</th><th>Date</th><th class="pe-3">Status</th></tr></thead>
+            <tbody>
+                {% for a in history %}
+                <tr>
+                    <td class="ps-3">Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}</td>
+                    <td>{{ a.appointment_date }}</td>
+                    <td class="pe-3">{{ a.status }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center text-muted py-4">No history yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

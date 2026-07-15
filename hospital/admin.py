@@ -26,7 +26,8 @@ class DoctorAdmin(admin.ModelAdmin):
         "is_active",
     )
 
-    list_filter = (
+    list
+    _filter = (
         "department",
         "is_active",
     )

@@ -26,8 +26,23 @@ class Doctor(models.Model):
         related_name="doctors"
     )
 
-    specialization = models.CharField(max_length=100)
+    SPECIALIZATION_CHOICES = [
+    ("General Physician", "General Physician"),
+    ("Cardiologist", "Cardiologist"),
+    ("Neurologist", "Neurologist"),
+    ("Orthopedic Surgeon", "Orthopedic Surgeon"),
+    ("Dermatologist", "Dermatologist"),
+    ("Pediatrician", "Pediatrician"),
+    ("Gynecologist", "Gynecologist"),
+    ("ENT Specialist", "ENT Specialist"),
+    ("Ophthalmologist", "Ophthalmologist"),
+    ("Psychiatrist", "Psychiatrist"),
+]
 
+    specialization = models.CharField(
+        max_length=100,
+        choices=SPECIALIZATION_CHOICES,
+    )
     consultation_fee = models.DecimalField(
         max_digits=10,
         decimal_places=2

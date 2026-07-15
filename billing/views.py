@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Bill
-from .forms import BillForm
+from .models import Bill, Payment
+from .forms import BillForm, PaymentForm
 from appointments.models import Appointment
 
 
@@ -33,6 +33,32 @@ def bill_list(request):
 
 def mark_paid(request, pk):
     bill = get_object_or_404(Bill, pk=pk)
-    bill.payment_status = "PAID"
+    bill.payment_status = "Paid"    # ← Fix: "PAID" இல்ல, "Paid" (Meta choices-ஓடு exact match)
     bill.save()
     return redirect("bill_list")
+
+
+def add_payment(request, bill_id):
+    bill = get_object_or_404(Bill, pk=bill_id)
+
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+
+        if form.is_valid():
+            payment = form.save(commit=False)
+            payment.bill = bill
+            payment.save()
+
+            if bill.balance_due <= 0:
+                bill.payment_status = "Paid"
+                bill.save()
+
+            return redirect("bill_list")
+
+    else:
+        form = PaymentForm()
+
+    return render(request, "billing/payment_form.html", {
+        "form": form,
+        "bill": bill,
+    })

@@ -172,3 +172,11 @@ def availability_list(request):
             "availabilities": availabilities
         }
     )
+
+
+def doctor_dashboard(request):
+
+    return render(
+        request,
+        "hospital/doctor_dashboard.html"
+    )

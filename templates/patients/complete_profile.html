@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Your Profile{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-7">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-vcard"></i>
+                    {% if editing %}Edit Your Profile{% else %}Complete Your Profile{% endif %}
+                </h4>
+                {% if not editing %}
+                    <small>Please fill in your details before booking an appointment</small>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Gender</label>
+                            {{ form.gender }}
+                            {% for error in form.gender.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Date of Birth</label>
+                            {{ form.date_of_birth }}
+                            {% for error in form.date_of_birth.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Blood Group</label>
+                            {{ form.blood_group }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone Number</label>
+                            {{ form.phone_number }}
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Address</label>
+                            {{ form.address }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Distance from Clinic (km)</label>
+                            {{ form.distance_from_clinic }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Emergency Contact</label>
+                            {{ form.emergency_contact }}
+                        </div>
+
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-check-circle"></i>
+                        {% if editing %}Update Profile{% else %}Save & Continue{% endif %}
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

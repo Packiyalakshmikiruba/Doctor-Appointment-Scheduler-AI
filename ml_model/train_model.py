@@ -1,269 +1,710 @@
-"""
-train_model.py
-No-Show Risk Predictor - Model Training Script
-------------------------------------------------
-Trains a binary classifier to predict patient appointment no-shows.
-
-Pipeline:
-1. Load dataset
-2. Preprocess (encode categoricals, drop identifier column)
-3. Train/test split
-4. Handle class imbalance with SMOTE
-5. Train Logistic Regression (baseline), Random Forest, and XGBoost
-6. Hyperparameter tuning with RandomizedSearchCV (Random Forest + XGBoost)
-7. Evaluate at multiple thresholds + report a chosen operating threshold
-8. Save the best model + encoders + threshold as files for Django to load
-
-Run:
-    pip install pandas numpy scikit-learn imbalanced-learn xgboost joblib
-    python train_model.py
-"""
-
 import json
 import warnings
-
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.model_selection import (
+    train_test_split,
+    RandomizedSearchCV,
+)
+
+from sklearn.preprocessing import LabelEncoder
+
 from sklearn.linear_model import LogisticRegression
+
+from sklearn.ensemble import RandomForestClassifier
+
 from sklearn.metrics import (
     accuracy_score,
-    classification_report,
-    confusion_matrix,
-    f1_score,
     precision_score,
     recall_score,
+    f1_score,
     roc_auc_score,
+    confusion_matrix,
+    classification_report,
 )
-from sklearn.model_selection import RandomizedSearchCV, train_test_split
-from sklearn.preprocessing import LabelEncoder
 
 warnings.filterwarnings("ignore")
 
 try:
     from imblearn.over_sampling import SMOTE
-
     HAS_SMOTE = True
 except ImportError:
     HAS_SMOTE = False
-    print("[WARN] imbalanced-learn not installed. Run: pip install imbalanced-learn")
-    print("       Falling back to class_weight='balanced' instead of SMOTE.\n")
 
 try:
     from xgboost import XGBClassifier
-
     HAS_XGB = True
 except ImportError:
     HAS_XGB = False
-    print("[WARN] xgboost not installed. Run: pip install xgboost")
-    print("       Skipping XGBoost model, will use Random Forest as final model.\n")
 
 
 DATA_PATH = "data/appointments_dataset_v4.csv"
-MODEL_OUT = "noshow_model.pkl"
-ENCODERS_OUT = "encoders.pkl"
-METRICS_OUT = "model_metrics.json"
 
-# Chosen operating threshold (tuned for accuracy/recall balance — see README notes).
-# 0.70 gives ~87% accuracy on this dataset.
-OPERATING_THRESHOLD = 0.70
+MODEL_PATH = "noshow_model.pkl"
 
-# patient_id is an identifier only — never used as a model feature.
-ID_COL = "patient_id"
-CATEGORICAL_COLS = ["gender", "department", "appointment_time"]
-FEATURE_COLS = [
-    "age",
+ENCODER_PATH = "encoders.pkl"
+
+METRICS_PATH = "model_metrics.json"
+
+THRESHOLD = 0.35
+
+
+ID_COLUMN = "patient_id"
+
+TARGET_COLUMN = "no_show"
+
+
+CATEGORICAL_COLUMNS = [
+
     "gender",
+
     "department",
-    "lead_time_days",
+
     "appointment_weekday",
+
     "appointment_time",
-    "sms_reminder_sent",
-    "prior_visits",
-    "prior_noshows",
-    "history_noshow_ratio",
-    "distance_from_clinic",
+
 ]
-TARGET_COL = "no_show"
 
 
-def load_and_preprocess(path):
-    df = pd.read_csv(path)
-    if ID_COL in df.columns:
-        df = df.drop(columns=[ID_COL])
-    df = df.drop_duplicates().dropna(subset=FEATURE_COLS + [TARGET_COL])
+FEATURE_COLUMNS = [
+
+    "age",
+
+    "gender",
+
+    "department",
+
+    "lead_time_days",
+
+    "appointment_weekday",
+
+    "appointment_time",
+
+    "sms_reminder_sent",
+
+    "prior_visits",
+
+    "prior_noshows",
+
+    "history_noshow_ratio",
+
+    "distance_from_clinic",
+
+]
+def load_dataset():
+
+    print("Loading Dataset...")
+
+    df = pd.read_csv(DATA_PATH)
+
+    print(df.head())
+
+    print(df.shape)
+
+    print(df.info())
+
+    return df
+def preprocess(df):
+
+    if ID_COLUMN in df.columns:
+
+        df = df.drop(columns=[ID_COLUMN])
+
+    df = df.drop_duplicates()
+
+    df = df.dropna()
 
     encoders = {}
-    for col in CATEGORICAL_COLS:
-        le = LabelEncoder()
-        df[col] = le.fit_transform(df[col].astype(str))
-        encoders[col] = le
 
-    X = df[FEATURE_COLS]
-    y = df[TARGET_COL]
-    return X, y, encoders
+    for column in CATEGORICAL_COLUMNS:
 
+        encoder = LabelEncoder()
 
-def evaluate_at_threshold(y_test, y_prob, threshold):
-    y_pred = (y_prob >= threshold).astype(int)
-    return {
-        "threshold": threshold,
-        "accuracy": round(accuracy_score(y_test, y_pred), 4),
-        "precision": round(precision_score(y_test, y_pred, zero_division=0), 4),
-        "recall": round(recall_score(y_test, y_pred, zero_division=0), 4),
-        "f1_score": round(f1_score(y_test, y_pred, zero_division=0), 4),
-        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
-    }
+        df[column] = encoder.fit_transform(
 
+            df[column].astype(str)
 
-def evaluate(model, X_test, y_test, name):
-    y_prob = model.predict_proba(X_test)[:, 1]
-    auc = round(roc_auc_score(y_test, y_prob), 4)
-
-    threshold_scan = [
-        evaluate_at_threshold(y_test, y_prob, round(t, 2))
-        for t in np.arange(0.3, 0.85, 0.05)
-    ]
-    chosen = evaluate_at_threshold(y_test, y_prob, OPERATING_THRESHOLD)
-
-    print(f"\n===== {name} =====")
-    print(f"ROC-AUC (threshold-independent): {auc}")
-    print("\nThreshold scan (Accuracy / Precision / Recall / F1):")
-    for row in threshold_scan:
-        print(
-            f"  {row['threshold']:.2f} | acc={row['accuracy']:.3f} "
-            f"prec={row['precision']:.3f} rec={row['recall']:.3f} f1={row['f1_score']:.3f}"
         )
-    print(f"\n--> Operating threshold {OPERATING_THRESHOLD}: {chosen}")
-    print("\nClassification Report at operating threshold:")
-    y_pred_final = (y_prob >= OPERATING_THRESHOLD).astype(int)
-    print(classification_report(y_test, y_pred_final, zero_division=0))
 
-    return {
-        "model": name,
-        "roc_auc": auc,
-        "threshold_scan": threshold_scan,
-        "chosen_threshold_metrics": chosen,
-    }
+        encoders[column] = encoder
 
+    X = df[FEATURE_COLUMNS]
 
-def main():
-    print("Loading and preprocessing data...")
-    X, y, encoders = load_and_preprocess(DATA_PATH)
+    y = df[TARGET_COLUMN]
+
+    return X, y, encoders
+def split_dataset(X, y):
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
-    )
-    print(f"Train size: {len(X_train)} | Test size: {len(X_test)}")
-    print(f"Train no-show rate: {round(y_train.mean() * 100, 2)}%")
 
-    # ---- Handle class imbalance ----
-    if HAS_SMOTE:
-        print("\nApplying SMOTE to balance training data...")
-        sm = SMOTE(random_state=42)
-        X_train_bal, y_train_bal = sm.fit_resample(X_train, y_train)
-        print(f"After SMOTE -> class distribution:\n{pd.Series(y_train_bal).value_counts()}")
-    else:
-        X_train_bal, y_train_bal = X_train, y_train
+        X,
 
-    all_metrics = []
+        y,
 
-    # ---- Baseline: Logistic Regression ----
-    print("\nTraining baseline Logistic Regression...")
-    log_reg = LogisticRegression(max_iter=1000, class_weight=None if HAS_SMOTE else "balanced")
-    log_reg.fit(X_train_bal, y_train_bal)
-    all_metrics.append(evaluate(log_reg, X_test, y_test, "Logistic Regression"))
+        test_size=0.20,
 
-    # ---- Random Forest + RandomizedSearchCV ----
-    print("\nTuning Random Forest with RandomizedSearchCV...")
-    rf_param_grid = {
-        "n_estimators": [100, 200, 300, 400],
-        "max_depth": [4, 6, 8, 10, None],
-        "min_samples_split": [2, 5, 10],
-        "min_samples_leaf": [1, 2, 4],
-        "max_features": ["sqrt", "log2"],
-    }
-    rf_search = RandomizedSearchCV(
-        RandomForestClassifier(
-            random_state=42, class_weight=None if HAS_SMOTE else "balanced"
-        ),
-        param_distributions=rf_param_grid,
-        n_iter=20,
-        cv=5,
-        scoring="roc_auc",
         random_state=42,
-        n_jobs=-1,
+
+        stratify=y
+
     )
-    rf_search.fit(X_train_bal, y_train_bal)
-    best_rf = rf_search.best_estimator_
-    print(f"Best RF params: {rf_search.best_params_}")
-    rf_metrics = evaluate(best_rf, X_test, y_test, "Random Forest (tuned)")
-    all_metrics.append(rf_metrics)
 
-    best_model = best_rf
-    best_name = "Random Forest (tuned)"
-    best_score = rf_metrics["roc_auc"]
+    print()
 
-    # ---- XGBoost + RandomizedSearchCV ----
-    if HAS_XGB:
-        print("\nTuning XGBoost with RandomizedSearchCV...")
-        xgb_param_grid = {
-            "n_estimators": [100, 200, 300, 400],
-            "max_depth": [3, 4, 5, 6, 8],
-            "learning_rate": [0.01, 0.05, 0.1, 0.2],
-            "subsample": [0.7, 0.8, 1.0],
-            "colsample_bytree": [0.7, 0.8, 1.0],
-        }
-        xgb_search = RandomizedSearchCV(
-            XGBClassifier(
-                random_state=42, eval_metric="logloss", use_label_encoder=False
-            ),
-            param_distributions=xgb_param_grid,
-            n_iter=20,
-            cv=5,
-            scoring="roc_auc",
+    print("Training Records :", len(X_train))
+
+    print("Testing Records :", len(X_test))
+
+    return X_train, X_test, y_train, y_test
+def balance_dataset(
+
+    X_train,
+
+    y_train,
+
+):
+
+    if HAS_SMOTE:
+
+        print()
+
+        print("Applying SMOTE...")
+
+        smote = SMOTE(
+
+            random_state=42
+
+        )
+
+        X_train, y_train = smote.fit_resample(
+
+            X_train,
+
+            y_train
+
+        )
+
+        print(pd.Series(y_train).value_counts())
+
+    return X_train, y_train
+def train_logistic(
+
+    X_train,
+
+    y_train,
+
+):
+
+    print()
+
+    print("Training Logistic Regression...")
+
+    model = LogisticRegression(
+
+        max_iter=1000
+
+    )
+
+    model.fit(
+
+        X_train,
+
+        y_train
+
+    )
+
+    return model
+RF_PARAMETERS = {
+
+    "n_estimators": [
+
+        100,
+
+        200,
+
+        300,
+
+        400,
+
+    ],
+
+    "max_depth": [
+
+        4,
+
+        6,
+
+        8,
+
+        10,
+
+        None,
+
+    ],
+
+    "min_samples_split": [
+
+        2,
+
+        5,
+
+        10,
+
+    ],
+
+    "min_samples_leaf": [
+
+        1,
+
+        2,
+
+        4,
+
+    ],
+
+    "max_features": [
+
+        "sqrt",
+
+        "log2",
+
+    ],
+
+}
+RF_PARAMETERS = {
+
+    "n_estimators": [
+
+        100,
+
+        200,
+
+        300,
+
+        400,
+
+    ],
+
+    "max_depth": [
+
+        4,
+
+        6,
+
+        8,
+
+        10,
+
+        None,
+
+    ],
+
+    "min_samples_split": [
+
+        2,
+
+        5,
+
+        10,
+
+    ],
+
+    "min_samples_leaf": [
+
+        1,
+
+        2,
+
+        4,
+
+    ],
+
+    "max_features": [
+
+        "sqrt",
+
+        "log2",
+
+    ],
+
+}
+def train_random_forest(
+
+    X_train,
+
+    y_train,
+
+):
+
+    print()
+
+    print("Training Random Forest...")
+
+    search = RandomizedSearchCV(
+
+        estimator=RandomForestClassifier(
+
+            random_state=42
+
+        ),
+
+        param_distributions=RF_PARAMETERS,
+
+        n_iter=20,
+
+        cv=5,
+
+        scoring="roc_auc",
+
+        random_state=42,
+
+        n_jobs=-1,
+
+    )
+
+    search.fit(
+
+        X_train,
+
+        y_train
+
+    )
+
+    print()
+
+    print(search.best_params_)
+
+    return search.best_estimator_
+def train_xgboost(
+
+    X_train,
+
+    y_train,
+
+):
+
+    if not HAS_XGB:
+
+        return None
+
+    parameters = {
+
+        "n_estimators": [
+
+            100,
+
+            200,
+
+            300,
+
+            400,
+
+        ],
+
+        "learning_rate": [
+
+            0.01,
+
+            0.05,
+
+            0.1,
+
+            0.2,
+
+        ],
+
+        "max_depth": [
+
+            3,
+
+            4,
+
+            5,
+
+            6,
+
+        ],
+
+        "subsample": [
+
+            0.8,
+
+            1.0,
+
+        ],
+
+        "colsample_bytree": [
+
+            0.8,
+
+            1.0,
+
+        ],
+
+    }
+
+    search = RandomizedSearchCV(
+
+        estimator=XGBClassifier(
+
             random_state=42,
-            n_jobs=-1,
+
+            eval_metric="logloss",
+
+        ),
+
+        param_distributions=parameters,
+
+        n_iter=20,
+
+        cv=5,
+
+        scoring="roc_auc",
+
+        random_state=42,
+
+        n_jobs=-1,
+
+    )
+
+    search.fit(
+
+        X_train,
+
+        y_train
+
+    )
+
+    print()
+
+    print(search.best_params_)
+
+    return search.best_estimator_
+def evaluate_model(
+    model,
+    X_test,
+    y_test,
+    model_name,
+):
+    y_probability = model.predict_proba(X_test)[:, 1]
+
+    roc_auc = roc_auc_score(
+        y_test,
+        y_probability,
+    )
+
+    y_prediction = (
+        y_probability >= THRESHOLD
+    ).astype(int)
+
+    accuracy = accuracy_score(
+        y_test,
+        y_prediction,
+    )
+
+    precision = precision_score(
+        y_test,
+        y_prediction,
+        zero_division=0,
+    )
+
+    recall = recall_score(
+        y_test,
+        y_prediction,
+        zero_division=0,
+    )
+
+    f1 = f1_score(
+        y_test,
+        y_prediction,
+        zero_division=0,
+    )
+
+    confusion = confusion_matrix(
+        y_test,
+        y_prediction,
+    )
+
+    print()
+    print("=" * 60)
+    print(model_name)
+    print("=" * 60)
+    print(f"ROC AUC   : {roc_auc:.4f}")
+    print(f"Accuracy  : {accuracy:.4f}")
+    print(f"Precision : {precision:.4f}")
+    print(f"Recall    : {recall:.4f}")
+    print(f"F1 Score  : {f1:.4f}")
+
+    print()
+    print("Confusion Matrix")
+    print(confusion)
+
+    print()
+    print("Classification Report")
+    print(
+        classification_report(
+            y_test,
+            y_prediction,
+            zero_division=0,
         )
-        xgb_search.fit(X_train_bal, y_train_bal)
-        best_xgb = xgb_search.best_estimator_
-        print(f"Best XGB params: {xgb_search.best_params_}")
-        xgb_metrics = evaluate(best_xgb, X_test, y_test, "XGBoost (tuned)")
-        all_metrics.append(xgb_metrics)
+    )
 
-        if xgb_metrics["roc_auc"] > best_score:
-            best_model = best_xgb
-            best_name = "XGBoost (tuned)"
-            best_score = xgb_metrics["roc_auc"]
+    return {
+        "model": model_name,
+        "roc_auc": round(roc_auc, 4),
+        "accuracy": round(accuracy, 4),
+        "precision": round(precision, 4),
+        "recall": round(recall, 4),
+        "f1_score": round(f1, 4),
+        "confusion_matrix": confusion.tolist(),
+    }
 
-    # ---- Save best model ----
-    print(f"\nBest model selected: {best_name} (ROC-AUC = {best_score})")
-    joblib.dump(best_model, MODEL_OUT)
-    joblib.dump(encoders, ENCODERS_OUT)
+def save_model(
 
-    with open(METRICS_OUT, "w") as f:
+    model,
+
+    encoders,
+
+    metrics,
+
+):
+
+    joblib.dump(
+
+        model,
+
+        MODEL_PATH,
+
+    )
+
+    joblib.dump(
+
+        encoders,
+
+        ENCODER_PATH,
+
+    )
+
+    with open(
+
+        METRICS_PATH,
+
+        "w",
+
+    ) as file:
+
         json.dump(
-            {
-                "best_model": best_name,
-                "operating_threshold": OPERATING_THRESHOLD,
-                "feature_order": FEATURE_COLS,
-                "results": all_metrics,
-            },
-            f,
-            indent=2,
+
+            metrics,
+
+            file,
+
+            indent=4,
+
         )
 
-    print(f"\nSaved model      -> {MODEL_OUT}")
-    print(f"Saved encoders   -> {ENCODERS_OUT}")
-    print(f"Saved metrics    -> {METRICS_OUT}")
-    print(f"\nOperating threshold saved: {OPERATING_THRESHOLD}")
-    print("Use this same threshold in the Django prediction API:")
-    print("    risk_prob = model.predict_proba(features)[0][1]")
-    print(f"    is_high_risk = risk_prob >= {OPERATING_THRESHOLD}")
-    print("\nLoad in Django with:")
-    print("    model = joblib.load('noshow_model.pkl')")
-    print("    encoders = joblib.load('encoders.pkl')")
+    print()
+
+    print("Saved Model")
+
+    print("Saved Encoders")
+
+    print("Saved Metrics")
+def main():
+
+    dataset = load_dataset()
+
+    X, y, encoders = preprocess(dataset)
+
+    X_train, X_test, y_train, y_test = split_dataset(X, y)
+
+    X_train, y_train = balance_dataset(X_train, y_train)
+
+    # ---------------- Logistic Regression ----------------
+
+    logistic = train_logistic(
+        X_train,
+        y_train,
+    )
+
+    # ---------------- Random Forest ----------------
+
+    random_forest = train_random_forest(
+        X_train,
+        y_train,
+    )
+
+    # ---------------- XGBoost ----------------
+
+    xgboost_model = None
+
+    if HAS_XGB:
+        xgboost_model = train_xgboost(
+            X_train,
+            y_train,
+        )
+
+    # ---------------- Evaluation ----------------
+
+   # ---------------- Evaluation ----------------
+
+    results = []
+
+    logistic_metrics = evaluate_model(
+        logistic,
+        X_test,
+        y_test,
+        "Logistic Regression",
+    )
+    results.append(logistic_metrics)
+
+    rf_metrics = evaluate_model(
+        random_forest,
+        X_test,
+        y_test,
+        "Random Forest",
+    )
+    results.append(rf_metrics)
+
+    candidates = [
+        (logistic, logistic_metrics),
+        (random_forest, rf_metrics),
+    ]
+
+    if xgboost_model is not None:
+
+        xgb_metrics = evaluate_model(
+            xgboost_model,
+            X_test,
+            y_test,
+            "XGBoost",
+        )
+
+        results.append(xgb_metrics)
+        candidates.append((xgboost_model, xgb_metrics))
+
+    # Select by RECALL (spec priority: "capturing maximum no-shows")
+    best_model, best_metrics = max(candidates, key=lambda c: c[1]["recall"])
+
+    print()
+    print(f">>> Selected model: {best_metrics['model']} "
+          f"(Recall={best_metrics['recall']}, ROC-AUC={best_metrics['roc_auc']})")
+
+    # ---------------- Save ----------------
+
+    save_model(
+        best_model,
+        encoders,
+        {
+            "best_model": type(best_model).__name__,
+            "threshold": THRESHOLD,
+            "feature_order": FEATURE_COLUMNS,
+            "results": results,
+        },
+    )
 
 
 if __name__ == "__main__":

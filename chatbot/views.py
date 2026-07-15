@@ -1,58 +1,57 @@
+"""
+chatbot/views.py
+Django views for the chat widget and its API endpoint.
+
+URLs expected (already in your config/urls.py):
+    chat/      -> chat_widget   (renders the widget page)
+    api/chat/  -> chat_api      (receives messages, returns agent replies)
+"""
+
 import json
-import uuid
-from django.shortcuts import render
+
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 
-from .models import ChatSession, ChatLog
-from .llm_engine import get_bot_response
+from .agent import get_agent_response
+
+# Simple in-memory session store: {session_key: [{"role":..., "content":...}, ...]}
+# Fine for a student/demo project. For production, back this with Redis/DB
+# (e.g. a checkpointer, since create_agent supports LangGraph checkpointing).
+_SESSION_HISTORY = {}
 
 
-@login_required
 def chat_widget(request):
-    if "chat_session_id" not in request.session:
-        request.session["chat_session_id"] = str(uuid.uuid4())
     return render(request, "chatbot/chat_widget.html")
 
 
 @csrf_exempt
-@login_required
 def chat_api(request):
-    """
-    Spec Section 5: real-time chat widget backend.
-    POST body: {"message": "..."}
-    Returns:    {"reply": "...", "escalated": bool}
-    """
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
 
-    data = json.loads(request.body or "{}")
-    message = data.get("message", "").strip()
-    if not message:
-        return JsonResponse({"error": "empty message"}, status=400)
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({"error": "Invalid JSON body"}, status=400)
 
-    session_id = request.session.get("chat_session_id", str(uuid.uuid4()))
-    request.session["chat_session_id"] = session_id
+    user_message = body.get("message", "").strip()
+    if not user_message:
+        return JsonResponse({"error": "message is required"}, status=400)
 
-    session, _ = ChatSession.objects.get_or_create(
-        session_id=session_id,
-        defaults={"user": request.user}
-    )
+    if not request.session.session_key:
+        request.session.create()
+    session_key = request.session.session_key
 
-    ChatLog.objects.create(session=session, sender="USER", message=message)
+    history = _SESSION_HISTORY.get(session_key, [])
 
-    # Build recent history for context window management (Spec 4)
-    history = [
-        {"role": "user" if log.sender == "USER" else "assistant", "content": log.message}
-        for log in session.messages.order_by("-timestamp")[:10][::-1]
-    ]
+    try:
+        reply, updated_history = get_agent_response(user_message, history=history)
+        _SESSION_HISTORY[session_key] = updated_history
+    except Exception as exc:  # noqa: BLE001 - surface a safe message to the widget
+        return JsonResponse(
+            {"error": "Something went wrong talking to the assistant.", "detail": str(exc)},
+            status=500,
+        )
 
-    result = get_bot_response(message, history)
-
-    ChatLog.objects.create(
-        session=session, sender="BOT",
-        message=result["reply"], escalated=result["escalated"]
-    )
-
-    return JsonResponse(result)
+    return JsonResponse({"response": reply})

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-1">Welcome, Dr. {{ request.user.first_name }}</h2>
+<p class="text-muted mb-4">Today's schedule and patient risk overview</p>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 text-center">
+            <h6 class="text-muted">Today's Appointments</h6>
+            <h2>{{ todays_appointments|length }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 text-center">
+            <h6 class="text-muted">High-Risk Today</h6>
+            <h2 class="text-danger">{{ high_risk_today|length }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 text-center">
+            <h6 class="text-muted">Total No-Shows (all time)</h6>
+            <h2>{{ total_noshows }}</h2>
+        </div>
+    </div>
+</div>
+
+{% if high_risk_today %}
+<div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    {{ high_risk_today|length }} patient{{ high_risk_today|length|pluralize }} today flagged as high no-show risk — consider a confirmation call.
+</div>
+{% endif %}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <i class="bi bi-calendar-day"></i> Today's Schedule
+    </div>
+    <div class="card-body p-0">
+        <table class="table mb-0">
+            <thead><tr><th class="ps-3">Time</th><th>Patient</th><th>Reason</th><th class="pe-3">Risk</th></tr></thead>
+            <tbody>
+                {% for a in todays_appointments %}
+                <tr class="{% if a.risk_level == 'HIGH' %}table-danger{% elif a.risk_level == 'MEDIUM' %}table-warning{% endif %}">
+                    <td class="ps-3">{{ a.appointment_time }}</td>
+                    <td>{{ a.patient }}</td>
+                    <td>{{ a.reason|truncatewords:8 }}</td>
+                    <td class="pe-3">
+                        {% if a.risk_level == "HIGH" %}
+                            <span class="badge bg-danger">High ({{ a.risk_score|floatformat:2 }})</span>
+                        {% elif a.risk_level == "MEDIUM" %}
+                            <span class="badge bg-warning text-dark">Medium ({{ a.risk_score|floatformat:2 }})</span>
+                        {% else %}
+                            <span class="badge bg-success">Low ({{ a.risk_score|floatformat:2 }})</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-4">No appointments scheduled for today.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

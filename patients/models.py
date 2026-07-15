@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import User
-
+from django.utils import timezone
 
 class Patient(models.Model):
 
@@ -53,6 +53,17 @@ class Patient(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        if self.user.first_name:
+            return f"{self.user.first_name} {self.user.last_name}".strip()
+        return self.user.username
+
+    @property
+    def age(self):
+        today = timezone.now().date()
+        dob = self.date_of_birth
+        return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
 
     def __str__(self):
      if self.user.first_name:

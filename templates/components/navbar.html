@@ -1,77 +1,87 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">
-            <i class="bi bi-hospital"></i>
-            AI Doctor Appointment Scheduler
+        <!-- Brand Logo -->
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'dashboard' %}">
+            <i class="bi bi-hospital fs-4"></i>
+            <span>AI Doctor Scheduler</span>
         </a>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
-
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
 
                 {% if user.is_authenticated %}
 
+                    <!-- Dashboard -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'dashboard' %}">
-                            Dashboard
+                            <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
 
+                    <!-- Doctors -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Doctors
+                        <a class="nav-link" href="{% url 'doctor_list' %}">
+                            <i class="bi bi-person-badge"></i> Doctors
                         </a>
                     </li>
 
+                    <!-- Patients -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Patients
+                        <a class="nav-link" href="{% url 'patient_list' %}">
+                            <i class="bi bi-people"></i> Patients
                         </a>
                     </li>
 
+                    <!-- Appointments -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Appointments
+                        <a class="nav-link" href="{% url 'appointment_list' %}">
+                            <i class="bi bi-calendar-check"></i> Appointments
                         </a>
                     </li>
 
+                    <!-- AI Risk Dashboard -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            {{ request.user.first_name }}
+                        <a class="nav-link text-warning fw-bold" href="{% url 'risk_dashboard' %}">
+                            <i class="bi bi-cpu"></i> Risk AI
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="btn btn-light ms-2"
-                           href="{% url 'logout' %}">
+                    <!-- AI Voice Booking (Highlight Badge) -->
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-light btn-sm fw-bold px-3 py-1 my-1" href="{% url 'voice_booking_page' %}">
+                            🎙️ Voice Booking
+                        </a>
+                    </li>
+
+                    <!-- User Profile Name -->
+                    <li class="nav-item ms-lg-2">
+                        <span class="nav-link fw-semibold text-white">
+                            <i class="bi bi-person-circle"></i> {{ request.user.first_name|default:request.user.username }}
+                        </span>
+                    </li>
+
+                    <!-- Logout -->
+                    <li class="nav-item ms-lg-1">
+                        <a class="btn btn-light btn-sm px-3" href="{% url 'logout' %}">
                             Logout
                         </a>
                     </li>
 
                 {% else %}
 
+                    <!-- Public Visitor Links -->
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="{% url 'login' %}">
-                            Login
-                        </a>
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="btn btn-light ms-2"
-                           href="{% url 'register' %}">
-                            Register
-                        </a>
+                        <a class="btn btn-light ms-2" href="{% url 'register' %}">Register</a>
                     </li>
 
                 {% endif %}

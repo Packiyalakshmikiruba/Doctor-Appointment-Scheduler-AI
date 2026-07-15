@@ -1,16 +1,11 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from datetime import date
-
 from .models import Appointment
-from patients.models import Patient
-from hospital.models import Doctor, DoctorAvailability
+from hospital.models import DoctorAvailability
 
 
 class AppointmentForm(forms.ModelForm):
 
     class Meta:
-
         model = Appointment
 
         fields = [
@@ -19,7 +14,7 @@ class AppointmentForm(forms.ModelForm):
             "appointment_date",
             "appointment_time",
             "reason",
-            "status",
+            
         ]
 
         widgets = {
@@ -32,48 +27,35 @@ class AppointmentForm(forms.ModelForm):
                 "class": "form-select"
             }),
 
-            "appointment_date": forms.DateInput(attrs={
-                "class": "form-control",
-                "type": "date"
-            }),
+            "appointment_date": forms.DateInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "date",
+                }
+            ),
 
-            "appointment_time": forms.TimeInput(attrs={
-                "class": "form-control",
-                "type": "time"
-            }),
+            "appointment_time": forms.TimeInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "time",
+                }
+            ),
 
-            "reason": forms.Textarea(attrs={
-                "class": "form-control",
-                "rows": 3,
-                "placeholder": "Enter Appointment Reason"
-            }),
+            "reason": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Reason for appointment"
+                }
+            ),
 
-            "status": forms.Select(attrs={
-                "class": "form-select"
-            }),
-
+            "status": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
         }
 
-    def __init__(self, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
-
-        self.fields["patient"].queryset = Patient.objects.select_related("user")
-        self.fields["doctor"].queryset = Doctor.objects.select_related("user")
-
-    # Past Date Validation
-    def clean_appointment_date(self):
-
-        appointment_date = self.cleaned_data.get("appointment_date")
-
-        if appointment_date < date.today():
-            raise ValidationError(
-                "Past date is not allowed."
-            )
-
-        return appointment_date
-
-    # Business Validations
     def clean(self):
 
         cleaned_data = super().clean()
@@ -85,51 +67,51 @@ class AppointmentForm(forms.ModelForm):
         if not doctor or not appointment_date or not appointment_time:
             return cleaned_data
 
-        # ---------------------------------
+        # ---------------------------------------------------
         # Doctor Availability Check
-        # ---------------------------------
+        # ---------------------------------------------------
 
-        weekday = appointment_date.strftime("%A")
+        day_name = appointment_date.strftime("%A")
 
-        availability = DoctorAvailability.objects.filter(
+        available = DoctorAvailability.objects.filter(
             doctor=doctor,
-            day_of_week=weekday,
-            is_available=True
+            day_of_week=day_name,
+            is_available=True,
         ).first()
 
-        if not availability:
-
-            raise ValidationError(
-                f"{doctor} is not available on {weekday}."
+        if not available:
+            raise forms.ValidationError(
+                f"{doctor} is not available on {day_name}."
             )
 
         if (
-            appointment_time < availability.start_time or
-            appointment_time > availability.end_time
+            appointment_time < available.start_time
+            or
+            appointment_time > available.end_time
         ):
-
-            raise ValidationError(
-                "Selected time is outside doctor's working hours."
+            raise forms.ValidationError(
+                f"Doctor is available only between "
+                f"{available.start_time} and {available.end_time}."
             )
 
-        # ---------------------------------
-        # Double Booking Validation
-        # ---------------------------------
+        # ---------------------------------------------------
+        # Double Booking Check
+        # ---------------------------------------------------
 
-        appointment = Appointment.objects.filter(
+        duplicate = Appointment.objects.filter(
             doctor=doctor,
             appointment_date=appointment_date,
             appointment_time=appointment_time,
         )
 
-        # Update page-க்கு
+        # Update செய்யும்போது தன்னையே ignore பண்ணும்
         if self.instance.pk:
-            appointment = appointment.exclude(pk=self.instance.pk)
+            duplicate = duplicate.exclude(pk=self.instance.pk)
 
-        if appointment.exists():
+        if duplicate.exists():
 
-            raise ValidationError(
-                "Doctor already has an appointment at this time."
+            raise forms.ValidationError(
+                "This doctor already has an appointment at this time."
             )
 
         return cleaned_data

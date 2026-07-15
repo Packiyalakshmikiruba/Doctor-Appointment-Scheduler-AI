@@ -1,39 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}Add Doctor{% endblock %}
+{% block title %}
+Doctor
+{% endblock %}
 
 {% block content %}
 
-<div class="card shadow">
+<div class="container mt-4">
 
-    <div class="card-header bg-success text-white">
+    <div class="card shadow">
 
-        <h3>Add Doctor</h3>
-
-    </div>
-
-    <div class="card-body">
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button type="submit" class="btn btn-success">
-                Save
-            </button>
-
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
-                Cancel
-            </a>
+        <div class="card-header bg-success text-white">
             {% if form.instance.pk %}
-    <h3>Edit Doctor</h3>
-{% else %}
-    <h3>Add Doctor</h3>
-{% endif %}
+                <h3>Edit Doctor</h3>
+            {% else %}
+                <h3>Add Doctor</h3>
+            {% endif %}
+        </div>
 
-        </form>
+        <div class="card-body">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-success">
+                    Save
+                </button>
+
+                <a href="{% url 'doctor_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
 
     </div>
 
