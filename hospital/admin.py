@@ -1,6 +1,13 @@
 from django.contrib import admin
 from .models import Department, Doctor, DoctorAvailability
+from .models import DoctorAttendance
+from .models import DoctorStatus
+from .models import DoctorLeave
 
+admin.site.register(DoctorAttendance)
+
+admin.site.register(DoctorStatus)
+admin.site.register(DoctorLeave)
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):

@@ -51,3 +51,20 @@ def send_email_confirmation(appointment):
 def send_appointment_confirmation(appointment):
     """Call this after any appointment is created."""
     send_email_confirmation(appointment)
+
+
+def send_sms_confirmation(appointment):
+    phone = appointment.patient.phone_number
+
+    if not phone:
+        print(f"[SMS SKIPPED] No phone number on file for {appointment.patient}")
+        return False
+
+    doctor_name = appointment.doctor.user.get_full_name() or appointment.doctor.user.username
+    message = (
+        f"Your appointment with Dr. {doctor_name} on "
+        f"{appointment.appointment_date} at {appointment.appointment_time} is confirmed."
+    )
+    # --- Simulated SMS (replace with real gateway call later) ---
+    print(f"[SMS SIMULATED] To {phone}: {message}")
+    return True

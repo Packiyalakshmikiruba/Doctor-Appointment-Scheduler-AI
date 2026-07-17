@@ -1,13 +1,170 @@
-<footer class="bg-light border-top mt-5 py-3">
-    <div class="container text-center">
+<footer class="mt-auto position-relative ultra-neon-3d-footer py-4 py-md-5 overflow-hidden">
+    <!-- Animated Top Neon Prism Flow -->
+    <div class="footer-neon-flow-edge"></div>
 
-        <p class="mb-1">
-            © 2026 AI Doctor Appointment Scheduler. All Rights Reserved.
-        </p>
+    <div class="container position-relative z-1 py-1">
+        <div class="row align-items-center gy-4">
+            
+            <!-- Left: Floating 3D Brand Logo & Subtitle -->
+            <div class="col-lg-5 text-center text-lg-start">
+                <div class="d-inline-flex align-items-center gap-3">
+                    <div class="footer-brand-neon-box rounded-4 d-flex align-items-center justify-content-center text-white">
+                        <i class="bi bi-hospital-fill fs-5"></i>
+                    </div>
+                    <div class="d-flex flex-column text-start">
+                        <span class="fw-extrabold fs-5 text-dark font-heading lh-1 tracking-tight">
+                            AI Doctor <span class="text-neon-gradient">Scheduler</span>
+                        </span>
+                        <span class="text-muted small mt-1 fw-semibold">Enterprise Clinical Intelligence Suite</span>
+                    </div>
+                </div>
+            </div>
 
-        <small class="text-muted">
-            Developed by Packiya
-        </small>
+            <!-- Center: Floating Glass Copyright Pill -->
+            <div class="col-lg-4 text-center">
+                <div class="px-4 py-2 rounded-pill bg-white border border-indigo-subtle d-inline-flex align-items-center gap-2.5 shadow-neon-sm copyright-pill-neon">
+                    <i class="bi bi-shield-lock-fill text-indigo-neon fs-6"></i>
+                    <span class="small fw-bold text-slate-800">
+                        © 2026 AI Doctor Appointment Scheduler
+                    </span>
+                </div>
+            </div>
 
+            <!-- Right: Interactive Glowing Developer Badge -->
+            <div class="col-lg-3 text-center text-lg-end">
+                <div class="developer-badge-neon d-inline-flex align-items-center gap-2.5 px-4 py-2 rounded-pill bg-white border border-indigo-subtle shadow-neon-sm">
+                    <span class="pulse-cyan-glow-dot rounded-circle"></span>
+                    <span class="small text-slate-600 fw-semibold">
+                        Developed by <strong class="text-indigo-dark fw-bold">Packiya</strong>
+                    </span>
+                </div>
+            </div>
+
+        </div>
     </div>
 </footer>
+
+<!-- Ultra-3D Neon Light Glassmorphism Stylesheet -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+:root {
+    --indigo-neon: #4f46e5;
+    --cyan-electric: #06b6d4;
+    --violet-deep: #7c3aed;
+    --slate-800: #1e293b;
+}
+
+.font-heading {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.tracking-tight {
+    letter-spacing: -0.03em;
+}
+
+/* Base Ultra Glass Surface */
+.ultra-neon-3d-footer {
+    background: rgba(255, 255, 255, 0.93) !important;
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 
+        0 -20px 40px -10px rgba(79, 70, 229, 0.12),
+        inset 0 2px 3px 0 rgba(255, 255, 255, 1);
+}
+
+/* Animated Flowing Prism Edge */
+.footer-neon-flow-edge {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3.5px;
+    background: linear-gradient(90deg, #4f46e5, #06b6d4, #7c3aed, #4f46e5);
+    background-size: 300% 100%;
+    animation: neonFlow 4s linear infinite;
+    box-shadow: 0 2px 14px rgba(6, 182, 212, 0.45);
+}
+
+@keyframes neonFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 0%; }
+}
+
+/* Glowing Neon Text Gradient */
+.text-neon-gradient {
+    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+    -webkit-background-clip: text; /* Chrome, Safari, Opera */
+    background-clip: text;         /* Standard Syntax (VS Code Warning போயிடும்) */
+    -webkit-text-fill-color: transparent;
+    color: transparent;            /* Fallback */
+}
+
+.text-indigo-neon { color: var(--indigo-neon) !important; }
+.text-indigo-dark { color: #3730a3 !important; }
+.text-slate-800 { color: var(--slate-800) !important; }
+.border-indigo-subtle { border-color: rgba(79, 70, 229, 0.18) !important; }
+
+/* 3D Icon Box with Soft Neon Shadow */
+.footer-brand-neon-box {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 10px 22px -4px rgba(79, 70, 229, 0.45),
+        inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.footer-brand-neon-box:hover {
+    transform: scale(1.1) rotate(-4deg);
+    box-shadow: 0 14px 28px -4px rgba(6, 182, 212, 0.55);
+}
+
+/* Universal Soft Neon Shadows */
+.shadow-neon-sm {
+    box-shadow: 
+        0 6px 20px -4px rgba(79, 70, 229, 0.08),
+        0 2px 6px -1px rgba(0, 0, 0, 0.03),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 1) !important;
+}
+
+/* Interactive Developer Badge */
+.developer-badge-neon {
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.developer-badge-neon:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 
+        0 14px 30px -6px rgba(79, 70, 229, 0.28),
+        0 0 15px rgba(6, 182, 212, 0.2),
+        inset 0 1px 2px 0 rgba(255, 255, 255, 1) !important;
+    border-color: rgba(79, 70, 229, 0.4) !important;
+}
+
+/* Pulsing Cyan Dot */
+.pulse-cyan-glow-dot {
+    width: 9px;
+    height: 9px;
+    background-color: #06b6d4;
+    box-shadow: 0 0 10px #06b6d4;
+    animation: cyanGlowPulse 2s infinite;
+}
+
+@keyframes cyanGlowPulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.8); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+}
+
+/* Copyright Pill Hover */
+.copyright-pill-neon {
+    transition: all 0.3s ease;
+}
+.copyright-pill-neon:hover {
+    transform: translateY(-2.5px);
+    box-shadow: 0 12px 24px -4px rgba(6, 182, 212, 0.2) !important;
+    border-color: rgba(6, 182, 212, 0.35) !important;
+}
+</style>

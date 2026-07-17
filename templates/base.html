@@ -5,8 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>{% block title %}AI Doctor Appointment Scheduler{% endblock %}</title>
+
+    <!-- Google Fonts (Plus Jakarta Sans & Outfit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,42 +18,220 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Custom CSS -->
+    <!-- 3D Depth & Multi-Layer Gradient Styles -->
+    <style>
+        :root {
+            --bs-font-sans-serif: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --heading-font: 'Outfit', sans-serif;
+            
+            /* 3D Vibrant Color Palette */
+            --gradient-3d-primary: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #06b6d4 100%);
+            --gradient-3d-accent: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            
+            /* 3D Box Shadow Profiles */
+            --shadow-3d-sm: 0 10px 20px -5px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-3d-lg: 0 20px 35px -10px rgba(37, 99, 235, 0.18), 0 10px 15px -5px rgba(0, 0, 0, 0.08);
+            --shadow-3d-inset: inset 0 2px 4px 0 rgba(255, 255, 255, 0.8), inset 0 -2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* Ambient 3D Dynamic Background with Floating Orbs Effect */
+        body {
+            font-family: var(--bs-font-sans-serif);
+            background-color: #f1f5f9;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.18) 0px, transparent 45%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.18) 0px, transparent 45%),
+                radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.15) 0px, transparent 45%);
+            background-attachment: fixed;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            perspective: 1000px; /* Enables 3D perspective space */
+        }
+
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: var(--heading-font);
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        /* Glassmorphism Header with 3D Depth Layer */
+        header.sticky-top {
+            background: rgba(255, 255, 255, 0.82) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .main-wrapper {
+            flex: 1 0 auto;
+        }
+
+        /* 3D Dynamic Floating Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            box-shadow: var(--shadow-3d-sm) !important;
+            border-radius: 24px !important;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+            transform-style: preserve-3d;
+        }
+
+        /* Real 3D Elevate & Tilt on Hover */
+        .card:hover {
+            transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
+            box-shadow: var(--shadow-3d-lg) !important;
+            border-color: rgba(37, 99, 235, 0.3) !important;
+        }
+
+        /* 3D Raised Buttons */
+        .btn-primary {
+            background: var(--gradient-3d-primary) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 14px !important;
+            font-weight: 700 !important;
+            padding: 12px 24px;
+            color: #ffffff !important;
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4), var(--shadow-3d-inset) !important;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.5), var(--shadow-3d-inset) !important;
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* 3D Inset Form Controls */
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
+            border-radius: 14px !important;
+            padding: 12px 18px !important;
+            color: #0f172a !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #2563eb !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15), inset 0 1px 2px rgba(0,0,0,0.02) !important;
+        }
+
+        /* Custom Modern Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3b82f6 0%, #06b6d4 100%);
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+        }
+
+        /* Floating 3D Alert Toasts */
+        .toast-container-custom {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1090;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .toast-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+            border-radius: 18px !important;
+        }
+
+        /* Page Smooth Entry Animation */
+        .fade-in-content {
+            animation: slideUp3D 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp3D {
+            from { opacity: 0; transform: translateY(20px) translateZ(-50px); }
+            to { opacity: 1; transform: translateY(0) translateZ(0); }
+        }
+    </style>
+
+    <!-- Custom App CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
 
-    <!-- Dynamic Navbar Included -->
-    {% include 'components/navbar.html' %}
+    <!-- Glassmorphic Header Navbar -->
+    <header class="sticky-top">
+        {% include 'components/navbar.html' %}
+    </header>
 
-    <div class="container mt-4">
-
-        <!-- Django Alert Messages -->
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Floating Django Alert Messages -->
+    {% if messages %}
+    <div class="toast-container-custom">
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show toast-card border-0 mb-3 p-3 d-flex align-items-center justify-content-between" role="alert">
+                <div class="d-flex align-items-center gap-3">
+                    {% if message.tags == 'success' %}
+                        <div class="rounded-circle bg-success bg-opacity-10 p-2 text-success d-flex align-items-center justify-content-center shadow-sm">
+                            <i class="bi bi-check-circle-fill fs-5"></i>
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="rounded-circle bg-danger bg-opacity-10 p-2 text-danger d-flex align-items-center justify-content-center shadow-sm">
+                            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                        </div>
+                    {% else %}
+                        <div class="rounded-circle bg-primary bg-opacity-10 p-2 text-primary d-flex align-items-center justify-content-center shadow-sm">
+                            <i class="bi bi-info-circle-fill fs-5"></i>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <span class="small fw-bold text-dark d-block">System Notification</span>
+                        <span class="small text-secondary">{{ message }}</span>
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
-
-        <!-- Page Main Content Block -->
-        {% block content %}
-
-        {% endblock %}
-
+                <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
     </div>
+    {% endif %}
 
-    <!-- Dynamic Footer Included -->
-    {% include 'components/footer.html' %}
+    <!-- Main Workspace -->
+    <main class="main-wrapper py-4 py-md-5 fade-in-content">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
 
-    <!-- Bootstrap JS Bundle -->
+    <!-- Modern Clean Footer -->
+    <footer class="mt-auto border-top bg-white bg-opacity-80" style="backdrop-filter: blur(12px);">
+        {% include 'components/footer.html' %}
+    </footer>
+
+    <!-- Floating AI Assistant Chat Widget -->
+    {% include 'components/chat_widget_floating.html' %}
+
+    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JS -->
+    <!-- Custom Global JS -->
     <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 
 </body>
 </html>

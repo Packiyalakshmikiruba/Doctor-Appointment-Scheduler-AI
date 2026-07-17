@@ -1,94 +1,253 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg sticky-top fresh-aether-nav py-2.5">
     <div class="container">
 
-        <!-- Brand Logo -->
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'dashboard' %}">
-            <i class="bi bi-hospital fs-4"></i>
-            <span>AI Doctor Scheduler</span>
+        <!-- Modern Soft Teal Floating Logo -->
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2.5 px-3 py-1.5 rounded-4 brand-card-light" href="{% url 'dashboard' %}">
+            <div class="brand-teal-badge rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm">
+                <i class="bi bi-hospital-fill fs-5"></i>
+            </div>
+            <div class="d-flex flex-column lh-1">
+                <span class="brand-title-text text-dark fw-bold">Aether<span class="text-teal">Care</span></span>
+                <span class="brand-sub-text text-muted">Smart Medical Suite</span>
+            </div>
         </a>
 
-        <!-- Mobile Toggle -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
+        <!-- Mobile Toggler -->
+        <button class="navbar-toggler border-0 shadow-none px-2 rounded-3 bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#aetherNavbar">
+            <i class="bi bi-grid-3x3-gap-fill fs-3 text-teal"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-
-            <ul class="navbar-nav ms-auto align-items-center">
+        <div class="collapse navbar-collapse mt-3 mt-lg-0" id="aetherNavbar">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1.5">
 
                 {% if user.is_authenticated %}
 
-                    <!-- Dashboard -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">
-                            <i class="bi bi-speedometer2"></i> Dashboard
+                        <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'dashboard' %}">
+                            <i class="bi bi-speedometer2 text-teal fs-6"></i> 
+                            <span>Dashboard</span>
                         </a>
                     </li>
 
-                    <!-- Doctors -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'doctor_list' %}">
-                            <i class="bi bi-person-badge"></i> Doctors
-                        </a>
-                    </li>
+                    {% if request.user.role == "PATIENT" %}
+                        
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'appointment_list' %}">
+                                <i class="bi bi-calendar2-pulse-fill text-teal fs-6"></i> 
+                                <span>My Appointments</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'bill_list' %}">
+                                <i class="bi bi-receipt-cutoff text-teal fs-6"></i> 
+                                <span>My Bills</span>
+                            </a>
+                        </li>
 
-                    <!-- Appointments -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'appointment_list' %}">
-                            <i class="bi bi-calendar-check"></i> Appointments
-                        </a>
-                    </li>
+                    {% elif request.user.role == "DOCTOR" %}
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'availability_list' %}">
+                                <i class="bi bi-clock-history text-teal fs-6"></i> 
+                                <span>My Availability</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'appointment_list' %}">
+                                <i class="bi bi-calendar2-check-fill text-teal fs-6"></i> 
+                                <span>Appointments</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'medical_record_list' %}">
+                                <i class="bi bi-folder-symlink-fill text-teal fs-6"></i> 
+                                <span>Medical Records</span>
+                            </a>
+                        </li>
 
-                    <!-- Chat Assistant -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'chat_widget' %}">
-                            <i class="bi bi-chat-dots"></i> Chat
-                        </a>
-                    </li>
+                    {% elif request.user.role == "ADMIN" %}
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'department_list' %}">
+                                <i class="bi bi-buildings-fill text-teal fs-6"></i> 
+                                <span>Departments</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'doctor_list' %}">
+                                <i class="bi bi-person-vcard-fill text-teal fs-6"></i> 
+                                <span>Doctors</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'patient_list' %}">
+                                <i class="bi bi-people-fill text-teal fs-6"></i> 
+                                <span>Patients</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'appointment_list' %}">
+                                <i class="bi bi-calendar2-check-fill text-teal fs-6"></i> 
+                                <span>Appointments</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'bill_list' %}">
+                                <i class="bi bi-receipt-cutoff text-teal fs-6"></i> 
+                                <span>Billing</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link risk-ai-badge px-3 py-2 rounded-pill text-dark d-flex align-items-center gap-2 ms-lg-1" href="{% url 'risk_dashboard' %}">
+                                <i class="bi bi-lightning-charge-fill text-amber fs-6"></i> 
+                                <span class="fw-bold">Risk AI Engine</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="/admin/">
+                                <i class="bi bi-sliders text-secondary fs-6"></i> 
+                                <span>Admin</span>
+                            </a>
+                        </li>
+                    {% endif %}
 
-                    <!-- AI Risk Dashboard -->
-                    <li class="nav-item">
-                        <a class="nav-link text-warning fw-bold" href="{% url 'risk_dashboard' %}">
-                            <i class="bi bi-cpu"></i> Risk AI
-                        </a>
-                    </li>
+                    <!-- User Profile Card & Soft Logout Button -->
+                    <div class="d-flex align-items-center gap-2.5 ms-lg-3 mt-3 mt-lg-0 pt-2 pt-lg-0 border-top border-secondary border-opacity-10 border-lg-0">
+                        <div class="user-profile-badge d-flex align-items-center gap-2 px-3 py-1.5 rounded-pill bg-white border shadow-sm">
+                            <div class="teal-avatar rounded-circle text-white d-flex align-items-center justify-content-center">
+                                <i class="bi bi-person-fill small"></i>
+                            </div>
+                            <span class="fw-bold text-dark small">{{ request.user.first_name|default:request.user.username }}</span>
+                        </div>
 
-                    <!-- AI Voice Booking (Highlight Badge) -->
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn btn-outline-light btn-sm fw-bold px-3 py-1 my-1" href="{% url 'voice_booking_page' %}">
-                            🎙️ Voice Booking
+                        <a class="btn btn-logout-soft rounded-pill px-3 py-1.5 small fw-bold d-flex align-items-center gap-1.5 text-danger" href="{% url 'logout' %}">
+                            <i class="bi bi-power fs-6"></i>
+                            <span>Logout</span>
                         </a>
-                    </li>
-
-                    <!-- User Profile Name -->
-                    <li class="nav-item ms-lg-2">
-                        <span class="nav-link fw-semibold text-white">
-                            <i class="bi bi-person-circle"></i> {{ request.user.first_name|default:request.user.username }}
-                        </span>
-                    </li>
-
-                    <!-- Logout -->
-                    <li class="nav-item ms-lg-1">
-                        <a class="btn btn-light btn-sm px-3" href="{% url 'logout' %}">
-                            Logout
-                        </a>
-                    </li>
+                    </div>
 
                 {% else %}
 
-                    <!-- Public Visitor Links -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-dark fw-bold" href="{% url 'login' %}">Login</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="btn btn-light ms-2" href="{% url 'register' %}">Register</a>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-teal-action rounded-pill px-4 py-2 fw-bold text-white shadow-sm" href="{% url 'register' %}">
+                            <span>Get Started</span>
+                            <i class="bi bi-arrow-right-short fs-5 ms-1"></i>
+                        </a>
                     </li>
 
                 {% endif %}
 
             </ul>
-
         </div>
 
     </div>
 </nav>
+
+<!-- Clean Aqua-Teal Medical Stylesheet -->
+<style>
+/* Custom Color Tokens */
+:root {
+    --brand-teal: #0284c7;
+    --brand-teal-dark: #0369a1;
+    --brand-teal-light: #e0f2fe;
+    --brand-amber: #d97706;
+}
+
+.text-teal { color: var(--brand-teal) !important; }
+.text-amber { color: var(--brand-amber) !important; }
+
+/* Base Clean Glassmorphism Navbar */
+.fresh-aether-nav {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.06);
+}
+
+/* Brand Card Styling */
+.brand-card-light {
+    background: rgba(241, 245, 249, 0.8);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.brand-card-light:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.18);
+}
+.brand-teal-badge {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+.brand-title-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: -0.5px;
+}
+.brand-sub-text {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Nav Pills Interactive Hover */
+.teal-pill-link {
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.teal-pill-link:hover {
+    color: var(--brand-teal) !important;
+    background: var(--brand-teal-light);
+    transform: translateY(-1.5px);
+}
+
+/* Risk AI Special Amber Badge */
+.risk-ai-badge {
+    background: rgba(217, 119, 6, 0.12);
+    border: 1px solid rgba(217, 119, 6, 0.25);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+.risk-ai-badge:hover {
+    background: rgba(217, 119, 6, 0.22);
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
+
+/* User Avatar & Logout Pill */
+.teal-avatar {
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+}
+
+.btn-logout-soft {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    transition: all 0.2s ease;
+}
+.btn-logout-soft:hover {
+    background: #ef4444;
+    color: #ffffff !important;
+    border-color: #ef4444;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1.5px);
+}
+
+/* Gradient Action Button */
+.btn-teal-action {
+    background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%) !important;
+    border: none;
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25) !important;
+    transition: all 0.25s ease !important;
+}
+.btn-teal-action:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 22px rgba(2, 132, 199, 0.35) !important;
+}
+</style>

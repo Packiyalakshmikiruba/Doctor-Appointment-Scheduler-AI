@@ -1,7 +1,7 @@
 from django import forms
 
 from accounts.models import User
-from .models import Department, Doctor, DoctorAvailability
+from .models import Department, Doctor, DoctorStatus, DoctorLeave, DoctorAvailability
 
 
 class DepartmentForm(forms.ModelForm):
@@ -194,3 +194,33 @@ class DoctorAvailabilityForm(forms.ModelForm):
         self.fields["doctor"].label_from_instance = (
             lambda obj: obj.user.get_full_name() or obj.user.username
         )
+class DoctorLeaveForm(forms.ModelForm):
+
+    class Meta:
+
+        model = DoctorLeave
+
+        fields = [
+            "doctor",
+            "leave_date",
+            "reason",
+        ]
+
+        widgets = {
+
+            "leave_date": forms.DateInput(
+                attrs={
+                    "type": "date"
+                }
+            ),
+
+            "reason": forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+        }
+class DoctorStatusForm(forms.ModelForm):
+    class Meta:
+        model = DoctorStatus
+        fields = ["status"]

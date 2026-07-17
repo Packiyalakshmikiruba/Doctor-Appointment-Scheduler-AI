@@ -10,7 +10,7 @@ existing mark_cancelled view (appointments/urls.py already has this URL).
 from .models import Appointment
 from .utils import is_doctor_available
 from .risk import predict_and_save_risk
-from .notifications import send_email_notification, send_sms_notification
+from .notifications import send_appointment_confirmation, send_sms_confirmation
 
 
 class BookingError(Exception):
@@ -54,13 +54,8 @@ def book_appointment_full(patient, doctor, appointment_date, appointment_time, r
     appointment.save(update_fields=["status"])
 
     # Step 5 — Email + Step 6 — SMS
-    subject = "Appointment Confirmed"
-    message = (
-        f"Dear {patient}, your appointment with Dr. {doctor} on "
-        f"{appointment_date} at {appointment_time} is confirmed. Reason: {reason}."
-    )
-    send_email_notification(getattr(patient.user, "email", None), subject, message)
-    sms_sent = send_sms_notification(patient.phone_number, message)
+    send_appointment_confirmation(appointment)
+    sms_sent = send_sms_confirmation(appointment)
     if sms_sent:
         appointment.sms_reminder_sent = True
         appointment.save(update_fields=["sms_reminder_sent"])
@@ -88,13 +83,25 @@ def handle_cancellation(appointment):
         return None
 
     patient = entry.patient
+    doctor_name = appointment.doctor.user.get_full_name() or appointment.doctor.user.username
     message = (
-        f"Good news! A slot with Dr. {appointment.doctor} on "
+        f"Good news! A slot with Dr. {doctor_name} on "
         f"{appointment.appointment_date} at {appointment.appointment_time} just opened up. "
         f"Book now before it's taken."
     )
-    send_sms_notification(patient.phone_number, message)
-    send_email_notification(getattr(patient.user, "email", None), "A slot just opened up!", message)
+
+    # Simple simulated notifications (waitlist offer isn't an "appointment
+    # confirmation", so it doesn't reuse send_appointment_confirmation).
+    if patient.phone_number:
+        print(f"[SMS SIMULATED] To {patient.phone_number}: {message}")
+    patient_email = getattr(patient.user, "email", None)
+    if patient_email:
+        try:
+            from django.core.mail import send_mail
+            from django.conf import settings
+            send_mail("A slot just opened up!", message, settings.DEFAULT_FROM_EMAIL, [patient_email])
+        except Exception as exc:  # noqa: BLE001
+            print(f"[EMAIL FAILED] {exc}")
 
     entry.notified = True
     entry.save(update_fields=["notified"])

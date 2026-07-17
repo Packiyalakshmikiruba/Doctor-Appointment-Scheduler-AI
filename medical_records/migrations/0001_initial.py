@@ -9,10 +9,10 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('appointments', '0003_alter_appointment_id'),
-        ('patients', '0003_alter_patient_id'),
-        ('hospital', '0003_alter_department_id_alter_doctor_id_and_more'),
-    ]
+    ('appointments', '0003_alter_appointment_id'),
+    ('patients', '0002_alter_patient_blood_group_alter_patient_gender'),
+    ('hospital', '0002_alter_doctoravailability_day_of_week'),
+]
 
     operations = [
         migrations.CreateModel(

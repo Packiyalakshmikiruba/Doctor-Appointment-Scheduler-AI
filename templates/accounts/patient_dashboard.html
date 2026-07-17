@@ -1,141 +1,797 @@
 {% extends "base.html" %}
-
-{% block title %}My Dashboard{% endblock %}
+{% block title %}Cyber-Health Patient Portal{% endblock %}
 
 {% block content %}
+<div class="container-fluid py-4 px-lg-4 cyber-portal-root">
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h2 class="fw-bold mb-1">Welcome, {{ request.user.first_name }}</h2>
-        <p class="text-muted mb-0">Your health overview at a glance</p>
+    <!-- 🚀 HERO BANNER: DEEP SAPPHIRE CYBER GLOW -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cyber-hero-card p-4 p-md-5 rounded-5 shadow-2xl position-relative overflow-hidden">
+                <div class="cyber-hero-glow"></div>
+                <div class="row align-items-center position-relative z-1 g-4">
+                    <div class="col-lg-7">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <span class="cyber-badge-neon rounded-pill px-3 py-1 extra-small fw-extrabold text-uppercase tracking-wider">
+                                <span class="pulse-dot me-1"></span> AI HEALTH ENGINE v4.2
+                            </span>
+                            <span class="cyber-badge-purple rounded-pill px-3 py-1 extra-small fw-extrabold text-uppercase">
+                                Encrypted VIP Portal
+                            </span>
+                        </div>
+                        <h1 class="fw-black text-white tracking-tight font-heading mb-2 display-6">
+                            Welcome, <span class="neon-text-cyan">{{ request.user.first_name|default:request.user.username }}</span> 👋
+                        </h1>
+                        <p class="cyber-subtitle mb-0 font-body fs-6">
+                            Real-time bio-telemetry monitored. All systems optimal.
+                        </p>
+                    </div>
+                    <div class="col-lg-5 d-flex justify-content-lg-end gap-3 flex-wrap">
+                        <button type="button" class="btn cyber-btn-cyan rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2 shadow-lg" onclick="document.getElementById('chat-toggle-btn').click();">
+                            <span class="fs-5">🤖</span>
+                            <span>Launch AI Medical Assistant</span>
+                        </button>
+                        <a href="{% url 'voice_booking_page' %}" class="btn cyber-btn-purple rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2 shadow-lg">
+                            <span class="fs-5">🎙️</span>
+                            <span>Voice Booking</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <a href="{% url 'chat_widget' %}" class="btn btn-primary shadow-sm">
-        <i class="bi bi-chat-dots"></i> Book via Chat Assistant
+
+    <!-- 🚨 EMERGENCY / HIGH RISK ALERT (IF ANY) -->
+    {% if high_risk_count > 0 %}
+    <div class="cyber-alert-card rounded-4 p-3.5 mb-4 d-flex align-items-center gap-3 border-crimson shadow-lg">
+        <div class="cyber-alert-icon rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fs-3">
+            🚨
+        </div>
+        <div class="flex-grow-1">
+            <h6 class="fw-extrabold mb-0 text-crimson font-heading">CRITICAL ATTENTION REQUIRED</h6>
+            <p class="small mb-0 text-cyber-muted">You have <strong>{{ high_risk_count }} high risk appointment{{ high_risk_count|pluralize }}</strong> requiring immediate clinical confirmation.</p>
+        </div>
+        <a href="{% url 'contact_admin' %}" class="btn btn-outline-primary">
+    <i class="bi bi-headset"></i> Contact Support (Admin)
+</a>
+        <a href="{% url 'patient_dashboard' %}" class="btn cyber-btn-crimson btn-sm rounded-pill px-3 fw-bold">Review Now</a>
+    </div>
+    {% endif %}
+
+    <!-- 📊 TOP 4 METRIC CARDS (NEON OBSIDIAN METALLIC) -->
+    <div class="row g-3.5 mb-4">
+        <!-- Upcoming Visits -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="cyber-stat-card card-glow-indigo p-4 rounded-4 shadow-xl">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="cyber-label text-indigo">Upcoming Visits</span>
+                    <div class="cyber-icon-box rounded-3 text-indigo">🗓️</div>
+                </div>
+                <h2 class="fw-black text-white mb-1 font-heading display-6">{{ upcoming|length }}</h2>
+                <div class="extra-small text-cyber-muted fw-semibold">Scheduled Consultations</div>
+            </div>
+        </div>
+
+        <!-- Pending Bills -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="cyber-stat-card card-glow-amber p-4 rounded-4 shadow-xl">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="cyber-label text-amber">Pending Invoices</span>
+                    <div class="cyber-icon-box rounded-3 text-amber">🧾</div>
+                </div>
+                <h2 class="fw-black text-white mb-1 font-heading display-6">{{ pending_bills|length }}</h2>
+                <div class="extra-small text-cyber-muted fw-semibold">Action Required</div>
+            </div>
+        </div>
+
+        <!-- Total Due -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="cyber-stat-card card-glow-emerald p-4 rounded-4 shadow-xl">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="cyber-label text-emerald">Amount Payable</span>
+                    <div class="cyber-icon-box rounded-3 text-emerald">💳</div>
+                </div>
+                <h2 class="fw-black text-emerald mb-1 font-heading display-6">₹{{ total_due }}</h2>
+                <div class="extra-small text-cyber-muted fw-semibold">Clear balance securely</div>
+            </div>
+        </div>
+
+        <!-- Medical Records -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="cyber-stat-card card-glow-cyan p-4 rounded-4 shadow-xl">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <span class="cyber-label text-cyan">Medical Vault</span>
+                    <div class="cyber-icon-box rounded-3 text-cyan">📁</div>
+                </div>
+                <h2 class="fw-black text-white mb-1 font-heading display-6">{{ recent_records|length }}</h2>
+                <div class="extra-small text-cyber-muted fw-semibold">Verified Clinical Files</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⚡ NEW UPDATE: REAL-TIME HEALTH VITALS TELEMETRY BAR -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="cyber-glass-panel p-4 rounded-5 border-cyan">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3 border-bottom border-cyber pb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4">💓</span>
+                        <div>
+                            <h6 class="fw-bold text-white mb-0 font-heading">Real-Time Vitals Telemetry</h6>
+                            <span class="extra-small text-cyber-muted">Synced with Health Tracker</span>
+                        </div>
+                    </div>
+                    <span class="cyber-badge-neon rounded-pill px-3 py-1 extra-small fw-bold">LIVE SYNCED</span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div class="cyber-vital-tile p-3 rounded-4">
+                            <span class="extra-small text-cyber-muted d-block mb-1">Heart Rate</span>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="fw-black fs-4 text-rose">72</span>
+                                <span class="extra-small text-cyber-muted">BPM</span>
+                            </div>
+                            <div class="progress cyber-progress mt-2" style="height:4px;">
+                                <div class="progress-bar bg-rose" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="cyber-vital-tile p-3 rounded-4">
+                            <span class="extra-small text-cyber-muted d-block mb-1">Blood Pressure</span>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="fw-black fs-4 text-cyan">120/80</span>
+                                <span class="extra-small text-cyber-muted">mmHg</span>
+                            </div>
+                            <div class="progress cyber-progress mt-2" style="height:4px;">
+                                <div class="progress-bar bg-cyan" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="cyber-vital-tile p-3 rounded-4">
+                            <span class="extra-small text-cyber-muted d-block mb-1">Blood Oxygen</span>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="fw-black fs-4 text-emerald">99%</span>
+                                <span class="extra-small text-cyber-muted">SpO2</span>
+                            </div>
+                            <div class="progress cyber-progress mt-2" style="height:4px;">
+                                <div class="progress-bar bg-emerald" style="width: 99%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="cyber-vital-tile p-3 rounded-4">
+                            <span class="extra-small text-cyber-muted d-block mb-1">Overall Health Score</span>
+                            <div class="d-flex align-items-baseline gap-2">
+                                <span class="fw-black fs-4 text-purple">88 / 100</span>
+                                <span class="extra-small text-emerald">Optimal</span>
+                            </div>
+                            <div class="progress cyber-progress mt-2" style="height:4px;">
+                                <div class="progress-bar bg-purple" style="width: 88%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🤖 AI ASSISTANT PANEL & 📅 APPOINTMENTS TABLE -->
+    <div class="row g-4 mb-4">
+        <!-- Left Side: AI Health Companion -->
+        <div class="col-lg-4">
+            <div class="cyber-glass-panel p-4 rounded-5 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between border-bottom border-cyber pb-3 mb-3">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <span class="fs-3">🤖</span>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0 font-heading">AI Care Companion</h6>
+                                <span class="extra-small text-purple">24/7 Clinical Assistant</span>
+                            </div>
+                        </div>
+                        <span class="cyber-pill-indigo rounded-pill px-3 py-1 extra-small fw-bold">ONLINE</span>
+                    </div>
+
+                    <div class="p-3.5 rounded-4 cyber-inner-box mb-3">
+                        <h6 class="fw-bold text-cyan mb-2 small">Pre-Consultation Checklist 📝</h6>
+                        {% if upcoming %}
+                        <ul class="list-unstyled mb-0 d-flex flex-column gap-2 extra-small text-cyber-light">
+                            <li class="d-flex align-items-center gap-2">
+                                <span class="text-emerald">✔</span> Reach hospital 15 mins prior
+                            </li>
+                            <li class="d-flex align-items-center gap-2">
+                                <span class="text-cyan">✔</span> Keep digital medical records ready
+                            </li>
+                            <li class="d-flex align-items-center gap-2">
+                                <span class="text-amber">✔</span> Fasting required for lab tests
+                            </li>
+                        </ul>
+                        {% else %}
+                        <div class="text-cyber-muted extra-small">No upcoming appointments! Book instantly via AI Assistant.</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- ⚡ NEW UPDATE: MEDICATION TIME TRACKER -->
+                    <div class="p-3.5 rounded-4 cyber-inner-box mb-3">
+                        <h6 class="fw-bold text-emerald mb-2 small">Today's Pill Tracker 💊</h6>
+                        <div class="d-flex flex-column gap-2 extra-small">
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-cyber-dark">
+                                <span>🌅 Morning — Paracetamol</span>
+                                <span class="badge bg-emerald-subtle text-emerald">Taken</span>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-cyber-dark">
+                                <span>🌙 Night — Vitamin D3</span>
+                                <span class="badge bg-amber-subtle text-amber">9:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                    <button type="button" class="btn cyber-btn-cyan w-100 py-3 rounded-pill fw-bold shadow-lg" onclick="document.getElementById('chat-toggle-btn').click();">
+                        💬 Chat with AI Assistant
+                    </button>
+                    <a href="{% url 'voice_booking_page' %}" class="btn cyber-btn-purple w-100 py-3 rounded-pill fw-bold shadow-lg">
+                        🎤 Voice Appointment Booking
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Appointments Table -->
+        <div class="col-lg-8">
+            <div class="cyber-glass-panel p-3 rounded-5 h-100">
+                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <span class="fs-3">📅</span>
+                        <div>
+                            <h6 class="fw-bold text-white mb-0 font-heading">Upcoming Appointments</h6>
+                            <span class="extra-small text-cyber-muted">Confirmed Clinical Visits</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive rounded-4">
+                    <table class="table align-middle mb-0 cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Doctor</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Risk Level</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in upcoming %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <div class="cyber-avatar rounded-circle text-cyan">
+                                            🩺
+                                        </div>
+                                        <div>
+                                            <span class="fw-bold text-white d-block lh-sm">Dr. {{ a.doctor.user.first_name }} {{ a.doctor.user.last_name }}</span>
+                                            <span class="extra-small text-cyber-muted">{{ a.doctor.department.department_name }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold text-white small d-block">{{ a.appointment_date }}</span>
+                                    <span class="extra-small text-cyan">{{ a.appointment_time }}</span>
+                                </td>
+                                <td>
+                                    {% if a.status == "Confirmed" %}
+                                        <span class="badge cyber-pill-emerald rounded-pill px-3 py-1 extra-small fw-bold">Confirmed</span>
+                                    {% elif a.status == "Pending" %}
+                                        <span class="badge cyber-pill-amber rounded-pill px-3 py-1 extra-small fw-bold">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-slate-800 text-slate-300 rounded-pill px-3 py-1 extra-small fw-bold">{{ a.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if a.risk_level == "HIGH" %}
+                                        <span class="badge cyber-pill-rose rounded-pill px-3 py-1 extra-small fw-bold">High Risk</span>
+                                    {% elif a.risk_level == "MEDIUM" %}
+                                        <span class="badge cyber-pill-amber rounded-pill px-3 py-1 extra-small fw-bold">Medium Risk</span>
+                                    {% else %}
+                                        <span class="badge cyber-pill-emerald rounded-pill px-3 py-1 extra-small fw-bold">Low Risk</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'patient_cancel_appointment' a.id %}" class="btn cyber-btn-outline-rose btn-sm rounded-pill px-3 py-1 fw-bold extra-small">Cancel</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <span class="fs-1 d-block mb-2">🎉</span>
+                                    <span class="text-cyber-muted small fw-semibold">No upcoming appointments scheduled!</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📋 MEDICAL RECORDS & PRESCRIPTIONS -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="cyber-glass-panel p-3 rounded-5">
+                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <span class="fs-3">📋</span>
+                        <div>
+                            <h6 class="fw-bold text-white mb-0 font-heading">Medical Records & Prescriptions Vault</h6>
+                            <span class="extra-small text-cyber-muted">Verified Doctor Notes</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'medical_record_list' %}" class="btn cyber-btn-outline btn-sm rounded-pill px-3.5 py-1.5 fw-bold extra-small">View Full Records</a>
+                </div>
+
+                <div class="table-responsive rounded-4">
+                    <table class="table align-middle mb-0 cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Doctor</th>
+                                <th>Diagnosis</th>
+                                <th>Prescribed Medicines</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in recent_records %}
+                            <tr>
+                                <td><span class="fw-semibold text-white small">{{ record.created_at|date:"d M Y" }}</span></td>
+                                <td><span class="fw-bold text-cyan small">Dr. {{ record.appointment.doctor.user.first_name }} {{ record.appointment.doctor.user.last_name }}</span></td>
+                                <td><span class="text-cyber-light small">{{ record.diagnosis|truncatewords:8 }}</span></td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1.5">
+                                        {% for p in record.prescriptions.all %}
+                                            <span class="badge cyber-pill-indigo rounded-pill px-3 py-1 extra-small fw-semibold">
+                                                💊 {{ p.medicine_name }} — {{ p.dosage }}, {{ p.frequency }}
+                                            </span>
+                                        {% empty %}
+                                            <span class="badge bg-dark text-muted rounded-pill px-3 py-1 extra-small">No prescriptions recorded</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <span class="fs-1 d-block mb-2">📂</span>
+                                    <span class="text-cyber-muted small fw-semibold">No Medical Records Available</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 💰 BILLING & PAYMENT HISTORY -->
+    <div class="row g-4 mb-4">
+        <!-- Pending Bills -->
+        <div class="col-lg-6">
+            <div class="cyber-glass-panel p-3 rounded-5 h-100">
+                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <span class="fs-3">🧾</span>
+                        <div>
+                            <h6 class="fw-bold text-amber mb-0 font-heading">Pending Invoices</h6>
+                            <span class="extra-small text-cyber-muted">Unpaid Hospital Bills</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'bill_list' %}" class="btn cyber-btn-outline btn-sm rounded-pill px-3.5 py-1.5 fw-bold extra-small">View All Bills</a>
+                </div>
+
+                <div class="table-responsive rounded-4">
+                    <table class="table align-middle mb-0 cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Bill #</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bill in pending_bills %}
+                            <tr>
+                                <td><span class="fw-bold text-white">#{{ bill.id }}</span></td>
+                                <td><span class="fw-black text-amber">₹{{ bill.balance_due }}</span></td>
+                                <td><span class="badge cyber-pill-rose rounded-pill px-3 py-1 extra-small fw-bold">Unpaid</span></td>
+                                <td class="text-end">
+                                    <a href="{% url 'add_payment' bill.id %}" class="btn cyber-btn-emerald btn-sm rounded-pill px-3.5 py-1 extra-small fw-bold">Pay Now</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-cyber-muted small fw-semibold">All bills cleared! No pending dues 🎉</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment History -->
+        <div class="col-lg-6">
+            <div class="cyber-glass-panel p-3 rounded-5 h-100">
+                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center gap-2.5 mb-3">
+                    <span class="fs-3">💳</span>
+                    <div>
+                        <h6 class="fw-bold text-emerald mb-0 font-heading">Payment History</h6>
+                        <span class="extra-small text-cyber-muted">Completed Transactions</span>
+                    </div>
+                </div>
+
+                <div class="table-responsive rounded-4">
+                    <table class="table align-middle mb-0 cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Bill #</th>
+                                <th>Amount</th>
+                                <th>Mode</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td><span class="small fw-semibold text-white">{{ payment.paid_at|date:"d M Y" }}</span></td>
+                                <td><span class="small fw-bold text-cyber-muted">#{{ payment.bill.id }}</span></td>
+                                <td><span class="small fw-black text-emerald">₹{{ payment.amount_paid }}</span></td>
+                                <td><span class="badge bg-cyber-dark text-cyan border border-cyan-subtle px-2.5 py-1 extra-small fw-bold">{{ payment.payment_mode }}</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-cyber-muted small fw-semibold">No Payment History Recorded</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column gap-2">
+    <button type="button" class="btn btn-primary" onclick="document.getElementById('chat-toggle-btn').click();">
+        🤖 AI Assistant (Chat)
+    </button>
+    <a href="{% url 'voice_booking_page' %}" class="btn btn-success">
+        🎤 Voice Booking
+    </a>
+    <a href="{% url 'support_chat_page' %}" class="btn btn-outline-dark">
+        🧑‍💼 Talk to Support Staff (Human)
     </a>
 </div>
 
-{% if high_risk_count > 0 %}
-<div class="alert alert-danger">
-    <i class="bi bi-exclamation-triangle"></i>
-    You have {{ high_risk_count }} upcoming appointment{{ high_risk_count|pluralize }} flagged as high no-show risk. Please confirm attendance.
-</div>
-{% endif %}
+    <!-- 👤 PROFILE, 💡 HEALTH TIPS & 🚑 EMERGENCY -->
+    <div class="row g-4 mb-4">
+        <!-- Profile Card -->
+        <div class="col-lg-4">
+            <div class="cyber-glass-panel p-4 rounded-5 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center gap-2.5 border-bottom border-cyber pb-3 mb-3">
+                        <span class="fs-3">👤</span>
+                        <div>
+                            <h6 class="fw-bold text-white mb-0 font-heading">My Profile</h6>
+                            <span class="extra-small text-cyber-muted">Personal Bio-Data</span>
+                        </div>
+                    </div>
 
-<!-- Quick Stats -->
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 text-center">
-            <h6 class="text-muted mb-1">Upcoming Appointments</h6>
-            <h3>{{ upcoming|length }}</h3>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 text-center">
-            <h6 class="text-muted mb-1">High Risk</h6>
-            <h3 class="text-danger">{{ high_risk_count }}</h3>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card shadow-sm p-3 text-center">
-            <h6 class="text-muted mb-1">Past Visits</h6>
-            <h3>{{ history|length }}</h3>
-        </div>
-    </div>
-</div>
+                    <div class="d-flex flex-column gap-2.5 small mb-3">
+                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
+                            <span class="text-cyber-muted fw-semibold">Full Name</span>
+                            <span class="fw-bold text-white">{{ request.user.get_full_name|default:request.user.username }}</span>
+                        </div>
+                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
+                            <span class="text-cyber-muted fw-semibold">Email ID</span>
+                            <span class="fw-bold text-cyan">{{ request.user.email|default:"Not Provided" }}</span>
+                        </div>
+                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
+                            <span class="text-cyber-muted fw-semibold">Phone</span>
+                            <span class="fw-bold text-white">{{ patient.phone_number|default:"N/A" }}</span>
+                        </div>
+                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
+                            <span class="text-cyber-muted fw-semibold">Blood Group</span>
+                            <span class="badge cyber-pill-rose fw-bold fs-6">{{ patient.blood_group|default:"N/A" }}</span>
+                        </div>
+                    </div>
+                </div>
 
-<div class="row g-4">
-
-    <!-- Upcoming Appointments -->
-    <div class="col-md-7">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-primary text-white">
-                <i class="bi bi-calendar-check"></i> Upcoming Appointments
-            </div>
-            <div class="card-body p-0">
-                <table class="table mb-0">
-                    <thead><tr><th class="ps-3">Doctor</th><th>Date</th><th>Time</th><th>Status</th><th class="pe-3">Risk</th></tr></thead>
-                    <tbody>
-                        {% for a in upcoming %}
-                        <tr>
-                            <td class="ps-3">Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}<br>
-                                <small class="text-muted">{{ a.doctor.department.department_name }}</small></td>
-                            <td>{{ a.appointment_date }}</td>
-                            <td>{{ a.appointment_time }}</td>
-                            <td>
-                                {% if a.status == "Pending" %}
-                                    <span class="badge bg-secondary-subtle text-secondary border">Pending</span>
-                                {% else %}
-                                    <span class="badge bg-primary-subtle text-primary border">Confirmed</span>
-                                {% endif %}
-                            </td>
-                            <td class="pe-3">
-                                {% if a.risk_level == "HIGH" %}
-                                    <span class="badge bg-danger">High</span>
-                                {% elif a.risk_level == "MEDIUM" %}
-                                    <span class="badge bg-warning text-dark">Medium</span>
-                                {% else %}
-                                    <span class="badge bg-success">Low</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="5" class="text-center text-muted py-4">No upcoming appointments.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <a href="{% url 'edit_profile' %}" class="btn cyber-btn-cyan w-100 py-3 rounded-pill fw-bold shadow-lg">✏ Edit Patient Profile</a>
             </div>
         </div>
-    </div>
 
-    <!-- Quick Actions -->
-    <div class="col-md-5">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-success text-white">
-                <i class="bi bi-lightning-charge"></i> Quick Actions
+        <!-- AI Health Care Tips -->
+        <div class="col-lg-4">
+            <div class="cyber-glass-panel p-4 rounded-5 h-100">
+                <div class="d-flex align-items-center gap-2.5 border-bottom border-cyber pb-3 mb-3">
+                    <span class="fs-3">💖</span>
+                    <div>
+                        <h6 class="fw-bold text-white mb-0 font-heading">AI Wellness Directives</h6>
+                        <span class="extra-small text-emerald">Personalized Care Tips</span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-2.5 extra-small">
+                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-cyan">
+                        💧 Hydration Goal: Drink 3 Litres of water daily.
+                    </div>
+                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-emerald">
+                        🥗 Nutrition: Eat leafy greens & fruit fibers.
+                    </div>
+                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-amber">
+                        💊 Prescription Compliance: Take medicines on schedule.
+                    </div>
+                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-rose">
+                        😴 Rest: Maintain 8 hours of uninterrupted sleep.
+                    </div>
+                </div>
             </div>
-            <div class="card-body d-grid gap-2">
-                <a href="{% url 'chat_widget' %}" class="btn btn-success">
-                    <i class="bi bi-chat-dots"></i> Book via Chat Assistant
-                </a>
-                <a href="{% url 'voice_booking_page' %}" class="btn btn-outline-success">
-                    <i class="bi bi-mic"></i> Book via Voice
-                </a>
-                <a href="{% url 'appointment_create' %}" class="btn btn-outline-secondary">
-                    <i class="bi bi-calendar-plus"></i> Book via Form
-                </a>
-                <a href="{% url 'bill_list' %}" class="btn btn-outline-warning">
-                    <i class="bi bi-receipt"></i> View Bills
-                </a>
-                <a href="{% url 'edit_profile' %}" class="btn btn-outline-secondary">
-                    <i class="bi bi-person-gear"></i> Edit Profile
-                </a>
+        </div>
+
+        <!-- Emergency Helpline -->
+        <div class="col-lg-4">
+            <div class="cyber-glass-panel p-4 rounded-5 h-100 d-flex flex-column justify-content-between border-crimson">
+                <div>
+                    <div class="d-flex align-items-center gap-2.5 border-bottom border-cyber pb-3 mb-3">
+                        <span class="fs-3">🚑</span>
+                        <div>
+                            <h6 class="fw-bold text-crimson mb-0 font-heading">Emergency SOS Protocol</h6>
+                            <span class="extra-small text-cyber-muted">24/7 Rapid Medical Unit</span>
+                        </div>
+                    </div>
+                    
+
+                    <div class="p-3.5 rounded-4 cyber-inner-box mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small fw-bold text-white">Hospital Control Room</span>
+                            <span class="fw-black text-rose fs-6">📞 +91 9876543210</span>
+                        </div>
+                        <hr class="my-2 border-cyber">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small fw-bold text-white">Ambulance SOS</span>
+                            <span class="fw-black text-rose fs-6">🚑 108</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="tel:+919876543210" class="btn cyber-btn-crimson w-100 py-3 rounded-pill fw-bold shadow-lg">🚨 Trigger Emergency Call</a>
             </div>
         </div>
     </div>
 
 </div>
 
-<!-- History -->
-<div class="card shadow-sm mt-4">
-    <div class="card-header">
-        <i class="bi bi-clock-history"></i> Appointment History
-    </div>
-    <div class="card-body p-0">
-        <table class="table mb-0">
-            <thead><tr><th class="ps-3">Doctor</th><th>Date</th><th class="pe-3">Status</th></tr></thead>
-            <tbody>
-                {% for a in history %}
-                <tr>
-                    <td class="ps-3">Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}</td>
-                    <td>{{ a.appointment_date }}</td>
-                    <td class="pe-3">{{ a.status }}</td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="3" class="text-center text-muted py-4">No history yet.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+<!-- 🎨 DEEP MIDNIGHT OBSIDIAN & ELECTRIC NEON STYLESHEET (100% NO WHITE BG) -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
 
+/* 🌌 ROOT DARK OBSIDIAN BACKGROUND (ZERO WHITE) */
+.cyber-portal-root {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #090d16;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(244, 63, 94, 0.1) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #f1f5f9;
+    min-height: 100vh;
+}
+
+.font-heading { font-family: 'Outfit', sans-serif; }
+.extra-small { font-size: 11px; }
+
+/* 🌟 HERO BANNER GLASS CARDS */
+.cyber-hero-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 27, 75, 0.8) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    backdrop-filter: blur(20px);
+}
+
+.cyber-hero-glow {
+    position: absolute; top: -50%; left: -20%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* 🧊 FROSTED GLASS PANELS (OBSIDIAN DARK) */
+.cyber-glass-panel {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.cyber-glass-panel:hover {
+    border-color: rgba(6, 182, 212, 0.3);
+}
+
+.cyber-inner-box {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bg-cyber-dark {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+/* 📊 METALLIC NEON STAT CARDS */
+.cyber-stat-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cyber-stat-card:hover {
+    transform: translateY(-6px);
+}
+
+.card-glow-indigo:hover { border-color: #6366f1; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.3); }
+.card-glow-amber:hover { border-color: #f59e0b; box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.3); }
+.card-glow-emerald:hover { border-color: #10b981; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3); }
+.card-glow-cyan:hover { border-color: #06b6d4; box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.3); }
+
+.cyber-icon-box {
+    width: 44px; height: 44px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+}
+
+.cyber-vital-tile {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cyber-progress {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 🎨 ELECTRIC TEXT & COLORS */
+.neon-text-cyan {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-cyber-muted { color: #94a3b8 !important; }
+.text-cyber-light { color: #cbd5e1 !important; }
+.text-cyan { color: #38bdf8 !important; }
+.text-indigo { color: #818cf8 !important; }
+.text-emerald { color: #34d399 !important; }
+.text-amber { color: #fbbf24 !important; }
+.text-purple { color: #c084fc !important; }
+.text-rose { color: #fb7185 !important; }
+.text-crimson { color: #f43f5e !important; }
+
+.bg-cyan { background-color: #38bdf8 !important; }
+.bg-emerald { background-color: #34d399 !important; }
+.bg-purple { background-color: #c084fc !important; }
+.bg-rose { background-color: #fb7185 !important; }
+
+.border-cyber { border-color: rgba(255, 255, 255, 0.08) !important; }
+.border-cyan { border-color: rgba(56, 189, 248, 0.3) !important; }
+.border-crimson { border-color: rgba(244, 63, 94, 0.4) !important; }
+
+/* 🔘 NEON BUTTONS */
+.cyber-btn-cyan {
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    color: #ffffff !important; border: none;
+}
+.cyber-btn-cyan:hover { box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); transform: scale(1.02); }
+
+.cyber-btn-purple {
+    background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+    color: #ffffff !important; border: none;
+}
+.cyber-btn-purple:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
+
+.cyber-btn-emerald {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff !important; border: none;
+}
+.cyber-btn-emerald:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+
+.cyber-btn-crimson {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    color: #ffffff !important; border: none;
+}
+
+.cyber-btn-outline {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+}
+.cyber-btn-outline:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+.cyber-btn-outline-rose {
+    background: rgba(244, 63, 94, 0.1);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    color: #fb7185;
+}
+.cyber-btn-outline-rose:hover { background: #f43f5e; color: #fff; }
+
+/* 🍬 BADGES & PILLS */
+.cyber-badge-neon {
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #38bdf8;
+}
+
+.cyber-badge-purple {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #c084fc;
+}
+
+.cyber-pill-emerald { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+.cyber-pill-amber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.cyber-pill-rose { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+.cyber-pill-indigo { background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+
+/* 📊 TABLES WITH NO WHITE BACKGROUND */
+.cyber-table {
+    background: transparent !important;
+    color: #f1f5f9;
+}
+
+.cyber-table th {
+    background: rgba(15, 23, 42, 0.9) !important;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+    color: #64748b; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 18px;
+}
+
+.cyber-table td {
+    background: transparent !important;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+}
+
+.cyber-table tr:hover td {
+    background: rgba(30, 41, 59, 0.5) !important;
+}
+
+.cyber-avatar {
+    width: 38px; height: 38px;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* 🔴 LIVE PULSE DOT */
+.pulse-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background-color: #a4e5ff;
+    box-shadow: 0 0 8px #38bdf8;
+    animation: pulse-animation 1.5s infinite;
+}
+
+@keyframes pulse-animation {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+</style>
 {% endblock %}

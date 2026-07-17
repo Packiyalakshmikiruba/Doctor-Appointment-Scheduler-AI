@@ -1,0 +1,18 @@
+appointment_id,patient_name,patient_age,patient_gender,doctor_name,department,appointment_date,appointment_weekday,appointment_time,lead_time_days,sms_reminder_sent,prior_visits,prior_noshows,history_noshow_ratio,distance_from_clinic,status,risk_score,risk_level
+3,Selvi P,30,Female,Arun Kumar,Neurology,2026-07-20,Monday,11:00:00,6,0,0,0,0.0,0.0,No Show,,
+8,bhuvan k,26,Male,Saran K,Cardiology,2026-07-20,Monday,10:00:00,5,0,1,0,0.0,5.0,No Show,0.5174,MEDIUM
+10,Nirmala K,30,Female,Arun Kumar,Neurology,2026-07-20,Monday,10:00:00,5,0,1,0,0.0,56.0,No Show,0.4612,MEDIUM
+17,divya k,139,Female,Saran K,Cardiology,2026-07-18,Saturday,10:00:00,2,0,0,0,0.0,6.0,Completed,0.1934,LOW
+18,divya k,139,Female,Devi H,General Medicine,2026-07-17,Friday,14:30:00,1,0,1,0,0.0,6.0,Confirmed,0.2362,LOW
+5,bhuvan k,26,Male,Arun Kumar,Neurology,2026-07-17,Friday,10:00:00,3,0,1,0,0.0,5.0,Confirmed,0.3328,LOW
+6,Kiruba P,28,Male,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,2,1,0.5,0.5,Confirmed,0.6242,HIGH
+7,Kiruba P,28,Male,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,2,1,0.5,0.5,Confirmed,0.6242,HIGH
+11,Nithya P,34,Female,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,5,0,0.0,9.0,Confirmed,0.5396,MEDIUM
+12,Nithya P,34,Female,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,5,0,0.0,9.0,Confirmed,0.5396,MEDIUM
+13,Nithya P,34,Female,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,5,0,0.0,9.0,Confirmed,0.5396,MEDIUM
+14,Nithya P,34,Female,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,5,0,0.0,9.0,Confirmed,0.5396,MEDIUM
+15,Nithya P,34,Female,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,4,0,0.0,9.0,Pending,0.5356,MEDIUM
+16,Nithya P,34,Female,Arun Kumar,Neurology,2026-07-16,Thursday,09:00:00,1,0,5,0,0.0,9.0,Pending,0.5396,MEDIUM
+9,Nirmala K,30,Female,Arun Kumar,Neurology,2026-07-15,Wednesday,12:00:00,0,0,1,0,0.0,56.0,Confirmed,0.5368,MEDIUM
+1,Nithya P,23,Female,Arun Kumar,Neurology,2026-05-11,Monday,10:00:00,0,0,0,0,0.0,20.0,No Show,0.5613,MEDIUM
+4,Kiruba P,28,Male,Saran K,Cardiology,2025-01-08,Wednesday,12:30:00,0,0,0,0,0.0,0.5,No Show,0.5929,MEDIUM

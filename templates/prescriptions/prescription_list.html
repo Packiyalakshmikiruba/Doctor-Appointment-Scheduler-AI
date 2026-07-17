@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Prescriptions{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">
+        My Prescriptions
+    </h2>
+
+    {% if prescriptions %}
+
+    <table class="table table-bordered table-hover">
+
+        <thead>
+
+            <tr>
+                <th>Date</th>
+                <th>Doctor</th>
+                <th>Medicine</th>
+                <th>Dosage</th>
+                <th>Duration</th>
+                <th>Download</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for prescription in prescriptions %}
+
+        <tr>
+
+            <td>{{ prescription.created_at|date:"d M Y" }}</td>
+
+            <td>
+                Dr.
+                {{ prescription.medical_record.appointment.doctor.user.get_full_name }}
+            </td>
+
+            <td>{{ prescription.medicine_name }}</td>
+
+            <td>{{ prescription.dosage }}</td>
+
+            <td>{{ prescription.duration }}</td>
+
+            <td>
+
+                <a href="{% url 'download_prescription_pdf' prescription.id %}"
+                   class="btn btn-success btn-sm">
+
+                    Download PDF
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <div class="alert alert-info">
+
+            No prescriptions available.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

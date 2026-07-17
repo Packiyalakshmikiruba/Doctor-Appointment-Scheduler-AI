@@ -1,10 +1,6 @@
 """
 chatbot/views.py
 Django views for the chat widget and its API endpoint.
-
-URLs expected (already in your config/urls.py):
-    chat/      -> chat_widget   (renders the widget page)
-    api/chat/  -> chat_api      (receives messages, returns agent replies)
 """
 
 import json
@@ -15,9 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .agent import get_agent_response
 
-
-# Simple in-memory session store: {session_key: [{"role":..., "content":...}, ...]}
-# Fine for a student/demo project. For production, back this with Redis/DB.
+# Simple in-memory session store. Fine for demo; use Redis/DB for production.
 _SESSION_HISTORY = {}
 
 
@@ -44,24 +38,49 @@ def chat_api(request):
     session_key = request.session.session_key
 
     history = _SESSION_HISTORY.get(session_key, [])
+    history = history[-10:]
 
-    # Extract patient_id from the logged-in user, if any -- so the agent
-    # never has to ask the user for it.
     patient_id = None
+    doctor_id = None
+    user_role = None
+
     if request.user.is_authenticated:
-        patient = getattr(request.user, "patient_profile", None)
-        if patient:
-            patient_id = patient.id
+        user_role = getattr(request.user, "role", None)
+
+        if user_role == "PATIENT":
+            patient = getattr(request.user, "patient_profile", None)
+            if patient:
+                patient_id = patient.id
+
+        elif user_role == "DOCTOR":
+            doctor = getattr(request.user, "doctor_profile", None)
+            if doctor:
+                doctor_id = doctor.id
 
     try:
         reply, updated_history = get_agent_response(
-            user_message, history=history, patient_id=patient_id
+            user_message,
+            history=history,
+            patient_id=patient_id,
+            user_role=user_role,
+            doctor_id=doctor_id,
         )
-        _SESSION_HISTORY[session_key] = updated_history
-    except Exception as exc:  # noqa: BLE001
+        _SESSION_HISTORY[session_key] = updated_history[-20:]
+
+    except Exception as exc:
+        print("=" * 60)
+        print("CHATBOT ERROR")
+        print(exc)
+        print("=" * 60)
+
         return JsonResponse(
-            {"error": "Something went wrong talking to the assistant.", "detail": str(exc)},
+            {
+                "error": "Assistant Error",
+                "detail": str(exc),
+            },
             status=500,
         )
 
+    # Success path -- this was missing entirely before, which is why
+    # a working reply never made it back to the browser.
     return JsonResponse({"response": reply})

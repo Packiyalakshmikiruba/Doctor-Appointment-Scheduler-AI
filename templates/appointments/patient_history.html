@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3>Patient History: {{ patient.user.get_full_name|default:patient.user.username }}</h3>
+  <p class="text-muted">Age: {{ patient.age }} | Gender: {{ patient.gender }} | Blood Group: {{ patient.blood_group }}</p>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">All Appointments</div>
+    <div class="card-body p-0">
+      <table class="table mb-0">
+        <thead><tr><th class="ps-3">Date</th><th>Doctor</th><th>Department</th><th class="pe-3">Status</th></tr></thead>
+        <tbody>
+          {% for a in appointments %}
+          <tr>
+            <td class="ps-3">{{ a.appointment_date }}</td>
+            <td>Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}</td>
+            <td>{{ a.doctor.department.department_name }}</td>
+            <td class="pe-3">{{ a.status }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted py-3">No appointment history.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">Medical Records & Prescriptions</div>
+    <div class="card-body p-0">
+      <table class="table mb-0">
+        <thead><tr><th class="ps-3">Date</th><th>Doctor</th><th>Diagnosis</th><th class="pe-3">Medicines</th></tr></thead>
+        <tbody>
+          {% for r in records %}
+          <tr>
+            <td class="ps-3">{{ r.created_at|date:"d M Y" }}</td>
+            <td>Dr. {{ r.appointment.doctor.user.get_full_name|default:r.appointment.doctor.user.username }}</td>
+            <td>{{ r.diagnosis|default:"-" }}</td>
+            <td class="pe-3">
+              {% for p in r.prescriptions.all %}
+                {{ p.medicine_name }} ({{ p.dosage }}){% if not forloop.last %}, {% endif %}
+              {% empty %}-{% endfor %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted py-3">No medical records.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}

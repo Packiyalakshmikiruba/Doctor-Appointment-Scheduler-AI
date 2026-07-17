@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Doctor Leave
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h4 class="mb-0">
+                        Add Doctor Leave
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Doctor
+                            </label>
+
+                            {{ form.doctor }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Leave Date
+                            </label>
+
+                            {{ form.leave_date }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Reason
+                            </label>
+
+                            {{ form.reason }}
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger">
+
+                            Save Leave
+
+                        </button>
+
+                        <a
+                            href="{% url 'doctor_leave_list' %}"
+                            class="btn btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

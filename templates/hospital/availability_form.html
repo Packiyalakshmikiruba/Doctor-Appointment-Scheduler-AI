@@ -3,48 +3,80 @@
 {% block title %}Add Availability{% endblock %}
 
 {% block content %}
-
-<div class="row justify-content-center">
-
-    <div class="col-md-6">
-
-        <div class="card shadow-sm">
-
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">
-                    <i class="bi bi-calendar-plus"></i> Add Doctor Availability
-                </h4>
+<div class="row justify-content-center my-5">
+    <div class="col-md-6 col-lg-5">
+        
+        <!-- Main Form Card -->
+        <div class="card border-0 shadow-lg rounded-4">
+            
+            <!-- Elegant Card Header -->
+            <div class="card-header bg-gradient bg-primary text-white text-center py-4 rounded-top-4">
+                <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle p-3 mb-2">
+                    <i class="bi bi-calendar-plus fs-3 text-white"></i>
+                </div>
+                <h4 class="mb-1 fw-bold">Add Doctor Availability</h4>
+                <p class="mb-0 text-white-50 small">Set working hours and available slots</p>
             </div>
 
-            <div class="card-body">
+            <!-- Card Body Form Elements -->
+            <div class="card-body p-4">
+                
+                <!-- Non-Field Validation Errors Alert -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
+                        {% for error in form.non_field_errors %}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
 
-                <form method="POST">
-
+                <form method="POST" novalidate>
                     {% csrf_token %}
 
+                    <!-- Dynamic Loop For Form Fields -->
                     {% for field in form %}
-                        <div class="mb-3">
-                            <label class="form-label">{{ field.label }}</label>
-                            {{ field }}
+                        <div class="mb-3 position-relative">
+                            <label class="form-label fw-semibold text-secondary small d-flex align-items-center gap-1">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
+                            </label>
 
-                            {% for error in field.errors %}
-                                <div class="text-danger small">{{ error }}</div>
-                            {% endfor %}
+                            <!-- Widget Injections Layer (Safe Injection Setup) -->
+                            <div class="input-group">
+                                {{ field }}
+                            </div>
+
+                            <!-- Individual Field Validation Errors -->
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="form-text text-danger d-flex align-items-center gap-1 mt-1 small animated fadeIn">
+                                        <i class="bi bi-x-circle-fill"></i> {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+                            <!-- Help Text Hint Support (If present in model configuration fields) -->
+                            {% if field.help_text %}
+                                <div class="form-text text-muted small">{{ field.help_text }}</div>
+                            {% endif %}
                         </div>
                     {% endfor %}
 
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-check-circle"></i> Save Availability
-                    </button>
+                    <!-- Submission Action Button Wrapper -->
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary bg-gradient w-100 py-2.5 rounded-3 fw-bold shadow-sm transition-all hover-up d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-check-circle-fill"></i> Save Availability
+                        </button>
+                    </div>
 
                 </form>
 
             </div>
-
         </div>
 
     </div>
-
 </div>
-
 {% endblock %}

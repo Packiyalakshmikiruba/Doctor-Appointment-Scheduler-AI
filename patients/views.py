@@ -5,7 +5,10 @@ from .models import Patient
 from .forms import PatientForm
 from django.contrib.admin.views.decorators import staff_member_required
 from .forms import PatientForm, AdminPatientForm
-
+from datetime import timedelta
+from django.utils import timezone
+from appointments.models import Appointment
+from appointments.booking_service import book_appointment_full, handle_cancellation, BookingError
 @login_required
 def complete_profile(request):
 
@@ -113,3 +116,38 @@ def patient_delete(request, pk):
         return redirect("patient_list")
 
     return render(request, "patients/patient_confirm_delete.html", {"patient": patient})
+
+
+@login_required
+def patient_cancel_appointment(request, pk):
+    appt = get_object_or_404(Appointment, pk=pk)
+
+    patient = getattr(request.user, "patient_profile", None)
+    if patient is None or appt.patient_id != patient.id:
+        messages.error(request, "You can only cancel your own appointments.")
+        return redirect("dashboard")
+
+    if appt.status in ("Cancelled", "Completed", "No Show"):
+        messages.error(request, "This appointment can no longer be cancelled.")
+        return redirect("dashboard")
+
+    naive_dt = timezone.datetime.combine(appt.appointment_date, appt.appointment_time)
+    appt_dt = timezone.make_aware(naive_dt) if timezone.is_naive(naive_dt) else naive_dt
+
+    if appt_dt - timezone.now() < timedelta(hours=2):
+        messages.error(request, "Appointments can only be cancelled at least 2 hours in advance. Please call the front desk.")
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        appt.status = "Cancelled"
+        appt.save(update_fields=["status"])
+
+        try:
+            handle_cancellation(appt)  # offers the freed slot to the waitlist
+        except Exception:
+            pass
+
+        messages.success(request, "Your appointment has been cancelled.")
+        return redirect("dashboard")
+
+    return render(request, "appointments/patient_cancel_confirm.html", {"appointment": appt})

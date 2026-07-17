@@ -13,4 +13,6 @@ urlpatterns = [
     path("", include("billing.urls")),
     path("", include("chatbot.urls")),
     path("", include("ai_prediction.urls")),
+    path("", include("support.urls")),
+
 ]

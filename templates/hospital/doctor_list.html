@@ -1,113 +1,217 @@
 {% extends "base.html" %}
 
-{% block title %}Doctors{% endblock %}
+{% block title %}
+Doctors
+{% endblock %}
 
 {% block content %}
 
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <h2>Doctors</h2>
+    <h2 class="fw-bold">
+        Doctors
+    </h2>
 
     <a href="{% url 'doctor_create' %}"
        class="btn btn-success">
+
+        <i class="bi bi-person-plus-fill"></i>
+
         Add Doctor
+
     </a>
 
 </div>
 
-<table class="table table-bordered table-hover">
+<div class="table-responsive">
 
-    <thead class="table-dark">
+<table class="table table-bordered table-hover align-middle">
 
-        <tr>
-            <th>ID</th>
-            <th>Doctor</th>
-            <th>Department</th>
-            <th>Specialization</th>
-            <th>Fee</th>
-            <th>Phone</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
+<thead class="table-dark">
 
-    </thead>
+<tr>
 
-    <tbody>
+    <th>ID</th>
 
-    {% for doctor in doctors %}
+    <th>Doctor</th>
 
-        <tr>
+    <th>Department</th>
 
-            <td>{{ doctor.id }}</td>
+    <th>Specialization</th>
 
-            <td>
-                Dr. {{ doctor.user.get_full_name }}
-            </td>
+    <th>Fee</th>
 
-            <td>
-                {{ doctor.department.department_name }}
-            </td>
+    <th>Schedule</th>
 
-            <td>
-                {{ doctor.specialization }}
-            </td>
+    <th>Phone</th>
 
-            <td>
-                ₹{{ doctor.consultation_fee }}
-            </td>
+    <th>Status</th>
 
-            <td>
-                {{ doctor.phone_number }}
-            </td>
+    <th width="250">
+        Actions
+    </th>
 
-            <td>
+</tr>
 
-                {% if doctor.is_active %}
+</thead>
 
-                    <span class="badge bg-success">
-                        Active
+<tbody>
+
+{% for doctor in doctors %}
+
+<tr>
+
+    <td>
+
+        {{ doctor.id }}
+
+    </td>
+
+    <td>
+
+        <strong>
+
+            Dr.
+            {{ doctor.user.get_full_name|default:doctor.user.username }}
+
+        </strong>
+
+    </td>
+
+    <td>
+
+        {{ doctor.department.department_name }}
+
+    </td>
+
+    <td>
+
+        {{ doctor.specialization }}
+
+    </td>
+
+    <td>
+
+        ₹{{ doctor.consultation_fee }}
+
+    </td>
+
+    <td>
+
+        {% if doctor.availabilities.all %}
+
+            {% for slot in doctor.availabilities.all %}
+
+                <div class="mb-1">
+
+                    <span class="badge bg-primary">
+
+                        {{ slot.day_of_week }}
+
                     </span>
 
-                {% else %}
+                    {{ slot.start_time|time:"H:i" }}
 
-                    <span class="badge bg-danger">
-                        Inactive
-                    </span>
+                    -
 
-                {% endif %}
+                    {{ slot.end_time|time:"H:i" }}
 
-            </td>
+                </div>
 
-            <td>
+            {% endfor %}
 
-                <a href="{% url 'doctor_update' doctor.id %}"
-   class="btn btn-warning btn-sm">
-    Edit
-</a>
+        {% else %}
 
-               <a href="{% url 'doctor_delete' doctor.id %}"
-   class="btn btn-danger btn-sm">
-    Delete
-</a>
+            <span class="badge bg-danger">
 
-            </td>
+                No Schedule
 
-        </tr>
+            </span>
 
-    {% empty %}
+        {% endif %}
 
-        <tr>
+    </td>
 
-            <td colspan="8" class="text-center">
-                No Doctors Found
-            </td>
+    <td>
 
-        </tr>
+        {{ doctor.phone_number }}
 
-    {% endfor %}
+    </td>
 
-    </tbody>
+    <td>
+
+        {% if doctor.is_active %}
+
+            <span class="badge bg-success">
+
+                Active
+
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-danger">
+
+                Inactive
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        <a href="{% url 'doctor_update' doctor.id %}"
+           class="btn btn-warning btn-sm">
+
+            <i class="bi bi-pencil-square"></i>
+
+            Edit
+
+        </a>
+
+        <a href="{% url 'doctor_delete' doctor.id %}"
+           class="btn btn-danger btn-sm">
+
+            <i class="bi bi-trash"></i>
+
+            Delete
+
+        </a>
+
+        <a href="{% url 'availability_create' %}?doctor={{ doctor.id }}"
+           class="btn btn-info btn-sm">
+
+            <i class="bi bi-calendar-plus"></i>
+
+            Schedule
+
+        </a>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+    <td colspan="9"
+        class="text-center">
+
+        No Doctors Found
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
 
 </table>
+
+</div>
 
 {% endblock %}

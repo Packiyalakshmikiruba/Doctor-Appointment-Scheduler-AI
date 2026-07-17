@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Conversation{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-person"></i> {{ patient.get_full_name|default:patient.username }}
+            </div>
+            <div class="card-body">
+                <div id="chat-log" style="height: 400px; overflow-y: auto; background: #f8f9fa; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;"></div>
+
+                <div class="input-group mt-3">
+                    <input type="text" id="chat-input" class="form-control" placeholder="Reply to patient...">
+                    <button class="btn btn-dark" id="send-btn"><i class="bi bi-send"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.msg-me { background: #0d6efd; color: #fff; padding: 8px 12px; border-radius: 14px; max-width: 75%; align-self: flex-end; }
+.msg-staff { background: #e9ecef; padding: 8px 12px; border-radius: 14px; max-width: 75%; align-self: flex-start; }
+</style>
+
+<script>
+const patientId = JSON.parse(document.getElementById('patient-id-data').textContent);
+    console.log("Patient ID is:", patientId);
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+async function loadMessages() {
+    const resp = await fetch(`/support/messages/${patientId}/`);
+    const data = await resp.json();
+    const log = document.getElementById('chat-log');
+    log.innerHTML = '';
+    data.messages.forEach(m => {
+        const div = document.createElement('div');
+        div.className = m.is_staff ? 'msg-me' : 'msg-staff';
+        div.textContent = m.message;
+        log.appendChild(div);
+    });
+    log.scrollTop = log.scrollHeight;
+}
+
+document.getElementById('send-btn').addEventListener('click', async () => {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+
+    await fetch("{% url 'send_support_message' %}", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ message: text, patient_id: patientId }),
+    });
+    loadMessages();
+});
+
+loadMessages();
+setInterval(loadMessages, 4000);
+</script>
+
+{% endblock %}

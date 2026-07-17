@@ -7,8 +7,8 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hospital', '0003_alter_department_id_alter_doctor_id_and_more'),
-        ('patients', '0003_alter_patient_id'),
+        ('hospital', '0002_alter_doctoravailability_day_of_week'),
+        ('patients', '0002_alter_patient_blood_group_alter_patient_gender'),
         ('medical_records', '0001_initial'),
     ]
 

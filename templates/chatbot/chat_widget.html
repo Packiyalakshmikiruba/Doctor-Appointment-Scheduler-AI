@@ -1,96 +1,305 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Clinic Assistant</title>
-<style>
-  body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; }
-  #chat-container {
-    max-width: 420px; margin: 40px auto; background: #fff;
-    border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: flex; flex-direction: column; height: 600px;
-  }
-  #chat-header {
-    background: #2563eb; color: #fff; padding: 14px 16px;
-    border-radius: 10px 10px 0 0; font-weight: bold;
-  }
-  #chat-messages {
-    flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px;
-  }
-  .msg { max-width: 80%; padding: 8px 12px; border-radius: 12px; line-height: 1.4; white-space: pre-wrap; }
-  .user { align-self: flex-end; background: #2563eb; color: #fff; }
-  .bot { align-self: flex-start; background: #e5e7eb; color: #111; }
-  #chat-input-row { display: flex; border-top: 1px solid #eee; }
-  #chat-input {
-    flex: 1; border: none; padding: 12px; font-size: 14px; outline: none;
-  }
-  #chat-send {
-    border: none; background: #2563eb; color: #fff; padding: 0 18px; cursor: pointer;
-  }
-  #chat-send:disabled { background: #9ca3af; cursor: default; }
-</style>
-</head>
-<body>
+{% extends "base.html" %}
 
-<div id="chat-container">
-  <div id="chat-header">Clinic Assistant</div>
-  <div id="chat-messages"></div>
-  <div id="chat-input-row">
-    <input id="chat-input" type="text" placeholder="Type a message..." />
-    <button id="chat-send">Send</button>
-  </div>
+{% block title %}AI Clinic Assistant{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-8 col-xl-7">
+
+        <!-- Main Chat Console Card -->
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+            
+            <!-- Professional Header -->
+            <div class="card-header bg-primary bg-gradient text-white p-3 border-0 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-white bg-opacity-20 p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                        <i class="bi bi-robot fs-4"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Clinic AI Assistant</h5>
+                        <small class="text-white-50 d-flex align-items-center gap-1">
+                            <span class="online-indicator"></span> Active & Online
+                        </small>
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-outline-light rounded-pill border-0 px-2" id="clear-chat-btn" title="Clear Chat Log">
+                    <i class="bi bi-arrow-counterclockwise fs-5"></i>
+                </button>
+            </div>
+
+            <!-- Chat Scroll Area -->
+            <div class="card-body p-4 bg-light bg-opacity-50">
+                <div id="chat-log" class="d-flex flex-column gap-3 mb-2" style="height: 420px; overflow-y: auto; padding-right: 5px;">
+                    <!-- Bubbles dynamically inject here -->
+                </div>
+
+                <!-- Subtle Status / Typing Indicator -->
+                <div id="status-text" class="text-muted small px-2 mb-2 fw-semibold d-none">
+                    <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status"></span>
+                    <span id="status-message">Assistant is thinking...</span>
+                </div>
+
+                <!-- Interactive Input Dock -->
+                <div class="input-group bg-white p-1 rounded-4 shadow-sm border border-secondary border-opacity-10">
+                    <button class="btn btn-light rounded-circle text-primary me-1 border-0" id="mic-btn" type="button" title="Voice Input">
+                        <i class="bi bi-mic-fill fs-5" id="mic-icon"></i>
+                    </button>
+
+                    <input type="text" id="chat-input" class="form-control border-0 bg-transparent shadow-none" placeholder="Ask about doctors, appointments, or clinic info..." style="font-size: 15px;">
+
+                    <button class="btn btn-primary rounded-pill px-3 fw-bold d-flex align-items-center gap-1 shadow-sm" id="send-btn">
+                        <span>Send</span>
+                        <i class="bi bi-send-fill small"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Contextual Quick Action Chips -->
+            <div class="card-footer bg-white border-0 py-2 px-4 d-flex gap-2 overflow-x-auto">
+                <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('Book an appointment')">📅 Book Appointment</span>
+                <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('Show available doctors')">👨‍⚕️ Available Doctors</span>
+                <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('What are the clinic timings?')">⏰ Clinic Timings</span>
+            </div>
+
+        </div>
+
+    </div>
 </div>
 
-<script>
-const messagesEl = document.getElementById('chat-messages');
-const inputEl = document.getElementById('chat-input');
-const sendBtn = document.getElementById('chat-send');
-
-function addMessage(text, sender) {
-  const div = document.createElement('div');
-  div.className = 'msg ' + sender;
-  div.textContent = text;
-  messagesEl.appendChild(div);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
-
-async function sendMessage() {
-  const text = inputEl.value.trim();
-  if (!text) return;
-  addMessage(text, 'user');
-  inputEl.value = '';
-  sendBtn.disabled = true;
-
-  try {
-    const res = await fetch('/api/chat/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text })
-    });
-    const data = await res.json();
-    if (data.error) {
-      addMessage('Error: ' + data.error, 'bot');
-    } else {
-      addMessage(data.response, 'bot');
+<style>
+    /* Online dot indicator */
+    .online-indicator {
+        width: 8px;
+        height: 8px;
+        background-color: #20c997;
+        border-radius: 50%;
+        display: inline-block;
     }
-  } catch (err) {
-    addMessage('Network error. Please try again.', 'bot');
-  } finally {
-    sendBtn.disabled = false;
-  }
+
+    /* Custom Chat Scrollbar */
+    #chat-log::-webkit-scrollbar {
+        width: 5px;
+    }
+    #chat-log::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+
+    /* Message Bubbles */
+    .chat-bubble-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 80%;
+    }
+    .chat-bubble-container.user {
+        align-self: flex-end;
+        align-items: flex-end;
+    }
+    .chat-bubble-container.bot {
+        align-self: flex-start;
+        align-items: flex-start;
+    }
+
+    .chat-bubble-user {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 18px 18px 2px 18px;
+        font-size: 14.5px;
+        box-shadow: 0 2px 5px rgba(13, 110, 253, 0.15);
+    }
+
+    .chat-bubble-bot {
+        background: #ffffff;
+        color: #212529;
+        padding: 10px 16px;
+        border-radius: 18px 18px 18px 2px;
+        font-size: 14.5px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+
+    .chat-bubble-escalated {
+        background: #fff5f5 !important;
+        border: 1px solid #feb2b2 !important;
+        color: #c53030 !important;
+    }
+
+    .timestamp {
+        font-size: 10px;
+        color: #94a3b8;
+        margin-top: 3px;
+    }
+
+    /* Pulse Mic Recording State */
+    #mic-btn.listening {
+        background-color: #dc3545 !important;
+        color: white !important;
+        animation: micPulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes micPulse {
+        0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5); }
+        70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+    }
+
+    /* Quick Action Chips */
+    .hover-chip {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .hover-chip:hover {
+        background-color: #0d6efd !important;
+        color: white !important;
+        border-color: #0d6efd !important;
+    }
+</style>
+
+<script>
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-sendBtn.addEventListener('click', sendMessage);
-inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+function getCurrentTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
 
-addMessage('Hi! I can help you find a doctor, check availability, and book an appointment. How can I help?', 'bot');
+function appendBubble(text, sender, escalated = false) {
+    const log = document.getElementById('chat-log');
+    
+    const container = document.createElement('div');
+    container.className = `chat-bubble-container ${sender}`;
+
+    let cls = sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot';
+    if (escalated) cls += ' chat-bubble-escalated';
+
+    container.innerHTML = `
+        <div class="${cls}">${text}</div>
+        <div class="timestamp">${getCurrentTime()}</div>
+    `;
+
+    log.appendChild(container);
+    log.scrollTop = log.scrollHeight;
+}
+
+function quickQuery(queryText) {
+    sendMessage(queryText);
+}
+
+async function sendMessage(text) {
+    const message = text.trim();
+    if (!message) return;
+
+    // Stop ongoing voice synthesis if active
+    if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+    }
+
+    appendBubble(message, 'user');
+    document.getElementById('chat-input').value = '';
+
+    const statusContainer = document.getElementById('status-text');
+    const statusMsg = document.getElementById('status-message');
+    statusContainer.classList.remove('d-none');
+    statusMsg.textContent = 'Assistant is thinking...';
+
+    try {
+        const resp = await fetch("{% url 'chat_api' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({ message: message }),
+        });
+        const data = await resp.json();
+        const replyText = data.response || data.error || "Sorry, something went wrong.";
+
+        appendBubble(replyText, 'bot', !!data.error);
+        statusContainer.classList.add('d-none');
+
+        // Text-to-Speech Output
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(replyText);
+            utterance.lang = 'en-IN';
+            speechSynthesis.speak(utterance);
+        }
+
+    } catch (err) {
+        statusContainer.classList.add('d-none');
+        appendBubble("Sorry, connection error. Please check your network.", 'bot', true);
+    }
+}
+
+// Event Listeners for Input
+document.getElementById('send-btn').addEventListener('click', () => {
+    sendMessage(document.getElementById('chat-input').value);
+});
+
+document.getElementById('chat-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage(document.getElementById('chat-input').value);
+    }
+});
+
+document.getElementById('clear-chat-btn').addEventListener('click', () => {
+    const log = document.getElementById('chat-log');
+    log.innerHTML = '';
+    appendBubble("Chat cleared. How else can I assist you today?", 'bot');
+});
+
+// Speech Recognition Engine
+const micBtn = document.getElementById('mic-btn');
+const micIcon = document.getElementById('mic-icon');
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (!SpeechRecognition) {
+    micBtn.disabled = true;
+    micBtn.title = "Voice recognition not supported in this browser.";
+} else {
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+
+    micBtn.addEventListener('click', () => {
+        micBtn.classList.add('listening');
+        micIcon.className = 'bi bi-mic-fill';
+        
+        const statusContainer = document.getElementById('status-text');
+        const statusMsg = document.getElementById('status-message');
+        statusContainer.classList.remove('d-none');
+        statusMsg.textContent = 'Listening to your voice...';
+        
+        recognition.start();
+    });
+
+    recognition.onresult = (event) => {
+        const spokenText = event.results[0][0].transcript;
+        resetMic();
+        sendMessage(spokenText);
+    };
+
+    recognition.onerror = () => {
+        resetMic();
+    };
+
+    recognition.onend = () => {
+        resetMic();
+    };
+
+    function resetMic() {
+        micBtn.classList.remove('listening');
+        micIcon.className = 'bi bi-mic-fill';
+        document.getElementById('status-text').classList.add('d-none');
+    }
+}
+
+// Initial Bot Greeting
+appendBubble("Hello! 👋 I'm your AI Clinic Assistant. How can I help you today?", 'bot');
 </script>
-
-</body>
-</html>
+{% endblock %}

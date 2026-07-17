@@ -1,88 +1,264 @@
 {% extends "base.html" %}
 
-{% block title %}Create Bill{% endblock %}
+{% block title %}Generate Bill{% endblock %}
 
 {% block content %}
 
+<div class="container mt-4">
+
 <div class="row justify-content-center">
-    <div class="col-md-6">
 
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="bi bi-receipt"></i> Create Bill</h4>
-            </div>
+<div class="col-lg-8">
 
-            <div class="card-body">
+<div class="card shadow">
 
-                <form method="POST">
-                    {% csrf_token %}
+<div class="card-header bg-primary text-white">
 
-                    <div class="mb-3">
-                        <label class="form-label">Select Appointment</label>
-                        {{ form.appointment }}
-                    </div>
+<h3 class="mb-0">
+<i class="bi bi-receipt"></i>
+Generate Patient Bill
+</h3>
 
-                    <div id="patient-info" class="alert alert-light border d-none mb-3">
-                        <strong id="info-patient"></strong> — <span id="info-doctor"></span>
-                    </div>
+</div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Consultation Fee (auto-filled)</label>
-                        {{ form.consultation_fee }}
-                    </div>
+<div class="card-body">
 
-                    <div class="mb-3">
-                        <label class="form-label">Additional Charges</label>
-                        {{ form.additional_charges }}
-                    </div>
+<form method="POST">
 
-                    <div class="mb-3">
-                        <label class="form-label">Discount</label>
-                        {{ form.discount }}
-                    </div>
+{% csrf_token %}
 
-                    <div class="mb-3">
-                        <label class="form-label">Payment Status</label>
-                        {{ form.payment_status }}
-                    </div>
+<div class="mb-3">
 
-                    <div class="mb-3">
-                        <label class="form-label">Payment Mode</label>
-                        {{ form.payment_mode }}
-                    </div>
+<label class="form-label fw-bold">
 
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-check-circle"></i> Generate Bill
-                    </button>
+Appointment
 
-                </form>
+</label>
 
-            </div>
-        </div>
+{{ form.appointment }}
 
-    </div>
+</div>
+
+<hr>
+
+<div id="appointmentInfo" class="card bg-light mb-3 d-none">
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<b>Patient :</b>
+
+<p id="patient_name"></p>
+
+</div>
+
+<div class="col-md-6">
+
+<b>Doctor :</b>
+
+<p id="doctor_name"></p>
+
+</div>
+
+<div class="col-md-6">
+
+<b>Department :</b>
+
+<p id="department_name"></p>
+
+</div>
+
+<div class="col-md-6">
+
+<b>Appointment Date :</b>
+
+<p id="appointment_date"></p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Consultation Fee
+
+</label>
+
+{{ form.consultation_fee }}
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Additional Charges
+
+</label>
+
+{{ form.additional_charges }}
+
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Discount
+
+</label>
+
+{{ form.discount }}
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Total Amount
+
+</label>
+
+<input
+type="text"
+id="totalAmount"
+class="form-control"
+readonly>
+
+</div>
+
+</div>
+
+<div class="row mt-3">
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Payment Status
+
+</label>
+
+{{ form.payment_status }}
+
+</div>
+
+<div class="col-md-6">
+
+<label class="form-label">
+
+Payment Mode
+
+</label>
+
+{{ form.payment_mode }}
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="text-end">
+
+<button class="btn btn-success btn-lg">
+
+<i class="bi bi-check-circle"></i>
+
+Generate Bill
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
-document.getElementById("id_appointment").addEventListener("change", function () {
-    const appointmentId = this.value;
-    const infoBox = document.getElementById("patient-info");
-    const feeInput = document.getElementById("id_consultation_fee");
 
-    if (!appointmentId) {
-        infoBox.classList.add("d-none");
-        return;
-    }
+const appointment=document.getElementById("id_appointment");
 
-    fetch(`/api/appointment/${appointmentId}/fee/`)
-        .then(response => response.json())
-        .then(data => {
-            feeInput.value = data.fee;
-            document.getElementById("info-patient").textContent = data.patient_name;
-            document.getElementById("info-doctor").textContent = data.doctor_name;
-            infoBox.classList.remove("d-none");
-        });
+const fee=document.getElementById("id_consultation_fee");
+
+const add=document.getElementById("id_additional_charges");
+
+const dis=document.getElementById("id_discount");
+
+const total=document.getElementById("totalAmount");
+
+function calculate(){
+
+let f=parseFloat(fee.value)||0;
+
+let a=parseFloat(add.value)||0;
+
+let d=parseFloat(dis.value)||0;
+
+total.value=(f+a-d).toFixed(2);
+
+}
+
+fee.addEventListener("input",calculate);
+
+add.addEventListener("input",calculate);
+
+dis.addEventListener("input",calculate);
+
+appointment.addEventListener("change",function(){
+
+let id=this.value;
+
+if(!id)return;
+
+fetch(`/api/appointment/${id}/fee/`)
+
+.then(r=>r.json())
+
+.then(data=>{
+
+fee.value=data.fee;
+
+document.getElementById("patient_name").innerHTML=data.patient_name;
+
+document.getElementById("doctor_name").innerHTML=data.doctor_name;
+
+document.getElementById("department_name").innerHTML=data.department_name;
+
+document.getElementById("appointment_date").innerHTML=data.appointment_date;
+
+document.getElementById("appointmentInfo").classList.remove("d-none");
+
+calculate();
+
 });
+
+});
+
 </script>
 
 {% endblock %}

@@ -1,7 +1,247 @@
 {% extends "base.html" %}
 
+{% block title %}Doctor Dashboard{% endblock %}
+
 {% block content %}
+<style>
+    body { background-color: #f8fafc; }
+    .glass-card { background: #ffffff; border: 1px solid #e2e8f0; }
+    .hover-card:hover { transform: translateY(-5px); transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; }
+</style>
 
-<h2>Doctor Dashboard</h2>
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-bolder text-dark mb-1">Welcome, Dr. {{ request.user.get_full_name|default:request.user.username }}</h1>
+            <p class="text-muted fs-5">{{ doctor.department.department_name }}</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'chat_widget' %}" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                <i class="bi bi-robot me-2"></i> AI Assistant
+            </a>
+        </div>
+    </div>
 
+    <!-- Alerts -->
+    {% if admin_messages or high_risk_today %}
+    <div class="row mb-4">
+        {% if admin_messages %}
+        <div class="col-md-6">
+            <div class="alert alert-info border-0 rounded-4 shadow-sm p-4">
+                <h6 class="fw-bold"><i class="bi bi-megaphone"></i> Admin Updates</h6>
+                {% for msg in admin_messages %}<p class="mb-0 small">{{ msg.content }}</p>{% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if high_risk_today %}
+        <div class="col-md-6">
+            <div class="alert alert-danger border-0 rounded-4 shadow-sm p-4">
+                <h6 class="fw-bold"><i class="bi bi-exclamation-octagon"></i> Priority Attention</h6>
+                <p class="mb-0 small">{{ high_risk_today|length }} patients flagged as high risk.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 glass-card hover-card">
+                <div class="d-flex align-items-center"><div class="p-3 rounded-4 bg-primary-subtle text-primary"><i class="bi bi-calendar-check fs-4"></i></div>
+                <div class="ms-3"><h2 class="fw-bold mb-0">{{ todays_appointments|length }}</h2><small class="text-muted">Today</small></div></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 glass-card hover-card">
+                <div class="d-flex align-items-center"><div class="p-3 rounded-4 bg-success-subtle text-success"><i class="bi bi-people fs-4"></i></div>
+                <div class="ms-3"><h2 class="fw-bold mb-0">{{ total_patients }}</h2><small class="text-muted">Total Patients</small></div></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 glass-card hover-card">
+                <div class="d-flex align-items-center"><div class="p-3 rounded-4 bg-success-subtle text-success"><i class="bi bi-check-circle fs-4"></i></div>
+                <div class="ms-3"><h2 class="fw-bold mb-0">{{ total_completed }}</h2><small class="text-muted">Completed</small></div></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 rounded-4 shadow-sm p-3 glass-card hover-card">
+                <div class="d-flex align-items-center"><div class="p-3 rounded-4 bg-danger-subtle text-danger"><i class="bi bi-x-circle fs-4"></i></div>
+                <div class="ms-3"><h2 class="fw-bold mb-0">{{ noshow_rate }}%</h2><small class="text-muted">No-Show Rate</small></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 rounded-4 shadow-sm glass-card p-4">
+                <h5 class="fw-bold mb-4">Today's Schedule</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="text-muted small text-uppercase"><tr><th>Time</th><th>Patient</th><th>Risk</th><th>Action</th></tr></thead>
+                        <tbody>
+                            {% for a in todays_appointments %}
+                            <tr>
+                                <td class="fw-bold">{{ a.appointment_time }}</td>
+                                <td>{{ a.patient }}</td>
+                                <td><span class="badge rounded-pill {% if a.risk_level == 'HIGH' %}bg-danger-subtle text-danger{% else %}bg-success-subtle text-success{% endif %}">{{ a.risk_level }}</span></td>
+                                <td><a href="{% url 'medical_record_create' %}?appointment={{ a.id }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Start</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center py-4 text-muted">No appointments found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 rounded-4 shadow-sm glass-card p-4">
+                <h5 class="fw-bold mb-4">Quick Actions</h5>
+                <div class="d-grid gap-3">
+                    <a href="{% url 'contact_admin' %}" class="btn btn-light py-3 text-start fw-semibold"><i class="bi bi-headset me-2"></i> Contact Admin</a>
+                    <a href="{% url 'availability_list' %}" class="btn btn-light py-3 text-start fw-semibold"><i class="bi bi-calendar-week me-2"></i> Manage Availability</a>
+                    <a href="{% url 'medical_record_list' %}" class="btn btn-light py-3 text-start fw-semibold"><i class="bi bi-file-earmark-medical me-2"></i> Medical Records</a>
+                </div>
+                   </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-4">
+
+    <div class="card border-0 rounded-4 shadow-sm glass-card p-4">
+
+        <h5 class="fw-bold mb-4">Quick Actions</h5>
+
+        <div class="d-grid gap-3">
+
+            <!-- Check In -->
+            <a href="{% url 'doctor_checkin' %}"
+               class="btn btn-success py-3 text-start fw-semibold">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Check In
+            </a>
+
+            <!-- Check Out -->
+            <a href="{% url 'doctor_checkout' %}"
+               class="btn btn-danger py-3 text-start fw-semibold">
+                <i class="bi bi-box-arrow-left me-2"></i>
+                Check Out
+            </a>
+
+            <!-- Status -->
+            <a href="{% url 'update_doctor_status' %}"
+               class="btn btn-warning py-3 text-start fw-semibold">
+                <i class="bi bi-activity me-2"></i>
+                Update Status
+            </a>
+
+            <!-- Leave -->
+            <a href="{% url 'doctor_leave_create' %}"
+               class="btn btn-secondary py-3 text-start fw-semibold">
+                <i class="bi bi-calendar-x me-2"></i>
+                Apply Leave
+            </a>
+
+            <!-- Availability -->
+            <a href="{% url 'availability_list' %}"
+               class="btn btn-info py-3 text-start fw-semibold">
+                <i class="bi bi-calendar-week me-2"></i>
+                Manage Availability
+            </a>
+
+            <!-- Medical Records -->
+            <a href="{% url 'medical_record_list' %}"
+               class="btn btn-primary py-3 text-start fw-semibold">
+                <i class="bi bi-file-earmark-medical me-2"></i>
+                Medical Records
+            </a>
+
+            <!-- Contact Admin -->
+            <a href="{% url 'contact_admin' %}"
+               class="btn btn-dark py-3 text-start fw-semibold">
+                <i class="bi bi-headset me-2"></i>
+                Contact Admin
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Today's Status -->
+    <div class="card border-0 rounded-4 shadow-sm mt-4 p-4">
+
+        <h5 class="fw-bold mb-3">Today's Status</h5>
+
+        <table class="table table-borderless">
+
+            <tr>
+                <th>Attendance</th>
+                <td>
+                    {% if today_attendance %}
+                        🟢 {{ today_attendance.status }}
+                    {% else %}
+                        🔴 Not Checked In
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Current Status</th>
+                <td>
+                    {% if doctor_status %}
+                        {{ doctor_status.status }}
+                    {% else %}
+                        Available
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Today's Leave</th>
+                <td>
+                    {% if today_leave %}
+    <span class="badge bg-secondary">🟣 On Leave</span>
+{% endif %}
+                </td>
+                <td>
+
+{% if doctor_status %}
+
+    {% if doctor_status.status == "AVAILABLE" %}
+        🟢 Available
+
+    {% elif doctor_status.status == "BUSY" %}
+        🟠 Busy
+
+    {% elif doctor_status.status == "EMERGENCY" %}
+        🔴 Emergency
+
+    {% elif doctor_status.status == "ON_LEAVE" %}
+        🟣 On Leave
+
+    {% elif doctor_status.status == "NOT_AVAILABLE" %}
+        ⚫ Not Available
+
+    {% endif %}
+
+{% else %}
+
+    🟢 Available
+
+{% endif %}
+
+</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+         
 {% endblock %}

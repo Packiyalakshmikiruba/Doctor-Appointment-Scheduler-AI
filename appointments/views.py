@@ -1,45 +1,33 @@
-import json
-from datetime import datetime, timedelta
-from .notifications import send_appointment_confirmation
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
-from hospital.models import Department, Doctor, DoctorAvailability
-from patients.models import Patient
+from django.contrib import messages
+from hospital.models import Department, Doctor
 from .forms import AppointmentForm
 from .models import Appointment
-
-
+from patients.models import Patient
+from .notifications import send_appointment_confirmation
+from appointments.booking_service import book_appointment_full, handle_cancellation, BookingError
+from django.contrib.auth.decorators import login_required
 def appointment_create(request):
 
-    doctors = Doctor.objects.all()
-
     if request.method == "POST":
-
         form = AppointmentForm(request.POST)
 
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.status = "Pending"
             appointment.save()
+
+            send_appointment_confirmation(appointment)
+
             return redirect("appointment_list")
 
     else:
-
         form = AppointmentForm()
 
-    return render(
-        request,
-        "appointments/appointment_form.html",
-        {
-            "form": form,
-            "doctors": doctors,
-        },
-    )
+    return render(request, "appointments/appointment_form.html", {"form": form})
+
 
 def appointment_list(request):
 
@@ -151,6 +139,8 @@ def mark_noshow(request, pk):
 
 
 def get_doctors_by_department(request, department_id):
+    from django.http import JsonResponse
+
     doctors = Doctor.objects.filter(department_id=department_id, is_active=True).select_related("user")
     data = [
         {"id": d.id, "name": f"Dr. {d.user.get_full_name() or d.user.username}", "fee": str(d.consultation_fee)}
@@ -160,100 +150,62 @@ def get_doctors_by_department(request, department_id):
 
 
 # ---------------- Voice Booking ----------------
+# Voice booking reuses the SAME chat agent as the text chat widget --
+# see chatbot/views.py chat_api and appointments/templates/appointments/voice_booking.html.
+# There is no separate voice-only booking endpoint -- one booking brain,
+# two input methods (typing or speaking).
 
 def voice_booking_page(request):
     return render(request, "appointments/voice_booking.html")
 
-
-@csrf_exempt
-def voice_call_booking_api(request):
-    """
-    Books an appointment from spoken text. Risk score is computed
-    automatically by the pre_save signal (appointments/signals.py) --
-    no manual prediction call needed here, avoiding duplicate logic.
-    """
-    if request.method != "POST":
-        return JsonResponse({"status": "error", "voice_response": "Invalid Request Method"})
+def mark_cancelled(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk)
+    appointment.status = "Cancelled"
+    appointment.save()
 
     try:
-        data = json.loads(request.body)
-        spoken_text = data.get("spoken_text", "").lower()
+        handle_cancellation(appointment)
+    except Exception:
+        pass
 
-        patient = getattr(request.user, "patient_profile", None) if request.user.is_authenticated else None
-        if not patient:
-            patient = Patient.objects.first()
+    return redirect("appointment_list")
+@login_required
+def patient_cancel_appointment(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk)
 
-        doctor = Doctor.objects.filter(is_active=True).first()
-
-        if not patient or not doctor:
-            return JsonResponse({"status": "error", "voice_response": "Patient or Doctor details not found."})
-
-        # Determine appointment date from spoken text
-        appt_date = datetime.now().date() + timedelta(days=1)
-
-        if "sunday" in spoken_text:
-            days_until_sunday = (6 - datetime.now().weekday()) % 7
-            days_until_sunday = days_until_sunday or 7
-            appt_date = datetime.now().date() + timedelta(days=days_until_sunday)
-
-        # Availability check (reuses the same rule as the web booking form)
-        day_name = appt_date.strftime("%A")
-        availability = DoctorAvailability.objects.filter(
-            doctor=doctor, day_of_week=day_name, is_available=True
-        ).first()
-
-        if not availability:
-            return JsonResponse({
-                "status": "error",
-                "voice_response": (
-                    f"Sorry, Dr. {doctor.user.get_full_name() or doctor.user.username} "
-                    f"is not available on {day_name}. Please choose another day."
-                ),
-            })
-
-        appt_time = availability.start_time
-
-        # Create the appointment -- pre_save signal auto-computes risk_score/risk_level
-        appointment = Appointment.objects.create(
-            patient=patient,
-            doctor=doctor,
-            appointment_date=appt_date,
-            appointment_time=appt_time,
-            reason=f"Voice booking: {spoken_text}",
-            status="Pending",
-        )
-
-        voice_msg = (
-            f"Your appointment with Dr. {doctor.user.get_full_name() or doctor.user.username} "
-            f"for {appt_date.strftime('%A, %B %d')} at {appt_time} is confirmed! "
-            f"No-Show risk evaluated as {appointment.risk_level} "
-            f"({round(appointment.risk_score * 100, 1)}%)."
-        )
-
-        return JsonResponse({
-            "status": "success",
-            "voice_response": voice_msg,
-            "risk_level": appointment.risk_level,
-        })
-
-    except Exception as e:
-        return JsonResponse({"status": "error", "voice_response": f"Error: {str(e)}"})
-
-def appointment_create(request):
+    # Security: patient தன் appointment-ஐ மட்டும் cancel பண்ண முடியும்
+    if appointment.patient != getattr(request.user, "patient_profile", None):
+        messages.error(request, "Access denied.")
+        return redirect("dashboard")
 
     if request.method == "POST":
-        form = AppointmentForm(request.POST)
+        appointment.status = "Cancelled"
+        appointment.save()
+        messages.success(request, "Appointment cancelled.")
+        return redirect("dashboard")
 
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.status = "Pending"
-            appointment.save()
+    return render(request, "appointments/patient_cancel_confirm.html", {"appointment": appointment})
 
-            send_appointment_confirmation(appointment)   # புது line
+@login_required
+def patient_history_view(request, patient_id):
+    if request.user.role != "DOCTOR":
+        messages.error(request, "Access denied.")
+        return redirect("dashboard")
 
-            return redirect("appointment_list")
+    patient = get_object_or_404(Patient, pk=patient_id)
 
-    else:
-        form = AppointmentForm()
+    appointments = Appointment.objects.filter(patient=patient).select_related(
+        "doctor__user", "doctor__department"
+    ).order_by("-appointment_date")
 
-    return render(request, "appointments/appointment_form.html", {"form": form})
+    from medical_records.models import MedicalRecord
+    records = MedicalRecord.objects.filter(appointment__patient=patient).select_related(
+        "appointment__doctor__user"
+    ).prefetch_related("prescriptions").order_by("-created_at")
+
+    return render(request, "appointments/patient_history.html", {
+        "patient": patient,
+        "appointments": appointments,
+        "records": records,
+    })
+

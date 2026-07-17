@@ -96,3 +96,4 @@ class Waitlist(models.Model):
 
     def __str__(self):
         return f"{self.patient} waiting for Dr. {self.doctor}"
+
