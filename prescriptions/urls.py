@@ -27,4 +27,16 @@ urlpatterns = [
         name="prescription_delete"
     ),
 
+    path(
+        "download/<int:pk>/",
+        views.download_prescription_pdf,
+        name="download_prescription_pdf"
+    ),
+
+    path(
+        "my-prescriptions/",
+        views.my_prescriptions,
+        name="my_prescriptions"
+    ),
+
 ]

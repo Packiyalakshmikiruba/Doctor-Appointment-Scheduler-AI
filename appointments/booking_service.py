@@ -10,7 +10,7 @@ existing mark_cancelled view (appointments/urls.py already has this URL).
 from .models import Appointment
 from .utils import is_doctor_available
 from .risk import predict_and_save_risk
-from .notifications import send_appointment_confirmation, send_sms_confirmation
+from .notifications import send_appointment_confirmation
 
 
 class BookingError(Exception):
@@ -19,50 +19,127 @@ class BookingError(Exception):
         super().__init__(message)
 
 
-def book_appointment_full(patient, doctor, appointment_date, appointment_time, reason):
-    # Step 1 — Check Availability
-    available, reason_msg = is_doctor_available(doctor, appointment_date, appointment_time)
+def book_appointment_full(
+    patient,
+    doctor,
+    appointment_date,
+    appointment_time,
+    reason,
+):
+    """
+    Complete Appointment Booking Flow
+    """
+
+    # ---------------------------------------
+    # Check Doctor Availability
+    # ---------------------------------------
+
+    available, reason_msg = is_doctor_available(
+        doctor,
+        appointment_date,
+        appointment_time,
+    )
+
     if not available:
         raise BookingError(reason_msg)
 
-    # Step 2 — Check Existing Appointment (no duplicate booking same day/doctor)
+    # ---------------------------------------
+    # Duplicate Check
+    # ---------------------------------------
+
     duplicate = Appointment.objects.filter(
-        patient=patient, doctor=doctor, appointment_date=appointment_date,
-    ).exclude(status="Cancelled").exists()
+        patient=patient,
+        doctor=doctor,
+        appointment_date=appointment_date,
+    ).exclude(
+        status="Cancelled"
+    ).exists()
+
     if duplicate:
-        raise BookingError("You already have an appointment with this doctor on this date.")
+        raise BookingError(
+            "You already have an appointment with this doctor on this date."
+        )
 
-    past_appts = Appointment.objects.filter(patient=patient)
-    prior_visits = past_appts.filter(status="Completed").count() + past_appts.filter(status="No Show").count()
-    prior_noshows = past_appts.filter(status="No Show").count()
-    history_noshow_ratio = round(prior_noshows / prior_visits, 3) if prior_visits > 0 else 0.0
+    # ---------------------------------------
+    # Patient History
+    # ---------------------------------------
 
-    appointment = Appointment.objects.create(
-        patient=patient, doctor=doctor,
-        appointment_date=appointment_date, appointment_time=appointment_time,
-        reason=reason, status="Pending",
-        prior_visits=prior_visits, prior_noshows=prior_noshows,
-        history_noshow_ratio=history_noshow_ratio,
-        distance_from_clinic=float(patient.distance_from_clinic),
+    past = Appointment.objects.filter(
+        patient=patient
     )
 
-    # Step 3 — Predict No Show
-    risk_level = predict_and_save_risk(appointment)
+    prior_visits = (
+        past.filter(status="Completed").count()
+        +
+        past.filter(status="No Show").count()
+    )
 
-    # Step 4 — Auto Confirm
-    appointment.status = "Confirmed"
-    appointment.save(update_fields=["status"])
+    prior_noshows = (
+        past.filter(status="No Show").count()
+    )
 
-    # Step 5 — Email + Step 6 — SMS
-    send_appointment_confirmation(appointment)
-    sms_sent = send_sms_confirmation(appointment)
-    if sms_sent:
-        appointment.sms_reminder_sent = True
-        appointment.save(update_fields=["sms_reminder_sent"])
+    history_ratio = (
+        round(prior_noshows / prior_visits, 3)
+        if prior_visits
+        else 0
+    )
 
-    # Step 7 — Dashboard Updated: automatic, dashboards query Appointment live.
+    # ---------------------------------------
+    # Create Appointment
+    # ---------------------------------------
+
+    appointment = Appointment.objects.create(
+
+        patient=patient,
+
+        doctor=doctor,
+
+        appointment_date=appointment_date,
+
+        appointment_time=appointment_time,
+
+        reason=reason,
+
+        status="Confirmed",
+
+        prior_visits=prior_visits,
+
+        prior_noshows=prior_noshows,
+
+        history_noshow_ratio=history_ratio,
+
+        distance_from_clinic=float(
+            patient.distance_from_clinic
+        ),
+
+        sms_reminder_sent=False,
+    )
+
+    # ---------------------------------------
+    # AI Prediction
+    # ---------------------------------------
+
+    try:
+        predict_and_save_risk(appointment)
+    except Exception as e:
+        print("Risk Prediction Error:", e)
+
+    # ---------------------------------------
+    # Email Confirmation
+    # ---------------------------------------
+
+    try:
+        send_appointment_confirmation(
+            appointment
+        )
+    except Exception as e:
+        print("Email Error:", e)
+
+    # ---------------------------------------
+    # Return Appointment
+    # ---------------------------------------
+
     return appointment
-
 
 def handle_cancellation(appointment):
     """

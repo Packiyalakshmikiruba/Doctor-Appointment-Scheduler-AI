@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}Voice Appointment Assistant{% endblock %}
-
 {% block content %}
 
 <div class="row justify-content-center">
@@ -16,8 +14,7 @@
             <div class="card-body text-center p-4">
 
                 <p class="text-muted">Tap the mic and say something like:</p>
-                <p class="fst-italic text-secondary">"Find doctors in cardiology"</p>
-                <p class="fst-italic text-secondary">"Book an appointment with Dr. Saran on July 20th at 10 AM"</p>
+                <p class="fst-italic text-secondary">"I have fever, book an appointment"</p>
 
                 <button id="mic-btn" class="btn btn-lg btn-primary rounded-circle p-4 mb-3">
                     <i class="bi bi-mic-fill fs-2"></i>
@@ -29,7 +26,7 @@
                     <strong>You said:</strong> <span id="transcript-text"></span>
                 </div>
 
-                <div id="response-box" class="alert alert-success d-none text-start"></div>
+                <div id="response-box" class="alert d-none text-start"></div>
 
             </div>
         </div>
@@ -64,6 +61,7 @@ if (!SpeechRecognition) {
         responseBox.classList.add("d-none");
         transcriptBox.classList.add("d-none");
         statusText.textContent = "Listening...";
+        micBtn.disabled = true;
         recognition.start();
     });
 
@@ -73,33 +71,52 @@ if (!SpeechRecognition) {
         transcriptBox.classList.remove("d-none");
         statusText.textContent = "Thinking...";
 
-        // Reuses the SAME chat agent endpoint as the text chat widget --
-        // one booking brain, two input methods (typing or voice).
-        const resp = await fetch("{% url 'chat_api' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
-            },
-            body: JSON.stringify({ message: spokenText }),
-        });
+        try {
+            // Uses the SAME chat endpoint as the text chat widget --
+            // one booking brain, two input methods (typing or speaking).
+            const resp = await fetch("{% url 'chat_api' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                body: JSON.stringify({ message: spokenText }),
+            });
 
-        const data = await resp.json();
-        statusText.textContent = "Tap to speak";
+            if (!resp.ok) {
+                throw new Error(`Server returned ${resp.status}`);
+            }
 
-        const replyText = data.response || data.reply || data.error || "Sorry, something went wrong.";
+            const data = await resp.json();
+            const replyText = data.response || data.error || "Sorry, something went wrong.";
 
-        responseBox.classList.remove("d-none");
-        responseBox.className = data.error ? "alert alert-danger text-start" : "alert alert-success text-start";
-        responseBox.textContent = replyText;
+            responseBox.classList.remove("d-none");
+            responseBox.className = data.error ? "alert alert-danger text-start" : "alert alert-success text-start";
+            responseBox.textContent = replyText;
 
-        // Speak the response back (Text-to-Speech)
-        const utterance = new SpeechSynthesisUtterance(replyText);
-        speechSynthesis.speak(utterance);
+            // Speak the response back (Text-to-Speech)
+            const utterance = new SpeechSynthesisUtterance(replyText);
+            utterance.lang = "en-IN";
+            speechSynthesis.speak(utterance);
+
+        } catch (err) {
+            console.error("Voice booking error:", err);
+            responseBox.classList.remove("d-none");
+            responseBox.className = "alert alert-danger text-start";
+            responseBox.textContent = "Sorry, connection error. Please try again.";
+        } finally {
+            statusText.textContent = "Tap to speak";
+            micBtn.disabled = false;
+        }
     };
 
     recognition.onerror = () => {
         statusText.textContent = "Didn't catch that. Tap to try again.";
+        micBtn.disabled = false;
+    };
+
+    recognition.onend = () => {
+        micBtn.disabled = false;
     };
 }
 </script>

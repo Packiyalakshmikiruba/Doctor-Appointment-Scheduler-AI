@@ -1,53 +1,93 @@
 {% extends "base.html" %}
-
+{% block title %}Book Appointment{% endblock %}
 {% block content %}
 <div class="container mt-4">
-  <h3>{% if appointment %}Edit Appointment{% else %}Book an Appointment{% endif %}</h3>
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="mb-4">{% if is_self_booking %}Book an Appointment{% else %}Create Appointment{% endif %}</h4>
 
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
+          <form method="post" novalidate>
+            {% csrf_token %}
 
-  <form method="post">
-    {% csrf_token %}
+            {% if not is_self_booking %}
+              <div class="mb-3">
+                <label class="form-label">{{ form.patient.label }}</label>
+                {{ form.patient }}
+                {% if form.patient.errors %}<div class="text-danger small">{{ form.patient.errors|striptags }}</div>{% endif %}
+              </div>
+            {% else %}
+              {{ form.patient }}
+            {% endif %}
 
-    {% if not appointment %}
-    <div class="mb-3">
-      <label class="form-label">Doctor</label>
-      <select name="doctor" class="form-select" required>
-        <option value="">-- Select Doctor --</option>
-        {% for d in doctors %}
-          <option value="{{ d.id }}">
-            Dr. {{ d.user.get_full_name|default:d.user.username }} - {{ d.specialization }} (₹{{ d.consultation_fee }})
-          </option>
-        {% endfor %}
-      </select>
+            <div class="mb-3">
+              <label class="form-label">{{ form.doctor.label }}</label>
+              {{ form.doctor }}
+              {% if form.doctor.errors %}<div class="text-danger small">{{ form.doctor.errors|striptags }}</div>{% endif %}
+              <div id="doctor-availability-hint" class="form-text text-primary"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Date</label>
+              {{ form.appointment_date }}
+              {% if form.appointment_date.errors %}<div class="text-danger small">{{ form.appointment_date.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Time</label>
+              {{ form.appointment_time }}
+              <div class="form-text">Uses 24-hour format -- e.g. 3:00 PM = <strong>15:00</strong>, not 03:00.</div>
+              {% if form.appointment_time.errors %}<div class="text-danger small">{{ form.appointment_time.errors|striptags }}</div>{% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Reason for visit</label>
+              {{ form.reason }}
+              {% if form.reason.errors %}<div class="text-danger small">{{ form.reason.errors|striptags }}</div>{% endif %}
+            </div>
+
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i>
+              {% if is_self_booking %}Book Appointment{% else %}Save{% endif %}
+            </button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
     </div>
-    {% endif %}
-
-    <div class="mb-3">
-      <label class="form-label">Date</label>
-      <input type="date" name="appointment_date" class="form-control"
-             value="{{ appointment.appointment_date|date:'Y-m-d' }}" required>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Time</label>
-      <input type="time" name="appointment_time" class="form-control"
-             value="{{ appointment.appointment_time|time:'H:i' }}" required>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Reason for visit</label>
-      <textarea name="reason" class="form-control" rows="3" required>{{ appointment.reason|default:"" }}</textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-      {% if appointment %}Update{% else %}Book Appointment{% endif %}
-    </button>
-    <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Cancel</a>
-  </form>
+  </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const doctorSelect = document.querySelector("#id_doctor");
+const hintBox = document.getElementById("doctor-availability-hint");
+
+async function showAvailability() {
+  const doctorId = doctorSelect.value;
+  if (!doctorId) { hintBox.textContent = ""; return; }
+  try {
+    const res = await fetch(`/api/doctor/${doctorId}/availability/`);
+    const data = await res.json();
+    if (!data.availability.length) {
+      hintBox.textContent = "No availability on file for this doctor.";
+      return;
+    }
+    const lines = data.availability.map(a => `${a.day}: ${a.start} - ${a.end}`);
+    hintBox.innerHTML = "<i class='bi bi-clock'></i> Available: " + lines.join(" | ");
+  } catch (e) {
+    hintBox.textContent = "";
+  }
+}
+
+if (doctorSelect) {
+  doctorSelect.addEventListener("change", showAvailability);
+  showAvailability();
+}
+</script>
 {% endblock %}

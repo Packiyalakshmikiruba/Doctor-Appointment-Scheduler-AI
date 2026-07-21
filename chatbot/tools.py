@@ -130,123 +130,74 @@ def safe_encode(column, value):
 # =====================================================
 
 @tool
-
 def search_doctor(query: str) -> str:
-
     """
-    Search doctors by
+    Search doctor by
 
-    - Name
-    - Department
-    - Specialization
-
-    Returns doctor id which is required
-    for booking.
+    Name
+    Department
+    Specialization
     """
 
     doctors = (
-
         Doctor.objects
-
         .filter(is_active=True)
-
         .filter(
-
-            Q(
-
-                user__first_name__icontains=query
-
-            )
-
-            |
-
-            Q(
-
-                user__last_name__icontains=query
-
-            )
-
-            |
-
-            Q(
-
-                user__username__icontains=query
-
-            )
-
-            |
-
-            Q(
-
-                department__department_name__icontains=query
-
-            )
-
-            |
-
-            Q(
-
-                specialization__icontains=query
-
-            )
-
+            Q(user__first_name__icontains=query)
+            | Q(user__last_name__icontains=query)
+            | Q(user__username__icontains=query)
+            | Q(department__department_name__icontains=query)
+            | Q(specialization__icontains=query)
         )
-
         .select_related(
-
             "user",
-
-            "department"
-
+            "department",
         )
-
     )
 
     if not doctors.exists():
 
-        return (
+        return "No doctor found."
 
-            f"No active doctor found "
-
-            f"matching '{query}'."
-
-        )
-
-    response = []
+    result = []
 
     for doctor in doctors:
 
-        status = getattr(doctor, "current_status", None)
+        status = getattr(
+            doctor,
+            "current_status",
+            None,
+        )
 
         if status:
 
-            if status.status != "AVAILABLE":
+            if status and status.status != "AVAILABLE":
                 continue
 
-        name = (
+        doctor_name = (
             doctor.user.get_full_name()
-            or
-            doctor.user.username
+            or doctor.user.username
         )
 
-        response.append(
+        result.append(
             f"""
 Doctor ID : {doctor.id}
 
-Doctor    : Dr. {name}
+Doctor Name : Dr. {doctor_name}
 
-Department: {doctor.department.department_name}
+Department : {doctor.department.department_name}
 
-Speciality: {doctor.specialization}
+Specialization : {doctor.specialization}
 
-Fee       : ₹{doctor.consultation_fee}
+Consultation Fee : ₹{doctor.consultation_fee}
 """
-    )
+        )
 
-    if not response:
-        return "No doctors are currently available."
+    if not result:
 
-    return "\n".join(response)
+        return "No available doctor."
+
+    return "\n".join(result)
 # =====================================================
 # DOCTOR AVAILABILITY
 # =====================================================
@@ -561,100 +512,68 @@ def book_appointment(
 ) -> str:
     """
     Books an appointment.
-
     appointment_date -> YYYY-MM-DD
     appointment_time -> HH:MM (24 hour)
     """
+    if doctor_id is None:
+        return "Doctor ID is required."
 
+    if patient_id is None:
+        return "Patient not found."
+
+    if not appointment_date:
+        return "Appointment date is required."
+
+    if not appointment_time:
+        return "Appointment time is required."
+
+    if not reason:
+        reason = "General Consultation"
     from appointments.notifications import send_appointment_confirmation
 
     # -------------------------------
     # Patient
     # -------------------------------
-
     try:
-
-        patient = Patient.objects.select_related(
-            "user"
-        ).get(id=patient_id)
-
+        patient = Patient.objects.select_related("user").get(id=patient_id)
     except Patient.DoesNotExist:
-
         return "Patient not found."
-    # -------------------------------
-# Doctor Current Status Check
-# -------------------------------
 
-    doctor_status = getattr(
-        doctor,
-        "current_status",
-        None
-    )
+    # -------------------------------
+    # Doctor (fetch FIRST, before checking status)
+    # -------------------------------
+    try:
+        doctor = Doctor.objects.select_related("user", "department").get(
+            id=doctor_id, is_active=True
+        )
+    except Doctor.DoesNotExist:
+        return "Doctor not found."
+
+    # -------------------------------
+    # Doctor Current Status Check (now doctor is defined)
+    # -------------------------------
+    doctor_status = getattr(doctor, "current_status", None)
 
     if doctor_status:
-
         if doctor_status.status == "NOT_AVAILABLE":
-            return (
-                "Doctor is currently not available."
-            )
-
+            return "Doctor is currently not available."
         elif doctor_status.status == "BUSY":
-            return (
-                "Doctor is currently busy."
-            )
-
+            return "Doctor is currently busy."
         elif doctor_status.status == "EMERGENCY":
-            return (
-                "Doctor is attending an emergency case."
-            )
-
+            return "Doctor is attending an emergency case."
         elif doctor_status.status == "ON_LEAVE":
-            return (
-                "Doctor is currently on leave."
-            )
-
-    # -------------------------------
-    # Doctor
-    # -------------------------------
-
-    try:
-
-        doctor = Doctor.objects.select_related(
-            "user",
-            "department"
-        ).get(
-            id=doctor_id,
-            is_active=True
-        )
-
-    except Doctor.DoesNotExist:
-
-        return "Doctor not found."
+            return "Doctor is currently on leave."
 
     # -------------------------------
     # Date Conversion
     # -------------------------------
-
     try:
-
-        booking_date = datetime.strptime(
-            appointment_date,
-            "%Y-%m-%d"
-        ).date()
-
-        booking_time = datetime.strptime(
-            appointment_time,
-            "%H:%M"
-        ).time()
-
+        booking_date = datetime.strptime(appointment_date, "%Y-%m-%d").date()
+        booking_time = datetime.strptime(appointment_time, "%H:%M").time()
     except Exception:
+        return "Invalid Date/Time.\nDate : YYYY-MM-DD\nTime : HH:MM"
 
-        return (
-            "Invalid Date/Time.\n"
-            "Date : YYYY-MM-DD\n"
-            "Time : HH:MM"
-        )
-
+   
     # -------------------------------
     # Past Date Check
     # -------------------------------
@@ -882,21 +801,16 @@ def book_appointment(
 
     )
 
-    return f"""
-Appointment Booked Successfully
-
-Appointment ID : {appointment.id}
-
-Doctor : Dr. {doctor_name}
-
-Department : {doctor.department.department_name}
-
-Date : {booking_date}
-
-Time : {booking_time.strftime('%I:%M %p')}
-
-Status : Pending
-"""
+    return (
+    f"✅ Appointment booked successfully.\n\n"
+    f"Appointment ID : {appointment.id}\n"
+    f"Doctor ID : {doctor.id}\n"
+    f"Doctor : Dr. {doctor_name}\n"
+    f"Department : {doctor.department.department_name}\n"
+    f"Date : {booking_date}\n"
+    f"Time : {booking_time.strftime('%I:%M %p')}\n"
+    f"Status : Pending"
+)
 # =====================================================
 # PREDICT NO SHOW RISK
 # =====================================================
@@ -1770,6 +1684,7 @@ def suggest_alternate_doctors(doctor_id: int) -> str:
 
         if status and status.status != "AVAILABLE":
             continue
+        
 
         response.append(
             f"""
@@ -1788,4 +1703,175 @@ Fee : ₹{d.consultation_fee}
     if not response:
         return "No alternate doctors are currently available."
 
-    return "\n".join(response)
+    return (
+    "Requested doctor unavailable.\n\n"
+    "Available alternatives:\n\n"
+    + "\n".join(response)
+)
+# =====================================================
+# SYMPTOM TO DEPARTMENT
+# =====================================================
+
+SYMPTOM_MAP = {
+    "fever": "General Medicine",
+    "cold": "General Medicine",
+    "cough": "General Medicine",
+    "body pain": "General Medicine",
+    "weakness": "General Medicine",
+
+    "chest pain": "Cardiology",
+    "heart pain": "Cardiology",
+    "palpitations": "Cardiology",
+    "high bp": "Cardiology",
+
+    "skin rash": "Dermatology",
+    "allergy": "Dermatology",
+    "acne": "Dermatology",
+
+    "headache": "Neurology",
+    "dizziness": "Neurology",
+    "numbness": "Neurology",
+
+    "joint pain": "Orthopedics",
+    "fracture": "Orthopedics",
+    "back pain": "Orthopedics",
+}
+
+
+@tool
+def symptom_to_department(symptom: str) -> str:
+    """
+    Maps symptoms to department.
+    """
+
+    symptom = symptom.lower()
+
+    for key, dept in SYMPTOM_MAP.items():
+
+        if key in symptom:
+
+            return dept
+
+    return "General Medicine"
+from medical_records.models import MedicalRecord
+
+@tool
+def view_medical_records(patient_id: int) -> str:
+    """
+    View patient's medical records.
+    """
+
+    records = (
+        MedicalRecord.objects
+        .filter(appointment__patient_id=patient_id)
+        .select_related("appointment__doctor__user")
+        .order_by("-created_at")
+    )
+
+    if not records.exists():
+        return "No medical records found."
+
+    result = []
+
+    for record in records:
+
+        doctor = (
+            record.appointment.doctor.user.get_full_name()
+            or record.appointment.doctor.user.username
+        )
+
+        result.append(
+            f"""
+Date : {record.created_at.date()}
+
+Doctor : Dr. {doctor}
+
+Symptoms : {record.symptoms}
+
+Diagnosis : {record.diagnosis}
+"""
+        )
+
+    return "\n".join(result)
+from prescriptions.models import Prescription
+from medical_records.models import MedicalRecord
+
+@tool
+def create_prescription(
+    appointment_id: int,
+    medicine_name: str,
+    dosage: str,
+    frequency: str,
+    duration: int,
+    before_after_food: str,
+) -> str:
+    """
+    Create prescription for a patient.
+    """
+
+    try:
+        record = MedicalRecord.objects.get(
+            appointment_id=appointment_id
+        )
+
+    except MedicalRecord.DoesNotExist:
+        return "Medical record not found."
+
+    Prescription.objects.create(
+        medical_record=record,
+        medicine_name=medicine_name,
+        dosage=dosage,
+        frequency=frequency,
+        duration=duration,
+        before_after_food=before_after_food,
+    )
+
+    return "Prescription created successfully."
+
+
+@tool
+def doctor_full_details(name: str) -> str:
+    """
+    Search a doctor by name and return their full details including
+    department, specialization, consultation fee, and weekly availability.
+    """
+
+    doctor = (
+        Doctor.objects
+        .filter(
+            Q(user__first_name__icontains=name)
+            | Q(user__last_name__icontains=name)
+        )
+        .select_related("user", "department")
+        .first()
+    )
+
+    if not doctor:
+        return "Doctor not found."
+
+    slots = DoctorAvailability.objects.filter(
+        doctor=doctor,
+        is_available=True
+    )
+
+    text = f"""
+Doctor Name : Dr. {doctor.user.get_full_name()}
+
+Department : {doctor.department.department_name}
+
+Specialization : {doctor.specialization}
+
+Consultation Fee : ₹{doctor.consultation_fee}
+
+Availability
+
+"""
+
+    for slot in slots:
+        text += (
+            f"{slot.day_of_week}\n"
+            f"{slot.start_time.strftime('%I:%M %p')} - "
+            f"{slot.end_time.strftime('%I:%M %p')}\n\n"
+        )
+
+    return text

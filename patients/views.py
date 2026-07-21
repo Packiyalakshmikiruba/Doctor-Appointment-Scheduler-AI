@@ -7,7 +7,18 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import PatientForm, AdminPatientForm
 from datetime import timedelta
 from django.utils import timezone
+from medical_records.models import MedicalRecord
 from appointments.models import Appointment
+from prescriptions.models import Prescription
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+
+from prescriptions.models import Prescription
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 from appointments.booking_service import book_appointment_full, handle_cancellation, BookingError
 @login_required
 def complete_profile(request):
@@ -151,3 +162,397 @@ def patient_cancel_appointment(request, pk):
         return redirect("dashboard")
 
     return render(request, "appointments/patient_cancel_confirm.html", {"appointment": appt})
+@login_required
+def patient_medical_record(request, pk):
+
+    patient = getattr(request.user, "patient_profile", None)
+
+    record = get_object_or_404(
+
+        MedicalRecord.objects.select_related(
+            "appointment",
+            "appointment__doctor__user",
+            "appointment__doctor__department",
+            "appointment__patient"
+        ),
+
+        pk=pk,
+
+        appointment__patient=patient
+
+    )
+
+    prescriptions = Prescription.objects.filter(
+        medical_record=record
+    )
+
+    return render(
+        request,
+        "patients/medical_record_detail.html",
+        {
+            "record": record,
+            "prescriptions": prescriptions,
+        }
+    )
+@login_required
+def download_medical_report(request, pk):
+
+    patient = request.user.patient_profile
+
+    record = get_object_or_404(
+
+        MedicalRecord,
+
+        pk=pk,
+
+        appointment__patient=patient
+
+    )
+
+    response = HttpResponse(
+
+        content_type="application/pdf"
+
+    )
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="Medical_Report_{record.id}.pdf"'
+    )
+
+    doc = SimpleDocTemplate(response)
+
+    styles = getSampleStyleSheet()
+
+    elements = []
+
+    elements.append(
+        Paragraph("<b>Doctor Appointment Scheduler</b>", styles["Title"])
+    )
+
+    elements.append(
+        Paragraph("<b>Medical Report</b>", styles["Heading2"])
+    )
+
+    elements.append(
+        Paragraph(
+            f"<b>Patient :</b> {record.appointment.patient}",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            f"<b>Doctor :</b> Dr. {record.appointment.doctor.user.get_full_name()}",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            f"<b>Department :</b> {record.appointment.doctor.department.department_name}",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            f"<b>Date :</b> {record.appointment.appointment_date}",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "<br/><b>Symptoms</b>",
+            styles["Heading3"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            record.symptoms,
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "<br/><b>Diagnosis</b>",
+            styles["Heading3"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            record.diagnosis,
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            "<br/><b>Notes</b>",
+            styles["Heading3"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            record.notes or "-",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(
+        Paragraph(
+            f"<br/><b>Follow Up :</b> {record.follow_up_date}",
+            styles["Normal"]
+        )
+    )
+
+    doc.build(elements)
+
+    return response
+@login_required
+def patient_medical_history(request):
+
+    patient = getattr(request.user, "patient_profile", None)
+
+    if patient is None:
+        messages.error(request, "Patient profile not found.")
+        return redirect("dashboard")
+
+    records = (
+        MedicalRecord.objects
+        .select_related(
+            "appointment",
+            "appointment__doctor__user",
+            "appointment__doctor__department",
+            "appointment__patient",
+        )
+        .filter(
+            appointment__patient=patient
+        )
+        .order_by("-created_at")
+    )
+
+    return render(
+        request,
+        "patients/medical_history.html",
+        {
+            "records": records
+        }
+    )
+
+
+
+@login_required
+def download_prescription(request, pk):
+
+    patient = request.user.patient_profile
+
+
+    prescription = get_object_or_404(
+
+        Prescription,
+
+        pk=pk,
+
+        medical_record__appointment__patient=patient
+
+    )
+
+
+    response = HttpResponse(
+        content_type="application/pdf"
+    )
+
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="Prescription_{pk}.pdf"'
+    )
+
+
+    doc = SimpleDocTemplate(response)
+
+
+    styles = getSampleStyleSheet()
+
+
+    elements = []
+
+
+
+    record = prescription.medical_record
+
+
+    appointment = record.appointment
+
+
+
+    elements.append(
+
+        Paragraph(
+
+            "<b>Doctor Appointment Scheduler</b>",
+
+            styles["Title"]
+
+        )
+
+    )
+
+
+    elements.append(
+
+        Paragraph(
+
+            "<b>Prescription</b>",
+
+            styles["Heading2"]
+
+        )
+
+    )
+
+
+    elements.append(
+
+        Paragraph(
+
+            f"""
+            Patient :
+            {appointment.patient.user.get_full_name()}
+            """,
+
+            styles["Normal"]
+
+        )
+
+    )
+
+
+    elements.append(
+
+        Paragraph(
+
+            f"""
+            Doctor :
+            Dr.
+            {appointment.doctor.user.get_full_name()}
+            """,
+
+            styles["Normal"]
+
+        )
+
+    )
+
+
+    elements.append(
+
+        Paragraph(
+
+            f"""
+            Date :
+            {appointment.appointment_date}
+            """,
+
+            styles["Normal"]
+
+        )
+
+    )
+
+
+
+    elements.append(
+
+        Paragraph(
+
+            "<br/>Medicine Details",
+
+            styles["Heading3"]
+
+        )
+
+    )
+
+
+
+    data=[
+
+        [
+            "Medicine",
+            "Dosage",
+            "Frequency",
+            "Duration",
+            "Food"
+        ],
+
+        [
+
+            prescription.medicine_name,
+
+            prescription.dosage,
+
+            prescription.frequency,
+
+            str(
+                prescription.duration
+            ),
+
+            prescription.before_after_food
+
+        ]
+
+    ]
+
+
+
+    table = Table(data)
+
+
+
+    table.setStyle(
+
+        TableStyle([
+
+            (
+                "GRID",
+                (0,0),
+                (-1,-1),
+                1,
+                colors.black
+            )
+
+        ])
+
+    )
+
+
+    elements.append(table)
+
+
+
+    elements.append(
+
+        Paragraph(
+
+            f"""
+            <br/>
+            Instructions:
+            {prescription.instructions or '-'}
+            """,
+
+            styles["Normal"]
+
+        )
+
+    )
+
+
+    doc.build(elements)
+
+
+    return response

@@ -2,33 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django import forms
 from hospital.models import Department, Doctor
 from .forms import AppointmentForm
 from .models import Appointment
 from patients.models import Patient
 from .notifications import send_appointment_confirmation
 from appointments.booking_service import book_appointment_full, handle_cancellation, BookingError
-from django.contrib.auth.decorators import login_required
-def appointment_create(request):
-
-    if request.method == "POST":
-        form = AppointmentForm(request.POST)
-
-        if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.status = "Pending"
-            appointment.save()
-
-            send_appointment_confirmation(appointment)
-
-            return redirect("appointment_list")
-
-    else:
-        form = AppointmentForm()
-
-    return render(request, "appointments/appointment_form.html", {"form": form})
 
 
+@login_required
 def appointment_list(request):
 
     appointments = Appointment.objects.select_related(
@@ -91,6 +76,7 @@ def appointment_list(request):
     })
 
 
+@login_required
 def appointment_update(request, pk):
 
     appointment = get_object_or_404(Appointment, pk=pk)
@@ -106,6 +92,7 @@ def appointment_update(request, pk):
     return render(request, "appointments/appointment_form.html", {"form": form})
 
 
+@login_required
 def appointment_delete(request, pk):
 
     appointment = get_object_or_404(Appointment, pk=pk)
@@ -117,6 +104,7 @@ def appointment_delete(request, pk):
     return render(request, "appointments/appointment_confirm_delete.html", {"appointment": appointment})
 
 
+@login_required
 def mark_confirmed(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
     appointment.status = "Confirmed"
@@ -124,13 +112,7 @@ def mark_confirmed(request, pk):
     return redirect("appointment_list")
 
 
-def mark_cancelled(request, pk):
-    appointment = get_object_or_404(Appointment, pk=pk)
-    appointment.status = "Cancelled"
-    appointment.save()
-    return redirect("appointment_list")
-
-
+@login_required
 def mark_noshow(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
     appointment.status = "No Show"
@@ -138,26 +120,7 @@ def mark_noshow(request, pk):
     return redirect("appointment_list")
 
 
-def get_doctors_by_department(request, department_id):
-    from django.http import JsonResponse
-
-    doctors = Doctor.objects.filter(department_id=department_id, is_active=True).select_related("user")
-    data = [
-        {"id": d.id, "name": f"Dr. {d.user.get_full_name() or d.user.username}", "fee": str(d.consultation_fee)}
-        for d in doctors
-    ]
-    return JsonResponse({"doctors": data})
-
-
-# ---------------- Voice Booking ----------------
-# Voice booking reuses the SAME chat agent as the text chat widget --
-# see chatbot/views.py chat_api and appointments/templates/appointments/voice_booking.html.
-# There is no separate voice-only booking endpoint -- one booking brain,
-# two input methods (typing or speaking).
-
-def voice_booking_page(request):
-    return render(request, "appointments/voice_booking.html")
-
+@login_required
 def mark_cancelled(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
     appointment.status = "Cancelled"
@@ -169,6 +132,45 @@ def mark_cancelled(request, pk):
         pass
 
     return redirect("appointment_list")
+
+
+def get_doctors_by_department(request, department_id):
+    doctors = Doctor.objects.filter(department_id=department_id, is_active=True).select_related("user")
+    data = [
+        {"id": d.id, "name": f"Dr. {d.user.get_full_name() or d.user.username}", "fee": str(d.consultation_fee)}
+        for d in doctors
+    ]
+    return JsonResponse({"doctors": data})
+
+
+def get_doctor_availability(request, doctor_id):
+    from hospital.models import DoctorAvailability
+    slots = DoctorAvailability.objects.filter(
+        doctor_id=doctor_id, is_available=True
+    ).order_by("day_of_week")
+    data = [
+        {
+            "day": s.day_of_week,
+            "start": s.start_time.strftime("%I:%M %p"),
+            "end": s.end_time.strftime("%I:%M %p"),
+            "start_24h": s.start_time.strftime("%H:%M"),
+            "end_24h": s.end_time.strftime("%H:%M"),
+        }
+        for s in slots
+    ]
+    return JsonResponse({"availability": data})
+
+
+# ---------------- Voice Booking ----------------
+# Voice booking reuses the SAME chat agent as the text chat widget --
+# see chatbot/views.py chat_api and appointments/templates/appointments/voice_booking.html.
+# There is no separate voice-only booking endpoint -- one booking brain,
+# two input methods (typing or speaking).
+
+def voice_booking_page(request):
+    return render(request, "appointments/voice_booking.html")
+
+
 @login_required
 def patient_cancel_appointment(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
@@ -185,6 +187,7 @@ def patient_cancel_appointment(request, pk):
         return redirect("dashboard")
 
     return render(request, "appointments/patient_cancel_confirm.html", {"appointment": appointment})
+
 
 @login_required
 def patient_history_view(request, patient_id):
@@ -208,4 +211,58 @@ def patient_history_view(request, patient_id):
         "appointments": appointments,
         "records": records,
     })
+@login_required
+def appointment_create(request):
 
+    if request.user.role not in ("ADMIN", "PATIENT"):
+        messages.error(request, "Access denied.")
+        return redirect("dashboard")
+
+    is_self_booking = request.user.role == "PATIENT"
+
+    if request.method == "POST":
+
+        form = AppointmentForm(request.POST)
+
+        if is_self_booking:
+            form.data = form.data.copy()
+            form.data["patient"] = request.user.patient_profile.id
+
+        if form.is_valid():
+
+            try:
+
+                appointment = book_appointment_full(
+                    patient=form.cleaned_data["patient"],
+                    doctor=form.cleaned_data["doctor"],
+                    appointment_date=form.cleaned_data["appointment_date"],
+                    appointment_time=form.cleaned_data["appointment_time"],
+                    reason=form.cleaned_data["reason"],
+                )
+
+                messages.success(
+                    request,
+                    "Appointment booked successfully."
+                )
+
+                return redirect("dashboard")
+
+            except BookingError as e:
+                messages.error(request, e.message)
+
+    else:
+
+        form = AppointmentForm()
+
+        if is_self_booking:
+            form.fields["patient"].widget = forms.HiddenInput()
+            form.fields["patient"].initial = request.user.patient_profile.id
+
+    return render(
+        request,
+        "appointments/appointment_form.html",
+        {
+            "form": form,
+            "is_self_booking": is_self_booking,
+        },
+    )

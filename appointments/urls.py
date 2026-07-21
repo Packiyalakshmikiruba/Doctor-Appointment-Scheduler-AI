@@ -13,4 +13,5 @@ urlpatterns = [
     path("appointment/<int:pk>/patient-cancel/", views.patient_cancel_appointment, name="patient_cancel_appointment"),
     path("voice-booking/", views.voice_booking_page, name="voice_booking_page"),
     path("api/department/<int:department_id>/doctors/", views.get_doctors_by_department, name="get_doctors_by_department"),
+    path("api/doctor/<int:doctor_id>/availability/", views.get_doctor_availability, name="get_doctor_availability"),
 ]

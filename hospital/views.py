@@ -200,11 +200,30 @@ from appointments.models import Appointment
 @login_required
 def doctor_dashboard(request):
 
+    # Role check
+    if request.user.role != "DOCTOR":
+        messages.error(
+            request,
+            "Access denied."
+        )
+        return redirect("dashboard")
+
+    # Doctor profile check
+    if not hasattr(request.user, "doctor_profile"):
+        messages.info(
+            request,
+            "Doctor profile not set up yet. Contact admin."
+        )
+        return render(
+            request,
+            "accounts/dashboard.html"
+        )
+
     doctor = Doctor.objects.select_related(
-    "department",
-    "user",
-    "current_status"
-).get(user=request.user)
+        "department",
+        "user",
+        "current_status"
+    ).get(user=request.user)
 
     today = timezone.now().date()
 
@@ -257,10 +276,11 @@ def doctor_dashboard(request):
         doctor=doctor,
         attendance_date=today
     ).first()
-    doctor_status = getattr(
-    doctor,
-    "current_status",
-    None
+    doctor_status = (
+    DoctorStatus.objects
+    .filter(doctor=doctor)
+    .order_by("-updated_at")
+    .first()
 )
 
     availability = DoctorAvailability.objects.filter(
@@ -409,8 +429,8 @@ def doctor_checkin(request):
         attendance_date=timezone.now().date(),
     )
 
-    attendance.status = "PRESENT"
-    attendance.check_in = timezone.now().time()
+    attendance.status = "AVAILABLE"
+    attendance.check_in_time = timezone.now().time()
     attendance.save()
 
     status, created = DoctorStatus.objects.get_or_create(
@@ -433,8 +453,8 @@ def doctor_checkout(request):
     ).first()
 
     if attendance:
-        attendance.check_out = timezone.now().time()
-        attendance.status = "ABSENT"
+        attendance.check_out_time = timezone.now().time()
+        attendance.status = "LEAVE"
         attendance.save()
 
     status, created = DoctorStatus.objects.get_or_create(
@@ -587,3 +607,6 @@ def doctor_leave_delete(request, pk):
     )
 
     return redirect("doctor_leave_list")
+@login_required
+def contact_admin(request):
+    return redirect("chat_widget")

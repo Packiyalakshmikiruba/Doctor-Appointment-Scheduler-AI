@@ -1,246 +1,330 @@
-"""
-chatbot/agent.py
-Wires all tools together into a LangChain agent with safety-first routing:
-    1. Emergency keywords (English + Tamil + Tanglish) -> deterministic
-       escalation, bypasses agent entirely -- fast, free, no LLM call.
-    2. Otherwise -> agent picks from 17 tools based on role context.
-"""
-
 import os
-from datetime import date
+import re
+import time
+
 from langchain.agents import create_agent
 from langchain_groq import ChatGroq
-from .tools import (
-    search_doctor,
-    check_doctor_availability,
-    find_next_available_slot,
-    today_available_doctors,
-    book_appointment,
-    predict_noshow_risk,
-    get_billing_info,
-    get_patient_pending_bills,
-    get_my_schedule,
-    cancel_appointment,
-    reschedule_appointment,
-    appointment_history,
-    patient_summary,
-    doctor_summary,
-    hospital_statistics,
-    suggest_alternate_doctors,
+from langchain_core.messages import ToolMessage
+
+from chatbot.rag_tool import hospital_info_search
+from chatbot.tools import (
+    search_doctor, doctor_full_details, check_doctor_availability, cancel_appointment,
+    reschedule_appointment, appointment_history, get_billing_info,
+    symptom_to_department, patient_summary, doctor_summary,
+    hospital_statistics, view_medical_records, create_prescription,
 )
-from .rag_tool import hospital_info_search
 
-EMERGENCY_KEYWORDS = [
-    # English
-    "chest pain", "can't breathe", "cannot breathe", "severe bleeding",
-    "unconscious", "suicide", "overdose", "stroke", "heart attack", "heart pain",
-    "difficulty breathing", "severe pain", "collapsed", "seizure", "accident",
-    "blood vomiting", "snake bite", "burn injury", "poison", "pregnancy bleeding",
-
-    # Tanglish
-    "nenju vali", "moochu vidamudiyala", "moochu thinaral",
-    "ratha kasivu", "mayakkam", "thatrkolai", "swasa pirachanai",
-    "romba vali", "udal nadukkam", "hrudaya kaettu", "vipathu",
-    "paambu kadi", "thee kayam", "ratha vaandhi", "visham",
-
-    # Tamil script
-    "நெஞ்சு வலி", "மூச்சு விடமுடியல", "மூச்சு திணறல்", "மயக்கம்",
-    "இரத்த கசிவு", "தற்கொலை", "சுவாசப் பிரச்சனை", "மார்பு வலி",
-    "உடல் நடுக்கம்", "இதய கோளாறு", "விபத்து",
-    "பாம்பு கடி", "தீக்காயம்", "விஷம்", "ரத்த வாந்தி",
+# -----------------------------------------------------------------------
+# PATIENT chat is now INFORMATION-ONLY: search doctors, check availability,
+# see appointment history, check bills, symptom -> department, hospital
+# FAQs. No booking tools at all -- actual booking happens through the real
+# appointment form (100% reliable, no LLM involved). This removes the
+# entire class of "wrong doctor / hallucinated date-time / fake booking
+# success" bugs, since the chatbot never carries booking state across
+# turns anymore.
+# -----------------------------------------------------------------------
+PATIENT_TOOLS = [
+    search_doctor, doctor_full_details, check_doctor_availability, appointment_history,
+    get_billing_info, symptom_to_department, hospital_info_search,
 ]
 
-SYSTEM_PROMPT = """You are an AI Hospital Receptionist for a hospital appointment system.
+DOCTOR_TOOLS = [
+    search_doctor, check_doctor_availability, cancel_appointment,
+    reschedule_appointment, appointment_history, get_billing_info,
+    hospital_info_search, doctor_summary, view_medical_records,
+    create_prescription,
+]
 
-You have access to EXACTLY these 17 tools:
-search_doctor, check_doctor_availability, find_next_available_slot,
-today_available_doctors, book_appointment, predict_noshow_risk,
-get_billing_info, get_patient_pending_bills, get_my_schedule,
-cancel_appointment, reschedule_appointment, appointment_history,
-patient_summary, doctor_summary, hospital_statistics,
-suggest_alternate_doctors, hospital_info_search.
+ADMIN_TOOLS = [
+    search_doctor, check_doctor_availability, cancel_appointment,
+    reschedule_appointment, appointment_history, get_billing_info,
+    symptom_to_department, patient_summary, doctor_summary,
+    hospital_statistics, hospital_info_search, view_medical_records,
+    create_prescription,
+]
 
-CRITICAL: Never attempt to call any tool other than these 17. You do NOT have
-web search, browsing, or any external tool access.
+TOOLS_BY_ROLE = {
+    "PATIENT": PATIENT_TOOLS,
+    "DOCTOR": DOCTOR_TOOLS,
+    "ADMIN": ADMIN_TOOLS,
+}
 
-CORE RULES:
-- Always use a tool whenever one can answer the question -- never invent
-  data, doctors, appointments, or bills.
-- Never diagnose diseases, never prescribe medicines, never replace a
-  doctor's advice.
-- Always answer politely and concisely.
-- If a doctor is BUSY, EMERGENCY, ON_LEAVE, or NOT_AVAILABLE, immediately
-  call suggest_alternate_doctors using the same department. Never end the
-  conversation by only saying "Doctor unavailable" -- always offer an
-  alternative.
+# Real path from appointments/urls.py: path("appointment/add/", ..., name="appointment_create")
+BOOKING_FORM_URL = "/appointment/add/"
 
-CRITICAL TOOL-CALLING RULE:
-- When you need to call a tool, use the proper tool-calling mechanism ONLY.
-- NEVER write tool calls as text in your response (e.g. never write something
-  like "<function=tool_name>{...}</function>" as part of your reply).
-- Call the tool FIRST, wait for its result, THEN write your natural-language
-  reply based on that result. Your reply must never contain function/tool syntax.
-
-RESPONSE STYLE:
-- You are speaking AS THE ASSISTANT, addressing the user as "you" (Neenga/Unga in Tamil-Tanglish).
-- Never refer to yourself as having symptoms or needing appointments -- you are booking FOR the patient, not for yourself.
-- Example (correct): "Unga fever-ku General Medicine department nalla irukkum. Dr. Devi H available irukkanga."
-- Example (WRONG): "Enakku Dr. Devi H la irukku" (sounds like the assistant has the doctor -- confusing).
-
-SYMPTOM-TO-DEPARTMENT TRIAGE (routing, NOT diagnosis, for PATIENTS only):
-- fever, cold, cough, body pain, general weakness -> General Medicine
-- chest pain, palpitations, high BP -> Cardiology
-- skin rash, allergy, acne -> Dermatology
-- headache, dizziness, numbness -> Neurology
-- joint pain, fracture, back pain -> Orthopedics
-Immediately suggest the department and call search_doctor -- don't just ask
-"which department?" in a loop. Only ask a clarifying question if the symptom
-truly doesn't map to any department above, or the message is too vague.
-
-DATE PARSING:
-- Users may give dates as DD-MM-YYYY (e.g. "18-07-2026"), or just a day
-  number (e.g. "18"), or "july 18". Convert ALL of these to YYYY-MM-DD
-  before calling any tool. Convert times like "12.00" or "12pm" to 24-hour
-  HH:MM format (e.g. "12:00").
-
-LANGUAGE RULE:
-- Always reply in the SAME language and style the user writes in (Tamil,
-  Tanglish, or English) -- match the user's most recent message.
-- Understand requests even with spelling mistakes or mixed language phrasing.
-
-CONVERSATION CONSISTENCY:
-- Once you have suggested a specific doctor, date, or time, remember it for
-  the rest of this conversation. When the user confirms ("yes", "book
-  pannunga"), use the EXACT SAME details already suggested.
-
-ROLE AWARENESS:
-- PATIENTS can: search doctors, book/cancel/reschedule appointments, view
-  bills, pending bills, and appointment history.
-- DOCTORS can: view today's schedule, next 7 days schedule, appointment
-  history, and patient summaries. Do NOT book an appointment for a doctor
-  as if they were a patient.
-- ADMINS can: view doctor list, hospital statistics, billing, and search
-  hospital information. Admins never book personal appointments.
-- Always check the system note at the start of the conversation to know who
-  you're talking to, and only use tools appropriate for that role.
+SYSTEM_PROMPT = f"""
+You are a friendly AI Hospital Receptionist. You help patients with
+INFORMATION ONLY: searching doctors, checking availability, viewing their
+appointment history, checking bills, symptom-to-department guidance, and
+hospital FAQs.
 
 STRICT RULES:
-- NEVER diagnose a specific condition or suggest medications/dosages.
-  Suggesting a DEPARTMENT based on a symptom is routing, not diagnosis.
-- NEVER interpret lab results or medical images.
-- Always confirm key booking details (doctor, date, time) back to the user
-  before/after calling book_appointment.
+- You CANNOT book, cancel, or reschedule appointments. Never say an
+  appointment is booked, confirmed, or that the user "has" an appointment.
+- If the patient wants to book an appointment, tell them to use the
+  appointment booking page at {BOOKING_FORM_URL}, and mention the doctor
+  name/department you found (if any) so they know who to select there.
+- Always call search_doctor to find a doctor -- never make up a doctor's
+  name or ID. If a tool returns no result, say so plainly.
+- If a symptom is mentioned (fever, headache, pain, etc.), call symptom_to_department
+  first, then search_doctor with that department. Once you've found a doctor to
+  recommend, call doctor_full_details with their name to also tell the patient
+  their availability (days/times) and consultation fee.
+- Never diagnose or prescribe. Reply in the same language the user used.
+- If the user just replies "yes"/"ok"/similar after you already recommended a
+  doctor, do NOT search again or mention a different doctor. Simply remind
+  them of the booking page link for the doctor you already found.
 """
 
-TOOLS = [
-    search_doctor,
-    check_doctor_availability,
-    find_next_available_slot,
-    today_available_doctors,
-    book_appointment,
-    predict_noshow_risk,
-    get_billing_info,
-    get_patient_pending_bills,
-    get_my_schedule,
-    cancel_appointment,
-    reschedule_appointment,
-    appointment_history,
-    patient_summary,
-    doctor_summary,
-    hospital_statistics,
-    suggest_alternate_doctors,
-    hospital_info_search,
+_agents = {}
+
+def _get_agent(role="PATIENT"):
+    role = role if role in TOOLS_BY_ROLE else "PATIENT"
+    if role not in _agents:
+        llm = ChatGroq(
+            api_key=os.getenv("GROQ_API_KEY"),
+            model="llama-3.1-8b-instant",
+            temperature=0,
+            max_tokens=400,
+        )
+        _agents[role] = create_agent(llm, TOOLS_BY_ROLE[role], system_prompt=SYSTEM_PROMPT)
+    return _agents[role]
+
+def build_role_context(patient_id, doctor_id, role):
+    if role == "PATIENT": return f"\nRole : PATIENT\nPatient ID : {patient_id}\n"
+    if role == "DOCTOR": return f"\nRole : DOCTOR\nDoctor ID : {doctor_id}\n"
+    return "\nRole : ADMIN\n"
+SYMPTOM_KEYWORDS = [
+    "fever", "cold", "cough", "pain", "headache", "vali", "vayathu",
+    "eruggu", "achu", "kastam", "ache", "sick",
 ]
 
-_agent = None
+# Word-boundary matching so short/common substrings (e.g. "vali") don't
+# false-positive inside unrelated words (e.g. "availability" contains "vali").
+_SYMPTOM_PATTERN = re.compile(
+    r"\b(" + "|".join(re.escape(k) for k in SYMPTOM_KEYWORDS) + r")\b",
+    re.IGNORECASE,
+)
+
+HOSPITAL_INFO_KEYWORDS = [
+    "hospital hour", "hospital time", "closing time", "opening time",
+    "visiting hour", "hospital address", "hospital location", "hospital detail",
+    "contact number", "parking", "hospital timing",
+]
+
+HISTORY_KEYWORDS = [
+    "medical report", "medical record", "medical history", "past appointment",
+    "appointment history", "previous visit", "my history",
+]
+
+def _call_tool(tool_obj, arg):
+    """Calls an @tool-decorated LangChain tool directly, bypassing the LLM entirely."""
+    return tool_obj.func(arg)
 
 
-def _get_agent():
-    global _agent
-    if _agent is None:
+def _is_tamil_script(text: str) -> bool:
+    """True if the message contains actual Tamil Unicode characters."""
+    return bool(re.search(r"[\u0B80-\u0BFF]", text))
+
+
+def _translate_to_tamil(english_text: str) -> str:
+    """
+    Translates an already-correct English reply into Tamil. This is a
+    bounded, low-risk use of the LLM -- it is only asked to translate facts
+    that were already fetched deterministically from the database, never
+    to decide or invent any fact itself. If the call fails for any reason
+    (rate limit, etc.), the original English text is returned so the user
+    still gets a correct answer.
+    """
+    try:
         llm = ChatGroq(
+            api_key=os.getenv("GROQ_API_KEY"),
             model="llama-3.1-8b-instant",
-            api_key=os.environ.get("GROQ_API_KEY"),
-            temperature=0.1,
+            temperature=0,
+            max_tokens=500,
         )
-        _agent = create_agent(llm, TOOLS, system_prompt=SYSTEM_PROMPT)
-    return _agent
+        result = llm.invoke([
+            {
+                "role": "system",
+                "content": (
+                    "Translate the user's text into Tamil script. Keep all names, "
+                    "numbers, dates, times, and IDs EXACTLY unchanged. Do not add, "
+                    "remove, or explain anything -- output only the Tamil translation."
+                ),
+            },
+            {"role": "user", "content": english_text},
+        ])
+        return result.content.strip() or english_text
+    except Exception:
+        return english_text
 
 
-def is_emergency(message: str) -> bool:
+def deterministic_router(message: str, user_role: str, patient_id=None) -> str | None:
+    """
+    Fast, reliable, non-LLM routing for the most common patient questions.
+    Returns a reply string if handled here, or None to fall through to the
+    LLM agent for genuinely open-ended queries. This exists because the
+    free-tier Groq model is unreliable at deciding WHEN to call tools --
+    so for these common intents, we skip that decision entirely.
+    """
+    if user_role != "PATIENT":
+        return None
+
     text = message.lower()
-    return any(kw in text for kw in EMERGENCY_KEYWORDS)
+
+    # 1. Specific doctor name mentioned (e.g. "Dr. Arun Raj") -- checked
+    #    BEFORE the symptom check, since a question like "Dr. X availability"
+    #    is a more specific intent than a generic symptom mention.
+    name_match = re.search(r"dr\.?\s*([a-zA-Z]+(?:\s+[a-zA-Z]+)?)", text)
+    if name_match:
+        full_name = name_match.group(1).strip()
+        # Search by the first name token only -- first_name/last_name are
+        # separate DB fields, so querying "arun raj" as one string matches
+        # neither ("Arun Raj" split across two columns never contains the
+        # substring "arun raj" in either column individually).
+        search_term = full_name.split()[0]
+        result = _call_tool(search_doctor, search_term)
+
+        if "today" in text or "available" in text or "avail" in text or "time" in text:
+            id_match = re.search(r"Doctor ID\s*:\s*(\d+)", result)
+            if id_match:
+                availability = _call_tool(check_doctor_availability, int(id_match.group(1)))
+                return f"{result}\n\n{availability}"
+
+        return result
+
+    # 2. Hospital details (hours, location, contact, parking, etc.)
+    if any(kw in text for kw in HOSPITAL_INFO_KEYWORDS):
+        return _call_tool(hospital_info_search, message)
+
+    # 3. Medical reports / appointment history
+    if any(kw in text for kw in HISTORY_KEYWORDS):
+        if not patient_id:
+            return "I couldn't find your patient profile. Please contact admin."
+        return _call_tool(appointment_history, patient_id)
+
+    # 4. Symptom mentioned -> always resolve department + search doctors
+    if _SYMPTOM_PATTERN.search(text):
+        dept_result = _call_tool(symptom_to_department, message)
+        # Extract department name from the tool's response text
+        dept_match = re.search(r"department:\s*(.+)", dept_result, re.IGNORECASE)
+        department = dept_match.group(1).strip() if dept_match else "General Medicine"
+
+        doctors = _call_tool(search_doctor, department)
+        return (
+            f"{dept_result}\n\n{doctors}\n\n"
+            f"To book, visit the appointment page and select one of these doctors."
+        )
+
+    return None
 
 
-def get_agent_response(
-    message,
-    history=None,
-    patient_id=None,
-    user_role=None,
-    doctor_id=None,
-):
-    """
-    Returns: (reply: str, updated_history: list)
-    """
+
+def get_agent_response(message, history=None, patient_id=None, doctor_id=None, user_role="PATIENT", session_key=None):
     history = history or []
 
-    if is_emergency(message):
-        reply = ("This sounds urgent. I'm connecting you to clinic staff "
-                  "right now -- please call our front desk immediately or "
-                  "visit the nearest emergency room if this is life-threatening.")
-        return reply, history
+    # FIX: deterministic_router was defined above but never actually
+    # called anywhere -- it existed purely as dead code. This is exactly
+    # why "i have fever" (and every other symptom keyword) skipped the
+    # fast, reliable direct-tool-call path and went straight to the
+    # unreliable LLM instead, which then hallucinated a doctor name and
+    # got caught by the anti-hallucination guard below, producing the
+    # generic "Could you tell me the department or symptom again?" reply.
+    router_reply = deterministic_router(message, user_role, patient_id=patient_id)
+    if router_reply is not None:
+        if _is_tamil_script(message):
+            router_reply = _translate_to_tamil(router_reply)
+        history.extend([
+            {"role": "user", "content": message},
+            {"role": "assistant", "content": router_reply},
+        ])
+        return router_reply, history
 
-    if not os.environ.get("GROQ_API_KEY"):
-        reply = ("I can help with booking, doctor search, and hospital info once "
-                  "the assistant is fully configured. For now, please use the menu "
-                  "options to book an appointment or browse doctors.")
-        return reply, history
+    context = build_role_context(patient_id, doctor_id, user_role)
+    agent = _get_agent(user_role)
 
-    agent = _get_agent()
+    invoke_input = {
+        "messages": history[-3:] + [{"role": "user", "content": context + "\n\n" + message}]
+    }
 
-    today_str = date.today().strftime("%Y-%m-%d")
-    context_note = f"[System note: today's date is {today_str}. Use this to resolve relative dates like 'tomorrow' or 'next Monday'.]\n\n"
-
-    if user_role == "PATIENT" and patient_id:
-        context_note += (
-            f"[System note: you are speaking with a PATIENT (patient_id: {patient_id}). "
-            f"Use their patient_id automatically for book_appointment/cancel_appointment/"
-            f"reschedule_appointment -- never ask for it.]\n\n"
-        )
-    elif user_role == "DOCTOR" and doctor_id:
-        context_note += (
-            f"[System note: you are speaking with a DOCTOR (doctor_id: {doctor_id}). "
-            f"Use this doctor_id automatically when calling get_my_schedule -- never ask for it. "
-            f"Do NOT offer to book an appointment for them as if they were a patient.]\n\n"
-        )
-    elif user_role == "ADMIN":
-        context_note += (
-            "[System note: you are speaking with an ADMIN (hospital staff). "
-            "They may ask about hospital-wide information. Do NOT offer "
-            "patient-specific booking.]\n\n"
-        )
-    else:
-        context_note += (
-            "[System note: this user is not logged in as a patient. If they want to "
-            "book an appointment, ask them to log in as a patient first.]\n\n"
-        )
-
-    history = history[-10:]
-    messages = history + [{"role": "user", "content": context_note + message}]
+    def _invoke_with_retry():
+        # Groq's free "on_demand" tier has a low tokens-per-minute limit,
+        # so back-to-back chat messages can hit a 429 rate_limit_exceeded
+        # error even when nothing is actually wrong. Groq's error message
+        # tells us exactly how long to wait ("please try again in 10.4s") --
+        # so wait that long and retry (up to 2 attempts) instead of
+        # immediately giving up.
+        last_err = None
+        for attempt in range(2):
+            try:
+                return agent.invoke(invoke_input)
+            except Exception as e:
+                last_err = e
+                err_text = str(e)
+                if "rate_limit" in err_text or "429" in err_text:
+                    wait_match = re.search(r"try again in ([\d.]+)s", err_text)
+                    wait_seconds = float(wait_match.group(1)) if wait_match else 4.0
+                    time.sleep(min(wait_seconds, 15) + 0.5)
+                    continue
+                raise
+        raise last_err
 
     try:
-        result = agent.invoke({"messages": messages})
-        reply_message = result["messages"][-1]
-        reply = reply_message.content
+        result = _invoke_with_retry()
+        reply = result["messages"][-1].content
 
-        if "<function=" in reply or "</function>" in reply:
-            reply = ("Sorry, I had trouble processing that request. Could you "
-                      "please confirm the details again?")
+        # Tool results are deterministic strings the tool itself generated
+        # (e.g. "Doctor ID: 7 ..."), unlike `reply` which is the LLM's own
+        # paraphrase. Use this turn's actual tool output to verify the
+        # model isn't just inventing a doctor name from chat history.
+        tool_outputs = "\n".join(
+            m.content for m in result["messages"] if isinstance(m, ToolMessage)
+        )
 
-    except Exception:
-        reply = ("Sorry, I didn't quite understand that. Could you tell me "
-                  "which department or doctor you'd like to book with, and "
-                  "your preferred date?")
+        # Detect if the model leaked raw tool-call syntax instead of
+        # actually executing the tool. Two formats seen in practice:
+        #   <function=name>{...}</function>
+        #   <tool_name>{...}</tool_name>   (e.g. <hospital_info_search>{...}</hospital_info_search>)
+        _leaked_tool_call = re.search(r"<(\w+)>\s*\{.*?\}\s*</\1>", reply, re.DOTALL)
+        if "<function=" in reply or "</function>" in reply or _leaked_tool_call:
+            reply = (
+                "Sorry, I had trouble processing that. Could you rephrase, "
+                "or tell me the doctor name/department you're looking for?"
+            )
 
-    updated_history = messages + [{"role": "assistant", "content": reply}]
-    return reply, updated_history
+        # The model sometimes mentions "Dr. Someone" purely from its own
+        # chat-history recollection WITHOUT actually calling search_doctor
+        # this turn (e.g. replying to a plain "yes"/"ok") -- this is exactly
+        # how a different, invented doctor name keeps showing up. If this
+        # turn's tool output contains no doctor lookup result at all, any
+        # "Dr. X" in the reply is ungrounded -- discard it.
+        elif (
+            re.search(r"Dr\.?\s+[A-Za-z]", reply)
+            and "doctor id" not in tool_outputs.lower()
+            and "doctor name" not in tool_outputs.lower()
+        ):
+            reply = (
+                "Could you tell me the department or symptom again so I can "
+                "search our doctors properly?"
+            )
+
+    except Exception as e:
+        print("Agent invoke failed:", e)
+        err_text = str(e)
+        if "rate_limit" in err_text or "429" in err_text:
+            reply = (
+                "I'm getting a lot of requests right now and hit a rate limit. "
+                "Please wait about 10 seconds and send your message again."
+            )
+        else:
+            reply = (
+                "Sorry, I didn't quite understand that. Could you tell me "
+                "which department, doctor, or symptom you'd like help with?"
+            )
+
+    history.extend([
+        {"role": "user", "content": message},
+        {"role": "assistant", "content": reply},
+    ])
+
+    return reply, history

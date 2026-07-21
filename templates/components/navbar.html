@@ -28,7 +28,11 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-
+                    <li class="nav-item">
+    <a class="nav-link" href="{% url 'contacts_list' %}">
+        <i class="bi bi-chat-square-text"></i> Messages
+    </a>
+</li>
                     {% if request.user.role == "PATIENT" %}
                         
                         <li class="nav-item">
@@ -58,10 +62,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'medical_record_list' %}">
-                                <i class="bi bi-folder-symlink-fill text-teal fs-6"></i> 
-                                <span>Medical Records</span>
-                            </a>
+                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2"
+   href="{% url 'medical_records:medical_record_list' %}">
+    <i class="bi bi-folder-symlink-fill text-teal fs-6"></i>
+    <span>Medical Records</span>
+</a>
                         </li>
 
                     {% elif request.user.role == "ADMIN" %}

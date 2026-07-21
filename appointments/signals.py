@@ -10,7 +10,14 @@ def compute_risk(sender, instance, **kwargs):
         return
 
     patient = instance.patient
-    prior_qs = patient.appointments.exclude(pk=instance.pk)
+
+    # FIX: was counting ALL prior appointments (including still-Pending/
+    # Confirmed future ones), which doesn't match how "prior_visits" was
+    # defined in the training data (only appointments that actually
+    # happened). Now matches appointments/booking_service.py's logic.
+    prior_qs = patient.appointments.exclude(pk=instance.pk).filter(
+        status__in=["Completed", "No Show"]
+    )
     prior_visits = prior_qs.count()
     prior_noshows = prior_qs.filter(status="No Show").count()
     history_ratio = round(prior_noshows / prior_visits, 3) if prior_visits > 0 else 0.0

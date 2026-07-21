@@ -3,38 +3,153 @@
 {% block title %}Delete Doctor{% endblock %}
 
 {% block content %}
+<div class="container-fluid oceanic-3d-bg py-5 d-flex justify-content-center align-items-center min-vh-100">
+    
+    <!-- Glowing Ambient Background Orbs -->
+    <div class="oceanic-glow orb-1"></div>
+    <div class="oceanic-glow orb-2"></div>
 
-<div class="card shadow">
+    <div class="row w-100 justify-content-center position-relative" style="z-index: 2;">
+        <div class="col-md-7 col-lg-6 col-xl-5">
+            
+            <!-- 3D Glassmorphism Delete Card -->
+            <div class="card oceanic-card border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+                
+                <!-- Danger Warning Header -->
+                <div class="card-header danger-gradient-header text-white text-center py-4 border-0">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle shadow-lg p-3 mb-2 icon-3d-float">
+                        <i class="bi bi-exclamation-triangle-fill fs-2 text-white"></i>
+                    </div>
+                    <h3 class="mb-1 fw-bold tracking-wide">Delete Doctor</h3>
+                    <p class="mb-0 text-white-50 small">This action is permanent and cannot be undone</p>
+                </div>
 
-    <div class="card-header bg-danger text-white">
-        <h3>Delete Doctor</h3>
+                <!-- Card Body Content -->
+                <div class="card-body p-4 p-md-5 text-center">
+                    
+                    <div class="mb-4">
+                        <div class="avatar-box mx-auto mb-3 rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center shadow-sm" style="width: 70px; height: 70px;">
+                            <i class="bi bi-person-x-fill text-danger fs-2"></i>
+                        </div>
+                        <h5 class="text-secondary fw-normal mb-2">Are you sure you want to delete</h5>
+                        <h4 class="fw-bold text-dark">Dr. {{ doctor.user.get_full_name }}?</h4>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Action Buttons Wrapper -->
+                        <div class="d-flex flex-column flex-sm-row gap-3 mt-4 pt-2">
+                            <button type="submit" class="btn btn-danger-3d flex-grow-1 py-3 rounded-pill fw-bold text-white text-uppercase tracking-wider shadow-lg transition-all d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-trash3-fill"></i> Yes, Delete
+                            </button>
+                            
+                            <a href="{% url 'doctor_list' %}" class="btn btn-light flex-grow-1 py-3 rounded-pill fw-bold text-secondary text-uppercase tracking-wider transition-all d-flex align-items-center justify-content-center gap-2 border shadow-sm">
+                                <i class="bi bi-arrow-left-circle"></i> Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <div class="card-body">
-
-        <h5>
-            Are you sure you want to delete
-            <strong>{{ doctor.user.get_full_name }}</strong>?
-        </h5>
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            <button type="submit"
-                    class="btn btn-danger">
-                Yes, Delete
-            </button>
-
-            <a href="{% url 'doctor_list' %}"
-               class="btn btn-secondary">
-                Cancel
-            </a>
-
-        </form>
-
-    </div>
-
 </div>
 
+<!-- Oceanic 3D Styling & Animated Background -->
+<style>
+    /* Deep Oceanic Night Gradient with Slow Motion Animation */
+    .oceanic-3d-bg {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #065f46 100%);
+        background-size: 300% 300%;
+        animation: oceanicFlow 15s ease infinite;
+        min-height: 90vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes oceanicFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Soft Floating Glow Orbs for Peaceful Depth */
+    .oceanic-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 1;
+        opacity: 0.35;
+        animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+        width: 350px;
+        height: 350px;
+        background: rgba(239, 68, 68, 0.3);
+        top: 5%;
+        left: 10%;
+    }
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: rgba(6, 182, 212, 0.3);
+        bottom: 5%;
+        right: 10%;
+        animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+        0% { transform: translateY(0px) scale(1); }
+        100% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    /* 3D Floating Card Depth & Layers */
+    .oceanic-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(12px);
+        transform: perspective(1000px) rotateX(0.5deg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.3) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .oceanic-card:hover {
+        transform: perspective(1000px) rotateX(0deg) translateY(-4px);
+        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Danger Header Gradient */
+    .danger-gradient-header {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    /* Floating Icon 3D Effect */
+    .icon-3d-float {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transform: translateZ(20px);
+    }
+
+    /* 3D Danger Delete Action Button */
+    .btn-danger-3d {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border: none;
+        box-shadow: 0 4px 0 #991b1b, 0 8px 15px rgba(239, 68, 68, 0.3);
+        transition: all 0.1s ease;
+    }
+
+    .btn-danger-3d:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #7f1d1d, 0 12px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-danger-3d:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #991b1b, 0 4px 8px rgba(239, 68, 68, 0.3);
+    }
+</style>
 {% endblock %}

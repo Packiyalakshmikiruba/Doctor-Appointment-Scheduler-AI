@@ -1,62 +1,88 @@
-{% extends "base.html" %}
+<tbody>
 
-{% block title %}Medical Records{% endblock %}
+{% for record in records %}
 
-{% block content %}
+<tr>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h2 class="fw-bold mb-1">
-            <i class="bi bi-file-earmark-medical text-primary"></i> Medical Records
-        </h2>
-        <p class="text-muted mb-0">Patient diagnosis and consultation history</p>
-    </div>
-    <a href="{% url 'medical_record_create' %}" class="btn btn-primary shadow-sm">
-        <i class="bi bi-plus-circle"></i> New Record
-    </a>
-</div>
 
-<div class="card shadow-sm">
-    <div class="card-body p-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
-                    <th class="ps-4 py-3">#</th>
-                    <th class="py-3">Patient</th>
-                    <th class="py-3">Doctor</th>
-                    <th class="py-3">Diagnosis</th>
-                    <th class="py-3">Prescriptions</th>
-                    <th class="py-3">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in records %}
-                <tr>
-                    <td class="ps-4 text-muted">{{ record.id }}</td>
-                    <td class="fw-semibold">{{ record.patient }}</td>
-                    <td>Dr. {{ record.doctor.user.get_full_name|default:record.doctor.user.username }}</td>
-                    <td>{{ record.diagnosis|truncatewords:10 }}</td>
-                    <td>
-                        <span class="badge bg-info-subtle text-info border">
-                            {{ record.prescriptions.count }} medicine{{ record.prescriptions.count|pluralize }}
-                        </span>
-                    </td>
-                    <td>{{ record.created_at|date:"d M Y" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center py-5">
-                        <i class="bi bi-file-earmark-x text-muted" style="font-size: 3rem;"></i>
-                        <p class="text-muted mt-2 mb-3">No medical records found.</p>
-                        <a href="{% url 'medical_record_create' %}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-circle"></i> Add first record
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+<td>
+{{record.id}}
+</td>
 
-{% endblock %}
+
+
+<td>
+
+{{record.appointment.patient.user.get_full_name}}
+
+</td>
+
+
+
+<td>
+
+Dr.
+{{record.appointment.doctor.user.get_full_name}}
+
+</td>
+
+
+
+<td>
+
+{{record.diagnosis|truncatewords:8}}
+
+</td>
+
+
+
+<td>
+
+{{record.prescriptions.count}}
+
+</td>
+
+
+
+<td>
+
+{{record.created_at|date:"d M Y"}}
+
+</td>
+
+
+<td>
+
+
+<a href="{% url 'medical_record_detail' record.id %}"
+class="btn btn-sm btn-primary">
+
+View
+
+</a>
+
+
+</td>
+
+
+</tr>
+
+
+{% empty %}
+
+
+<tr>
+
+<td colspan="7">
+
+No Records
+
+</td>
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>

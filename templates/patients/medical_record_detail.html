@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Report{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<div class="card">
+
+<div class="card-header">
+
+<h3>
+
+Medical Report
+
+</h3>
+
+</div>
+
+<div class="card-body">
+
+<p>
+
+<b>Doctor :</b>
+
+Dr.
+{{ record.appointment.doctor.user.get_full_name }}
+
+</p>
+
+<p>
+
+<b>Department :</b>
+
+{{ record.appointment.doctor.department.department_name }}
+
+</p>
+
+<p>
+
+<b>Date :</b>
+
+{{ record.appointment.appointment_date }}
+
+</p>
+
+<hr>
+
+<p>
+
+<b>Symptoms</b>
+
+</p>
+
+<p>
+
+{{ record.symptoms }}
+
+</p>
+
+<hr>
+
+<p>
+
+<b>Diagnosis</b>
+
+</p>
+
+<p>
+
+{{ record.diagnosis }}
+
+</p>
+
+<hr>
+
+<p>
+
+<b>Notes</b>
+
+</p>
+
+<p>
+
+{{ record.notes }}
+
+</p>
+
+<hr>
+
+<p>
+
+<b>Follow Up</b>
+
+</p>
+
+<p>
+
+{{ record.follow_up_date }}
+
+</p>
+
+<br>
+
+<a
+href="{% url 'download_medical_report' record.id %}"
+class="btn btn-success">
+
+Download Medical Report
+
+</a>
+
+<a href="{% url 'download_prescription' p.id %}"
+class="btn btn-success">
+
+Download Prescription PDF
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

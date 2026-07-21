@@ -42,10 +42,16 @@ def build_vectorstore():
     return vectorstore
 
 
+_vectorstore = None
+
+
 def _load_vectorstore():
-    return FAISS.load_local(
-        INDEX_DIR, _embeddings, allow_dangerous_deserialization=True
-    )
+    global _vectorstore
+    if _vectorstore is None:
+        _vectorstore = FAISS.load_local(
+            INDEX_DIR, _embeddings, allow_dangerous_deserialization=True
+        )
+    return _vectorstore
 
 
 @tool

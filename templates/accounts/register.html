@@ -1,104 +1,262 @@
 {% extends "base.html" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register - Hospital Portal{% endblock %}
 
 {% block content %}
-
-<div class="container mt-5">
-
-    <div class="row justify-content-center">
-
-        <div class="col-lg-6">
-
-            <div class="card shadow">
-
-                <div class="card-header bg-success text-white">
-                    <h3 class="mb-0">Create Account</h3>
+<div class="container-fluid py-5 cyber-bg d-flex justify-content-center align-items-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            
+            <!-- Cyber Neon Card -->
+            <div class="card cyber-card border-0 rounded-4 overflow-hidden">
+                
+                <!-- Glowing Neon Header -->
+                <div class="card-header cyber-header text-white text-center py-4 border-0 position-relative">
+                    <div class="neon-badge mx-auto mb-2 shadow-lg">
+                        <i class="bi bi-person-plus-fill fs-2 text-cyan"></i>
+                    </div>
+                    <h3 class="mb-1 fw-bold text-glow">ENTITY REGISTRATION</h3>
+                    <p class="mb-0 text-cyan-50 small tracking-widest">CREATE NEW SECURE PROFILE</p>
                 </div>
 
-                <div class="card-body">
+                <!-- Card Body -->
+                <div class="card-body p-4 p-md-5 cyber-body">
 
+                    <!-- Messages Section -->
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show bg-dark border-secondary text-white" role="alert">
                                 {{ message }}
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         {% endfor %}
                     {% endif %}
 
-                    <form method="POST">
-
+                    <form method="POST" class="needs-validation" novalidate>
                         {% csrf_token %}
 
-                        <div class="mb-3">
-                            <label class="form-label">First Name</label>
-                            {{ form.first_name }}
-                            <div class="text-danger">{{ form.first_name.errors }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Last Name</label>
-                            {{ form.last_name }}
-                            <div class="text-danger">{{ form.last_name.errors }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Username</label>
-                            {{ form.username }}
-                            <div class="text-danger">{{ form.username.errors }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            {{ form.email }}
-                            <div class="text-danger">{{ form.email.errors }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            {{ form.role }}
-                            <div class="text-danger">{{ form.role.errors }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            {{ form.password1 }}
-                            <div class="text-danger">{{ form.password1.errors }}</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Confirm Password</label>
-                            {{ form.password2 }}
-                            <div class="text-danger">{{ form.password2.errors }}</div>
-                        </div>
-
+                        <!-- Non-field Errors -->
                         {% if form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {{ form.non_field_errors }}
+                            <div class="alert alert-danger rounded-3 shadow-sm mb-4 bg-dark border-danger text-danger">
+                                {% for error in form.non_field_errors %}
+                                    <div class="small"><i class="bi bi-exclamation-triangle me-1"></i> {{ error }}</div>
+                                {% endfor %}
                             </div>
                         {% endif %}
 
-                        <button type="submit" class="btn btn-success w-100">
-                            Register
+                        <!-- First Name & Last Name Grid -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-cyan small tracking-wider">FIRST NAME</label>
+                                <div class="input-group cyber-input-group">
+                                    <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-person"></i></span>
+                                    {{ form.first_name }}
+                                </div>
+                                <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-cyan small tracking-wider">LAST NAME</label>
+                                <div class="input-group cyber-input-group">
+                                    <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-person"></i></span>
+                                    {{ form.last_name }}
+                                </div>
+                                <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Username & Email Grid -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-cyan small tracking-wider">USERNAME</label>
+                                <div class="input-group cyber-input-group">
+                                    <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-at"></i></span>
+                                    {{ form.username }}
+                                </div>
+                                <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-cyan small tracking-wider">EMAIL ADDRESS</label>
+                                <div class="input-group cyber-input-group">
+                                    <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-envelope"></i></span>
+                                    {{ form.email }}
+                                </div>
+                                <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Role Selection -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-cyan small tracking-wider">USER ROLE</label>
+                            <div class="input-group cyber-input-group">
+                                <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-shield-lock"></i></span>
+                                {{ form.role }}
+                            </div>
+                            <div class="text-danger small mt-1">{{ form.role.errors }}</div>
+                        </div>
+
+                        <!-- Password & Confirm Password Grid -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold text-cyan small tracking-wider">PASSWORD</label>
+                                <div class="input-group cyber-input-group">
+                                    <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-key"></i></span>
+                                    {{ form.password1 }}
+                                </div>
+                                <div class="text-danger small mt-1">{{ form.password1.errors }}</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold text-cyan small tracking-wider">CONFIRM PASSWORD</label>
+                                <div class="input-group cyber-input-group">
+                                    <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-key-fill"></i></span>
+                                    {{ form.password2 }}
+                                </div>
+                                <div class="text-danger small mt-1">{{ form.password2.errors }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Neon Glow Action Button -->
+                        <button type="submit" class="btn btn-neon-glow w-100 py-3 rounded-pill fw-bold text-dark text-uppercase tracking-wider shadow-lg mb-3">
+                            <i class="bi bi-check-circle-fill me-2"></i> Complete Registration
                         </button>
 
                     </form>
 
-                    <hr>
+                    <hr class="text-secondary my-4">
 
-                    <p class="text-center">
-                        Already have an account?
-                        <a href="{% url 'login' %}">Login</a>
+                    <!-- Login Link -->
+                    <p class="text-center text-secondary mb-0">
+                        Already have an entity profile? 
+                        <a href="{% url 'login' %}" class="text-neon-link fw-bold text-decoration-none">Sign In Here</a>
                     </p>
 
                 </div>
-
             </div>
 
         </div>
-
     </div>
-
 </div>
 
+<!-- Cyberpunk Neon 3D CSS Styles -->
+<style>
+    /* Dark Futuristic Background */
+    .cyber-bg {
+        background: #050508;
+        background-image: 
+            radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.1) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(78, 84, 200, 0.1) 0%, transparent 40%);
+        min-height: 100vh;
+    }
+
+    /* Cyber Card Glassmorphism with Neon Border */
+    .cyber-card {
+        background: rgba(13, 17, 23, 0.88);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 242, 254, 0.3) !important;
+        box-shadow: 0 0 35px rgba(0, 242, 254, 0.15), 0 20px 40px rgba(0, 0, 0, 0.85);
+        transition: all 0.4s ease;
+    }
+
+    .cyber-card:hover {
+        border-color: rgba(0, 242, 254, 0.7) !important;
+        box-shadow: 0 0 45px rgba(0, 242, 254, 0.3), 0 25px 50px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Header Styling */
+    .cyber-header {
+        background: linear-gradient(135deg, #090d16, #111b2b);
+        border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .neon-badge {
+        width: 65px;
+        height: 65px;
+        background: rgba(0, 242, 254, 0.05);
+        border: 2px solid #00f2fe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .text-cyan {
+        color: #00f2fe !important;
+    }
+
+    .text-glow {
+        color: #fff;
+        text-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
+    }
+
+    /* Form Body */
+    .cyber-body {
+        background: transparent;
+    }
+
+    /* Cyber Inputs and Select fields compatibility */
+    .cyber-input-group input, .cyber-input-group select {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        border-top-right-radius: 0.5rem !important;
+        border-bottom-right-radius: 0.5rem !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+        transition: all 0.3s ease;
+    }
+
+    .cyber-input-group select option {
+        background-color: #0d1117;
+        color: #fff;
+    }
+
+    .cyber-input-group input:focus, .cyber-input-group select:focus {
+        background-color: rgba(255, 255, 255, 0.06) !important;
+        color: #fff;
+        border-color: #00f2fe;
+        outline: 0;
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .cyber-input-group .input-group-text {
+        border-top-left-radius: 0.5rem !important;
+        border-bottom-left-radius: 0.5rem !important;
+        background-color: rgba(0, 242, 254, 0.05);
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        border-right: none;
+    }
+
+    /* Neon Button */
+    .btn-neon-glow {
+        background: #00f2fe;
+        color: #050508;
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .btn-neon-glow:hover {
+        background: #4facfe;
+        color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(0, 242, 254, 0.8);
+    }
+
+    /* Link Style */
+    .text-neon-link {
+        color: #00f2fe;
+        text-shadow: 0 0 5px rgba(0, 242, 254, 0.4);
+        transition: all 0.2s ease;
+    }
+
+    .text-neon-link:hover {
+        color: #fff;
+        text-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
+        text-decoration: underline !important;
+    }
+</style>
 {% endblock %}

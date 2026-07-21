@@ -132,7 +132,7 @@ from django.utils import timezone
 class DoctorAttendance(models.Model):
 
     STATUS_CHOICES = [
-         ("AVAILABLE", "Available"),
+        ("AVAILABLE", "Available"),
         ("BUSY", "Busy"),
         ("EMERGENCY", "Emergency"),
         ("LEAVE", "Leave"),

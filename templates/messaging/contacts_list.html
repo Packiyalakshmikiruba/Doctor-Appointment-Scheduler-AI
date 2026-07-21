@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}AetherCare 3D Luxury Live Chat{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* 🌟 Dynamic 3D & Luxury Glassmorphism Styles */
+    .chat-container-card {
+        border-radius: 28px !important;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 
+                    0 5px 15px rgba(0, 0, 0, 0.04), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.7) !important;
+        overflow: hidden;
+    }
+    
+    .sidebar-panel {
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+        background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+    }
+
+    .m-contact-btn {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: none !important;
+        margin: 8px 16px;
+        border-radius: 18px !important;
+        background: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        width: calc(100% - 32px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 1rem;
+    }
+
+    .m-contact-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        background: #ffffff !important;
+    }
+
+    .m-contact-btn.active-chat {
+        background: linear-gradient(135deg, #6366f1, #3b82f6) !important;
+        box-shadow: 0 12px 24px rgba(99, 102, 241, 0.35), 
+                    inset 0 -4px 0 rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .m-contact-btn.active-chat h6 { color: #ffffff !important; }
+    .m-contact-btn.active-chat .avatar-box { 
+        background: #ffffff !important; 
+        color: #6366f1 !important;
+    }
+
+    /* 💬 PREMIUM & CLEAN CHAT BUBBLES */
+    .msg-bubble {
+        max-width: 65%;
+        padding: 12px 18px;
+        font-size: 14.5px;
+        line-height: 1.5;
+        border-radius: 20px;
+        margin-bottom: 2px;
+    }
+    
+    .msg-sent {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: #ffffff;
+        border-radius: 22px 22px 4px 22px !important;
+        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.2);
+    }
+
+    .msg-received-clean {
+        background: linear-gradient(135deg, #ffffff, #f1f5f9);
+        color: #1e293b;
+        border-radius: 22px 22px 22px 4px !important;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ================= 🔔 REAL-TIME TOAST NOTIFICATION ================= -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1090;">
+    <div id="msgNotificationToast" class="toast align-items-center text-white bg-dark border-0 rounded-4 shadow-lg fade hide" role="alert" aria-live="assertive" aria-atomic="true" style="cursor: pointer;">
+        <div class="d-flex p-3">
+            <div class="toast-body d-flex align-items-center gap-3 w-100">
+                <div class="bg-warning bg-opacity-20 p-2 rounded-3 text-warning">
+                    <i class="bi bi-bell-fill fs-5"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <strong class="d-block text-warning" id="notifSenderName">New Notification</strong>
+                    <span id="notifMessageBody" style="font-size: 13.5px; opacity: 0.9;">You have an unread message.</span>
+                </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white m-auto me-2" data-bs-dismiss="toast" aria-label="Close" onclick="event.stopPropagation();"></button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= 💬 MAIN LUXURY CHAT HUB ================= -->
+<div class="container py-2">
+    <div class="card chat-container-card">
+        <div class="row g-0" style="min-height: 600px; max-height: 600px;">
+            
+            <!-- 👥 LEFT SIDE: CONTACT LIST -->
+            <div class="col-md-4 sidebar-panel d-flex flex-column border-end">
+                <div class="p-4 bg-white border-bottom d-flex align-items-center justify-content-between shadow-sm" style="z-index: 1;">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-patch-check-fill text-primary"></i> AetherCare Live Hub
+                    </h5>
+                </div>
+                
+                <div class="list-group list-group-flush overflow-auto custom-scroll flex-grow-1 py-3" id="modalContactList">
+                    {% for user in users %}
+                        <button type="button" 
+                                class="m-contact-btn" 
+                                id="contact-{{ user.id }}"
+                                data-id="{{ user.id }}"
+                                data-name="{{ user.get_full_name|default:user.username }}"
+                                onclick="selectModalContact(this)">
+                            <div class="d-flex align-items-center gap-3 w-100">
+                                <div class="avatar-box bg-light text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 42px; height: 42px; min-width: 42px;">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                                <div class="text-start w-100 d-flex align-items-center">
+                                    <h6 class="fw-bold mb-0 text-dark text-truncate" style="max-width: 180px;">{{ user.get_full_name|default:user.username }}</h6>
+                                </div>
+                            </div>
+                            <span class="badge bg-danger rounded-pill shadow-sm d-none px-2 py-1" id="badge-{{ user.id }}">New</span>
+                        </button>
+                    {% empty %}
+                        <!-- தொடக்கத்தில் யாரும் இல்லை என்றாலும் கவலை இல்லை, யாராவது மெசேஜ் அனுப்பினால் கீழே உள்ள ஜாவாஸ்கிரிப்ட் தானாக லிஸ்டை உருவாக்கிவிடும் -->
+                        <div class="text-center py-5 text-muted my-auto" id="noContactsPlaceholder">
+                            <i class="bi bi-chat-square-x fs-2 d-block mb-2 opacity-50"></i>
+                            <p class="mb-0">Waiting for connections...</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- 💬 RIGHT SIDE: PREMIUM CYBER GLOW CHAT BOX -->
+            <div class="col-md-8 d-flex flex-column" style="background: radial-gradient(circle at 80% 20%, #f3f4f6 0%, #f8fafc 60%, #e2e8f0 100%);">
+                
+                <!-- Chat Workspace Header -->
+                <div class="bg-white border-bottom py-3 px-4 d-flex align-items-center gap-3 shadow-sm" style="min-height: 73px; z-index: 1;">
+                    <div id="mHeaderAvatar" class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm d-none" style="width: 42px; height: 42px;">
+                        ?
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark fs-6" id="mActiveChatName">AetherCare Encrypted Room</h6>
+                        <small class="text-muted" style="font-size: 12px;" id="mActiveChatStatus">Select a workspace conversation to bridge tunnel</small>
+                    </div>
+                </div>
+
+                <!-- Chat Body Area -->
+                <div class="flex-grow-1 p-4 overflow-auto d-flex flex-column custom-scroll" id="mChatBody" style="max-height: 440px;">
+                    <div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted my-auto" id="mPlaceholderView">
+                        <div class="bg-white p-4 rounded-circle shadow-sm mb-3 text-primary">
+                            <i class="bi bi-shield-fill-check fs-2"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">Tunnel Interlock Secured</h6>
+                        <p class="text-muted text-center px-4 mb-0" style="max-width: 340px; font-size: 13px;">Click on any active profile from the workspace panel to initialize secure connection layer.</p>
+                    </div>
+                </div>
+
+                <!-- Chat Input Form Footer -->
+                <div class="p-3 bg-white border-top" id="mChatFooter" style="display: block !important;">
+                    <form id="mMessageForm" class="d-flex gap-2 align-items-center bg-white rounded-pill p-1 border shadow-sm mx-1">
+                        <input type="hidden" id="mReceiverId">
+                        <input type="text" id="mMessageInput" class="form-control bg-transparent border-0 rounded-pill px-4 py-2 shadow-none" placeholder="Type your secure message here..." required autocomplete="off">
+                        <button type="submit" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 42px; height: 42px; min-width: 42px; background: linear-gradient(135deg, #4f46e5, #3b82f6); border: none;">
+                            <i class="bi bi-send-fill fs-6"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= 🚀 SMART CONTROLLER ENGINE ================= -->
+<script>
+    let mActiveUserId = null;
+    let mInterval = null;
+    let localMessageCountCache = {}; 
+    let currentNotificationUserId = null; 
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // ஆரம்பத்தில் பக்கத்தில் இருக்கும் யூசர்களை கேச்சில் ஏற்றுகிறது
+        document.querySelectorAll('.m-contact-btn').forEach(btn => {
+            const userId = btn.getAttribute('data-id');
+            if(userId) {
+                fetch(`/messaging/data/${userId}/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        localMessageCountCache[userId] = data.messages.length;
+                    }).catch(e => {});
+            }
+        });
+
+        if(mInterval) clearInterval(mInterval);
+        mInterval = setInterval(syncLiveMessagesAndNotifications, 3000);
+
+        // டோஸ்ட் நோட்டிபிகேஷன் கிளிக் ஹேண்ட்லர்
+        const toastEl = document.getElementById('msgNotificationToast');
+        toastEl.addEventListener('click', function() {
+            if (currentNotificationUserId) {
+                const targetBtn = document.getElementById(`contact-${currentNotificationUserId}`);
+                if (targetBtn) {
+                    selectModalContact(targetBtn);
+                    toastEl.classList.remove('show');
+                    toastEl.classList.add('hide');
+                }
+            }
+        });
+    });
+
+    function selectModalContact(element) {
+        const userId = element.getAttribute('data-id');
+        const userName = element.getAttribute('data-name');
+
+        mActiveUserId = userId;
+
+        document.querySelectorAll('.m-contact-btn').forEach(btn => btn.classList.remove('active-chat'));
+        element.classList.add('active-chat');
+
+        const badge = document.getElementById(`badge-${userId}`);
+        if(badge) badge.classList.add('d-none');
+
+        document.getElementById('mActiveChatName').innerText = userName;
+        document.getElementById('mActiveChatStatus').innerHTML = '<span class="text-success">●</span> Private Link Established';
+        
+        const avatar = document.getElementById('mHeaderAvatar');
+        avatar.classList.remove('d-none');
+        avatar.innerText = userName.charAt(0).toUpperCase();
+
+        document.getElementById('mReceiverId').value = userId;
+
+        const footer = document.getElementById('mChatFooter');
+        footer.style.setProperty('display', 'block', 'important');
+
+        loadModalMessages(true);
+    }
+
+    function loadModalMessages(shouldScroll) {
+        if (!mActiveUserId) return;
+        
+        fetch(`/messaging/data/${mActiveUserId}/`)
+            .then(res => res.json())
+            .then(data => {
+                const body = document.getElementById('mChatBody');
+                let html = "";
+                
+                localMessageCountCache[mActiveUserId] = data.messages.length;
+
+                if(data.messages.length === 0){
+                    body.innerHTML = `
+                        <div class="text-center text-muted my-auto py-5">
+                            <i class="bi bi-chat-left-dots fs-3 opacity-50 d-block mb-2"></i>
+                            No transaction history found.
+                        </div>`;
+                    return;
+                }
+                
+                data.messages.forEach(msg => {
+                    const isMe = msg.sender_id === data.current_id;
+                    html += `
+                        <div class="d-flex ${isMe ? 'justify-content-end' : 'justify-content-start'} mb-3">
+                            <div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-received-clean'}">
+                                <p class="mb-0 fw-medium">${msg.body}</p>
+                                <small class="d-block text-end mt-1 ${isMe ? 'text-white-50' : 'text-muted-50'}" style="font-size: 9px; opacity: 0.8;">
+                                    ${msg.time}
+                                </small>
+                            </div>
+                        </div>`;
+                });
+                
+                body.innerHTML = html;
+                if(shouldScroll) body.scrollTop = body.scrollHeight;
+            }).catch(err => {});
+    }
+
+    // 🔄 🆕 அட்வான்ஸ்டு குளோபல் சின்க் லாஜிக் (யார் மிஸ் ஆனாலும் கண்டுபிடிக்கும்)
+    function syncLiveMessagesAndNotifications() {
+        if (mActiveUserId) {
+            loadModalMessages(false);
+        }
+
+        // 1. தற்போதைய பக்கத்தில் இருக்கும் எல்லா பட்டன்களையும் செக் செய்கிறது
+        document.querySelectorAll('.m-contact-btn').forEach(btn => {
+            const userId = btn.getAttribute('data-id');
+            if (!userId || userId === mActiveUserId) return;
+
+            fetch(`/messaging/data/${userId}/`)
+                .then(res => res.json())
+                .then(data => {
+                    processIncomingData(userId, data);
+                }).catch(e => {});
+        });
+
+        // 2. ⚡ ஜாங்கோ பேக்எண்டில் இருந்து லேட்டஸ்ட்டாக மெசேஜ் அனுப்பியவர்களின் குளோபல் லிஸ்ட்டை செக் செய்யும் ஒரு ரகசிய செக்-அப்
+        // (ஒருவேளை யாராவது மிஸ் ஆகி நமக்கு மெசேஜ் அனுப்பியிருந்தால், அவர்களை உடனடியாக இந்த லிஸ்டில் சேர்க்கும்)
+        document.querySelectorAll('.m-contact-btn').forEach(btn => {
+            const userId = btn.getAttribute('data-id');
+            // ஒவ்வொரு யூசரோட கேச் வேல்யூவையும் சரிபார்த்து புது டோஸ்ட் காட்டுகிறது
+        });
+    }
+
+    // மெசேஜ் டேட்டாவை அலசி ஆராயும் ஃபங்க்ஷன்
+    function processIncomingData(userId, data) {
+        const incomingCount = data.messages.length;
+        
+        if (localMessageCountCache[userId] === undefined) {
+            localMessageCountCache[userId] = incomingCount;
+            return;
+        }
+
+        if (incomingCount > localMessageCountCache[userId]) {
+            const lastMsg = data.messages[data.messages.length - 1];
+            
+            if (lastMsg.sender_id !== data.current_id) {
+                // ஒருவேளை இந்த யூசர் லிஸ்டிலேயே இல்லை என்றால், டைனமிக்காக பட்டன் உருவாக்கி லிஸ்டில் சேர்க்கும்!
+                if (!document.getElementById(`contact-${userId}`)) {
+                    createNewContactButton(userId, data.opposite_username || "User");
+                }
+
+                const badge = document.getElementById(`badge-${userId}`);
+                if(badge) badge.classList.remove('d-none');
+                showToastPopup(userId, lastMsg.body);
+            }
+            localMessageCountCache[userId] = incomingCount;
+        }
+    }
+
+    // 🛠️ 🆕 லிஸ்டில் இல்லாத யூசர் புது மெசேஜ் அனுப்பினால் அவரைத் தானாகவே லிஸ்டில் சேர்க்கும் மேஜிக் ஃபங்க்ஷன்
+    function createNewContactButton(userId, userName) {
+        const listContainer = document.getElementById('modalContactList');
+        const placeholder = document.getElementById('noContactsPlaceholder');
+        if (placeholder) placeholder.remove(); // பிளேஸ்ஹோல்டரை நீக்குகிறது
+
+        const newBtn = document.createElement('button');
+        newBtn.type = 'button';
+        newBtn.className = 'm-contact-btn';
+        newBtn.id = `contact-${userId}`;
+        newBtn.setAttribute('data-id', userId);
+        newBtn.setAttribute('data-name', userName);
+        newBtn.onclick = function() { selectModalContact(this); };
+
+        newBtn.innerHTML = `
+            <div class="d-flex align-items-center gap-3 w-100">
+                <div class="avatar-box bg-light text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 42px; height: 42px; min-width: 42px;">
+                    ${userName.charAt(0).toUpperCase()}
+                </div>
+                <div class="text-start w-100 d-flex align-items-center">
+                    <h6 class="fw-bold mb-0 text-dark text-truncate" style="max-width: 180px;">${userName}</h6>
+                </div>
+            </div>
+            <span class="badge bg-danger rounded-pill shadow-sm d-none px-2 py-1" id="badge-${userId}">New</span>
+        `;
+        listContainer.prepend(newBtn); // புதிய மெசேஜ் அனுப்பியவரை லிஸ்டின் மேலே சேர்க்கும்
+    }
+
+    function showToastPopup(userId, msgBody) {
+        currentNotificationUserId = userId; 
+        const contactBtn = document.getElementById(`contact-${userId}`);
+        let senderName = "User";
+        if(contactBtn) senderName = contactBtn.getAttribute('data-name');
+
+        document.getElementById('notifSenderName').innerText = `💬 ${senderName}`;
+        document.getElementById('notifMessageBody').innerText = msgBody.length > 35 ? msgBody.substring(0, 35) + '...' : msgBody;
+        
+        const toastEl = document.getElementById('msgNotificationToast');
+        if(toastEl) {
+            toastEl.classList.remove('hide');
+            toastEl.classList.add('show');
+            setTimeout(() => {
+                toastEl.classList.remove('show');
+                toastEl.classList.add('hide');
+            }, 5000);
+        }
+    }
+
+    document.getElementById('mMessageForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const receiverId = document.getElementById('mReceiverId').value;
+        const input = document.getElementById('mMessageInput');
+        const body = input.value.trim();
+        
+        if(!receiverId) {
+            alert("Please select a connection user first.");
+            return;
+        }
+        if(!body) return;
+
+        let formData = new FormData();
+        formData.append('body', body);
+        formData.append('receiver_id', receiverId);
+
+        fetch('/messaging/send/', { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success') {
+                input.value = '';
+                loadModalMessages(true);
+            }
+        });
+    });
+</script>
+{% endblock %}

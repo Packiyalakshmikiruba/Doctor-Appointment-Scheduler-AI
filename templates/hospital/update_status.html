@@ -5,39 +5,206 @@ Update Doctor Status
 {% endblock %}
 
 {% block content %}
+<div class="container-fluid dual-cyber-bg py-5 d-flex justify-content-center align-items-center min-vh-100">
+    
+    <!-- Dual Neon Floating Glowing Orbs -->
+    <div class="cyber-glow glow-pink"></div>
+    <div class="cyber-glow glow-blue"></div>
 
-<div class="container mt-4">
+    <div class="row w-100 justify-content-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            
+            <!-- 3D Glassmorphism Status Form Card -->
+            <div class="card cyber-card border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+                
+                <!-- Dual Cyber Gradient Header -->
+                <div class="card-header cyber-header-gradient text-white text-center py-4 border-0">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle shadow-lg p-3 mb-2 icon-3d-float">
+                        <i class="bi bi-toggle-on fs-2 text-white"></i>
+                    </div>
+                    <h3 class="mb-1 fw-bold tracking-wide">Update Status</h3>
+                    <p class="mb-0 text-white-50 small">Modify your current availability and duty status</p>
+                </div>
 
-    <div class="card shadow">
+                <!-- Card Body Form Elements -->
+                <div class="card-body p-4 p-md-5">
+                    
+                    <!-- Non-Field Validation Errors Alert -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div class="small"><i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}</div>
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
 
-        <div class="card-header bg-primary text-white">
-            <h4>Update Current Status</h4>
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Automatically Styled Django Form Fields via CSS Wrapper -->
+                        <div class="cyber-form-fields mb-4">
+                            {{ form.as_p }}
+                        </div>
+
+                        <!-- Action Buttons Wrapper -->
+                        <div class="d-flex flex-column flex-sm-row gap-3 pt-2">
+                            <button type="submit" class="btn btn-cyber-action flex-grow-1 py-3 rounded-pill fw-bold text-white text-uppercase tracking-wider shadow-lg transition-all d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-check-circle-fill"></i> Save Status
+                            </button>
+                            
+                            <a href="{% url 'doctor_dashboard' %}" class="btn btn-light flex-grow-1 py-3 rounded-pill fw-bold text-secondary text-uppercase tracking-wider transition-all d-flex align-items-center justify-content-center gap-2 border shadow-sm">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
         </div>
-
-        <div class="card-body">
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                {{ form.as_p }}
-
-                <button type="submit"
-                        class="btn btn-success">
-                    Save Status
-                </button>
-
-                <a href="{% url 'doctor_dashboard' %}"
-                   class="btn btn-secondary">
-                    Cancel
-                </a>
-
-            </form>
-
-        </div>
-
     </div>
-
 </div>
 
+<!-- Dual-Tone Cyber & Neon 3D Styling & Custom Form Control Enhancements -->
+<style>
+    /* Dual-Tone Vivid Cyberpunk Gradient Background with Slow Motion Animation */
+    .dual-cyber-bg {
+        background: linear-gradient(135deg, #111827 0%, #4c1d95 35%, #db2777 70%, #2563eb 100%);
+        background-size: 400% 400%;
+        animation: dualCyberFlow 15s ease infinite;
+        min-height: 90vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes dualCyberFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Dual Neon Floating Orbs */
+    .cyber-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        z-index: 1;
+        opacity: 0.4;
+        animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .glow-pink {
+        width: 380px;
+        height: 380px;
+        background: rgba(244, 63, 94, 0.5);
+        top: 5%;
+        left: 10%;
+    }
+    .glow-blue {
+        width: 420px;
+        height: 420px;
+        background: rgba(59, 130, 246, 0.4);
+        bottom: 5%;
+        right: 10%;
+        animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+        0% { transform: translateY(0px) scale(1); }
+        100% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    /* 3D Floating Card Depth & Layers */
+    .cyber-card {
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(12px);
+        transform: perspective(1000px) rotateX(0.5deg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.3) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .cyber-card:hover {
+        transform: perspective(1000px) rotateX(0deg) translateY(-4px);
+        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Cyber Header Gradient */
+    .cyber-header-gradient {
+        background: linear-gradient(135deg, #db2777 0%, #7c3aed 100%);
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    /* Floating Icon 3D Effect */
+    .icon-3d-float {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transform: translateZ(20px);
+    }
+
+    /* Automated Styling for form.as_p fields */
+    .cyber-form-fields p {
+        margin-bottom: 1.25rem;
+    }
+    .cyber-form-fields label {
+        display: block;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.875rem;
+        margin-bottom: 0.35rem;
+    }
+    .cyber-form-fields input[type="text"], 
+    .cyber-form-fields input[type="password"], 
+    .cyber-form-fields input[type="email"], 
+    .cyber-form-fields input[type="number"], 
+    .cyber-form-fields input[type="date"],
+    .cyber-form-fields select, 
+    .cyber-form-fields textarea {
+        display: block !important;
+        width: 100% !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.95rem !important;
+        color: #1e293b !important;
+        background-color: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 0.75rem !important;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    .cyber-form-fields input:focus, 
+    .cyber-form-fields select:focus, 
+    .cyber-form-fields textarea:focus {
+        background-color: #fff !important;
+        border-color: #db2777 !important;
+        outline: 0 !important;
+        box-shadow: 0 0 0 4px rgba(219, 39, 119, 0.15), inset 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+    
+    .cyber-form-fields .helptext, .cyber-form-fields .form-text {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    /* Dual Cyber Action Button with 3D Effect */
+    .btn-cyber-action {
+        background: linear-gradient(135deg, #db2777 0%, #7c3aed 100%);
+        border: none;
+        box-shadow: 0 4px 0 #581c87, 0 8px 15px rgba(219, 39, 119, 0.3);
+        transition: all 0.1s ease;
+    }
+
+    .btn-cyber-action:hover {
+        background: linear-gradient(135deg, #be185d 0%, #6d28d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #4c1d95, 0 12px 20px rgba(219, 39, 119, 0.4);
+    }
+
+    .btn-cyber-action:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #581c87, 0 4px 8px rgba(219, 39, 119, 0.3);
+    }
+</style>
 {% endblock %}

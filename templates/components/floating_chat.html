@@ -1,0 +1,273 @@
+{% if request.user.is_authenticated %}
+
+<!-- ================= PERMANENT FLOATING ROBOT ASSISTANT ================= -->
+<div id="ai-robot-widget" class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1085; width: 160px; height: 160px; cursor: pointer;">
+    <div id="ai-robot-bubble" class="position-absolute bg-white rounded-pill shadow-sm px-3 py-2 d-none"
+         style="bottom: 100%; right: 0; margin-bottom: 10px; white-space: nowrap; font-size: 13px; color:#0f172a; border: 1px solid #dbe3ea;">
+        Need help? Ask me anything!
+    </div>
+    <div id="ai-robot-mount" style="width: 100%; height: 100%;"></div>
+</div>
+
+<!-- Chat button kept (hidden) so existing floating_chat.html JS toggle logic (#chat-toggle-btn) still works -->
+<button id="chat-toggle-btn" class="d-none"></button>
+
+<!-- ================= CHAT PANEL (reuses your existing chat-panel markup/logic) ================= -->
+<div id="chat-panel" class="card shadow-3d-panel border-0 d-none position-fixed fade-in-3d"
+     style="bottom: 140px; right: 20px; width: 370px; max-width: 92vw; z-index: 1086; background: rgba(255, 255, 255, 0.96) !important; backdrop-filter: blur(20px); border-radius: 24px !important; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.9) !important;">
+
+    <div class="card-header border-0 p-3 text-white d-flex justify-content-between align-items-center"
+         style="background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #0891b2 100%) !important;">
+        <div class="d-flex align-items-center gap-2">
+            <div style="width: 34px; height: 34px;" id="ai-robot-mount-header"></div>
+            <div>
+                <h6 class="fw-bold mb-0 text-white" style="font-size: 15px;">
+                    {% if request.user.role == "PATIENT" %}Clinic AI Assistant
+                    {% elif request.user.role == "DOCTOR" %}Doctor Assistant
+                    {% elif request.user.role == "ADMIN" %}Admin Assistant
+                    {% else %}AI Assistant
+                    {% endif %}
+                </h6>
+                <small class="text-white-50 d-block" style="font-size: 11px;"><i class="bi bi-circle-fill text-success me-1" style="font-size: 8px;"></i>Always online</small>
+            </div>
+        </div>
+        <button id="chat-close-btn" class="btn-close btn-close-white shadow-none" style="font-size: 0.8rem;"></button>
+    </div>
+
+    <div class="card-body p-3 d-flex flex-column gap-2" style="background: rgba(248, 250, 252, 0.6);">
+        <div id="chat-log" class="custom-scroll" style="height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px;"></div>
+
+        <div id="status-text" class="badge bg-primary bg-opacity-10 text-primary small align-self-start fw-normal px-2 py-1 rounded-pill d-none">
+            <i class="bi bi-three-dots me-1"></i> Thinking...
+        </div>
+
+        <div class="input-group mt-1 bg-white p-1 rounded-pill border shadow-sm">
+            <button class="btn btn-light rounded-circle border-0 me-1 text-primary" id="upload-btn" type="button" title="Upload an old medical report/file" style="width: 34px; height: 34px;">
+                <i class="bi bi-paperclip"></i>
+            </button>
+            <input type="file" id="file-input" accept="image/*" class="d-none">
+            <input type="text" id="chat-input" class="form-control border-0 bg-transparent shadow-none px-2 text-dark" placeholder="Ask me anything...">
+            <button class="btn btn-primary rounded-circle border-0 p-0 d-flex align-items-center justify-content-center me-1" id="send-btn" type="button" style="width: 36px; height: 36px;">
+                <i class="bi bi-send-fill text-white small"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= ROBOT SVG TEMPLATE (waving, blinking, floating) ================= -->
+<template id="ai-robot-template">
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+  <defs>
+    <linearGradient id="shellG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dbe3ea"/>
+    </linearGradient>
+    <radialGradient id="eyeG" cx="35%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#a6f3ff"/>
+      <stop offset="60%" stop-color="#22c3e6"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </radialGradient>
+  </defs>
+  <g class="robot-float">
+    <ellipse cx="100" cy="182" rx="46" ry="8" fill="#0891b2" opacity="0.15"/>
+    <g class="robot-arm" style="transform-origin: 62px 118px;">
+      <rect x="40" y="112" width="14" height="46" rx="7" fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
+      <circle cx="47" cy="108" r="8" fill="#cbd5e1"/>
+    </g>
+    <rect x="146" y="118" width="14" height="42" rx="7" fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
+    <line x1="100" y1="26" x2="100" y2="40" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="100" cy="22" r="8" fill="#22c3e6"/>
+    <rect x="52" y="66" width="16" height="44" rx="8" fill="#cbd5e1"/>
+    <rect x="132" y="66" width="16" height="44" rx="8" fill="#cbd5e1"/>
+    <rect x="46" y="40" width="108" height="86" rx="30" fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
+    <rect x="62" y="60" width="76" height="52" rx="16" fill="#0f172a"/>
+    <g class="robot-eyes" style="transform-origin: 100px 84px;">
+      <circle cx="82" cy="84" r="8" fill="url(#eyeG)"/>
+      <circle cx="118" cy="84" r="8" fill="url(#eyeG)"/>
+    </g>
+    <path d="M82 104 Q100 116 118 104" stroke="#7ff0ff" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <rect x="88" y="124" width="24" height="10" fill="#cbd5e1"/>
+    <path d="M56 148 Q56 134 100 134 Q144 134 144 148 L144 160 Q144 178 100 178 Q56 178 56 160 Z"
+          fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
+    <line x1="70" y1="150" x2="130" y2="150" stroke="#b6c0cb" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="100" cy="160" r="7" fill="#22c3e6" opacity="0.9"/>
+  </g>
+</svg>
+</template>
+
+<style>
+@keyframes aiFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes aiWave { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-28deg); } 50% { transform: rotate(-6deg); } 75% { transform: rotate(-28deg); } }
+@keyframes aiBlink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } }
+@keyframes aiPopIn { from { opacity: 0; transform: translateY(16px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes bubblePop { 0% { opacity: 0; transform: scale(0.9); } 10% { opacity: 1; transform: scale(1); } 90% { opacity: 1; } 100% { opacity: 0; } }
+.robot-float { animation: aiFloat 2.6s ease-in-out infinite; }
+.robot-arm { animation: aiWave 1.4s ease-in-out infinite; }
+.robot-eyes { animation: aiBlink 4s ease-in-out infinite; }
+#chat-panel.fade-in-3d { animation: aiPopIn 0.3s ease-out; }
+#ai-robot-widget:hover .robot-arm { animation-duration: 0.6s; }
+#ai-robot-bubble.show-bubble { animation: bubblePop 3.5s ease-in-out; }
+
+.chat-bubble-user {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    color: #ffffff !important; padding: 10px 14px; border-radius: 18px 18px 2px 18px;
+    max-width: 82%; align-self: flex-end; font-size: 0.88rem; word-break: break-word;
+}
+.chat-bubble-bot {
+    background: #ffffff !important; color: #0f172a !important; padding: 10px 14px;
+    border-radius: 18px 18px 18px 2px; max-width: 82%; align-self: flex-start;
+    font-size: 0.88rem; border: 1px solid rgba(226, 232, 240, 0.9); word-break: break-word;
+}
+.chat-bubble-escalated { background: #fef2f2 !important; border: 1px solid #fca5a5 !important; color: #991b1b !important; }
+.custom-scroll::-webkit-scrollbar { width: 5px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+</style>
+
+<script>
+(function () {
+    const mount = document.getElementById('ai-robot-mount');
+    const mountHeader = document.getElementById('ai-robot-mount-header');
+    const template = document.getElementById('ai-robot-template');
+    mount.appendChild(template.content.cloneNode(true));
+    mountHeader.appendChild(template.content.cloneNode(true));
+
+    const widget = document.getElementById('ai-robot-widget');
+    const bubble = document.getElementById('ai-robot-bubble');
+    const chatToggle = document.getElementById('chat-toggle-btn');
+    const closeBtn = document.getElementById('chat-close-btn');
+    const panel = document.getElementById('chat-panel');
+    const chatLog = document.getElementById('chat-log');
+    const STORAGE_KEY = 'ai_chat_history_v1';
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function appendBubble(text, sender, escalated, persist) {
+        const div = document.createElement('div');
+        let cls = sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot';
+        if (escalated) cls += ' chat-bubble-escalated';
+        div.className = cls;
+        div.textContent = text;
+        chatLog.appendChild(div);
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        if (persist !== false) {
+            const history = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+            history.push({ text, sender, escalated: !!escalated });
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        }
+    }
+
+    function restoreHistory() {
+        const history = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+        history.forEach(m => appendBubble(m.text, m.sender, m.escalated, false));
+        return history.length > 0;
+    }
+    const hadHistory = restoreHistory();
+
+    if (sessionStorage.getItem('ai_chat_panel_open') === '1') {
+        panel.classList.remove('d-none');
+    }
+
+    function togglePanel() {
+        const isHidden = panel.classList.contains('d-none');
+        panel.classList.toggle('d-none');
+        sessionStorage.setItem('ai_chat_panel_open', isHidden ? '1' : '0');
+        if (isHidden && !hadHistory) {
+            appendBubble("Hi! I'm always here. Ask me about appointments, doctors, bills, or anything about the hospital.", 'bot');
+        }
+    }
+
+    widget.addEventListener('click', togglePanel);
+    chatToggle.addEventListener('click', togglePanel);
+    closeBtn.addEventListener('click', function () {
+        panel.classList.add('d-none');
+        sessionStorage.setItem('ai_chat_panel_open', '0');
+    });
+
+    async function sendMessage(text) {
+        const message = text.trim();
+        if (!message) return;
+        appendBubble(message, 'user');
+        document.getElementById('chat-input').value = '';
+
+        const statusText = document.getElementById('status-text');
+        statusText.classList.remove('d-none');
+
+        try {
+            const resp = await fetch("{% url 'chat_api' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({ message: message }),
+            });
+            const data = await resp.json();
+            const replyText = data.response || data.error || "Sorry, something went wrong.";
+            appendBubble(replyText, 'bot', !!data.error);
+            statusText.classList.add('d-none');
+
+            if ('speechSynthesis' in window) {
+                try { speechSynthesis.speak(new SpeechSynthesisUtterance(replyText)); } catch (e) {}
+            }
+        } catch (err) {
+            statusText.classList.add('d-none');
+            appendBubble("Sorry, connection error. Please try again.", 'bot', true);
+        }
+    }
+
+    document.getElementById('send-btn').addEventListener('click', () => sendMessage(document.getElementById('chat-input').value));
+    document.getElementById('chat-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(e.target.value); });
+
+    // Upload an old medical report/file photo
+    const uploadBtn = document.getElementById('upload-btn');
+    const fileInput = document.getElementById('file-input');
+
+    uploadBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        appendBubble(`📎 Uploaded: ${file.name}`, 'user');
+
+        const statusText = document.getElementById('status-text');
+        statusText.classList.remove('d-none');
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const resp = await fetch("{% url 'upload_medical_file' %}", {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: formData,
+            });
+            const data = await resp.json();
+            const isError = !!data.error;
+            const replyText = data.response || data.error || "Sorry, something went wrong reading that file.";
+            appendBubble(replyText, 'bot', isError);
+        } catch (err) {
+            appendBubble("Sorry, I couldn't upload that file. Please try again.", 'bot', true);
+        } finally {
+            statusText.classList.add('d-none');
+            fileInput.value = '';
+        }
+    });
+
+    // Periodically show a little speech-bubble hint above the robot when the
+    // chat is closed, so it feels alive without being annoying (every 45s).
+    function pulseHint() {
+        if (panel.classList.contains('d-none')) {
+            bubble.classList.remove('d-none');
+            bubble.classList.add('show-bubble');
+            setTimeout(() => { bubble.classList.add('d-none'); bubble.classList.remove('show-bubble'); }, 3500);
+        }
+    }
+    setInterval(pulseHint, 45000);
+})();
+</script>
+
+{% endif %}

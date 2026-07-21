@@ -5,213 +5,268 @@ Doctors
 {% endblock %}
 
 {% block content %}
+<div class="container-fluid dual-cyber-bg py-5 min-vh-100">
+    
+    <!-- Dual Neon Floating Glowing Orbs -->
+    <div class="cyber-glow glow-pink"></div>
+    <div class="cyber-glow glow-blue"></div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container py-4 position-relative" style="z-index: 2;">
+        
+        <!-- Top Heading & Add Button Section with Dual Glassmorphism -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 p-4 rounded-4 cyber-glass-header shadow-lg">
+            <div>
+                <h2 class="fw-bold mb-1 text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-people-fill text-neon-pink"></i>
+                    Doctors Directory
+                </h2>
+                <p class="text-white-50 mb-0 small">Manage hospital medical staff, schedules and profiles</p>
+            </div>
 
-    <h2 class="fw-bold">
-        Doctors
-    </h2>
+            <a href="{% url 'doctor_create' %}" class="btn btn-cyber-action rounded-pill px-4 py-2.5 fw-bold text-white shadow-lg d-inline-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-person-plus-fill fs-5"></i> Add Doctor
+            </a>
+        </div>
 
-    <a href="{% url 'doctor_create' %}"
-       class="btn btn-success">
+        <!-- Main 3D Card Table Wrapper -->
+        <div class="card cyber-card border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+            <div class="card-body p-0">
 
-        <i class="bi bi-person-plus-fill"></i>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
 
-        Add Doctor
+                        <thead>
+                            <tr class="text-uppercase text-secondary small fw-bold bg-light border-bottom">
+                                <th class="ps-4 py-3">#</th>
+                                <th class="py-3">Doctor</th>
+                                <th class="py-3">Department</th>
+                                <th class="py-3">Specialization</th>
+                                <th class="py-3">Fee</th>
+                                <th class="py-3">Schedule</th>
+                                <th class="py-3">Phone</th>
+                                <th class="py-3">Status</th>
+                                <th class="py-3 text-end pe-4" width="220">Actions</th>
+                            </tr>
+                        </thead>
 
-    </a>
+                        <tbody>
+                            {% for doctor in doctors %}
+                            <tr class="transition-all">
 
-</div>
+                                <td class="ps-4 text-muted fw-semibold">{{ doctor.id }}</td>
 
-<div class="table-responsive">
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-pink bg-opacity-10 d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person-badge text-pink fs-5"></i>
+                                        </div>
+                                        <span class="fw-bold text-dark">
+                                            Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}
+                                        </span>
+                                    </div>
+                                </td>
 
-<table class="table table-bordered table-hover align-middle">
+                                <td class="fw-medium text-secondary">{{ doctor.department.department_name }}</td>
 
-<thead class="table-dark">
+                                <td class="text-dark">{{ doctor.specialization }}</td>
 
-<tr>
+                                <td class="fw-bold text-success">₹{{ doctor.consultation_fee }}</td>
 
-    <th>ID</th>
+                                <td>
+                                    {% if doctor.availabilities.all %}
+                                        {% for slot in doctor.availabilities.all %}
+                                            <div class="mb-1">
+                                                <span class="badge bg-pink-subtle text-pink border border-pink-subtle px-2 py-1 rounded-pill fw-semibold">
+                                                    {{ slot.day_of_week }}
+                                                </span>
+                                                <small class="text-muted ms-1">{{ slot.start_time|time:"H:i" }} - {{ slot.end_time|time:"H:i" }}</small>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1 rounded-pill">No Schedule</span>
+                                    {% endif %}
+                                </td>
 
-    <th>Doctor</th>
+                                <td class="text-muted small"><i class="bi bi-telephone me-1"></i>{{ doctor.phone_number }}</td>
 
-    <th>Department</th>
+                                <td>
+                                    {% if doctor.is_active %}
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 rounded-pill fw-semibold">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Active
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1.5 rounded-pill fw-semibold">
+                                            <i class="bi bi-x-circle-fill me-1"></i> Inactive
+                                        </span>
+                                    {% endif %}
+                                </td>
 
-    <th>Specialization</th>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a href="{% url 'doctor_update' doctor.id %}"
+                                           class="btn btn-sm btn-light border text-warning shadow-sm rounded-circle p-2"
+                                           title="Edit" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
 
-    <th>Fee</th>
+                                        <a href="{% url 'doctor_delete' doctor.id %}"
+                                           class="btn btn-sm btn-light border text-danger shadow-sm rounded-circle p-2"
+                                           title="Delete" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
 
-    <th>Schedule</th>
+                                        <a href="{% url 'availability_create' %}?doctor={{ doctor.id }}"
+                                           class="btn btn-sm btn-light border text-info shadow-sm rounded-circle p-2"
+                                           title="Schedule" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-calendar-plus"></i>
+                                        </a>
+                                    </div>
+                                </td>
 
-    <th>Phone</th>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-person-x text-muted opacity-50" style="font-size: 3.5rem;"></i>
+                                        <p class="text-muted mt-3 mb-3 fw-medium">No doctors found in the system right now.</p>
+                                        <a href="{% url 'doctor_create' %}" class="btn btn-cyber-action rounded-pill px-4 py-2 shadow-sm fw-bold text-white">
+                                            <i class="bi bi-person-plus-fill me-1"></i> Add your first doctor
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
 
-    <th>Status</th>
-
-    <th width="250">
-        Actions
-    </th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-{% for doctor in doctors %}
-
-<tr>
-
-    <td>
-
-        {{ doctor.id }}
-
-    </td>
-
-    <td>
-
-        <strong>
-
-            Dr.
-            {{ doctor.user.get_full_name|default:doctor.user.username }}
-
-        </strong>
-
-    </td>
-
-    <td>
-
-        {{ doctor.department.department_name }}
-
-    </td>
-
-    <td>
-
-        {{ doctor.specialization }}
-
-    </td>
-
-    <td>
-
-        ₹{{ doctor.consultation_fee }}
-
-    </td>
-
-    <td>
-
-        {% if doctor.availabilities.all %}
-
-            {% for slot in doctor.availabilities.all %}
-
-                <div class="mb-1">
-
-                    <span class="badge bg-primary">
-
-                        {{ slot.day_of_week }}
-
-                    </span>
-
-                    {{ slot.start_time|time:"H:i" }}
-
-                    -
-
-                    {{ slot.end_time|time:"H:i" }}
-
+                    </table>
                 </div>
 
-            {% endfor %}
+            </div>
+        </div>
 
-        {% else %}
-
-            <span class="badge bg-danger">
-
-                No Schedule
-
-            </span>
-
+        {% if doctors %}
+        <p class="text-white-50 small mt-3 px-2">
+            <i class="bi bi-info-circle text-neon-pink"></i> Showing {{ doctors|length }} doctor{{ doctors|length|pluralize }} profile{{ doctors|length|pluralize }}
+        </p>
         {% endif %}
 
-    </td>
-
-    <td>
-
-        {{ doctor.phone_number }}
-
-    </td>
-
-    <td>
-
-        {% if doctor.is_active %}
-
-            <span class="badge bg-success">
-
-                Active
-
-            </span>
-
-        {% else %}
-
-            <span class="badge bg-danger">
-
-                Inactive
-
-            </span>
-
-        {% endif %}
-
-    </td>
-
-    <td>
-
-        <a href="{% url 'doctor_update' doctor.id %}"
-           class="btn btn-warning btn-sm">
-
-            <i class="bi bi-pencil-square"></i>
-
-            Edit
-
-        </a>
-
-        <a href="{% url 'doctor_delete' doctor.id %}"
-           class="btn btn-danger btn-sm">
-
-            <i class="bi bi-trash"></i>
-
-            Delete
-
-        </a>
-
-        <a href="{% url 'availability_create' %}?doctor={{ doctor.id }}"
-           class="btn btn-info btn-sm">
-
-            <i class="bi bi-calendar-plus"></i>
-
-            Schedule
-
-        </a>
-
-    </td>
-
-</tr>
-
-{% empty %}
-
-<tr>
-
-    <td colspan="9"
-        class="text-center">
-
-        No Doctors Found
-
-    </td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
+    </div>
 </div>
 
+<!-- Dual-Tone Cyber & Neon 3D Styling -->
+<style>
+    /* Dual-Tone Vivid Cyberpunk Gradient Background with Slow Motion Animation */
+    .dual-cyber-bg {
+        background: linear-gradient(135deg, #111827 0%, #4c1d95 35%, #db2777 70%, #2563eb 100%);
+        background-size: 400% 400%;
+        animation: dualCyberFlow 15s ease infinite;
+        min-height: 90vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes dualCyberFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Dual Neon Floating Orbs */
+    .cyber-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        z-index: 1;
+        opacity: 0.4;
+        animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .glow-pink {
+        width: 380px;
+        height: 380px;
+        background: rgba(244, 63, 94, 0.5);
+        top: 5%;
+        left: 10%;
+    }
+    .glow-blue {
+        width: 420px;
+        height: 420px;
+        background: rgba(59, 130, 246, 0.4);
+        bottom: 5%;
+        right: 10%;
+        animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+        0% { transform: translateY(0px) scale(1); }
+        100% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    /* Dual Glass Header Box */
+    .cyber-glass-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* 3D Floating Card Depth & Layers */
+    .cyber-card {
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(12px);
+        transform: perspective(1000px) rotateX(0.5deg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.3) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .cyber-card:hover {
+        transform: perspective(1000px) rotateX(0deg) translateY(-4px);
+        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Custom Color Utilities */
+    .text-pink {
+        color: #db2777 !important;
+    }
+    .text-neon-pink {
+        color: #f472b6 !important;
+    }
+    .bg-pink {
+        background-color: #db2777 !important;
+    }
+    .bg-pink-subtle {
+        background-color: rgba(219, 39, 119, 0.1) !important;
+    }
+    .border-pink-subtle {
+        border-color: rgba(219, 39, 119, 0.2) !important;
+    }
+
+    /* Dual Cyber Action Button with 3D Effect */
+    .btn-cyber-action {
+        background: linear-gradient(135deg, #db2777 0%, #7c3aed 100%);
+        border: none;
+        box-shadow: 0 4px 0 #581c87, 0 8px 15px rgba(219, 39, 119, 0.3);
+        transition: all 0.1s ease;
+    }
+
+    .btn-cyber-action:hover {
+        background: linear-gradient(135deg, #be185d 0%, #6d28d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #4c1d95, 0 12px 20px rgba(219, 39, 119, 0.4);
+    }
+
+    .btn-cyber-action:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #581c87, 0 4px 8px rgba(219, 39, 119, 0.3);
+    }
+
+    /* Table Hover Enhancement */
+    .table-hover tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(219, 39, 119, 0.04) !important;
+    }
+</style>
 {% endblock %}

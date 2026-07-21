@@ -1,797 +1,452 @@
 {% extends "base.html" %}
-{% block title %}Cyber-Health Patient Portal{% endblock %}
+{% load static %}
+{% block title %}My Dashboard{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-lg-4 cyber-portal-root">
+<div class="ph-wrap">
 
-    <!-- 🚀 HERO BANNER: DEEP SAPPHIRE CYBER GLOW -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="cyber-hero-card p-4 p-md-5 rounded-5 shadow-2xl position-relative overflow-hidden">
-                <div class="cyber-hero-glow"></div>
-                <div class="row align-items-center position-relative z-1 g-4">
-                    <div class="col-lg-7">
-                        <div class="d-flex align-items-center gap-3 mb-2">
-                            <span class="cyber-badge-neon rounded-pill px-3 py-1 extra-small fw-extrabold text-uppercase tracking-wider">
-                                <span class="pulse-dot me-1"></span> AI HEALTH ENGINE v4.2
-                            </span>
-                            <span class="cyber-badge-purple rounded-pill px-3 py-1 extra-small fw-extrabold text-uppercase">
-                                Encrypted VIP Portal
-                            </span>
-                        </div>
-                        <h1 class="fw-black text-white tracking-tight font-heading mb-2 display-6">
-                            Welcome, <span class="neon-text-cyan">{{ request.user.first_name|default:request.user.username }}</span> 👋
-                        </h1>
-                        <p class="cyber-subtitle mb-0 font-body fs-6">
-                            Real-time bio-telemetry monitored. All systems optimal.
-                        </p>
-                    </div>
-                    <div class="col-lg-5 d-flex justify-content-lg-end gap-3 flex-wrap">
-                        <button type="button" class="btn cyber-btn-cyan rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2 shadow-lg" onclick="document.getElementById('chat-toggle-btn').click();">
-                            <span class="fs-5">🤖</span>
-                            <span>Launch AI Medical Assistant</span>
-                        </button>
-                        <a href="{% url 'voice_booking_page' %}" class="btn cyber-btn-purple rounded-pill px-4 py-3 fw-bold d-flex align-items-center gap-2 shadow-lg">
-                            <span class="fs-5">🎙️</span>
-                            <span>Voice Booking</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- ============ HERO WELCOME ============ -->
+  <div class="ph-hero">
+    <div class="ph-hero-inner">
+      <div>
+        <div class="ph-hero-eyebrow"><i class="bi bi-heart-pulse-fill"></i> Patient portal</div>
+        <h1 class="ph-hero-title">Hi, {{ request.user.first_name|default:request.user.username }}</h1>
+        <p class="ph-hero-sub">Here's what's happening with your health today</p>
+      </div>
+      <a href="{% url 'appointment_create' %}" class="ph-btn ph-btn-white">
+        <i class="bi bi-calendar-plus"></i> Book appointment
+      </a>
     </div>
+  </div>
 
-    <!-- 🚨 EMERGENCY / HIGH RISK ALERT (IF ANY) -->
+  <div class="ph-body">
+
+    
+
     {% if high_risk_count > 0 %}
-    <div class="cyber-alert-card rounded-4 p-3.5 mb-4 d-flex align-items-center gap-3 border-crimson shadow-lg">
-        <div class="cyber-alert-icon rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 fs-3">
-            🚨
-        </div>
-        <div class="flex-grow-1">
-            <h6 class="fw-extrabold mb-0 text-crimson font-heading">CRITICAL ATTENTION REQUIRED</h6>
-            <p class="small mb-0 text-cyber-muted">You have <strong>{{ high_risk_count }} high risk appointment{{ high_risk_count|pluralize }}</strong> requiring immediate clinical confirmation.</p>
-        </div>
-        <a href="{% url 'contact_admin' %}" class="btn btn-outline-primary">
-    <i class="bi bi-headset"></i> Contact Support (Admin)
-</a>
-        <a href="{% url 'patient_dashboard' %}" class="btn cyber-btn-crimson btn-sm rounded-pill px-3 fw-bold">Review Now</a>
+    <div class="ph-alert ph-alert-danger">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ high_risk_count }} upcoming appointment{{ high_risk_count|pluralize }} need attendance confirmation.
     </div>
     {% endif %}
 
-    <!-- 📊 TOP 4 METRIC CARDS (NEON OBSIDIAN METALLIC) -->
-    <div class="row g-3.5 mb-4">
-        <!-- Upcoming Visits -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="cyber-stat-card card-glow-indigo p-4 rounded-4 shadow-xl">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <span class="cyber-label text-indigo">Upcoming Visits</span>
-                    <div class="cyber-icon-box rounded-3 text-indigo">🗓️</div>
-                </div>
-                <h2 class="fw-black text-white mb-1 font-heading display-6">{{ upcoming|length }}</h2>
-                <div class="extra-small text-cyber-muted fw-semibold">Scheduled Consultations</div>
-            </div>
-        </div>
+    {% if total_due > 0 %}
+    <div class="ph-alert ph-alert-warning">
+      <i class="bi bi-cash-coin"></i>
+      You have ₹{{ total_due }} in pending payments.
+      <a href="#" data-bs-toggle="modal" data-bs-target="#billsModal">View bills →</a>
+    </div>
+    {% endif %}
 
-        <!-- Pending Bills -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="cyber-stat-card card-glow-amber p-4 rounded-4 shadow-xl">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <span class="cyber-label text-amber">Pending Invoices</span>
-                    <div class="cyber-icon-box rounded-3 text-amber">🧾</div>
-                </div>
-                <h2 class="fw-black text-white mb-1 font-heading display-6">{{ pending_bills|length }}</h2>
-                <div class="extra-small text-cyber-muted fw-semibold">Action Required</div>
-            </div>
+    <!-- ============ LATEST APPOINTMENT ============ -->
+    {% if latest_appointment %}
+    <div class="ph-latest">
+      <div class="ph-latest-head">
+        <i class="bi bi-calendar-check-fill"></i>
+        <span>Latest appointment</span>
+        <span class="ph-status ph-status-{{ latest_appointment.status|lower }}">{{ latest_appointment.status }}</span>
+      </div>
+      <div class="ph-latest-grid">
+        <div class="ph-latest-item">
+          <div class="ph-latest-avatar">{{ latest_appointment.doctor.user.first_name|slice:":1" }}{{ latest_appointment.doctor.user.last_name|slice:":1" }}</div>
+          <div>
+            <div class="ph-latest-label">Doctor</div>
+            <div class="ph-latest-value">Dr {{ latest_appointment.doctor.user.first_name }} {{ latest_appointment.doctor.user.last_name }}</div>
+          </div>
         </div>
+        <div class="ph-latest-item">
+          <div class="ph-latest-icon"><i class="bi bi-hospital"></i></div>
+          <div>
+            <div class="ph-latest-label">Department</div>
+            <div class="ph-latest-value">{{ latest_appointment.doctor.department.department_name }}</div>
+          </div>
+        </div>
+        <div class="ph-latest-item">
+          <div class="ph-latest-icon"><i class="bi bi-calendar3"></i></div>
+          <div>
+            <div class="ph-latest-label">Date</div>
+            <div class="ph-latest-value">{{ latest_appointment.appointment_date|date:"d M Y" }}</div>
+          </div>
+        </div>
+        <div class="ph-latest-item">
+          <div class="ph-latest-icon"><i class="bi bi-clock"></i></div>
+          <div>
+            <div class="ph-latest-label">Time</div>
+            <div class="ph-latest-value">{{ latest_appointment.appointment_time|time:"h:i A" }}</div>
+          </div>
+        </div>
+      </div>
+      {% if latest_appointment.risk_level %}
+      <div class="ph-risk ph-risk-{{ latest_appointment.risk_level|lower }}">
+        <i class="bi bi-activity"></i> No-show risk: {{ latest_appointment.risk_level }}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
 
-        <!-- Total Due -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="cyber-stat-card card-glow-emerald p-4 rounded-4 shadow-xl">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <span class="cyber-label text-emerald">Amount Payable</span>
-                    <div class="cyber-icon-box rounded-3 text-emerald">💳</div>
-                </div>
-                <h2 class="fw-black text-emerald mb-1 font-heading display-6">₹{{ total_due }}</h2>
-                <div class="extra-small text-cyber-muted fw-semibold">Clear balance securely</div>
-            </div>
-        </div>
-
-        <!-- Medical Records -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="cyber-stat-card card-glow-cyan p-4 rounded-4 shadow-xl">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <span class="cyber-label text-cyan">Medical Vault</span>
-                    <div class="cyber-icon-box rounded-3 text-cyan">📁</div>
-                </div>
-                <h2 class="fw-black text-white mb-1 font-heading display-6">{{ recent_records|length }}</h2>
-                <div class="extra-small text-cyber-muted fw-semibold">Verified Clinical Files</div>
-            </div>
-        </div>
+    <!-- ============ STATS ============ -->
+    <div class="ph-stats">
+      <div class="ph-stat">
+        <div class="ph-stat-icon ph-stat-icon-blue"><i class="bi bi-calendar-week"></i></div>
+        <div class="ph-stat-num">{{ upcoming|length }}</div>
+        <div class="ph-stat-label">Upcoming</div>
+      </div>
+      <div class="ph-stat">
+        <div class="ph-stat-icon ph-stat-icon-amber"><i class="bi bi-receipt"></i></div>
+        <div class="ph-stat-num">{{ pending_bills|length }}</div>
+        <div class="ph-stat-label">Pending bills</div>
+      </div>
+      <div class="ph-stat">
+        <div class="ph-stat-icon ph-stat-icon-red"><i class="bi bi-cash"></i></div>
+        <div class="ph-stat-num">₹{{ total_due }}</div>
+        <div class="ph-stat-label">Amount due</div>
+      </div>
+      <div class="ph-stat">
+        <div class="ph-stat-icon ph-stat-icon-green"><i class="bi bi-file-earmark-medical"></i></div>
+        <div class="ph-stat-num">{{ recent_records|length }}</div>
+        <div class="ph-stat-label">Records</div>
+      </div>
     </div>
 
-    <!-- ⚡ NEW UPDATE: REAL-TIME HEALTH VITALS TELEMETRY BAR -->
-    <div class="row g-3 mb-4">
-        <div class="col-12">
-            <div class="cyber-glass-panel p-4 rounded-5 border-cyan">
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3 border-bottom border-cyber pb-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fs-4">💓</span>
-                        <div>
-                            <h6 class="fw-bold text-white mb-0 font-heading">Real-Time Vitals Telemetry</h6>
-                            <span class="extra-small text-cyber-muted">Synced with Health Tracker</span>
-                        </div>
-                    </div>
-                    <span class="cyber-badge-neon rounded-pill px-3 py-1 extra-small fw-bold">LIVE SYNCED</span>
-                </div>
+    <div class="ph-grid">
 
-                <div class="row g-3">
-                    <div class="col-6 col-md-3">
-                        <div class="cyber-vital-tile p-3 rounded-4">
-                            <span class="extra-small text-cyber-muted d-block mb-1">Heart Rate</span>
-                            <div class="d-flex align-items-baseline gap-2">
-                                <span class="fw-black fs-4 text-rose">72</span>
-                                <span class="extra-small text-cyber-muted">BPM</span>
-                            </div>
-                            <div class="progress cyber-progress mt-2" style="height:4px;">
-                                <div class="progress-bar bg-rose" style="width: 75%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="cyber-vital-tile p-3 rounded-4">
-                            <span class="extra-small text-cyber-muted d-block mb-1">Blood Pressure</span>
-                            <div class="d-flex align-items-baseline gap-2">
-                                <span class="fw-black fs-4 text-cyan">120/80</span>
-                                <span class="extra-small text-cyber-muted">mmHg</span>
-                            </div>
-                            <div class="progress cyber-progress mt-2" style="height:4px;">
-                                <div class="progress-bar bg-cyan" style="width: 85%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="cyber-vital-tile p-3 rounded-4">
-                            <span class="extra-small text-cyber-muted d-block mb-1">Blood Oxygen</span>
-                            <div class="d-flex align-items-baseline gap-2">
-                                <span class="fw-black fs-4 text-emerald">99%</span>
-                                <span class="extra-small text-cyber-muted">SpO2</span>
-                            </div>
-                            <div class="progress cyber-progress mt-2" style="height:4px;">
-                                <div class="progress-bar bg-emerald" style="width: 99%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="cyber-vital-tile p-3 rounded-4">
-                            <span class="extra-small text-cyber-muted d-block mb-1">Overall Health Score</span>
-                            <div class="d-flex align-items-baseline gap-2">
-                                <span class="fw-black fs-4 text-purple">88 / 100</span>
-                                <span class="extra-small text-emerald">Optimal</span>
-                            </div>
-                            <div class="progress cyber-progress mt-2" style="height:4px;">
-                                <div class="progress-bar bg-purple" style="width: 88%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- ============ UPCOMING APPOINTMENTS ============ -->
+      <div class="ph-card ph-card-main">
+        <div class="ph-card-head">
+          <h3><i class="bi bi-calendar-check"></i> Upcoming appointments</h3>
         </div>
+        <div class="ph-card-body ph-card-body-flush">
+          {% for a in upcoming %}
+          <div class="ph-appt-row">
+            <div class="ph-appt-avatar">{{ a.doctor.user.first_name|slice:":1" }}{{ a.doctor.user.last_name|slice:":1" }}</div>
+            <div class="ph-appt-info">
+              <div class="ph-appt-doctor">Dr {{ a.doctor.user.first_name }} {{ a.doctor.user.last_name }}</div>
+              <div class="ph-appt-dept">{{ a.doctor.department.department_name }}</div>
+            </div>
+            <div class="ph-appt-when">
+              <div>{{ a.appointment_date|date:"d M" }}</div>
+              <div class="ph-appt-time">{{ a.appointment_time|time:"h:i A" }}</div>
+            </div>
+            <span class="ph-status ph-status-{{ a.status|lower }}">{{ a.status }}</span>
+            <button type="button" class="ph-btn-icon" title="Cancel appointment"
+                    data-bs-toggle="modal" data-bs-target="#cancelModal{{ a.id }}">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <div class="modal fade" id="cancelModal{{ a.id }}" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content ph-modal">
+                <div class="modal-header border-0">
+                  <h5 class="modal-title">Cancel appointment</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="{% url 'patient_cancel_appointment' a.id %}">
+                  {% csrf_token %}
+                  <div class="modal-body">
+                    Cancel your appointment with <strong>Dr {{ a.doctor.user.first_name }} {{ a.doctor.user.last_name }}</strong>
+                    on {{ a.appointment_date|date:"d M Y" }} at {{ a.appointment_time|time:"h:i A" }}?
+                  </div>
+                  <div class="modal-footer border-0">
+                    <button type="button" class="ph-btn ph-btn-ghost" data-bs-dismiss="modal">Keep it</button>
+                    <button type="submit" class="ph-btn ph-btn-danger">Cancel appointment</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          {% empty %}
+          <div class="ph-empty">
+            <i class="bi bi-calendar-heart"></i>
+            <p>No upcoming appointments</p>
+            <a href="{% url 'appointment_create' %}" class="ph-btn ph-btn-primary-sm">Book your first appointment</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- ============ QUICK ACTIONS ============ -->
+      <div class="ph-card">
+        <div class="ph-card-head">
+          <h3><i class="bi bi-lightning-charge"></i> Quick actions</h3>
+        </div>
+        <div class="ph-card-body ph-actions">
+          <a href="{% url 'appointment_create' %}" class="ph-action">
+            <i class="bi bi-calendar-plus"></i> Book appointment
+          </a>
+          <a href="{% url 'voice_booking_page' %}" class="ph-action">
+            <i class="bi bi-mic"></i> Voice booking
+          </a>
+          <button type="button" class="ph-action" data-bs-toggle="modal" data-bs-target="#recordsModal">
+            <i class="bi bi-file-earmark-medical"></i> Medical records
+          </button>
+          <button type="button" class="ph-action" data-bs-toggle="modal" data-bs-target="#billsModal">
+            <i class="bi bi-receipt"></i> Bills and payments
+          </button>
+          <button type="button" class="ph-action" data-bs-toggle="modal" data-bs-target="#historyModal">
+            <i class="bi bi-clock-history"></i> Appointment history
+          </button>
+          <button type="button" class="ph-action" data-bs-toggle="modal" data-bs-target="#profileModal">
+            <i class="bi bi-person-circle"></i> My profile
+          </button>
+        </div>
+      </div>
+
     </div>
-
-    <!-- 🤖 AI ASSISTANT PANEL & 📅 APPOINTMENTS TABLE -->
-    <div class="row g-4 mb-4">
-        <!-- Left Side: AI Health Companion -->
-        <div class="col-lg-4">
-            <div class="cyber-glass-panel p-4 rounded-5 h-100 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="d-flex align-items-center justify-content-between border-bottom border-cyber pb-3 mb-3">
-                        <div class="d-flex align-items-center gap-2.5">
-                            <span class="fs-3">🤖</span>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0 font-heading">AI Care Companion</h6>
-                                <span class="extra-small text-purple">24/7 Clinical Assistant</span>
-                            </div>
-                        </div>
-                        <span class="cyber-pill-indigo rounded-pill px-3 py-1 extra-small fw-bold">ONLINE</span>
-                    </div>
-
-                    <div class="p-3.5 rounded-4 cyber-inner-box mb-3">
-                        <h6 class="fw-bold text-cyan mb-2 small">Pre-Consultation Checklist 📝</h6>
-                        {% if upcoming %}
-                        <ul class="list-unstyled mb-0 d-flex flex-column gap-2 extra-small text-cyber-light">
-                            <li class="d-flex align-items-center gap-2">
-                                <span class="text-emerald">✔</span> Reach hospital 15 mins prior
-                            </li>
-                            <li class="d-flex align-items-center gap-2">
-                                <span class="text-cyan">✔</span> Keep digital medical records ready
-                            </li>
-                            <li class="d-flex align-items-center gap-2">
-                                <span class="text-amber">✔</span> Fasting required for lab tests
-                            </li>
-                        </ul>
-                        {% else %}
-                        <div class="text-cyber-muted extra-small">No upcoming appointments! Book instantly via AI Assistant.</div>
-                        {% endif %}
-                    </div>
-
-                    <!-- ⚡ NEW UPDATE: MEDICATION TIME TRACKER -->
-                    <div class="p-3.5 rounded-4 cyber-inner-box mb-3">
-                        <h6 class="fw-bold text-emerald mb-2 small">Today's Pill Tracker 💊</h6>
-                        <div class="d-flex flex-column gap-2 extra-small">
-                            <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-cyber-dark">
-                                <span>🌅 Morning — Paracetamol</span>
-                                <span class="badge bg-emerald-subtle text-emerald">Taken</span>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between p-2 rounded-3 bg-cyber-dark">
-                                <span>🌙 Night — Vitamin D3</span>
-                                <span class="badge bg-amber-subtle text-amber">9:00 PM</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-column gap-2">
-                    <button type="button" class="btn cyber-btn-cyan w-100 py-3 rounded-pill fw-bold shadow-lg" onclick="document.getElementById('chat-toggle-btn').click();">
-                        💬 Chat with AI Assistant
-                    </button>
-                    <a href="{% url 'voice_booking_page' %}" class="btn cyber-btn-purple w-100 py-3 rounded-pill fw-bold shadow-lg">
-                        🎤 Voice Appointment Booking
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right Side: Appointments Table -->
-        <div class="col-lg-8">
-            <div class="cyber-glass-panel p-3 rounded-5 h-100">
-                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center justify-content-between mb-3">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <span class="fs-3">📅</span>
-                        <div>
-                            <h6 class="fw-bold text-white mb-0 font-heading">Upcoming Appointments</h6>
-                            <span class="extra-small text-cyber-muted">Confirmed Clinical Visits</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="table-responsive rounded-4">
-                    <table class="table align-middle mb-0 cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Doctor</th>
-                                <th>Date & Time</th>
-                                <th>Status</th>
-                                <th>Risk Level</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for a in upcoming %}
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2.5">
-                                        <div class="cyber-avatar rounded-circle text-cyan">
-                                            🩺
-                                        </div>
-                                        <div>
-                                            <span class="fw-bold text-white d-block lh-sm">Dr. {{ a.doctor.user.first_name }} {{ a.doctor.user.last_name }}</span>
-                                            <span class="extra-small text-cyber-muted">{{ a.doctor.department.department_name }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="fw-semibold text-white small d-block">{{ a.appointment_date }}</span>
-                                    <span class="extra-small text-cyan">{{ a.appointment_time }}</span>
-                                </td>
-                                <td>
-                                    {% if a.status == "Confirmed" %}
-                                        <span class="badge cyber-pill-emerald rounded-pill px-3 py-1 extra-small fw-bold">Confirmed</span>
-                                    {% elif a.status == "Pending" %}
-                                        <span class="badge cyber-pill-amber rounded-pill px-3 py-1 extra-small fw-bold">Pending</span>
-                                    {% else %}
-                                        <span class="badge bg-slate-800 text-slate-300 rounded-pill px-3 py-1 extra-small fw-bold">{{ a.status }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if a.risk_level == "HIGH" %}
-                                        <span class="badge cyber-pill-rose rounded-pill px-3 py-1 extra-small fw-bold">High Risk</span>
-                                    {% elif a.risk_level == "MEDIUM" %}
-                                        <span class="badge cyber-pill-amber rounded-pill px-3 py-1 extra-small fw-bold">Medium Risk</span>
-                                    {% else %}
-                                        <span class="badge cyber-pill-emerald rounded-pill px-3 py-1 extra-small fw-bold">Low Risk</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end">
-                                    <a href="{% url 'patient_cancel_appointment' a.id %}" class="btn cyber-btn-outline-rose btn-sm rounded-pill px-3 py-1 fw-bold extra-small">Cancel</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center py-5">
-                                    <span class="fs-1 d-block mb-2">🎉</span>
-                                    <span class="text-cyber-muted small fw-semibold">No upcoming appointments scheduled!</span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 📋 MEDICAL RECORDS & PRESCRIPTIONS -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="cyber-glass-panel p-3 rounded-5">
-                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center justify-content-between mb-3">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <span class="fs-3">📋</span>
-                        <div>
-                            <h6 class="fw-bold text-white mb-0 font-heading">Medical Records & Prescriptions Vault</h6>
-                            <span class="extra-small text-cyber-muted">Verified Doctor Notes</span>
-                        </div>
-                    </div>
-                    <a href="{% url 'medical_record_list' %}" class="btn cyber-btn-outline btn-sm rounded-pill px-3.5 py-1.5 fw-bold extra-small">View Full Records</a>
-                </div>
-
-                <div class="table-responsive rounded-4">
-                    <table class="table align-middle mb-0 cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Doctor</th>
-                                <th>Diagnosis</th>
-                                <th>Prescribed Medicines</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for record in recent_records %}
-                            <tr>
-                                <td><span class="fw-semibold text-white small">{{ record.created_at|date:"d M Y" }}</span></td>
-                                <td><span class="fw-bold text-cyan small">Dr. {{ record.appointment.doctor.user.first_name }} {{ record.appointment.doctor.user.last_name }}</span></td>
-                                <td><span class="text-cyber-light small">{{ record.diagnosis|truncatewords:8 }}</span></td>
-                                <td>
-                                    <div class="d-flex flex-wrap gap-1.5">
-                                        {% for p in record.prescriptions.all %}
-                                            <span class="badge cyber-pill-indigo rounded-pill px-3 py-1 extra-small fw-semibold">
-                                                💊 {{ p.medicine_name }} — {{ p.dosage }}, {{ p.frequency }}
-                                            </span>
-                                        {% empty %}
-                                            <span class="badge bg-dark text-muted rounded-pill px-3 py-1 extra-small">No prescriptions recorded</span>
-                                        {% endfor %}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center py-5">
-                                    <span class="fs-1 d-block mb-2">📂</span>
-                                    <span class="text-cyber-muted small fw-semibold">No Medical Records Available</span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 💰 BILLING & PAYMENT HISTORY -->
-    <div class="row g-4 mb-4">
-        <!-- Pending Bills -->
-        <div class="col-lg-6">
-            <div class="cyber-glass-panel p-3 rounded-5 h-100">
-                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center justify-content-between mb-3">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <span class="fs-3">🧾</span>
-                        <div>
-                            <h6 class="fw-bold text-amber mb-0 font-heading">Pending Invoices</h6>
-                            <span class="extra-small text-cyber-muted">Unpaid Hospital Bills</span>
-                        </div>
-                    </div>
-                    <a href="{% url 'bill_list' %}" class="btn cyber-btn-outline btn-sm rounded-pill px-3.5 py-1.5 fw-bold extra-small">View All Bills</a>
-                </div>
-
-                <div class="table-responsive rounded-4">
-                    <table class="table align-middle mb-0 cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Bill #</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for bill in pending_bills %}
-                            <tr>
-                                <td><span class="fw-bold text-white">#{{ bill.id }}</span></td>
-                                <td><span class="fw-black text-amber">₹{{ bill.balance_due }}</span></td>
-                                <td><span class="badge cyber-pill-rose rounded-pill px-3 py-1 extra-small fw-bold">Unpaid</span></td>
-                                <td class="text-end">
-                                    <a href="{% url 'add_payment' bill.id %}" class="btn cyber-btn-emerald btn-sm rounded-pill px-3.5 py-1 extra-small fw-bold">Pay Now</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-cyber-muted small fw-semibold">All bills cleared! No pending dues 🎉</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Payment History -->
-        <div class="col-lg-6">
-            <div class="cyber-glass-panel p-3 rounded-5 h-100">
-                <div class="p-3 px-4 cyber-inner-box rounded-4 border-0 d-flex align-items-center gap-2.5 mb-3">
-                    <span class="fs-3">💳</span>
-                    <div>
-                        <h6 class="fw-bold text-emerald mb-0 font-heading">Payment History</h6>
-                        <span class="extra-small text-cyber-muted">Completed Transactions</span>
-                    </div>
-                </div>
-
-                <div class="table-responsive rounded-4">
-                    <table class="table align-middle mb-0 cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Bill #</th>
-                                <th>Amount</th>
-                                <th>Mode</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for payment in payments %}
-                            <tr>
-                                <td><span class="small fw-semibold text-white">{{ payment.paid_at|date:"d M Y" }}</span></td>
-                                <td><span class="small fw-bold text-cyber-muted">#{{ payment.bill.id }}</span></td>
-                                <td><span class="small fw-black text-emerald">₹{{ payment.amount_paid }}</span></td>
-                                <td><span class="badge bg-cyber-dark text-cyan border border-cyan-subtle px-2.5 py-1 extra-small fw-bold">{{ payment.payment_mode }}</span></td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-cyber-muted small fw-semibold">No Payment History Recorded</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="d-flex flex-column gap-2">
-    <button type="button" class="btn btn-primary" onclick="document.getElementById('chat-toggle-btn').click();">
-        🤖 AI Assistant (Chat)
-    </button>
-    <a href="{% url 'voice_booking_page' %}" class="btn btn-success">
-        🎤 Voice Booking
-    </a>
-    <a href="{% url 'support_chat_page' %}" class="btn btn-outline-dark">
-        🧑‍💼 Talk to Support Staff (Human)
-    </a>
+  </div>
 </div>
 
-    <!-- 👤 PROFILE, 💡 HEALTH TIPS & 🚑 EMERGENCY -->
-    <div class="row g-4 mb-4">
-        <!-- Profile Card -->
-        <div class="col-lg-4">
-            <div class="cyber-glass-panel p-4 rounded-5 h-100 d-flex flex-column justify-content-between">
-                <div>
-                    <div class="d-flex align-items-center gap-2.5 border-bottom border-cyber pb-3 mb-3">
-                        <span class="fs-3">👤</span>
-                        <div>
-                            <h6 class="fw-bold text-white mb-0 font-heading">My Profile</h6>
-                            <span class="extra-small text-cyber-muted">Personal Bio-Data</span>
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column gap-2.5 small mb-3">
-                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
-                            <span class="text-cyber-muted fw-semibold">Full Name</span>
-                            <span class="fw-bold text-white">{{ request.user.get_full_name|default:request.user.username }}</span>
-                        </div>
-                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
-                            <span class="text-cyber-muted fw-semibold">Email ID</span>
-                            <span class="fw-bold text-cyan">{{ request.user.email|default:"Not Provided" }}</span>
-                        </div>
-                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
-                            <span class="text-cyber-muted fw-semibold">Phone</span>
-                            <span class="fw-bold text-white">{{ patient.phone_number|default:"N/A" }}</span>
-                        </div>
-                        <div class="p-3 rounded-4 cyber-inner-box d-flex justify-content-between align-items-center">
-                            <span class="text-cyber-muted fw-semibold">Blood Group</span>
-                            <span class="badge cyber-pill-rose fw-bold fs-6">{{ patient.blood_group|default:"N/A" }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="{% url 'edit_profile' %}" class="btn cyber-btn-cyan w-100 py-3 rounded-pill fw-bold shadow-lg">✏ Edit Patient Profile</a>
-            </div>
+<!-- ============ MODAL: MEDICAL RECORDS ============ -->
+<div class="modal fade" id="recordsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content ph-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"><i class="bi bi-file-earmark-medical"></i> Medical records</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        {% for r in recent_records %}
+        <div class="ph-record">
+          <div class="ph-record-head">
+            <strong>Dr {{ r.appointment.doctor.user.first_name }} {{ r.appointment.doctor.user.last_name }}</strong>
+            <span>{{ r.created_at|date:"d M Y" }}</span>
+          </div>
+          <div class="ph-record-dept">{{ r.appointment.doctor.department.department_name }}</div>
+          <p class="ph-record-diag"><strong>Diagnosis:</strong> {{ r.diagnosis|default:"Not recorded" }}</p>
+          {% if r.prescriptions.all %}
+            <div class="ph-record-rx-label">Prescribed</div>
+            <ul class="ph-record-rx">
+              {% for p in r.prescriptions.all %}
+              <li>{{ p.medicine_name }} — {{ p.dosage }}, {{ p.frequency }}{% if p.duration %}, {{ p.duration }} days{% endif %}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         </div>
-
-        <!-- AI Health Care Tips -->
-        <div class="col-lg-4">
-            <div class="cyber-glass-panel p-4 rounded-5 h-100">
-                <div class="d-flex align-items-center gap-2.5 border-bottom border-cyber pb-3 mb-3">
-                    <span class="fs-3">💖</span>
-                    <div>
-                        <h6 class="fw-bold text-white mb-0 font-heading">AI Wellness Directives</h6>
-                        <span class="extra-small text-emerald">Personalized Care Tips</span>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-column gap-2.5 extra-small">
-                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-cyan">
-                        💧 Hydration Goal: Drink 3 Litres of water daily.
-                    </div>
-                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-emerald">
-                        🥗 Nutrition: Eat leafy greens & fruit fibers.
-                    </div>
-                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-amber">
-                        💊 Prescription Compliance: Take medicines on schedule.
-                    </div>
-                    <div class="p-3 rounded-4 cyber-inner-box fw-semibold d-flex align-items-center gap-2 text-rose">
-                        😴 Rest: Maintain 8 hours of uninterrupted sleep.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Emergency Helpline -->
-        <div class="col-lg-4">
-            <div class="cyber-glass-panel p-4 rounded-5 h-100 d-flex flex-column justify-content-between border-crimson">
-                <div>
-                    <div class="d-flex align-items-center gap-2.5 border-bottom border-cyber pb-3 mb-3">
-                        <span class="fs-3">🚑</span>
-                        <div>
-                            <h6 class="fw-bold text-crimson mb-0 font-heading">Emergency SOS Protocol</h6>
-                            <span class="extra-small text-cyber-muted">24/7 Rapid Medical Unit</span>
-                        </div>
-                    </div>
-                    
-
-                    <div class="p-3.5 rounded-4 cyber-inner-box mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="small fw-bold text-white">Hospital Control Room</span>
-                            <span class="fw-black text-rose fs-6">📞 +91 9876543210</span>
-                        </div>
-                        <hr class="my-2 border-cyber">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="small fw-bold text-white">Ambulance SOS</span>
-                            <span class="fw-black text-rose fs-6">🚑 108</span>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="tel:+919876543210" class="btn cyber-btn-crimson w-100 py-3 rounded-pill fw-bold shadow-lg">🚨 Trigger Emergency Call</a>
-            </div>
-        </div>
+        {% empty %}
+        <div class="ph-empty"><i class="bi bi-folder2-open"></i><p>No medical records yet</p></div>
+        {% endfor %}
+      </div>
     </div>
-
+  </div>
 </div>
 
-<!-- 🎨 DEEP MIDNIGHT OBSIDIAN & ELECTRIC NEON STYLESHEET (100% NO WHITE BG) -->
+<!-- ============ MODAL: BILLS & PAYMENTS ============ -->
+<div class="modal fade" id="billsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content ph-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"><i class="bi bi-receipt"></i> Bills and payments</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="ph-modal-section">Bills</div>
+        {% for bill in all_bills %}
+        <div class="ph-bill-row">
+          <div>
+            <div class="ph-bill-doc">Dr {{ bill.appointment.doctor.user.first_name }}</div>
+            <div class="ph-bill-id">Bill #{{ bill.id }}</div>
+          </div>
+          <div class="ph-bill-amount">₹{{ bill.total_amount }}</div>
+          <span class="ph-status ph-status-{{ bill.payment_status|lower }}">{{ bill.payment_status }}</span>
+        </div>
+        {% empty %}
+        <div class="ph-empty ph-empty-sm"><p>No bills yet</p></div>
+        {% endfor %}
+
+        <div class="ph-modal-section mt-4">Payment history</div>
+        {% for p in payments %}
+        <div class="ph-bill-row">
+          <div>
+            <div class="ph-bill-doc">Bill #{{ p.bill.id }}</div>
+            <div class="ph-bill-id">{{ p.paid_at|date:"d M Y" }} · {{ p.payment_mode }}</div>
+          </div>
+          <div class="ph-bill-amount ph-bill-amount-paid">₹{{ p.amount_paid }}</div>
+        </div>
+        {% empty %}
+        <div class="ph-empty ph-empty-sm"><p>No payments yet</p></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: APPOINTMENT HISTORY ============ -->
+<div class="modal fade" id="historyModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content ph-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"><i class="bi bi-clock-history"></i> Appointment history</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        {% for a in history %}
+        <div class="ph-appt-row ph-appt-row-flat">
+          <div class="ph-appt-avatar">{{ a.doctor.user.first_name|slice:":1" }}{{ a.doctor.user.last_name|slice:":1" }}</div>
+          <div class="ph-appt-info">
+            <div class="ph-appt-doctor">Dr {{ a.doctor.user.first_name }} {{ a.doctor.user.last_name }}</div>
+            <div class="ph-appt-dept">{{ a.appointment_date|date:"d M Y" }}</div>
+          </div>
+          <span class="ph-status ph-status-{{ a.status|lower }}">{{ a.status }}</span>
+        </div>
+        {% empty %}
+        <div class="ph-empty"><i class="bi bi-hourglass"></i><p>No past appointments</p></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: PROFILE ============ -->
+<div class="modal fade" id="profileModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content ph-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"><i class="bi bi-person-circle"></i> My profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="ph-profile-avatar">{{ request.user.first_name|slice:":1" }}{{ request.user.last_name|slice:":1" }}</div>
+        <div class="ph-profile-row"><span>Name</span><strong>{{ request.user.get_full_name|default:request.user.username }}</strong></div>
+        <div class="ph-profile-row"><span>Email</span><strong>{{ request.user.email|default:"Not provided" }}</strong></div>
+        <div class="ph-profile-row"><span>Phone</span><strong>{{ patient.phone_number|default:"N/A" }}</strong></div>
+        <div class="ph-profile-row"><span>Gender</span><strong>{{ patient.gender|default:"N/A" }}</strong></div>
+        <div class="ph-profile-row"><span>Blood group</span><strong>{{ patient.blood_group|default:"N/A" }}</strong></div>
+        <div class="ph-profile-row"><span>Age</span><strong>{{ patient.age|default:"N/A" }}</strong></div>
+      </div>
+      <div class="modal-footer border-0">
+        <a href="{% url 'edit_profile' %}" class="ph-btn ph-btn-primary-sm w-100">Edit profile</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
+.ph-wrap { max-width: 1180px; margin: 0 auto; font-family: 'Segoe UI', -apple-system, sans-serif; }
 
-/* 🌌 ROOT DARK OBSIDIAN BACKGROUND (ZERO WHITE) */
-.cyber-portal-root {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: #090d16;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(244, 63, 94, 0.1) 0px, transparent 50%);
-    background-attachment: fixed;
-    color: #f1f5f9;
-    min-height: 100vh;
+.ph-hero {
+  background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
+  border-radius: 0 0 28px 28px;
+  padding: 2.5rem 2rem;
+  margin-bottom: -2.5rem;
+  color: #fff;
 }
+.ph-hero-inner { max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.ph-hero-eyebrow { font-size: 13px; font-weight: 600; opacity: 0.85; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.ph-hero-title { font-size: 30px; font-weight: 700; margin: 0 0 4px; }
+.ph-hero-sub { margin: 0; opacity: 0.9; font-size: 15px; }
 
-.font-heading { font-family: 'Outfit', sans-serif; }
-.extra-small { font-size: 11px; }
+.ph-body { padding: 3.5rem 1rem 2rem; position: relative; }
 
-/* 🌟 HERO BANNER GLASS CARDS */
-.cyber-hero-card {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 27, 75, 0.8) 100%);
-    border: 1px solid rgba(99, 102, 241, 0.3);
-    backdrop-filter: blur(20px);
-}
+.ph-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; border: none; text-decoration: none; cursor: pointer; transition: all .15s ease; }
+.ph-btn-white { background: #fff; color: #2563eb; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+.ph-btn-white:hover { transform: translateY(-2px); color: #1d4ed8; }
+.ph-btn-primary-sm { background: #2563eb; color: #fff; padding: 9px 16px; font-size: 13px; }
+.ph-btn-primary-sm:hover { background: #1d4ed8; color: #fff; }
+.ph-btn-ghost { background: #f1f5f9; color: #475569; }
+.ph-btn-ghost:hover { background: #e2e8f0; }
+.ph-btn-danger { background: #ef4444; color: #fff; }
+.ph-btn-danger:hover { background: #dc2626; }
+.ph-btn-icon { width: 36px; height: 36px; border-radius: 10px; border: none; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; transition: all .15s ease; }
+.ph-btn-icon:hover { background: #fee2e2; color: #ef4444; }
 
-.cyber-hero-glow {
-    position: absolute; top: -50%; left: -20%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 60%);
-    pointer-events: none;
-}
+.ph-alert { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-radius: 14px; font-size: 14px; margin-bottom: 14px; position: relative; }
+.ph-alert-danger { background: #fef2f2; color: #991b1b; }
+.ph-alert-warning { background: #fffbeb; color: #92400e; }
+.ph-alert-warning a { color: #92400e; font-weight: 600; text-decoration: none; margin-left: auto; }
+.ph-alert-success { background: #f0fdf4; color: #166534; }
+.ph-alert-error { background: #fef2f2; color: #991b1b; }
+.ph-alert-close { position: absolute; right: 14px; background: none; border: none; font-size: 18px; color: inherit; opacity: .5; cursor: pointer; }
 
-/* 🧊 FROSTED GLASS PANELS (OBSIDIAN DARK) */
-.cyber-glass-panel {
-    background: rgba(15, 23, 42, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
-}
+.ph-latest { background: #fff; border-radius: 20px; padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: 0 2px 16px rgba(15,23,42,0.06); border: 1px solid #eef2f7; }
+.ph-latest-head { display: flex; align-items: center; gap: 10px; font-weight: 700; color: #0f172a; font-size: 15px; margin-bottom: 1.25rem; }
+.ph-latest-head i { color: #2563eb; }
+.ph-latest-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+.ph-latest-item { display: flex; align-items: center; gap: 12px; }
+.ph-latest-avatar { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg,#2563eb,#0891b2); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.ph-latest-icon { width: 42px; height: 42px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.ph-latest-label { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+.ph-latest-value { font-size: 14px; color: #0f172a; font-weight: 600; margin-top: 1px; }
+.ph-risk { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.ph-risk-high { color: #dc2626; }
+.ph-risk-medium { color: #d97706; }
+.ph-risk-low { color: #16a34a; }
 
-.cyber-glass-panel:hover {
-    border-color: rgba(6, 182, 212, 0.3);
-}
+.ph-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.ph-stat { background: #fff; border-radius: 16px; padding: 1.25rem; border: 1px solid #eef2f7; box-shadow: 0 1px 6px rgba(15,23,42,0.04); }
+.ph-stat-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 12px; }
+.ph-stat-icon-blue { background: #eff6ff; color: #2563eb; }
+.ph-stat-icon-amber { background: #fffbeb; color: #d97706; }
+.ph-stat-icon-red { background: #fef2f2; color: #dc2626; }
+.ph-stat-icon-green { background: #f0fdf4; color: #16a34a; }
+.ph-stat-num { font-size: 26px; font-weight: 800; color: #0f172a; line-height: 1; }
+.ph-stat-label { font-size: 13px; color: #64748b; margin-top: 4px; font-weight: 500; }
 
-.cyber-inner-box {
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
+.ph-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; }
+@media (max-width: 900px) { .ph-grid { grid-template-columns: 1fr; } .ph-latest-grid, .ph-stats { grid-template-columns: repeat(2, 1fr); } }
 
-.bg-cyber-dark {
-    background: rgba(15, 23, 42, 0.9);
-}
+.ph-card { background: #fff; border-radius: 18px; border: 1px solid #eef2f7; box-shadow: 0 1px 8px rgba(15,23,42,0.04); overflow: hidden; }
+.ph-card-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; }
+.ph-card-head h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px; }
+.ph-card-head h3 i { color: #2563eb; }
+.ph-card-body { padding: 1.5rem; }
+.ph-card-body-flush { padding: 0.5rem 0; max-height: 480px; overflow-y: auto; }
 
-/* 📊 METALLIC NEON STAT CARDS */
-.cyber-stat-card {
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+.ph-appt-row { display: flex; align-items: center; gap: 14px; padding: 14px 1.5rem; transition: background .15s ease; }
+.ph-appt-row:hover { background: #f8fafc; }
+.ph-appt-row-flat { padding: 12px 4px; }
+.ph-appt-avatar { width: 40px; height: 40px; border-radius: 11px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.ph-appt-info { flex: 1; min-width: 0; }
+.ph-appt-doctor { font-weight: 600; font-size: 14px; color: #0f172a; }
+.ph-appt-dept { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+.ph-appt-when { text-align: right; font-size: 13px; color: #475569; font-weight: 600; min-width: 70px; }
+.ph-appt-time { font-size: 11px; color: #94a3b8; font-weight: 500; }
 
-.cyber-stat-card:hover {
-    transform: translateY(-6px);
-}
+.ph-status { font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; text-transform: capitalize; }
+.ph-status-confirmed { background: #f0fdf4; color: #16a34a; }
+.ph-status-pending { background: #fffbeb; color: #d97706; }
+.ph-status-cancelled { background: #f1f5f9; color: #64748b; }
+.ph-status-completed { background: #eff6ff; color: #2563eb; }
+.ph-status-no.ph-status-show, .ph-status-no { background: #fef2f2; color: #dc2626; }
+.ph-status-paid { background: #f0fdf4; color: #16a34a; }
+.ph-status-unpaid, .ph-status-pending { background: #fef2f2; color: #dc2626; }
 
-.card-glow-indigo:hover { border-color: #6366f1; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.3); }
-.card-glow-amber:hover { border-color: #f59e0b; box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.3); }
-.card-glow-emerald:hover { border-color: #10b981; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.3); }
-.card-glow-cyan:hover { border-color: #06b6d4; box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.3); }
+.ph-actions { display: flex; flex-direction: column; gap: 8px; }
+.ph-action { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: 12px; background: #f8fafc; border: none; color: #0f172a; font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; text-align: left; transition: all .15s ease; }
+.ph-action i { color: #2563eb; font-size: 16px; width: 20px; }
+.ph-action:hover { background: #eff6ff; color: #0f172a; transform: translateX(2px); }
 
-.cyber-icon-box {
-    width: 44px; height: 44px;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-}
+.ph-empty { text-align: center; padding: 3rem 1rem; color: #94a3b8; }
+.ph-empty i { font-size: 32px; margin-bottom: 10px; display: block; }
+.ph-empty p { font-size: 14px; margin-bottom: 14px; }
+.ph-empty-sm { padding: 1.5rem; }
 
-.cyber-vital-tile {
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
+.ph-modal { border-radius: 20px; border: none; }
+.ph-modal .modal-title { font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.ph-modal .modal-title i { color: #2563eb; }
 
-.cyber-progress {
-    background: rgba(255, 255, 255, 0.1);
-}
+.ph-record { padding: 1rem 0; border-bottom: 1px solid #f1f5f9; }
+.ph-record:last-child { border-bottom: none; }
+.ph-record-head { display: flex; justify-content: space-between; font-size: 14px; }
+.ph-record-head span { color: #94a3b8; font-size: 12px; }
+.ph-record-dept { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+.ph-record-diag { font-size: 13px; color: #334155; margin-bottom: 6px; }
+.ph-record-rx-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
+.ph-record-rx { margin: 0; padding-left: 18px; font-size: 13px; color: #475569; }
 
-/* 🎨 ELECTRIC TEXT & COLORS */
-.neon-text-cyan {
-    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+.ph-modal-section { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: .04em; margin-bottom: 10px; }
+.ph-bill-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+.ph-bill-row:last-child { border-bottom: none; }
+.ph-bill-row > div:first-child { flex: 1; }
+.ph-bill-doc { font-weight: 600; font-size: 14px; color: #0f172a; }
+.ph-bill-id { font-size: 12px; color: #94a3b8; }
+.ph-bill-amount { font-weight: 700; font-size: 14px; color: #0f172a; }
+.ph-bill-amount-paid { color: #16a34a; }
 
-.text-cyber-muted { color: #94a3b8 !important; }
-.text-cyber-light { color: #cbd5e1 !important; }
-.text-cyan { color: #38bdf8 !important; }
-.text-indigo { color: #818cf8 !important; }
-.text-emerald { color: #34d399 !important; }
-.text-amber { color: #fbbf24 !important; }
-.text-purple { color: #c084fc !important; }
-.text-rose { color: #fb7185 !important; }
-.text-crimson { color: #f43f5e !important; }
-
-.bg-cyan { background-color: #38bdf8 !important; }
-.bg-emerald { background-color: #34d399 !important; }
-.bg-purple { background-color: #c084fc !important; }
-.bg-rose { background-color: #fb7185 !important; }
-
-.border-cyber { border-color: rgba(255, 255, 255, 0.08) !important; }
-.border-cyan { border-color: rgba(56, 189, 248, 0.3) !important; }
-.border-crimson { border-color: rgba(244, 63, 94, 0.4) !important; }
-
-/* 🔘 NEON BUTTONS */
-.cyber-btn-cyan {
-    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-    color: #ffffff !important; border: none;
-}
-.cyber-btn-cyan:hover { box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); transform: scale(1.02); }
-
-.cyber-btn-purple {
-    background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
-    color: #ffffff !important; border: none;
-}
-.cyber-btn-purple:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); transform: scale(1.02); }
-
-.cyber-btn-emerald {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #ffffff !important; border: none;
-}
-.cyber-btn-emerald:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
-
-.cyber-btn-crimson {
-    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-    color: #ffffff !important; border: none;
-}
-
-.cyber-btn-outline {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #e2e8f0;
-}
-.cyber-btn-outline:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-
-.cyber-btn-outline-rose {
-    background: rgba(244, 63, 94, 0.1);
-    border: 1px solid rgba(244, 63, 94, 0.3);
-    color: #fb7185;
-}
-.cyber-btn-outline-rose:hover { background: #f43f5e; color: #fff; }
-
-/* 🍬 BADGES & PILLS */
-.cyber-badge-neon {
-    background: rgba(6, 182, 212, 0.15);
-    border: 1px solid rgba(6, 182, 212, 0.4);
-    color: #38bdf8;
-}
-
-.cyber-badge-purple {
-    background: rgba(168, 85, 247, 0.15);
-    border: 1px solid rgba(168, 85, 247, 0.4);
-    color: #c084fc;
-}
-
-.cyber-pill-emerald { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-.cyber-pill-amber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-.cyber-pill-rose { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
-.cyber-pill-indigo { background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
-
-/* 📊 TABLES WITH NO WHITE BACKGROUND */
-.cyber-table {
-    background: transparent !important;
-    color: #f1f5f9;
-}
-
-.cyber-table th {
-    background: rgba(15, 23, 42, 0.9) !important;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
-    color: #64748b; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 14px 18px;
-}
-
-.cyber-table td {
-    background: transparent !important;
-    padding: 14px 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: #e2e8f0;
-}
-
-.cyber-table tr:hover td {
-    background: rgba(30, 41, 59, 0.5) !important;
-}
-
-.cyber-avatar {
-    width: 38px; height: 38px;
-    background: rgba(6, 182, 212, 0.1);
-    border: 1px solid rgba(6, 182, 212, 0.2);
-    display: flex; align-items: center; justify-content: center;
-}
-
-/* 🔴 LIVE PULSE DOT */
-.pulse-dot {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background-color: #a4e5ff;
-    box-shadow: 0 0 8px #38bdf8;
-    animation: pulse-animation 1.5s infinite;
-}
-
-@keyframes pulse-animation {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
-}
+.ph-profile-avatar { width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg,#2563eb,#0891b2); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 22px; margin: 0 auto 1.25rem; }
+.ph-profile-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+.ph-profile-row span { color: #94a3b8; }
+.ph-profile-row strong { color: #0f172a; }
 </style>
+
 {% endblock %}

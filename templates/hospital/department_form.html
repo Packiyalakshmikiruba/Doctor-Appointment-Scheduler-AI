@@ -3,40 +3,193 @@
 {% block title %}Department{% endblock %}
 
 {% block content %}
+<div class="container-fluid serene-bg py-5 d-flex justify-content-center align-items-center min-vh-100">
+    
+    <!-- Peaceful Floating Ambient Lights -->
+    <div class="serene-glow glow-1"></div>
+    <div class="serene-glow glow-2"></div>
 
-<div class="card shadow">
+    <div class="row w-100 justify-content-center position-relative" style="z-index: 2;">
+        <div class="col-md-7 col-lg-6 col-xl-5">
+            
+            <!-- Serene Glassmorphism Card -->
+            <div class="card serene-card border-0 rounded-4 overflow-hidden shadow-lg">
+                
+                <!-- Gentle Header Section -->
+                <div class="card-header serene-header text-white text-center py-4 border-0">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle shadow-sm p-3 mb-2">
+                        <i class="bi bi-hospital fs-2 text-white"></i>
+                    </div>
+                    {% if form.instance.pk %}
+                        <h3 class="mb-1 fw-bold tracking-wide">Edit Department</h3>
+                        <p class="mb-0 text-white-50 small">Modify department details and settings</p>
+                    {% else %}
+                        <h3 class="mb-1 fw-bold tracking-wide">Add Department</h3>
+                        <p class="mb-0 text-white-50 small">Create a new hospital department</p>
+                    {% endif %}
+                </div>
 
-    <div class="card-header bg-primary text-white">
+                <!-- Card Body Form Elements -->
+                <div class="card-body p-4 p-md-5 bg-white">
+                    
+                    <!-- Non-Field Validation Errors Alert -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div class="small"><i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}</div>
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
 
-        {% if form.instance.pk %}
-            <h3>Edit Department</h3>
-        {% else %}
-            <h3>Add Department</h3>
-        {% endif %}
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
 
+                        <!-- Manual or Form Loop Styling support for form.as_p fields -->
+                        <div class="serene-form-fields">
+                            {{ form.as_p }}
+                        </div>
+
+                        <!-- Action Buttons Wrapper -->
+                        <div class="d-flex gap-3 mt-4 pt-2">
+                            <button type="submit" class="btn btn-seren-action flex-grow-1 py-3 rounded-pill fw-bold text-white text-uppercase tracking-wider transition-all d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                <i class="bi bi-check-circle-fill"></i> Save
+                            </button>
+                            <a href="{% url 'department_list' %}" class="btn btn-light flex-grow-1 py-3 rounded-pill fw-bold text-secondary text-uppercase tracking-wider transition-all d-flex align-items-center justify-content-center gap-2 border shadow-sm">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-
-    <div class="card-body">
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button type="submit" class="btn btn-primary">
-                Save
-            </button>
-
-            <a href="{% url 'department_list' %}"
-               class="btn btn-secondary">
-                Cancel
-            </a>
-
-        </form>
-
-    </div>
-
 </div>
 
+<!-- Serene Styling & Calm Animations -->
+<style>
+    /* Peaceful Lavender & Soft Mint Gradient Background with Slow Flow */
+    .serene-bg {
+        background: linear-gradient(135deg, #f5f3ff 0%, #ecfdf5 50%, #eff6ff 100%);
+        background-size: 300% 300%;
+        animation: sereneFlow 18s ease infinite;
+        min-height: 90vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes sereneFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Soft Floating Glow Orbs for Peace Vibe */
+    .serene-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(70px);
+        z-index: 1;
+        opacity: 0.4;
+        animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .glow-1 {
+        width: 320px;
+        height: 320px;
+        background: rgba(167, 139, 250, 0.4);
+        top: 5%;
+        left: 10%;
+    }
+    .glow-2 {
+        width: 350px;
+        height: 350px;
+        background: rgba(52, 211, 153, 0.3);
+        bottom: 5%;
+        right: 10%;
+        animation-delay: -5s;
+    }
+
+    @keyframes floatOrb {
+        0% { transform: translateY(0px) scale(1); }
+        100% { transform: translateY(-15px) scale(1.05); }
+    }
+
+    /* Serene Card Depth */
+    .serene-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 40px rgba(99, 102, 241, 0.08), 
+                    0 0 0 1px rgba(255, 255, 255, 0.6) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .serene-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 30px 60px rgba(99, 102, 241, 0.12) !important;
+    }
+
+    /* Serene Header Gradient */
+    .serene-header {
+        background: linear-gradient(135deg, #8b5cf6 0%, #059669 100%);
+    }
+
+    /* Styling for form.as_p tags integration automatically */
+    .serene-form-fields p {
+        margin-bottom: 1.25rem;
+    }
+    .serene-form-fields label {
+        display: block;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.875rem;
+        margin-bottom: 0.35rem;
+    }
+    .serene-form-fields input[type="text"], 
+    .serene-form-fields input[type="password"], 
+    .serene-form-fields input[type="email"], 
+    .serene-form-fields input[type="number"], 
+    .serene-form-fields select, 
+    .serene-form-fields textarea {
+        display: block !important;
+        width: 100% !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.95rem !important;
+        color: #334155 !important;
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 0.75rem !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    .serene-form-fields input:focus, 
+    .serene-form-fields select:focus, 
+    .serene-form-fields textarea:focus {
+        background-color: #fff !important;
+        border-color: #8b5cf6 !important;
+        outline: 0 !important;
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
+    }
+    .serene-form-fields .helptext, .serene-form-fields .form-text {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    /* Calm Action Button */
+    .btn-seren-action {
+        background: linear-gradient(135deg, #8b5cf6 0%, #059669 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-seren-action:hover {
+        background: linear-gradient(135deg, #7c3aed 0%, #047857 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(139, 92, 246, 0.25) !important;
+    }
+</style>
 {% endblock %}

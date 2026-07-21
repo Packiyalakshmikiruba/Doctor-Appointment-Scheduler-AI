@@ -1,50 +1,101 @@
 {% extends "base.html" %}
-
 {% block title %}Admin Dashboard{% endblock %}
-
 {% block content %}
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-1">Admin Dashboard</h2>
-            <p class="text-muted">Clinic-wide monitoring & management</p>
-        </div>
-        <!-- புதிய பட்டன்: Support Hub -->
-        <a href="{% url 'support_inbox' %}" class="btn btn-primary rounded-pill px-4">
-            <i class="bi bi-chat-dots-fill"></i> Check Support Inbox
-        </a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">Admin Dashboard</h2>
+        <p class="text-muted mb-0">Hospital-wide overview</p>
     </div>
+    <a href="{% url 'contacts_list' %}" class="btn btn-outline-dark">💬 Messages</a>
+</div>
 
-    <!-- Stats Section -->
-    <div class="row g-3 mb-4">
-        {% with stats='Total,total_appointments;Pending,pending_count;High Risk,high_risk_count;No Shows,noshow_count'|split:';' %}
-        {% for s in stats %}
-        {% with data=s|split:',' %}
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center hover-shadow">
-                <h6 class="text-muted small text-uppercase">{{ data.0 }}</h6>
-                <h2 class="fw-bold {% if data.0 == 'High Risk' %}text-danger{% endif %}">{{ data.1 }}</h2>
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <i class="bi bi-calendar-check fs-3 text-primary"></i>
+            <h3 class="mt-2">{{ total_appointments }}</h3><span class="text-muted small">Total Appointments</span>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <i class="bi bi-exclamation-triangle fs-3 text-danger"></i>
+            <h3 class="mt-2">{{ high_risk_count }}</h3><span class="text-muted small">High Risk (Active)</span>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <i class="bi bi-cash-coin fs-3 text-success"></i>
+            <h3 class="mt-2">₹{{ total_revenue }}</h3><span class="text-muted small">Collected Revenue</span>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <i class="bi bi-hourglass-split fs-3 text-warning"></i>
+            <h3 class="mt-2">₹{{ pending_revenue }}</h3><span class="text-muted small">Pending Revenue</span>
+        </div></div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <h4>{{ total_doctors }}</h4><span class="text-muted small">Active Doctors</span>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <h4>{{ total_patients }}</h4><span class="text-muted small">Total Patients</span>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <h4>{{ total_departments }}</h4><span class="text-muted small">Departments</span>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center"><div class="card-body">
+            <h4>{{ noshow_count }}</h4><span class="text-muted small">Total No-Shows</span>
+        </div></div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">Today's Appointments</div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light"><tr><th>Patient</th><th>Doctor</th><th>Time</th><th>Status</th></tr></thead>
+                    <tbody>
+                        {% for a in todays_appointments %}
+                        <tr>
+                            <td>{{ a.patient }}</td>
+                            <td>Dr. {{ a.doctor.user.first_name }} {{ a.doctor.user.last_name }}</td>
+                            <td>{{ a.appointment_time }}</td>
+                            <td><span class="badge bg-secondary">{{ a.status }}</span></td>
+                        </tr>
+                        {% empty %}<tr><td colspan="4" class="text-center py-4 text-muted">No appointments today.</td></tr>{% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-        {% endwith %}
-        {% endfor %}
-        {% endwith %}
     </div>
 
-    <!-- Quick Links -->
-    <div class="card border-0 shadow-sm rounded-4 p-4">
-        <h5 class="fw-bold mb-3">System Operations</h5>
-        <div class="row g-3">
-            <div class="col-md-3"><a href="{% url 'department_list' %}" class="btn btn-outline-primary w-100 py-3"><i class="bi bi-building"></i> Manage Depts</a></div>
-            <div class="col-md-3"><a href="{% url 'doctor_list' %}" class="btn btn-outline-primary w-100 py-3"><i class="bi bi-person-badge"></i> Manage Doctors</a></div>
-            <div class="col-md-3"><a href="{% url 'appointment_list' %}" class="btn btn-outline-primary w-100 py-3"><i class="bi bi-calendar-event"></i> All Appointments</a></div>
-            <div class="col-md-3"><a href="{% url 'support_inbox' %}" class="btn btn-dark w-100 py-3"><i class="bi bi-headset"></i> Support Inbox</a></div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-header">Quick Links</div>
+            <div class="card-body d-grid gap-2">
+                <a href="{% url 'department_list' %}" class="btn btn-outline-primary">Manage Departments</a>
+                <a href="{% url 'doctor_list' %}" class="btn btn-outline-primary">Manage Doctors</a>
+                <a href="{% url 'patient_list' %}" class="btn btn-outline-primary">Manage Patients</a>
+                <a href="{% url 'appointment_list' %}" class="btn btn-outline-primary">All Appointments</a>
+                <a href="{% url 'bill_list' %}" class="btn btn-outline-primary">Billing</a>
+                <a href="{% url 'risk_dashboard' %}" class="btn btn-outline-warning">AI Risk Dashboard</a>
+                <a href="/admin/" class="btn btn-outline-secondary">Django Admin Console</a>
+            </div>
         </div>
     </div>
 </div>
 
-<style>
-    .hover-shadow:hover { box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; transition: .3s; }
-</style>
 {% endblock %}

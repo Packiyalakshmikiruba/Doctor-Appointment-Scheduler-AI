@@ -3,106 +3,223 @@
 {% block title %}Departments{% endblock %}
 
 {% block content %}
+<div class="container-fluid oceanic-3d-bg py-5 min-vh-100">
+    
+    <!-- Glowing Ambient Background Orbs -->
+    <div class="oceanic-glow orb-1"></div>
+    <div class="oceanic-glow orb-2"></div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container py-4 position-relative" style="z-index: 2;">
+        
+        <!-- Top Heading & Add Button Section with Glassmorphism -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 p-4 rounded-4 oceanic-glass-header shadow-lg">
+            <div>
+                <h2 class="fw-bold mb-1 text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-building text-cyan"></i>
+                    Departments
+                </h2>
+                <p class="text-white-50 mb-0 small">Manage hospital departments and room assignments seamlessly</p>
+            </div>
 
-    <div>
-        <h2 class="fw-bold mb-1">
-            <i class="bi bi-building text-primary"></i>
-            Departments
-        </h2>
-        <p class="text-muted mb-0">Manage hospital departments and room assignments</p>
+            <a href="{% url 'department_create' %}" class="btn btn-oceanic-action rounded-pill px-4 py-2.5 fw-bold text-white shadow-lg d-inline-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-plus-circle fs-5"></i> Add Department
+            </a>
+        </div>
+
+        <!-- Main 3D Card Table Wrapper -->
+        <div class="card oceanic-card border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+                            <tr class="text-uppercase text-secondary small fw-bold bg-light border-bottom">
+                                <th class="ps-4 py-3">#</th>
+                                <th class="py-3">Department</th>
+                                <th class="py-3">Room</th>
+                                <th class="py-3">Description</th>
+                                <th class="py-3 text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for department in departments %}
+                            <tr class="transition-all">
+
+                                <td class="ps-4 text-muted fw-semibold">{{ department.id }}</td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-cyan bg-opacity-10 d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-hospital text-cyan fs-5"></i>
+                                        </div>
+                                        <span class="fw-bold text-dark">
+                                            {{ department.department_name }}
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-semibold shadow-sm">
+                                        <i class="bi bi-door-open text-info me-1"></i> {{ department.room_number }}
+                                    </span>
+                                </td>
+
+                                <td class="text-muted small">
+                                    {{ department.description|default:"—"|truncatewords:12 }}
+                                </td>
+
+                                <td class="text-end pe-4">
+                                    <a href="{% url 'department_update' department.id %}"
+                                       class="btn btn-sm btn-light border text-warning shadow-sm me-1 rounded-circle p-2"
+                                       title="Edit" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <a href="{% url 'department_delete' department.id %}"
+                                       class="btn btn-sm btn-light border text-danger shadow-sm rounded-circle p-2"
+                                       title="Delete" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;"
+                                       onclick="return confirm('Delete {{ department.department_name }}? This cannot be undone.');">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-inbox text-muted opacity-50" style="font-size: 3.5rem;"></i>
+                                        <p class="text-muted mt-3 mb-3 fw-medium">No departments found right now.</p>
+                                        <a href="{% url 'department_create' %}" class="btn btn-oceanic-action rounded-pill px-4 py-2 shadow-sm fw-bold text-white">
+                                            <i class="bi bi-plus-circle me-1"></i> Add your first department
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        {% if departments %}
+        <p class="text-white-50 small mt-3 px-2">
+            <i class="bi bi-info-circle text-cyan"></i> Showing {{ departments|length }} department{{ departments|length|pluralize }}
+        </p>
+        {% endif %}
+
     </div>
-
-    <a href="{% url 'department_create' %}" class="btn btn-primary shadow-sm">
-        <i class="bi bi-plus-circle"></i> Add Department
-    </a>
-
 </div>
 
-<div class="card shadow-sm">
+<!-- Oceanic 3D Styling & Animated Background -->
+<style>
+    /* Deep Oceanic Night Gradient with Slow Motion Animation */
+    .oceanic-3d-bg {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #065f46 100%);
+        background-size: 300% 300%;
+        animation: oceanicFlow 15s ease infinite;
+        min-height: 90vh;
+        position: relative;
+        overflow: hidden;
+    }
 
-    <div class="card-body p-0">
+    @keyframes oceanicFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        <table class="table table-hover align-middle mb-0">
+    /* Soft Floating Glow Orbs for Peaceful Depth */
+    .oceanic-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 1;
+        opacity: 0.35;
+        animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+        width: 350px;
+        height: 350px;
+        background: rgba(6, 182, 212, 0.4);
+        top: 5%;
+        left: 10%;
+    }
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: rgba(52, 211, 153, 0.3);
+        bottom: 5%;
+        right: 10%;
+        animation-delay: -5s;
+    }
 
-            <thead>
-                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
-                    <th class="ps-4 py-3">#</th>
-                    <th class="py-3">Department</th>
-                    <th class="py-3">Room</th>
-                    <th class="py-3">Description</th>
-                    <th class="py-3 text-end pe-4">Actions</th>
-                </tr>
-            </thead>
+    @keyframes floatOrb {
+        0% { transform: translateY(0px) scale(1); }
+        100% { transform: translateY(-20px) scale(1.05); }
+    }
 
-            <tbody>
+    /* Glass Header Box */
+    .oceanic-glass-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-                {% for department in departments %}
-                <tr>
+    /* 3D Floating Card Depth & Layers */
+    .oceanic-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(12px);
+        transform: perspective(1000px) rotateX(0.5deg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.3) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
 
-                    <td class="ps-4 text-muted">{{ department.id }}</td>
+    .oceanic-card:hover {
+        transform: perspective(1000px) rotateX(0deg) translateY(-4px);
+        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5) !important;
+    }
 
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center"
-                                 style="width: 38px; height: 38px;">
-                                <i class="bi bi-hospital text-primary"></i>
-                            </div>
-                            <span class="fw-semibold">{{ department.department_name }}</span>
-                        </div>
-                    </td>
+    /* Custom Colors */
+    .text-cyan {
+        color: #06b6d4 !important;
+    }
+    .bg-cyan {
+        background-color: #06b6d4 !important;
+    }
 
-                    <td>
-                        <span class="badge bg-light text-dark border">
-                            <i class="bi bi-door-open"></i> {{ department.room_number }}
-                        </span>
-                    </td>
+    /* Oceanic Action Button with 3D Effect */
+    .btn-oceanic-action {
+        background: linear-gradient(135deg, #0ea5e9 0%, #059669 100%);
+        border: none;
+        box-shadow: 0 4px 0 #047857, 0 8px 15px rgba(14, 165, 233, 0.3);
+        transition: all 0.1s ease;
+    }
 
-                    <td class="text-muted">
-                        {{ department.description|default:"—"|truncatewords:12 }}
-                    </td>
+    .btn-oceanic-action:hover {
+        background: linear-gradient(135deg, #0284c7 0%, #047857 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #065f46, 0 12px 20px rgba(14, 165, 233, 0.4);
+    }
 
-                    <td class="text-end pe-4">
-                        <a href="{% url 'department_update' department.id %}"
-                           class="btn btn-sm btn-outline-warning me-1"
-                           title="Edit">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
+    .btn-oceanic-action:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #047857, 0 4px 8px rgba(14, 165, 233, 0.3);
+    }
 
-                        <a href="{% url 'department_delete' department.id %}"
-                           class="btn btn-sm btn-outline-danger"
-                           title="Delete"
-                           onclick="return confirm('Delete {{ department.department_name }}? This cannot be undone.');">
-                            <i class="bi bi-trash3"></i>
-                        </a>
-                    </td>
-
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center py-5">
-                        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-                        <p class="text-muted mt-2 mb-3">No departments found.</p>
-                        <a href="{% url 'department_create' %}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-circle"></i> Add your first department
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
-{% if departments %}
-<p class="text-muted small mt-3">
-    <i class="bi bi-info-circle"></i> Showing {{ departments|length }} department{{ departments|length|pluralize }}
-</p>
-{% endif %}
-
+    /* Table Hover Enhancement */
+    .table-hover tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(6, 182, 212, 0.05) !important;
+    }
+</style>
 {% endblock %}

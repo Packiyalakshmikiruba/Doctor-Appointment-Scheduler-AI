@@ -47,7 +47,15 @@ class Appointment(models.Model):
     prior_noshows = models.PositiveIntegerField(default=0, editable=False)
     history_noshow_ratio = models.FloatField(default=0, editable=False)
     distance_from_clinic = models.FloatField(default=0, editable=False)
+    patient_checked_in = models.BooleanField(
+    default=False
+)
 
+# Consultation Completed Time
+    consultation_completed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

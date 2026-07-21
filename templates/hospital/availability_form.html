@@ -3,80 +3,176 @@
 {% block title %}Add Availability{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center my-5">
-    <div class="col-md-6 col-lg-5">
-        
-        <!-- Main Form Card -->
-        <div class="card border-0 shadow-lg rounded-4">
+<div class="container-fluid dynamic-animated-bg py-5 d-flex justify-content-center align-items-center min-vh-100">
+    
+    <div class="row w-100 justify-content-center position-relative" style="z-index: 2;">
+        <div class="col-md-8 col-lg-6 col-xl-5">
             
-            <!-- Elegant Card Header -->
-            <div class="card-header bg-gradient bg-primary text-white text-center py-4 rounded-top-4">
-                <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle p-3 mb-2">
-                    <i class="bi bi-calendar-plus fs-3 text-white"></i>
-                </div>
-                <h4 class="mb-1 fw-bold">Add Doctor Availability</h4>
-                <p class="mb-0 text-white-50 small">Set working hours and available slots</p>
-            </div>
-
-            <!-- Card Body Form Elements -->
-            <div class="card-body p-4">
+            <!-- 3D Layered Floating Card -->
+            <div class="card card-3d-depth border-0 rounded-4 overflow-hidden bg-white">
                 
-                <!-- Non-Field Validation Errors Alert -->
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
-                        {% for error in form.non_field_errors %}
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
-                        {% endfor %}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <!-- 3D Glowing Gradient Header -->
+                <div class="card-header header-3d-gradient text-white text-center py-4 border-0">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle shadow-lg p-3 mb-2 icon-3d-float">
+                        <i class="bi bi-calendar-plus fs-2 text-white"></i>
                     </div>
-                {% endif %}
+                    <h3 class="mb-1 fw-bold tracking-wide">Add Availability</h3>
+                    <p class="mb-0 text-white-50 small">Configure your working hours and slots</p>
+                </div>
 
-                <form method="POST" novalidate>
-                    {% csrf_token %}
-
-                    <!-- Dynamic Loop For Form Fields -->
-                    {% for field in form %}
-                        <div class="mb-3 position-relative">
-                            <label class="form-label fw-semibold text-secondary small d-flex align-items-center gap-1">
-                                {{ field.label }}
-                                {% if field.field.required %}
-                                    <span class="text-danger">*</span>
-                                {% endif %}
-                            </label>
-
-                            <!-- Widget Injections Layer (Safe Injection Setup) -->
-                            <div class="input-group">
-                                {{ field }}
-                            </div>
-
-                            <!-- Individual Field Validation Errors -->
-                            {% if field.errors %}
-                                {% for error in field.errors %}
-                                    <div class="form-text text-danger d-flex align-items-center gap-1 mt-1 small animated fadeIn">
-                                        <i class="bi bi-x-circle-fill"></i> {{ error }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                            
-                            <!-- Help Text Hint Support (If present in model configuration fields) -->
-                            {% if field.help_text %}
-                                <div class="form-text text-muted small">{{ field.help_text }}</div>
-                            {% endif %}
+                <!-- Card Body Form Elements -->
+                <div class="card-body p-4 p-md-5">
+                    
+                    <!-- Non-Field Validation Errors Alert -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div class="small"><i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}</div>
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    {% endfor %}
+                    {% endif %}
 
-                    <!-- Submission Action Button Wrapper -->
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary bg-gradient w-100 py-2.5 rounded-3 fw-bold shadow-sm transition-all hover-up d-flex align-items-center justify-content-center gap-2">
-                            <i class="bi bi-check-circle-fill"></i> Save Availability
-                        </button>
-                    </div>
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
 
-                </form>
+                        <!-- Dynamic Loop For Form Fields -->
+                        {% for field in form %}
+                            <div class="mb-3 position-relative">
+                                <label class="form-label fw-bold text-secondary small d-flex align-items-center gap-1 mb-1">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
 
+                                <!-- Widget Injections Layer -->
+                                <div class="input-group">
+                                    {{ field }}
+                                </div>
+
+                                <!-- Individual Field Validation Errors -->
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger small mt-1 d-flex align-items-center gap-1">
+                                            <i class="bi bi-x-circle-fill"></i> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                
+                                <!-- Help Text Hint Support -->
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted small mt-1">{{ field.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- 3D Pop Action Button -->
+                        <div class="mt-4 pt-2">
+                            <button type="submit" class="btn btn-3d-action w-100 py-3 rounded-pill fw-bold text-white text-uppercase tracking-wider transition-all d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-check-circle-fill"></i> Save Availability
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>
+
+<!-- Dynamic Color-Changing Background & 3D Styling -->
+<style>
+    /* Time-based/Seconds Smooth Animated Gradient Background */
+    .dynamic-animated-bg {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777, #2563eb);
+        background-size: 400% 400%;
+        animation: gradientAnimation 10s ease infinite;
+        min-height: 90vh;
+        position: relative;
+    }
+
+    @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* 3D Floating Card Depth & Layers */
+    .card-3d-depth {
+        background: #ffffff !important;
+        transform: perspective(1000px) rotateX(1deg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .card-3d-depth:hover {
+        transform: perspective(1000px) rotateX(0deg) translateY(-5px);
+        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* 3D Header Gradient */
+    .header-3d-gradient {
+        background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    /* Floating Icon 3D Effect */
+    .icon-3d-float {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transform: translateZ(20px);
+    }
+
+    /* Smooth 3D Form Inputs */
+    .card-body input[type="text"], 
+    .card-body input[type="password"], 
+    .card-body input[type="email"], 
+    .card-body input[type="date"], 
+    .card-body input[type="time"], 
+    .card-body input[type="number"], 
+    .card-body select, 
+    .card-body textarea {
+        display: block !important;
+        width: 100% !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.95rem !important;
+        color: #1e293b !important;
+        background-color: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 0.75rem !important;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    .card-body input:focus, 
+    .card-body select:focus, 
+    .card-body textarea:focus {
+        background-color: #fff !important;
+        border-color: #7c3aed !important;
+        outline: 0 !important;
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15), inset 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+
+    /* 3D Pop Action Button */
+    .btn-3d-action {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        border: none;
+        box-shadow: 0 6px 0 #5b21b6, 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.1s ease;
+    }
+
+    .btn-3d-action:hover {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 0 #4c1d95, 0 15px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-3d-action:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #5b21b6, 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
 {% endblock %}

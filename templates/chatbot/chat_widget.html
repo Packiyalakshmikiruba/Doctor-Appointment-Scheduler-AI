@@ -45,6 +45,11 @@
                         <i class="bi bi-mic-fill fs-5" id="mic-icon"></i>
                     </button>
 
+                    <button class="btn btn-light rounded-circle text-primary me-1 border-0" id="upload-btn" type="button" title="Upload an old medical report/file">
+                        <i class="bi bi-paperclip fs-5"></i>
+                    </button>
+                    <input type="file" id="file-input" accept="image/*" class="d-none">
+
                     <input type="text" id="chat-input" class="form-control border-0 bg-transparent shadow-none" placeholder="Ask about doctors, appointments, or clinic info..." style="font-size: 15px;">
 
                     <button class="btn btn-primary rounded-pill px-3 fw-bold d-flex align-items-center gap-1 shadow-sm" id="send-btn">
@@ -247,10 +252,54 @@ document.getElementById('chat-input').addEventListener('keydown', (e) => {
     }
 });
 
-document.getElementById('clear-chat-btn').addEventListener('click', () => {
-    const log = document.getElementById('chat-log');
-    log.innerHTML = '';
-    appendBubble("Chat cleared. How else can I assist you today?", 'bot');
+// Upload an old medical report/file photo
+const uploadBtn = document.getElementById('upload-btn');
+const fileInput = document.getElementById('file-input');
+
+uploadBtn.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    appendBubble(`📎 Uploaded: ${file.name}`, 'user');
+
+    const statusContainer = document.getElementById('status-text');
+    const statusMsg = document.getElementById('status-message');
+    statusContainer.classList.remove('d-none');
+    statusMsg.textContent = 'Reading your file...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const resp = await fetch("{% url 'upload_medical_file' %}", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: formData,
+        });
+        const data = await resp.json();
+        const replyText = data.response || data.error || "Sorry, something went wrong reading that file.";
+        appendBubble(replyText, 'bot', !!data.error);
+    } catch (err) {
+        appendBubble("Sorry, I couldn't upload that file. Please try again.", 'bot', true);
+    } finally {
+        statusContainer.classList.add('d-none');
+        fileInput.value = '';
+    }
+});
+
+document.getElementById("clear-chat-btn").addEventListener("click", async () => {
+
+    const log = document.getElementById("chat-log");
+
+    log.innerHTML = "";
+
+    appendBubble(
+        "Chat cleared. How else can I assist you today?",
+        "bot"
+    );
+
 });
 
 // Speech Recognition Engine
@@ -300,6 +349,17 @@ if (!SpeechRecognition) {
 }
 
 // Initial Bot Greeting
-appendBubble("Hello! 👋 I'm your AI Clinic Assistant. How can I help you today?", 'bot');
+window.addEventListener("load", function () {
+
+    const log = document.getElementById("chat-log");
+
+    log.innerHTML = "";
+
+    appendBubble(
+        "Hello! 👋 I'm your AI Clinic Assistant. How can I help you today?",
+        "bot"
+    );
+
+});
 </script>
 {% endblock %}

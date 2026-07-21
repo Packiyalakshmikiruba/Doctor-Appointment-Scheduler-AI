@@ -138,7 +138,6 @@ class DoctorForm(forms.ModelForm):
 class DoctorAvailabilityForm(forms.ModelForm):
 
     class Meta:
-
         model = DoctorAvailability
 
         fields = [
@@ -150,17 +149,12 @@ class DoctorAvailabilityForm(forms.ModelForm):
         ]
 
         widgets = {
-
             "doctor": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
+                attrs={"class": "form-select"}
             ),
 
             "day_of_week": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
+                attrs={"class": "form-select"}
             ),
 
             "start_time": forms.TimeInput(
@@ -178,11 +172,8 @@ class DoctorAvailabilityForm(forms.ModelForm):
             ),
 
             "is_available": forms.CheckboxInput(
-                attrs={
-                    "class": "form-check-input",
-                }
+                attrs={"class": "form-check-input"}
             ),
-
         }
 
     def __init__(self, *args, **kwargs):
@@ -194,6 +185,27 @@ class DoctorAvailabilityForm(forms.ModelForm):
         self.fields["doctor"].label_from_instance = (
             lambda obj: obj.user.get_full_name() or obj.user.username
         )
+
+    # -------------------------
+    # Validation
+    # -------------------------
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        start_time = cleaned_data.get("start_time")
+        end_time = cleaned_data.get("end_time")
+
+        if start_time and end_time:
+
+            if end_time <= start_time:
+
+                raise forms.ValidationError(
+                    "End time must be greater than Start time."
+                )
+
+        return cleaned_data
 class DoctorLeaveForm(forms.ModelForm):
 
     class Meta:

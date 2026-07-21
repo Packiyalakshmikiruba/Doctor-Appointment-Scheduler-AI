@@ -20,6 +20,11 @@ urlpatterns = [
     name="doctor_dashboard",
 ),
 path(
+    "contact-admin/",
+    views.contact_admin,
+    name="contact_admin",
+),
+path(
     "doctor/<int:doctor_id>/generate/",
     views.generate_week_schedule,
     name="generate_week_schedule",

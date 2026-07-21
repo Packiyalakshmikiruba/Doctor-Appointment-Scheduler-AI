@@ -63,9 +63,3 @@ class Patient(models.Model):
         today = timezone.now().date()
         dob = self.date_of_birth
         return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
-
-
-    def __str__(self):
-     if self.user.first_name:
-        return f"{self.user.first_name} {self.user.last_name}".strip()
-     return self.user.username

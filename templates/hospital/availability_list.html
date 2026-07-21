@@ -3,96 +3,170 @@
 {% block title %}Doctor Availability{% endblock %}
 
 {% block content %}
+<div class="container-fluid dynamic-animated-bg py-5 min-vh-100">
+    
+    <div class="container py-4 position-relative" style="z-index: 2;">
+        
+        <!-- Top Heading & Add Button Section -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 p-4 rounded-4 glass-header-box shadow-lg">
+            <div>
+                <h2 class="fw-bold mb-1 text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-calendar-week text-warning"></i>
+                    Doctor Availability
+                </h2>
+                <p class="text-white-50 mb-0 small">Manage doctor schedules and available time slots dynamically</p>
+            </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{% url 'availability_create' %}" class="btn btn-3d-action rounded-pill px-4 py-2 fw-bold text-white shadow-sm d-inline-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-plus-circle fs-5"></i> Add Availability
+            </a>
+        </div>
 
-    <div>
-        <h2 class="fw-bold mb-1">
-            <i class="bi bi-calendar-week text-primary"></i>
-            Doctor Availability
-        </h2>
-        <p class="text-muted mb-0">Manage doctor schedules and available time slots</p>
+        <!-- Main 3D Card Table Wrapper -->
+        <div class="card card-3d-depth border-0 rounded-4 overflow-hidden shadow-lg bg-white">
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+                            <tr class="text-uppercase text-secondary small fw-bold bg-light border-bottom">
+                                <th class="ps-4 py-3">#</th>
+                                <th class="py-3">Doctor</th>
+                                <th class="py-3">Day</th>
+                                <th class="py-3">Start Time</th>
+                                <th class="py-3">End Time</th>
+                                <th class="py-3">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for availability in availabilities %}
+                            <tr class="transition-all">
+
+                                <td class="ps-4 text-muted fw-semibold">{{ availability.id }}</td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person-badge text-success fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <span class="fw-bold text-dark d-block">
+                                                Dr. {{ availability.doctor.user.get_full_name }}
+                                            </span>
+                                            <span class="text-muted" style="font-size: 0.75rem;">Specialist Physician</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="fw-semibold text-secondary">{{ availability.day_of_week }}</td>
+
+                                <td class="text-dark"><i class="bi bi-clock me-1 text-muted"></i>{{ availability.start_time }}</td>
+
+                                <td class="text-dark"><i class="bi bi-clock-fill me-1 text-muted"></i>{{ availability.end_time }}</td>
+
+                                <td>
+                                    {% if availability.is_available %}
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-semibold">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Available
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill fw-semibold">
+                                            <i class="bi bi-x-circle-fill me-1"></i> Unavailable
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-calendar-x text-muted opacity-50" style="font-size: 3.5rem;"></i>
+                                        <p class="text-muted mt-3 mb-3 fw-medium">No availability records found right now.</p>
+                                        <a href="{% url 'availability_create' %}" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm fw-bold">
+                                            <i class="bi bi-plus-circle me-1"></i> Add first availability
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-
-    <a href="{% url 'availability_create' %}" class="btn btn-primary shadow-sm">
-        <i class="bi bi-plus-circle"></i> Add Availability
-    </a>
-
 </div>
 
-<div class="card shadow-sm">
+<!-- Dynamic Color-Changing Background & 3D Styling -->
+<style>
+    /* Time-based/Seconds Smooth Animated Gradient Background */
+    .dynamic-animated-bg {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777, #2563eb);
+        background-size: 400% 400%;
+        animation: gradientAnimation 10s ease infinite;
+        min-height: 90vh;
+        position: relative;
+    }
 
-    <div class="card-body p-0">
+    @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        <table class="table table-hover align-middle mb-0">
+    /* Glass Header Box */
+    .glass-header-box {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-            <thead>
-                <tr class="text-uppercase small text-muted" style="background-color: rgba(0,0,0,0.02);">
-                    <th class="ps-4 py-3">#</th>
-                    <th class="py-3">Doctor</th>
-                    <th class="py-3">Day</th>
-                    <th class="py-3">Start Time</th>
-                    <th class="py-3">End Time</th>
-                    <th class="py-3">Status</th>
-                </tr>
-            </thead>
+    /* 3D Floating Card Depth & Layers */
+    .card-3d-depth {
+        background: #ffffff !important;
+        transform: perspective(1000px) rotateX(0.5deg);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 
+                    0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
 
-            <tbody>
+    .card-3d-depth:hover {
+        transform: perspective(1000px) rotateX(0deg) translateY(-3px);
+        box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5) !important;
+    }
 
-                {% for availability in availabilities %}
-                <tr>
+    /* 3D Action Button */
+    .btn-3d-action {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        border: none;
+        box-shadow: 0 4px 0 #5b21b6, 0 8px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.1s ease;
+    }
 
-                    <td class="ps-4 text-muted">{{ availability.id }}</td>
+    .btn-3d-action:hover {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #4c1d95, 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
 
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center"
-                                 style="width: 38px; height: 38px;">
-                                <i class="bi bi-person-badge text-success"></i>
-                            </div>
-                            <span class="fw-semibold">
-                                Dr. {{ availability.doctor.user.get_full_name }}
-                            </span>
-                        </div>
-                    </td>
+    .btn-3d-action:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #5b21b6, 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-                    <td>{{ availability.day_of_week }}</td>
-
-                    <td>{{ availability.start_time }}</td>
-
-                    <td>{{ availability.end_time }}</td>
-
-                    <td>
-                        {% if availability.is_available %}
-                            <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                <i class="bi bi-check-circle"></i> Available
-                            </span>
-                        {% else %}
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
-                                <i class="bi bi-x-circle"></i> Unavailable
-                            </span>
-                        {% endif %}
-                    </td>
-
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center py-5">
-                        <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
-                        <p class="text-muted mt-2 mb-3">No availability records found.</p>
-                        <a href="{% url 'availability_create' %}" class="btn btn-primary btn-sm">
-                            <i class="bi bi-plus-circle"></i> Add first availability
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
+    /* Table Hover Enhancement */
+    .table-hover tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(124, 58, 237, 0.04) !important;
+    }
+</style>
 {% endblock %}
