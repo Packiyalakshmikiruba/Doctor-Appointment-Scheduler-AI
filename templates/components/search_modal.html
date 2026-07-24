@@ -1,0 +1,156 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/components/search_modal.css' %}">
+<!-- ===========================
+      GLOBAL SEARCH MODAL
+=========================== -->
+
+<div class="modal fade"
+     id="globalSearchModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <div class="modal-header border-0">
+
+                <h4 class="fw-bold">
+
+                    <i class="fas fa-search text-primary me-2"></i>
+
+                    Global Search
+
+                </h4>
+
+                <button
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <!-- Search Box -->
+
+                <div class="input-group input-group-lg mb-4">
+
+                    <span class="input-group-text bg-white">
+
+                        <i class="fas fa-search"></i>
+
+                    </span>
+
+                    <input
+                        type="text"
+                        id="globalSearchInput"
+                        class="form-control"
+                        placeholder="Search Patients, Doctors, Bills, Appointments...">
+
+                </div>
+
+                <!-- Quick Search -->
+
+                <h6 class="text-muted mb-3">
+
+                    Quick Access
+
+                </h6>
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'patient_list' %}"
+                           class="search-card">
+
+                            <i class="fas fa-user-injured"></i>
+
+                            <span>Patients</span>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'doctor_list' %}"
+                           class="search-card">
+
+                            <i class="fas fa-user-md"></i>
+
+                            <span>Doctors</span>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'appointment_list' %}"
+                           class="search-card">
+
+                            <i class="fas fa-calendar-check"></i>
+
+                            <span>Appointments</span>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'medical_record_list' %}"
+                           class="search-card">
+
+                            <i class="fas fa-notes-medical"></i>
+
+                            <span>Medical Records</span>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'bill_list' %}"
+                           class="search-card">
+
+                            <i class="fas fa-file-invoice-dollar"></i>
+
+                            <span>Bills</span>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'bill_list' %}"
+                           class="search-card">
+
+                            <i class="fas fa-credit-card"></i>
+
+                            <span>Payments</span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- Live Search -->
+
+                <div
+                    id="searchResults"
+                    class="mt-4">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

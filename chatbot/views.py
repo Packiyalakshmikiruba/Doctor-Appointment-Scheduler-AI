@@ -1,8 +1,3 @@
-"""
-chatbot/views.py
-Django views for the chat widget and its API endpoint.
-"""
-
 import json
 import traceback
 from django.http import JsonResponse

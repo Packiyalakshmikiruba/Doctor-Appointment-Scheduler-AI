@@ -5,10 +5,10 @@
 
 {% block extra_css %}
 <style>
-    /* 🌟 Dynamic 3D & Luxury Glassmorphism Styles */
+    /* 🌟 Dynamic 3D & Luxury Glassmorphism Styles (Height Fixed Issue Solved) */
     .chat-container-card {
         border-radius: 28px !important;
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(255, 255, 255, 0.88);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 
@@ -16,11 +16,14 @@
                     inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
         border: 1px solid rgba(255, 255, 255, 0.7) !important;
         overflow: hidden;
+        height: auto !important;
     }
     
     .sidebar-panel {
         border-right: 1px solid rgba(0, 0, 0, 0.05);
         background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+        max-height: 620px;
+        overflow-y: auto;
     }
 
     .m-contact-btn {
@@ -107,19 +110,19 @@
 </div>
 
 <!-- ================= 💬 MAIN LUXURY CHAT HUB ================= -->
-<div class="container py-2">
+<div class="container py-3 mb-5">
     <div class="card chat-container-card">
-        <div class="row g-0" style="min-height: 600px; max-height: 600px;">
+        <div class="row g-0">
             
             <!-- 👥 LEFT SIDE: CONTACT LIST -->
             <div class="col-md-4 sidebar-panel d-flex flex-column border-end">
-                <div class="p-4 bg-white border-bottom d-flex align-items-center justify-content-between shadow-sm" style="z-index: 1;">
+                <div class="p-4 bg-white border-bottom d-flex align-items-center justify-content-between shadow-sm sticky-top">
                     <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
                         <i class="bi bi-patch-check-fill text-primary"></i> AetherCare Live Hub
                     </h5>
                 </div>
                 
-                <div class="list-group list-group-flush overflow-auto custom-scroll flex-grow-1 py-3" id="modalContactList">
+                <div class="list-group list-group-flush overflow-auto custom-scroll flex-grow-1 py-3" id="modalContactList" style="max-height: 520px;">
                     {% for user in users %}
                         <button type="button" 
                                 class="m-contact-btn" 
@@ -138,7 +141,6 @@
                             <span class="badge bg-danger rounded-pill shadow-sm d-none px-2 py-1" id="badge-{{ user.id }}">New</span>
                         </button>
                     {% empty %}
-                        <!-- தொடக்கத்தில் யாரும் இல்லை என்றாலும் கவலை இல்லை, யாராவது மெசேஜ் அனுப்பினால் கீழே உள்ள ஜாவாஸ்கிரிப்ட் தானாக லிஸ்டை உருவாக்கிவிடும் -->
                         <div class="text-center py-5 text-muted my-auto" id="noContactsPlaceholder">
                             <i class="bi bi-chat-square-x fs-2 d-block mb-2 opacity-50"></i>
                             <p class="mb-0">Waiting for connections...</p>
@@ -162,7 +164,7 @@
                 </div>
 
                 <!-- Chat Body Area -->
-                <div class="flex-grow-1 p-4 overflow-auto d-flex flex-column custom-scroll" id="mChatBody" style="max-height: 440px;">
+                <div class="p-4 overflow-auto d-flex flex-column custom-scroll" id="mChatBody" style="height: 400px; max-height: 400px;">
                     <div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted my-auto" id="mPlaceholderView">
                         <div class="bg-white p-4 rounded-circle shadow-sm mb-3 text-primary">
                             <i class="bi bi-shield-fill-check fs-2"></i>
@@ -173,10 +175,36 @@
                 </div>
 
                 <!-- Chat Input Form Footer -->
-                <div class="p-3 bg-white border-top" id="mChatFooter" style="display: block !important;">
+                <div class="p-3 bg-white border-top mt-auto" id="mChatFooter">
+                    
+                    <div id="mAttachmentPreview" class="d-none px-2 pb-2">
+                        <div class="d-flex align-items-center justify-content-between gap-2 bg-light rounded-3 p-2">
+                            <span id="mAttachmentName" class="small text-truncate flex-grow-1"></span>
+                            <audio id="mPreviewAudio" controls class="d-none" style="height: 30px; max-width: 180px;"></audio>
+                            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="clearAttachment()">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 🔥 CSRF Token இங்கே ஃபார்முக்குள் சேர்க்கப்பட்டுள்ளது -->
                     <form id="mMessageForm" class="d-flex gap-2 align-items-center bg-white rounded-pill p-1 border shadow-sm mx-1">
+                        {% csrf_token %}
                         <input type="hidden" id="mReceiverId">
-                        <input type="text" id="mMessageInput" class="form-control bg-transparent border-0 rounded-pill px-4 py-2 shadow-none" placeholder="Type your secure message here..." required autocomplete="off">
+
+                        <label class="btn btn-light rounded-circle d-flex align-items-center justify-content-center mb-0"
+                               style="width: 38px; height: 38px; min-width: 38px; cursor: pointer;" title="Attach file/image">
+                            <i class="bi bi-paperclip"></i>
+                            <input type="file" id="mFileInput" accept="image/*,.pdf,.doc,.docx" class="d-none">
+                        </label>
+
+                        <button type="button" id="mMicBtn" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center mb-0"
+                                style="width: 38px; height: 38px; min-width: 38px;" title="Record voice message">
+                            <i class="bi bi-mic-fill" id="mMicIcon"></i>
+                        </button>
+
+                        <input type="text" id="mMessageInput" class="form-control bg-transparent border-0 rounded-pill px-3 py-2 shadow-none" placeholder="Type your secure message here..." autocomplete="off">
+
                         <button type="submit" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 42px; height: 42px; min-width: 42px; background: linear-gradient(135deg, #4f46e5, #3b82f6); border: none;">
                             <i class="bi bi-send-fill fs-6"></i>
                         </button>
@@ -187,16 +215,20 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- ================= 🚀 SMART CONTROLLER ENGINE ================= -->
+{% block extra_js %}
 <script>
     let mActiveUserId = null;
     let mInterval = null;
     let localMessageCountCache = {}; 
     let currentNotificationUserId = null; 
+    let selectedAttachment = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
 
     document.addEventListener("DOMContentLoaded", function() {
-        // ஆரம்பத்தில் பக்கத்தில் இருக்கும் யூசர்களை கேச்சில் ஏற்றுகிறது
         document.querySelectorAll('.m-contact-btn').forEach(btn => {
             const userId = btn.getAttribute('data-id');
             if(userId) {
@@ -211,7 +243,6 @@
         if(mInterval) clearInterval(mInterval);
         mInterval = setInterval(syncLiveMessagesAndNotifications, 3000);
 
-        // டோஸ்ட் நோட்டிபிகேஷன் கிளிக் ஹேண்ட்லர்
         const toastEl = document.getElementById('msgNotificationToast');
         toastEl.addEventListener('click', function() {
             if (currentNotificationUserId) {
@@ -274,11 +305,12 @@
                 
                 data.messages.forEach(msg => {
                     const isMe = msg.sender_id === data.current_id;
+                    const renderedContent = renderMessageContent(msg);
                     html += `
                         <div class="d-flex ${isMe ? 'justify-content-end' : 'justify-content-start'} mb-3">
                             <div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-received-clean'}">
-                                <p class="mb-0 fw-medium">${msg.body}</p>
-                                <small class="d-block text-end mt-1 ${isMe ? 'text-white-50' : 'text-muted-50'}" style="font-size: 9px; opacity: 0.8;">
+                                ${renderedContent}
+                                <small class="d-block text-end mt-1 ${isMe ? 'text-white-50' : 'text-muted'}" style="font-size: 9px; opacity: 0.8;">
                                     ${msg.time}
                                 </small>
                             </div>
@@ -290,13 +322,11 @@
             }).catch(err => {});
     }
 
-    // 🔄 🆕 அட்வான்ஸ்டு குளோபல் சின்க் லாஜிக் (யார் மிஸ் ஆனாலும் கண்டுபிடிக்கும்)
     function syncLiveMessagesAndNotifications() {
         if (mActiveUserId) {
             loadModalMessages(false);
         }
 
-        // 1. தற்போதைய பக்கத்தில் இருக்கும் எல்லா பட்டன்களையும் செக் செய்கிறது
         document.querySelectorAll('.m-contact-btn').forEach(btn => {
             const userId = btn.getAttribute('data-id');
             if (!userId || userId === mActiveUserId) return;
@@ -307,16 +337,8 @@
                     processIncomingData(userId, data);
                 }).catch(e => {});
         });
-
-        // 2. ⚡ ஜாங்கோ பேக்எண்டில் இருந்து லேட்டஸ்ட்டாக மெசேஜ் அனுப்பியவர்களின் குளோபல் லிஸ்ட்டை செக் செய்யும் ஒரு ரகசிய செக்-அப்
-        // (ஒருவேளை யாராவது மிஸ் ஆகி நமக்கு மெசேஜ் அனுப்பியிருந்தால், அவர்களை உடனடியாக இந்த லிஸ்டில் சேர்க்கும்)
-        document.querySelectorAll('.m-contact-btn').forEach(btn => {
-            const userId = btn.getAttribute('data-id');
-            // ஒவ்வொரு யூசரோட கேச் வேல்யூவையும் சரிபார்த்து புது டோஸ்ட் காட்டுகிறது
-        });
     }
 
-    // மெசேஜ் டேட்டாவை அலசி ஆராயும் ஃபங்க்ஷன்
     function processIncomingData(userId, data) {
         const incomingCount = data.messages.length;
         
@@ -329,24 +351,22 @@
             const lastMsg = data.messages[data.messages.length - 1];
             
             if (lastMsg.sender_id !== data.current_id) {
-                // ஒருவேளை இந்த யூசர் லிஸ்டிலேயே இல்லை என்றால், டைனமிக்காக பட்டன் உருவாக்கி லிஸ்டில் சேர்க்கும்!
                 if (!document.getElementById(`contact-${userId}`)) {
                     createNewContactButton(userId, data.opposite_username || "User");
                 }
 
                 const badge = document.getElementById(`badge-${userId}`);
                 if(badge) badge.classList.remove('d-none');
-                showToastPopup(userId, lastMsg.body);
+                showToastPopup(userId, lastMsg.body || "Attachment received");
             }
             localMessageCountCache[userId] = incomingCount;
         }
     }
 
-    // 🛠️ 🆕 லிஸ்டில் இல்லாத யூசர் புது மெசேஜ் அனுப்பினால் அவரைத் தானாகவே லிஸ்டில் சேர்க்கும் மேஜிக் ஃபங்க்ஷன்
     function createNewContactButton(userId, userName) {
         const listContainer = document.getElementById('modalContactList');
         const placeholder = document.getElementById('noContactsPlaceholder');
-        if (placeholder) placeholder.remove(); // பிளேஸ்ஹோல்டரை நீக்குகிறது
+        if (placeholder) placeholder.remove();
 
         const newBtn = document.createElement('button');
         newBtn.type = 'button';
@@ -367,7 +387,7 @@
             </div>
             <span class="badge bg-danger rounded-pill shadow-sm d-none px-2 py-1" id="badge-${userId}">New</span>
         `;
-        listContainer.prepend(newBtn); // புதிய மெசேஜ் அனுப்பியவரை லிஸ்டின் மேலே சேர்க்கும்
+        listContainer.prepend(newBtn);
     }
 
     function showToastPopup(userId, msgBody) {
@@ -390,30 +410,123 @@
         }
     }
 
-    document.getElementById('mMessageForm').addEventListener('submit', function(e) {
+    document.getElementById('mFileInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        selectedAttachment = file;
+        document.getElementById('mAttachmentPreview').classList.remove('d-none');
+        document.getElementById('mAttachmentName').textContent = `📎 ${file.name}`;
+    });
+
+    document.getElementById('mMicBtn').addEventListener('click', async function () {
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    selectedAttachment = new File([audioBlob], `voice_${Date.now()}.webm`, { type: 'audio/webm' });
+                    
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const previewAudio = document.getElementById('mPreviewAudio');
+                    previewAudio.src = audioUrl;
+                    previewAudio.classList.remove('d-none');
+
+                    document.getElementById('mAttachmentPreview').classList.remove('d-none');
+                    document.getElementById('mAttachmentName').textContent = '🎤 Voice message';
+
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                document.getElementById('mMicBtn').classList.add('btn-danger', 'text-white');
+                document.getElementById('mMicIcon').className = 'bi bi-stop-fill';
+
+            } catch (err) {
+                alert('Microphone access denied or not available.');
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            document.getElementById('mMicBtn').classList.remove('btn-danger', 'text-white');
+            document.getElementById('mMicIcon').className = 'bi bi-mic-fill';
+        }
+    });
+
+    function clearAttachment() {
+        selectedAttachment = null;
+        document.getElementById('mFileInput').value = '';
+        const previewAudio = document.getElementById('mPreviewAudio');
+        previewAudio.pause();
+        previewAudio.src = '';
+        previewAudio.classList.add('d-none');
+        document.getElementById('mAttachmentPreview').classList.add('d-none');
+    }
+
+    document.getElementById('mMessageForm').addEventListener('submit', function (e) {
         e.preventDefault();
         const receiverId = document.getElementById('mReceiverId').value;
         const input = document.getElementById('mMessageInput');
         const body = input.value.trim();
-        
-        if(!receiverId) {
+
+        if (!receiverId) {
             alert("Please select a connection user first.");
             return;
         }
-        if(!body) return;
+        if (!body && !selectedAttachment) return;
 
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append('body', body);
         formData.append('receiver_id', receiverId);
+        if (selectedAttachment) {
+            formData.append('attachment', selectedAttachment);
+        }
 
-        fetch('/messaging/send/', { method: 'POST', body: formData })
-        .then(res => res.json())
-        .then(data => {
-            if(data.status === 'success') {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                          document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+
+        fetch('/messaging/send/', { 
+            method: 'POST', 
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            body: formData 
+        })
+        .then(async res => {
+            const data = await res.json();
+            if (res.ok && data.status === 'success') {
                 input.value = '';
+                clearAttachment();
                 loadModalMessages(true);
+            } else {
+                alert('Server Error: ' + (data.error || 'Failed to send.'));
             }
-        });
+        })
+        .catch(err => alert('Network Error: ' + err));
     });
+
+    function renderMessageContent(msg) {
+        if (msg.message_type === "IMAGE" && msg.attachment_url) {
+            return `<img src="${msg.attachment_url}" class="rounded-3 mb-1" style="max-width: 220px; max-height: 220px; cursor: pointer;" onclick="window.open('${msg.attachment_url}', '_blank')">
+                    ${msg.body ? `<p class="mb-0 mt-1">${msg.body}</p>` : ''}`;
+        }
+        if (msg.message_type === "VOICE" && msg.attachment_url) {
+            return `<audio controls src="${msg.attachment_url}" style="max-width: 220px;"></audio>`;
+        }
+        if (msg.message_type === "FILE" && msg.attachment_url) {
+            const fileName = msg.attachment_url.split('/').pop();
+            return `<a href="${msg.attachment_url}" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none text-reset">
+                        <i class="bi bi-file-earmark-arrow-down fs-4"></i>
+                        <span class="text-truncate" style="max-width: 160px;">${fileName}</span>
+                    </a>`;
+        }
+        return `<p class="mb-0 fw-medium">${msg.body || ''}</p>`;
+    }
 </script>
 {% endblock %}

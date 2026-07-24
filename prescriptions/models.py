@@ -24,7 +24,9 @@ class Prescription(models.Model):
         related_name="prescriptions"
     )
 
-    medicine_name = models.CharField(max_length=100)
+    medicine_name = models.CharField(
+        max_length=100
+    )
 
     dosage = models.CharField(
         max_length=50,
@@ -33,7 +35,8 @@ class Prescription(models.Model):
 
     frequency = models.CharField(
         max_length=30,
-        choices=FREQUENCY_CHOICES
+        choices=FREQUENCY_CHOICES,
+        default="Twice Daily"
     )
 
     duration = models.PositiveIntegerField(
@@ -42,7 +45,8 @@ class Prescription(models.Model):
 
     before_after_food = models.CharField(
         max_length=20,
-        choices=FOOD_CHOICES
+        choices=FOOD_CHOICES,
+        default="After Food"     # ✅ இதை மட்டும் add பண்ணு
     )
 
     instructions = models.TextField(

@@ -80,4 +80,7 @@ class Payment(models.Model):
         ordering=["-payment_date"]
 
     def __str__(self):
-        return f"{self.transaction_id} - {self.bill.patient.user.get_full_name()}"
+        return (
+            f"{self.transaction_id} - "
+            f"{self.bill.appointment.patient.user.get_full_name()}"
+        )

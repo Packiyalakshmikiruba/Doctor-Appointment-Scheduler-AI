@@ -1,13 +1,16 @@
 """
 appointments/booking_service.py
-Single source of truth for booking. Called from appointment_create view
-AND the LangChain book_appointment tool.
 
-Also provides handle_cancellation(), meant to be called from your
-existing mark_cancelled view (appointments/urls.py already has this URL).
+Single source of truth for booking.
 """
 
-from .models import Appointment
+from django.db import transaction
+from django.conf import settings
+from django.core.mail import send_mail
+
+from notifications.models import Notification
+
+from .models import Appointment, Waitlist
 from .utils import is_doctor_available
 from .risk import predict_and_save_risk
 from .notifications import send_appointment_confirmation
@@ -19,6 +22,7 @@ class BookingError(Exception):
         super().__init__(message)
 
 
+@transaction.atomic
 def book_appointment_full(
     patient,
     doctor,
@@ -30,10 +34,9 @@ def book_appointment_full(
     Complete Appointment Booking Flow
     """
 
-    # ---------------------------------------
-    # Check Doctor Availability
-    # ---------------------------------------
-
+    # ----------------------------------------
+    # Doctor Availability
+    # ----------------------------------------
     available, reason_msg = is_doctor_available(
         doctor,
         appointment_date,
@@ -43,10 +46,9 @@ def book_appointment_full(
     if not available:
         raise BookingError(reason_msg)
 
-    # ---------------------------------------
-    # Duplicate Check
-    # ---------------------------------------
-
+    # ----------------------------------------
+    # Duplicate Appointment Check
+    # ----------------------------------------
     duplicate = Appointment.objects.filter(
         patient=patient,
         doctor=doctor,
@@ -57,129 +59,160 @@ def book_appointment_full(
 
     if duplicate:
         raise BookingError(
-            "You already have an appointment with this doctor on this date."
+            "You already booked this doctor on the selected date."
         )
 
-    # ---------------------------------------
+    # ----------------------------------------
     # Patient History
-    # ---------------------------------------
-
-    past = Appointment.objects.filter(
+    # ----------------------------------------
+    previous = Appointment.objects.filter(
         patient=patient
     )
 
-    prior_visits = (
-        past.filter(status="Completed").count()
-        +
-        past.filter(status="No Show").count()
-    )
+    completed = previous.filter(
+        status="Completed"
+    ).count()
 
-    prior_noshows = (
-        past.filter(status="No Show").count()
-    )
+    no_show = previous.filter(
+        status="No Show"
+    ).count()
+
+    prior_visits = completed + no_show
 
     history_ratio = (
-        round(prior_noshows / prior_visits, 3)
+        round(no_show / prior_visits, 3)
         if prior_visits
         else 0
     )
 
-    # ---------------------------------------
+    # ----------------------------------------
     # Create Appointment
-    # ---------------------------------------
-
+    # ----------------------------------------
     appointment = Appointment.objects.create(
-
         patient=patient,
-
         doctor=doctor,
-
         appointment_date=appointment_date,
-
         appointment_time=appointment_time,
-
         reason=reason,
-
         status="Confirmed",
-
         prior_visits=prior_visits,
-
-        prior_noshows=prior_noshows,
-
+        prior_noshows=no_show,
         history_noshow_ratio=history_ratio,
-
-        distance_from_clinic=float(
-            patient.distance_from_clinic
-        ),
-
+        distance_from_clinic=float(patient.distance_from_clinic),
         sms_reminder_sent=False,
     )
 
-    # ---------------------------------------
-    # AI Prediction
-    # ---------------------------------------
-
+    # ----------------------------------------
+    # AI Risk Prediction
+    # ----------------------------------------
     try:
         predict_and_save_risk(appointment)
     except Exception as e:
-        print("Risk Prediction Error:", e)
+        print("AI Prediction Error:", e)
 
-    # ---------------------------------------
+    # ----------------------------------------
     # Email Confirmation
-    # ---------------------------------------
-
+    # ----------------------------------------
     try:
-        send_appointment_confirmation(
-            appointment
-        )
+        send_appointment_confirmation(appointment)
     except Exception as e:
         print("Email Error:", e)
 
-    # ---------------------------------------
-    # Return Appointment
-    # ---------------------------------------
+    # ----------------------------------------
+    # Website Notification
+    # ----------------------------------------
+    try:
+        Notification.objects.create(
+            user=appointment.patient.user,
+            title="Appointment Confirmed",
+            message=(
+                f"Your appointment with "
+                f"Dr. {appointment.doctor.user.get_full_name()} "
+                f"has been confirmed for "
+                f"{appointment.appointment_date} "
+                f"at {appointment.appointment_time}."
+            ),
+        )
+    except Exception as e:
+        print("Notification Error:", e)
 
     return appointment
 
+
 def handle_cancellation(appointment):
     """
-    Call this from your existing mark_cancelled view, AFTER setting
-    appointment.status = "Cancelled" and saving it:
-
-        appt.status = "Cancelled"
-        appt.save()
-        handle_cancellation(appt)   # <-- add this line
-
-    Offers the freed slot to the earliest waitlisted patient for this doctor.
-    Requires the Waitlist model (see models_waitlist.py) merged into models.py.
+    Offer cancelled slot to earliest waitlist patient.
     """
-    from .models import Waitlist  # local import: only needed if Waitlist exists
 
-    entry = Waitlist.objects.filter(doctor=appointment.doctor, notified=False).order_by("created_at").first()
+    entry = (
+        Waitlist.objects.filter(
+            doctor=appointment.doctor,
+            notified=False
+        )
+        .order_by("created_at")
+        .first()
+    )
+
     if not entry:
         return None
 
     patient = entry.patient
-    doctor_name = appointment.doctor.user.get_full_name() or appointment.doctor.user.username
-    message = (
-        f"Good news! A slot with Dr. {doctor_name} on "
-        f"{appointment.appointment_date} at {appointment.appointment_time} just opened up. "
-        f"Book now before it's taken."
+
+    doctor_name = (
+        appointment.doctor.user.get_full_name()
+        or appointment.doctor.user.username
     )
 
-    # Simple simulated notifications (waitlist offer isn't an "appointment
-    # confirmation", so it doesn't reuse send_appointment_confirmation).
-    if patient.phone_number:
-        print(f"[SMS SIMULATED] To {patient.phone_number}: {message}")
-    patient_email = getattr(patient.user, "email", None)
-    if patient_email:
-        try:
-            from django.core.mail import send_mail
-            from django.conf import settings
-            send_mail("A slot just opened up!", message, settings.DEFAULT_FROM_EMAIL, [patient_email])
-        except Exception as exc:  # noqa: BLE001
-            print(f"[EMAIL FAILED] {exc}")
+    subject = "Appointment Slot Available"
+
+    message = f"""
+Dear {patient.user.get_full_name()},
+
+A slot has become available.
+
+Doctor:
+Dr. {doctor_name}
+
+Date:
+{appointment.appointment_date}
+
+Time:
+{appointment.appointment_time}
+
+Please login immediately to book this slot.
+
+Thank you,
+Hospital Management System
+"""
+
+    # Email
+    try:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [patient.user.email],
+            fail_silently=False,
+        )
+    except Exception as e:
+        print("Waitlist Email Error:", e)
+
+    # Website Notification
+    try:
+        Notification.objects.create(
+            user=patient.user,
+            title="Appointment Slot Available",
+            message=(
+                f"A slot with Dr. {doctor_name} "
+                f"is available on "
+                f"{appointment.appointment_date} "
+                f"at {appointment.appointment_time}."
+            ),
+        )
+    except Exception as e:
+        print("Notification Error:", e)
 
     entry.notified = True
     entry.save(update_fields=["notified"])
+
     return entry

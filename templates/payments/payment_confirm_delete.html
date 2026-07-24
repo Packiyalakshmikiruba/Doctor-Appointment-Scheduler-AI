@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Delete Payment
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6">
+
+            <div class="card shadow border-danger">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h3 class="mb-0">
+
+                        <i class="fas fa-trash"></i>
+
+                        Delete Payment
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-credit-card
+                              fa-5x
+                              text-danger
+                              mb-4">
+                    </i>
+
+                    <h4>
+
+                        Are you sure?
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        You are about to delete this payment.
+
+                        <br>
+
+                        This action cannot be undone.
+
+                    </p>
+
+                    <hr>
+
+                    <table class="table table-bordered">
+
+                        <tr>
+
+                            <th width="180">
+
+                                Receipt No
+
+                            </th>
+
+                            <td>
+
+                                {{ payment.receipt_number }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Transaction ID
+
+                            </th>
+
+                            <td>
+
+                                {{ payment.transaction_id }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Patient
+
+                            </th>
+
+                            <td>
+
+                                {{ payment.bill.appointment.patient.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Doctor
+
+                            </th>
+
+                            <td>
+
+                                Dr. {{ payment.bill.appointment.doctor.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Amount
+
+                            </th>
+
+                            <td class="text-success fw-bold">
+
+                                ₹ {{ payment.amount }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Payment Method
+
+                            </th>
+
+                            <td>
+
+                                {{ payment.payment_method }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Status
+
+                            </th>
+
+                            <td>
+
+                                {% if payment.payment_status == "Success" %}
+
+                                <span class="badge bg-success">
+
+                                    Success
+
+                                </span>
+
+                                {% elif payment.payment_status == "Pending" %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+
+                                {% elif payment.payment_status == "Failed" %}
+
+                                <span class="badge bg-danger">
+
+                                    Failed
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-secondary">
+
+                                    Refunded
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+
+                            <a href="{% url 'payment_detail' payment.id %}"
+
+                               class="btn btn-secondary">
+
+                                <i class="fas fa-arrow-left"></i>
+
+                                Cancel
+
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger">
+
+                                <i class="fas fa-trash"></i>
+
+                                Delete Payment
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

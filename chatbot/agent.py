@@ -86,6 +86,8 @@ def _get_agent(role="PATIENT"):
             model="llama-3.1-8b-instant",
             temperature=0,
             max_tokens=400,
+            timeout=20,
+            max_retries=1,
         )
         _agents[role] = create_agent(llm, TOOLS_BY_ROLE[role], system_prompt=SYSTEM_PROMPT)
     return _agents[role]
@@ -109,12 +111,23 @@ _SYMPTOM_PATTERN = re.compile(
 HOSPITAL_INFO_KEYWORDS = [
     "hospital hour", "hospital time", "closing time", "opening time",
     "visiting hour", "hospital address", "hospital location", "hospital detail",
-    "contact number", "parking", "hospital timing",
+    "contact number", "parking", "hospital timing", "hospital open",
+    "hospital", "opd", "clinic hour", "clinic open", "clinic time",
+    "monday open", "tuesday open", "wednesday open", "thursday open",
+    "friday open", "saturday open", "sunday open", "working day",
+    "holiday", "cancellation polic", "reschedule polic",
+]
+
+BOOKING_KEYWORDS = [
+    "book", "appointment fix", "fix appointment", "confirm my appointment",
+    "confirm booking", "want to book", "schedule appointment",
 ]
 
 HISTORY_KEYWORDS = [
     "medical report", "medical record", "medical history", "past appointment",
-    "appointment history", "previous visit", "my history",
+    "appointment history", "previous visit", "my history", "which doctor",
+    "who did i see", "previous doctor", "last doctor", "parthanga", "paartha",
+    "munnadi", "before doctor",
 ]
 
 def _call_tool(tool_obj, arg):
@@ -142,6 +155,8 @@ def _translate_to_tamil(english_text: str) -> str:
             model="llama-3.1-8b-instant",
             temperature=0,
             max_tokens=500,
+            timeout=15,
+            max_retries=1,
         )
         result = llm.invoke([
             {
@@ -193,17 +208,33 @@ def deterministic_router(message: str, user_role: str, patient_id=None) -> str |
 
         return result
 
-    # 2. Hospital details (hours, location, contact, parking, etc.)
+    # 2. Booking intent (e.g. "appointment fix pannunga", "book an appointment")
+    #    -- typo-tolerant: matches "appointment"/"appoinment"/"appinment" etc.
+    #    Checked before hospital-info so a booking request never gets an
+    #    unhelpful generic reply; the chatbot can't book, so it should
+    #    always clearly point to the real booking form.
+    if (
+        re.search(r"\bbook\b", text)
+        or (re.search(r"\bfix\b", text) and re.search(r"appo?i?nt?ment", text))
+        or any(kw in text for kw in BOOKING_KEYWORDS)
+    ):
+        return (
+            "I can't book appointments directly in chat, but I can help you get there. "
+            f"Please visit {BOOKING_FORM_URL} to book your appointment -- if you tell me "
+            "the doctor or department you want, I'll confirm they're available first."
+        )
+
+    # 3. Hospital details (hours, location, contact, parking, etc.)
     if any(kw in text for kw in HOSPITAL_INFO_KEYWORDS):
         return _call_tool(hospital_info_search, message)
 
-    # 3. Medical reports / appointment history
+    # 4. Medical reports / appointment history
     if any(kw in text for kw in HISTORY_KEYWORDS):
         if not patient_id:
             return "I couldn't find your patient profile. Please contact admin."
         return _call_tool(appointment_history, patient_id)
 
-    # 4. Symptom mentioned -> always resolve department + search doctors
+    # 5. Symptom mentioned -> always resolve department + search doctors
     if _SYMPTOM_PATTERN.search(text):
         dept_result = _call_tool(symptom_to_department, message)
         # Extract department name from the tool's response text

@@ -9,10 +9,9 @@
     <div id="ai-robot-mount" style="width: 100%; height: 100%;"></div>
 </div>
 
-<!-- Chat button kept (hidden) so existing floating_chat.html JS toggle logic (#chat-toggle-btn) still works -->
 <button id="chat-toggle-btn" class="d-none"></button>
 
-<!-- ================= CHAT PANEL (reuses your existing chat-panel markup/logic) ================= -->
+<!-- ================= CHAT PANEL ================= -->
 <div id="chat-panel" class="card shadow-3d-panel border-0 d-none position-fixed fade-in-3d"
      style="bottom: 140px; right: 20px; width: 370px; max-width: 92vw; z-index: 1086; background: rgba(255, 255, 255, 0.96) !important; backdrop-filter: blur(20px); border-radius: 24px !important; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.9) !important;">
 
@@ -35,17 +34,34 @@
     </div>
 
     <div class="card-body p-3 d-flex flex-column gap-2" style="background: rgba(248, 250, 252, 0.6);">
-        <div id="chat-log" class="custom-scroll" style="height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px;"></div>
+        <div id="chat-log" class="custom-scroll" style="height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; scroll-behavior: smooth;"></div>
 
         <div id="status-text" class="badge bg-primary bg-opacity-10 text-primary small align-self-start fw-normal px-2 py-1 rounded-pill d-none">
             <i class="bi bi-three-dots me-1"></i> Thinking...
         </div>
 
+        <!-- Attachment preview before sending -->
+        <div id="attachment-preview" class="d-none">
+            <div class="d-flex align-items-center gap-2 bg-white rounded-3 p-2 border">
+                <span id="attachment-name" class="small text-truncate flex-grow-1"></span>
+                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" id="clear-attachment-btn"><i class="bi bi-x"></i></button>
+            </div>
+        </div>
+
         <div class="input-group mt-1 bg-white p-1 rounded-pill border shadow-sm">
-            <button class="btn btn-light rounded-circle border-0 me-1 text-primary" id="upload-btn" type="button" title="Upload an old medical report/file" style="width: 34px; height: 34px;">
+            <!-- File/Image upload -->
+            <label class="btn btn-light rounded-circle border-0 me-1 text-primary d-flex align-items-center justify-content-center"
+                   style="width: 34px; height: 34px;" title="Upload a report/image for a doubt">
                 <i class="bi bi-paperclip"></i>
+                <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx" class="d-none">
+            </label>
+
+            <!-- Voice input -->
+            <button class="btn btn-light rounded-circle border-0 me-1 text-primary d-flex align-items-center justify-content-center"
+                    id="mic-btn" type="button" title="Speak your question" style="width: 34px; height: 34px;">
+                <i class="bi bi-mic-fill" id="mic-icon"></i>
             </button>
-            <input type="file" id="file-input" accept="image/*" class="d-none">
+
             <input type="text" id="chat-input" class="form-control border-0 bg-transparent shadow-none px-2 text-dark" placeholder="Ask me anything...">
             <button class="btn btn-primary rounded-circle border-0 p-0 d-flex align-items-center justify-content-center me-1" id="send-btn" type="button" style="width: 36px; height: 36px;">
                 <i class="bi bi-send-fill text-white small"></i>
@@ -54,7 +70,7 @@
     </div>
 </div>
 
-<!-- ================= ROBOT SVG TEMPLATE (waving, blinking, floating) ================= -->
+<!-- ================= ROBOT SVG TEMPLATE ================= -->
 <template id="ai-robot-template">
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
   <defs>
@@ -101,12 +117,14 @@
 @keyframes aiBlink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } }
 @keyframes aiPopIn { from { opacity: 0; transform: translateY(16px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes bubblePop { 0% { opacity: 0; transform: scale(0.9); } 10% { opacity: 1; transform: scale(1); } 90% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes micPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(220,53,69,0.5); } 70% { box-shadow: 0 0 0 8px rgba(220,53,69,0); } }
 .robot-float { animation: aiFloat 2.6s ease-in-out infinite; }
 .robot-arm { animation: aiWave 1.4s ease-in-out infinite; }
 .robot-eyes { animation: aiBlink 4s ease-in-out infinite; }
 #chat-panel.fade-in-3d { animation: aiPopIn 0.3s ease-out; }
 #ai-robot-widget:hover .robot-arm { animation-duration: 0.6s; }
 #ai-robot-bubble.show-bubble { animation: bubblePop 3.5s ease-in-out; }
+#mic-btn.listening { background: #dc3545 !important; color: #fff !important; animation: micPulse 1s infinite; }
 
 .chat-bubble-user {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
@@ -119,6 +137,7 @@
     font-size: 0.88rem; border: 1px solid rgba(226, 232, 240, 0.9); word-break: break-word;
 }
 .chat-bubble-escalated { background: #fef2f2 !important; border: 1px solid #fca5a5 !important; color: #991b1b !important; }
+.chat-bubble-bot img { max-width: 100%; border-radius: 10px; margin-top: 6px; }
 .custom-scroll::-webkit-scrollbar { width: 5px; }
 .custom-scroll::-webkit-scrollbar-track { background: transparent; }
 .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -146,25 +165,35 @@
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
-    function appendBubble(text, sender, escalated, persist) {
+    function appendBubble(text, sender, escalated, persist, imageUrl) {
         const div = document.createElement('div');
         let cls = sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot';
         if (escalated) cls += ' chat-bubble-escalated';
         div.className = cls;
-        div.textContent = text;
+
+        const p = document.createElement('div');
+        p.textContent = text;
+        div.appendChild(p);
+
+        if (imageUrl) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            div.appendChild(img);
+        }
+
         chatLog.appendChild(div);
-        chatLog.scrollTop = chatLog.scrollHeight;
+        chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: 'smooth' });
 
         if (persist !== false) {
             const history = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
-            history.push({ text, sender, escalated: !!escalated });
+            history.push({ text, sender, escalated: !!escalated, imageUrl: imageUrl || null });
             sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history));
         }
     }
 
     function restoreHistory() {
         const history = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
-        history.forEach(m => appendBubble(m.text, m.sender, m.escalated, false));
+        history.forEach(m => appendBubble(m.text, m.sender, m.escalated, false, m.imageUrl));
         return history.length > 0;
     }
     const hadHistory = restoreHistory();
@@ -178,7 +207,7 @@
         panel.classList.toggle('d-none');
         sessionStorage.setItem('ai_chat_panel_open', isHidden ? '1' : '0');
         if (isHidden && !hadHistory) {
-            appendBubble("Hi! I'm always here. Ask me about appointments, doctors, bills, or anything about the hospital.", 'bot');
+            appendBubble("Hi! I'm always here. Ask me about appointments, doctors, bills, or anything about the hospital. You can also type, speak, or upload a photo/report if you have a doubt.", 'bot');
         }
     }
 
@@ -205,12 +234,16 @@
                 body: JSON.stringify({ message: message }),
             });
             const data = await resp.json();
+            const isError = !!data.error;
             const replyText = data.response || data.error || "Sorry, something went wrong.";
-            appendBubble(replyText, 'bot', !!data.error);
+            appendBubble(replyText, 'bot', isError);
             statusText.classList.add('d-none');
 
-            if ('speechSynthesis' in window) {
-                try { speechSynthesis.speak(new SpeechSynthesisUtterance(replyText)); } catch (e) {}
+            if (!isError && 'speechSynthesis' in window) {
+                try {
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(new SpeechSynthesisUtterance(replyText));
+                } catch (e) {}
             }
         } catch (err) {
             statusText.classList.add('d-none');
@@ -221,23 +254,75 @@
     document.getElementById('send-btn').addEventListener('click', () => sendMessage(document.getElementById('chat-input').value));
     document.getElementById('chat-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(e.target.value); });
 
-    // Upload an old medical report/file photo
-    const uploadBtn = document.getElementById('upload-btn');
+    // ---------------- Voice Input (Speech-to-Text) ----------------
+    const micBtn = document.getElementById('mic-btn');
+    const micIcon = document.getElementById('mic-icon');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        micBtn.disabled = true;
+        micBtn.title = "Voice input not supported in this browser (try Chrome)";
+    } else {
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-IN";
+        recognition.interimResults = false;
+
+        micBtn.addEventListener('click', () => {
+            micBtn.classList.add('listening');
+            micBtn.disabled = true;
+            recognition.start();
+        });
+
+        recognition.onresult = (event) => {
+            const spokenText = event.results[0][0].transcript;
+            sendMessage(spokenText);
+        };
+
+        recognition.onerror = () => {
+            micBtn.classList.remove('listening');
+            micBtn.disabled = false;
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('listening');
+            micBtn.disabled = false;
+        };
+    }
+
+    // ---------------- File / Image Upload (for doubts about reports/photos) ----------------
     const fileInput = document.getElementById('file-input');
+    const attachmentPreview = document.getElementById('attachment-preview');
+    const attachmentName = document.getElementById('attachment-name');
+    let selectedFile = null;
 
-    uploadBtn.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', async () => {
+    fileInput.addEventListener('change', () => {
         const file = fileInput.files[0];
         if (!file) return;
+        selectedFile = file;
+        attachmentPreview.classList.remove('d-none');
+        attachmentName.textContent = `📎 ${file.name}`;
+    });
 
-        appendBubble(`📎 Uploaded: ${file.name}`, 'user');
+    document.getElementById('clear-attachment-btn').addEventListener('click', () => {
+        selectedFile = null;
+        fileInput.value = '';
+        attachmentPreview.classList.add('d-none');
+    });
+
+    async function sendAttachment() {
+        if (!selectedFile) return;
+
+        const isImage = selectedFile.type.startsWith('image/');
+        const localUrl = isImage ? URL.createObjectURL(selectedFile) : null;
+
+        appendBubble(`📎 Uploaded: ${selectedFile.name}`, 'user', false, true, localUrl);
 
         const statusText = document.getElementById('status-text');
         statusText.classList.remove('d-none');
 
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', selectedFile);
+        formData.append('question', document.getElementById('chat-input').value.trim());
 
         try {
             const resp = await fetch("{% url 'upload_medical_file' %}", {
@@ -247,18 +332,53 @@
             });
             const data = await resp.json();
             const isError = !!data.error;
-            const replyText = data.response || data.error || "Sorry, something went wrong reading that file.";
+            const replyText = data.response || data.error || "Sorry, I couldn't read that file.";
             appendBubble(replyText, 'bot', isError);
         } catch (err) {
             appendBubble("Sorry, I couldn't upload that file. Please try again.", 'bot', true);
         } finally {
             statusText.classList.add('d-none');
+            selectedFile = null;
             fileInput.value = '';
+            attachmentPreview.classList.add('d-none');
+            document.getElementById('chat-input').value = '';
         }
-    });
+    }
 
-    // Periodically show a little speech-bubble hint above the robot when the
-    // chat is closed, so it feels alive without being annoying (every 45s).
+    // If a file is attached, sending goes through sendAttachment instead of plain text
+    document.getElementById('send-btn').addEventListener('click', () => {
+        if (selectedFile) {
+            sendAttachment();
+        }
+    }, true); // capture phase -- runs before the plain-text listener above
+
+    {% if show_welcome_wave %}
+    (function () {
+        const robotArm = widget.querySelector('.robot-arm');
+        panel.classList.remove('d-none');
+        sessionStorage.setItem('ai_chat_panel_open', '1');
+
+        if (robotArm) {
+            robotArm.style.animationDuration = '0.5s';
+            setTimeout(() => { robotArm.style.animationDuration = ''; }, 3000);
+        }
+
+        bubble.classList.remove('d-none');
+        bubble.classList.add('show-bubble');
+        setTimeout(() => {
+            bubble.classList.add('d-none');
+            bubble.classList.remove('show-bubble');
+        }, 3500);
+
+        setTimeout(() => {
+            appendBubble(
+                "Hi! 👋 Welcome aboard! Your profile is all set. What can I help you with today -- booking an appointment, checking a doctor, or anything else?",
+                'bot'
+            );
+        }, 400);
+    })();
+    {% endif %}
+
     function pulseHint() {
         if (panel.classList.contains('d-none')) {
             bubble.classList.remove('d-none');

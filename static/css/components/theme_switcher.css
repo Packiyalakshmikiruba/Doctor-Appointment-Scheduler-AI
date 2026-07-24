@@ -1,0 +1,180 @@
+/*==========================================
+        THEME SWITCHER
+==========================================*/
+
+.theme-switcher{
+
+position:fixed;
+
+left:30px;
+
+bottom:35px;
+
+z-index:9998;
+
+}
+
+/* Button */
+
+.theme-btn{
+
+width:65px;
+
+height:65px;
+
+border:none;
+
+outline:none;
+
+cursor:pointer;
+
+border-radius:50%;
+
+background:linear-gradient(
+135deg,
+#2563eb,
+#3b82f6,
+#06b6d4
+);
+
+color:white;
+
+font-size:24px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+transition:.35s;
+
+box-shadow:
+
+0 12px 30px rgba(37,99,235,.30);
+
+}
+
+/* Hover */
+
+.theme-btn:hover{
+
+transform:translateY(-6px);
+
+box-shadow:
+
+0 18px 40px rgba(37,99,235,.40);
+
+}
+
+/* Active */
+
+.theme-btn:active{
+
+transform:scale(.95);
+
+}
+
+/* Dark Mode */
+
+body.dark-mode{
+
+background:#0f172a;
+
+color:#f1f5f9;
+
+transition:.35s;
+
+}
+
+/* Cards */
+
+body.dark-mode .card,
+
+body.dark-mode .modal-content,
+
+body.dark-mode .dropdown-menu,
+
+body.dark-mode .quick-card,
+
+body.dark-mode .search-card{
+
+background:#1e293b;
+
+color:white;
+
+border-color:#334155;
+
+}
+
+/* Navbar */
+
+body.dark-mode .navbar{
+
+background:#0f172a !important;
+
+}
+
+/* Footer */
+
+body.dark-mode footer{
+
+background:#020617;
+
+color:white;
+
+}
+
+/* Inputs */
+
+body.dark-mode input,
+
+body.dark-mode textarea,
+
+body.dark-mode select{
+
+background:#1e293b;
+
+color:white;
+
+border:1px solid #475569;
+
+}
+
+body.dark-mode input::placeholder{
+
+color:#94a3b8;
+
+}
+
+/* Table */
+
+body.dark-mode table{
+
+color:white;
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.theme-switcher{
+
+left:18px;
+
+bottom:20px;
+
+}
+
+.theme-btn{
+
+width:55px;
+
+height:55px;
+
+font-size:20px;
+
+}
+
+}

@@ -4,9 +4,20 @@ from . import views
 urlpatterns = [
 
     path(
+        "my-prescriptions/",
+        views.my_prescriptions,
+        name="my_prescriptions"
+    ),
+
+    path(
+        "view/<int:record_id>/",
+        views.prescription_detail,
+        name="prescription_detail"
+    ),
+     path(
         "",
         views.prescription_list,
-        name="prescription_list"
+        name="prescription_list",
     ),
 
     path(
@@ -31,12 +42,6 @@ urlpatterns = [
         "download/<int:pk>/",
         views.download_prescription_pdf,
         name="download_prescription_pdf"
-    ),
-
-    path(
-        "my-prescriptions/",
-        views.my_prescriptions,
-        name="my_prescriptions"
     ),
 
 ]

@@ -15,9 +15,12 @@ from chatbot.views import _SESSION_HISTORY
 from .forms import RegisterForm, LoginForm
 from django.db.models import Count
 from hospital.models import DoctorAvailability
-# Models
+import json
+from datetime import timedelta
+from django.db.models import Count, Sum
 from appointments.models import Appointment
-
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from medical_records.models import MedicalRecord
 from billing.models import Bill, Payment
 
@@ -107,29 +110,20 @@ def dashboard_redirect(request):
     return redirect("login")
 
 # ---------------- Patient Dashboard ----------------
-"""
-REPLACE patient_dashboard_view in accounts/views.py with this.
 
-Ensure these imports exist at the top of accounts/views.py:
-    from medical_records.models import MedicalRecord
-    from billing.models import Bill, Payment
-"""
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils import timezone
+from django.db.models import Sum
 
-"""
-REPLACE patient_dashboard_view in accounts/views.py with this.
+from appointments.models import Appointment
+from hospital.models import Doctor
+from medical_records.models import MedicalRecord
+from prescriptions.models import Prescription
+from billing.models import Bill, Payment
+from messaging.models import Message
 
-Ensure these imports exist at the top of accounts/views.py:
-    from medical_records.models import MedicalRecord
-    from billing.models import Bill, Payment
-"""
-
-"""
-REPLACE patient_dashboard_view in accounts/views.py with this.
-
-Ensure these imports exist at the top of accounts/views.py:
-    from medical_records.models import MedicalRecord
-    from billing.models import Bill, Payment
-"""
 
 @login_required
 def patient_dashboard_view(request):
@@ -139,66 +133,232 @@ def patient_dashboard_view(request):
         return redirect("dashboard")
 
     if not hasattr(request.user, "patient_profile"):
-        messages.info(request, "Please complete your profile to continue.")
+        messages.info(request, "Please complete your profile.")
         return redirect("complete_profile")
 
     patient = request.user.patient_profile
     today = timezone.now().date()
 
-    all_appointments = Appointment.objects.filter(patient=patient).select_related(
-        "doctor__user", "doctor__department"
-    )
+    # ----------------------------------------
+    # Appointments
+    # ----------------------------------------
 
-    # ---- Latest Appointment card: shows immediately after booking ----
-    # Most recently CREATED appointment (not necessarily the soonest date),
-    # so it always reflects "what did I just book" right after booking.
-    latest_appointment = all_appointments.order_by("-created_at").first()
+    all_appointments = Appointment.objects.filter(
+        patient=patient
+    ).select_related(
+        "doctor__user",
+        "doctor__department"
+    ).order_by("-appointment_date", "-appointment_time")
 
     upcoming = all_appointments.filter(
         appointment_date__gte=today,
-        status__in=["Pending", "Confirmed"],
-    ).order_by("appointment_date", "appointment_time")
+        status__in=["Pending", "Confirmed"]
+    ).order_by(
+        "appointment_date",
+        "appointment_time"
+    )
+
+    latest_appointment = all_appointments.first()
+    next_appointment = upcoming.first()
 
     history = all_appointments.filter(
         status__in=["Completed", "Cancelled", "No Show"]
-    ).order_by("-appointment_date")[:15]
+    )[:15]
 
-    high_risk_count = upcoming.filter(risk_level="HIGH").count()
+    high_risk_count = upcoming.filter(
+        risk_level="HIGH"
+    ).count()
 
-    recent_records = (
-        MedicalRecord.objects.filter(appointment__patient=patient)
-        .select_related("appointment__doctor__user", "appointment__doctor__department")
-        .prefetch_related("prescriptions")
-        .order_by("-created_at")
-    )
+    # ----------------------------------------
+    # Medical Records
+    # ----------------------------------------
 
-    all_bills = Bill.objects.filter(appointment__patient=patient).select_related(
+    recent_records = MedicalRecord.objects.filter(
+        appointment__patient=patient
+    ).select_related(
+        "appointment__doctor__user"
+    ).prefetch_related(
+        "prescriptions"
+    ).order_by("-created_at")
+
+    latest_record = recent_records.first()
+
+    # ----------------------------------------
+    # Prescriptions
+    # ----------------------------------------
+
+    prescriptions = Prescription.objects.filter(
+        medical_record__appointment__patient=patient
+    ).select_related(
+        "medical_record"
+    ).order_by("-created_at")
+
+    # ----------------------------------------
+    # Bills
+    # ----------------------------------------
+
+    all_bills = Bill.objects.filter(
+        appointment__patient=patient
+    ).select_related(
         "appointment__doctor__user"
     ).order_by("-created_at")
 
-    pending_bills = all_bills.exclude(payment_status="Paid")
-    total_due = sum((b.balance_due for b in pending_bills), 0)
+    pending_bills = all_bills.exclude(
+        payment_status="Paid"
+    )
+
+    total_due = sum(
+        bill.balance_due
+        for bill in pending_bills
+    )
+
+    # ----------------------------------------
+    # Payments
+    # ----------------------------------------
 
     payments = Payment.objects.filter(
         bill__appointment__patient=patient
-    ).select_related("bill").order_by("-paid_at")[:10]
+    ).order_by("-paid_at")
 
-    return render(request, "accounts/patient_dashboard.html", {
-        "patient": patient,
-        "latest_appointment": latest_appointment,
-        "upcoming": upcoming,
-        "history": history,
-        "high_risk_count": high_risk_count,
-        "recent_records": recent_records,
-        "all_bills": all_bills,
-        "pending_bills": pending_bills,
+    total_paid = payments.aggregate(
+        total=Sum("amount_paid")
+    )["total"] or 0
+
+    # ----------------------------------------
+    # Messages
+    # ----------------------------------------
+
+    unread_messages = Message.objects.filter(
+        receiver=request.user,
+        is_read=False
+    ).count()
+
+    # ----------------------------------------
+    # Dashboard Statistics
+    # ----------------------------------------
+
+    stats = {
+        "appointments": all_appointments.count(),
+        "upcoming": upcoming.count(),
+        "completed": all_appointments.filter(status="Completed").count(),
+        "cancelled": all_appointments.filter(status="Cancelled").count(),
+        "medical_records": recent_records.count(),
+        "prescriptions": prescriptions.count(),
+        "pending_bills": pending_bills.count(),
+        "total_paid": total_paid,
         "total_due": total_due,
-        "payments": payments,
-    })
+    }
+
+    # ----------------------------------------
+    # Notifications
+    # ----------------------------------------
+
+    notifications = []
+
+    if next_appointment:
+        notifications.append({
+            "title": "Upcoming Appointment",
+            "message": f"You have an appointment with Dr. {next_appointment.doctor.user.get_full_name()}",
+            "date": next_appointment.appointment_date,
+            "time": next_appointment.appointment_time,
+        })
+
+    if pending_bills.exists():
+        notifications.append({
+            "title": "Pending Bill",
+            "message": f"₹ {total_due} payment pending.",
+        })
+
+    # ----------------------------------------
+    # Recent Activities
+    # ----------------------------------------
+
+    activities = []
+
+    for appointment in all_appointments[:5]:
+        activities.append({
+            "type": "Appointment",
+            "title": f"Appointment with Dr. {appointment.doctor.user.get_full_name()}",
+            "date": appointment.appointment_date,
+            "status": appointment.status,
+        })
+
+    for record in recent_records[:3]:
+        activities.append({
+            "type": "Medical Record",
+            "title": record.diagnosis,
+            "date": record.created_at.date(),
+            "status": "Completed",
+        })
+
+    for payment in payments[:3]:
+        activities.append({
+            "type": "Payment",
+            "title": f"₹ {payment.amount_paid}",
+            "date": payment.paid_at.date(),
+            "status": payment.payment_mode,
+        })
+
+    activities = sorted(
+        activities,
+        key=lambda x: x["date"],
+        reverse=True
+    )
+
+    # ----------------------------------------
+    # Doctors
+    # ----------------------------------------
+
+    all_doctors = Doctor.objects.select_related(
+        "user",
+        "department"
+    ).all()
+
+    # ----------------------------------------
+    # Render
+    # ----------------------------------------
+
+    return render(
+        request,
+        "accounts/patient_dashboard.html",
+        {
+            "patient": patient,
+
+            "stats": stats,
+
+            "latest_appointment": latest_appointment,
+            "next_appointment": next_appointment,
+            "upcoming": upcoming,
+            "history": history,
+
+            "high_risk_count": high_risk_count,
+
+            "recent_records": recent_records,
+            "latest_record": latest_record,
+
+            "prescriptions": prescriptions,
+
+            "all_bills": all_bills,
+            "bills": all_bills,
+            "pending_bills": pending_bills,
+
+            "payments": payments,
+
+            "total_due": total_due,
+            "total_paid": total_paid,
+
+            "notifications": notifications,
+            "activities": activities,
+
+            "all_doctors": all_doctors,
+
+            "unread_messages": unread_messages,
+        },
+    )
 # ---------------- Doctor Dashboard ----------------
 
 @login_required
-def doctor_dashboard(request):
+def doctor_dashboard_view(request):
 
     # Role check
     if request.user.role != "DOCTOR":
@@ -552,10 +712,14 @@ def admin_dashboard_view(request):
     from hospital.models import Doctor, Department
     from patients.models import Patient
 
+    today = timezone.now().date()
+
+    # ---------------- Core Stats ----------------
     total_appointments = Appointment.objects.count()
     pending_count = Appointment.objects.filter(status="Pending").count()
     confirmed_count = Appointment.objects.filter(status="Confirmed").count()
     completed_count = Appointment.objects.filter(status="Completed").count()
+    cancelled_count = Appointment.objects.filter(status="Cancelled").count()
     high_risk_count = Appointment.objects.filter(risk_level="HIGH", status__in=["Pending", "Confirmed"]).count()
     noshow_count = Appointment.objects.filter(status="No Show").count()
 
@@ -567,8 +731,67 @@ def admin_dashboard_view(request):
     pending_revenue = sum(b.balance_due for b in Bill.objects.filter(payment_status="Pending"))
 
     todays_appointments = Appointment.objects.filter(
-        appointment_date=timezone.now().date()
+        appointment_date=today
     ).select_related("patient__user", "doctor__user").order_by("appointment_time")[:10]
+
+    # ---------------- Chart 1: Appointment Status Breakdown (Donut) ----------------
+    status_labels = ["Pending", "Confirmed", "Completed", "Cancelled", "No Show"]
+    status_data = [
+        pending_count, confirmed_count, completed_count,
+        cancelled_count, noshow_count,
+    ]
+
+    # ---------------- Chart 2: Risk Level Distribution (Pie) ----------------
+    risk_qs = Appointment.objects.exclude(risk_level="").values("risk_level").annotate(count=Count("id"))
+    risk_map = {r["risk_level"]: r["count"] for r in risk_qs}
+    risk_labels = ["LOW", "MEDIUM", "HIGH"]
+    risk_data = [risk_map.get(lvl, 0) for lvl in risk_labels]
+
+    # ---------------- Chart 3: Appointments by Department (Bar) ----------------
+    dept_qs = (
+        Appointment.objects
+        .values("doctor__department__department_name")
+        .annotate(count=Count("id"))
+        .order_by("-count")[:8]
+    )
+    dept_labels = [d["doctor__department__department_name"] or "Unknown" for d in dept_qs]
+    dept_data = [d["count"] for d in dept_qs]
+
+    # ---------------- Chart 4: 7-Day Appointment Trend (Line) ----------------
+    trend_labels = []
+    trend_data = []
+    for i in range(6, -1, -1):
+        day = today - timedelta(days=i)
+        count = Appointment.objects.filter(appointment_date=day).count()
+        trend_labels.append(day.strftime("%d %b"))
+        trend_data.append(count)
+
+    # ---------------- Chart 5: Top 5 Doctors by Appointment Volume (Bar) ----------------
+    doctor_qs = (
+        Appointment.objects
+        .values("doctor__user__first_name", "doctor__user__last_name")
+        .annotate(count=Count("id"))
+        .order_by("-count")[:5]
+    )
+    doctor_labels = [f"Dr. {d['doctor__user__first_name']} {d['doctor__user__last_name']}".strip() for d in doctor_qs]
+    doctor_data = [d["count"] for d in doctor_qs]
+
+    # ---------------- Chart 6: Revenue Trend (Last 7 Days, Line) ----------------
+    # NOTE: "total_paid" is a Python @property on the Bill model (computed
+    # by summing related Payment rows in Python), not an actual database
+    # column -- Sum() can only aggregate real fields, so Sum("total_paid")
+    # raises FieldError. Aggregate through the real "payments" relation
+    # instead (Payment.amount_paid IS a real column), filtered to payments
+    # actually made ON that day.
+    revenue_labels = []
+    revenue_data = []
+    for i in range(6, -1, -1):
+        day = today - timedelta(days=i)
+        day_revenue = Payment.objects.filter(
+            paid_at__date=day,
+        ).aggregate(total=Sum("amount_paid"))["total"] or 0
+        revenue_labels.append(day.strftime("%d %b"))
+        revenue_data.append(float(day_revenue))
 
     return render(request, "accounts/admin_dashboard.html", {
         "total_appointments": total_appointments,
@@ -583,4 +806,46 @@ def admin_dashboard_view(request):
         "total_revenue": total_revenue,
         "pending_revenue": pending_revenue,
         "todays_appointments": todays_appointments,
+
+        # Chart data -- serialized as JSON for Chart.js
+        "status_labels": json.dumps(status_labels),
+        "status_data": json.dumps(status_data),
+        "risk_labels": json.dumps(risk_labels),
+        "risk_data": json.dumps(risk_data),
+        "dept_labels": json.dumps(dept_labels),
+        "dept_data": json.dumps(dept_data),
+        "trend_labels": json.dumps(trend_labels),
+        "trend_data": json.dumps(trend_data),
+        "doctor_labels": json.dumps(doctor_labels),
+        "doctor_data": json.dumps(doctor_data),
+        "revenue_labels": json.dumps(revenue_labels),
+        "revenue_data": json.dumps(revenue_data),
     })
+@login_required
+def change_password(request):
+
+    if request.method == "POST":
+
+        form = PasswordChangeForm(request.user, request.POST)
+
+        if form.is_valid():
+
+            user = form.save()
+
+            update_session_auth_hash(request, user)
+
+            messages.success(request, "Password changed successfully.")
+
+            return redirect("dashboard")
+
+    else:
+
+        form = PasswordChangeForm(request.user)
+
+    return render(
+        request,
+        "accounts/change_password.html",
+        {
+            "form": form
+        }
+    )

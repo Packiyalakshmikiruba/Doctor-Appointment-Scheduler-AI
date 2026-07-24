@@ -1,261 +1,218 @@
 {% extends "base.html" %}
 
-{% block title %}Generate Bill{% endblock %}
+{% block title %}
+
+Generate Bill
+
+{% endblock %}
 
 {% block content %}
 
 <div class="container mt-4">
 
-<div class="row justify-content-center">
+    <div class="row justify-content-center">
 
-<div class="col-lg-8">
+        <div class="col-lg-10">
 
-<div class="card shadow">
+            <div class="card shadow border-0">
 
-<div class="card-header bg-primary text-white">
+                <div class="card-header bg-primary text-white">
 
-<h3 class="mb-0">
-<i class="bi bi-receipt"></i>
-Generate Patient Bill
-</h3>
+                    <div class="d-flex justify-content-between align-items-center">
 
-</div>
+                        <h3 class="mb-0">
 
-<div class="card-body">
+                            <i class="fas fa-file-invoice-dollar"></i>
 
-<form method="POST">
+                            {% if is_update %}
 
-{% csrf_token %}
+                                Update Bill
 
-<div class="mb-3">
+                            {% else %}
 
-<label class="form-label fw-bold">
+                                Generate Hospital Bill
 
-Appointment
+                            {% endif %}
 
-</label>
+                        </h3>
 
-{{ form.appointment }}
+                        <a href="{% url 'bill_list' %}"
 
-</div>
+                           class="btn btn-light btn-sm">
 
-<hr>
+                            <i class="fas fa-arrow-left"></i>
 
-<div id="appointmentInfo" class="card bg-light mb-3 d-none">
+                            Back
 
-<div class="card-body">
+                        </a>
 
-<div class="row">
+                    </div>
 
-<div class="col-md-6">
+                </div>
 
-<b>Patient :</b>
+                <div class="card-body">
 
-<p id="patient_name"></p>
+                    <form method="POST">
 
-</div>
+                        {% csrf_token %}
 
-<div class="col-md-6">
+                        <div class="row">
 
-<b>Doctor :</b>
+                            <div class="col-md-6 mb-3">
 
-<p id="doctor_name"></p>
+                                <label class="form-label">
 
-</div>
+                                    Appointment
 
-<div class="col-md-6">
+                                </label>
 
-<b>Department :</b>
+                                {{ form.appointment }}
 
-<p id="department_name"></p>
+                            </div>
 
-</div>
+                            <div class="col-md-6 mb-3">
 
-<div class="col-md-6">
+                                <label class="form-label">
 
-<b>Appointment Date :</b>
+                                    Consultation Fee
 
-<p id="appointment_date"></p>
+                                </label>
 
-</div>
+                                {{ form.consultation_fee }}
 
-</div>
+                            </div>
 
-</div>
+                            <div class="col-md-6 mb-3">
 
-</div>
+                                <label class="form-label">
 
-<div class="row">
+                                    Medicine Cost
 
-<div class="col-md-6">
+                                </label>
 
-<label class="form-label">
+                                {{ form.medicine_cost }}
 
-Consultation Fee
+                            </div>
 
-</label>
+                            <div class="col-md-6 mb-3">
 
-{{ form.consultation_fee }}
+                                <label class="form-label">
 
-</div>
+                                    Lab Test Cost
 
-<div class="col-md-6">
+                                </label>
 
-<label class="form-label">
+                                {{ form.lab_test_cost }}
 
-Additional Charges
+                            </div>
+                                                        <div class="col-md-6 mb-3">
 
-</label>
+                                <label class="form-label">
 
-{{ form.additional_charges }}
+                                    Discount
 
-</div>
+                                </label>
 
-</div>
+                                {{ form.discount }}
 
-<div class="row mt-3">
+                            </div>
 
-<div class="col-md-6">
+                            <div class="col-md-6 mb-3">
 
-<label class="form-label">
+                                <label class="form-label">
 
-Discount
+                                    GST
 
-</label>
+                                </label>
 
-{{ form.discount }}
+                                {{ form.gst }}
 
-</div>
+                            </div>
 
-<div class="col-md-6">
+                            <div class="col-md-6 mb-4">
 
-<label class="form-label">
+                                <label class="form-label">
 
-Total Amount
+                                    Payment Status
 
-</label>
+                                </label>
 
-<input
-type="text"
-id="totalAmount"
-class="form-control"
-readonly>
+                                {{ form.payment_status }}
 
-</div>
+                            </div>
 
-</div>
+                        </div>
 
-<div class="row mt-3">
+                        <hr>
 
-<div class="col-md-6">
+                        <div class="d-flex justify-content-end">
 
-<label class="form-label">
+                            <a href="{% url 'bill_list' %}"
 
-Payment Status
+                               class="btn btn-secondary me-2">
 
-</label>
+                                <i class="fas fa-times"></i>
 
-{{ form.payment_status }}
+                                Cancel
 
-</div>
+                            </a>
 
-<div class="col-md-6">
+                            <button type="submit"
 
-<label class="form-label">
+                                    class="btn btn-success">
 
-Payment Mode
+                                <i class="fas fa-save"></i>
 
-</label>
+                                {% if is_update %}
 
-{{ form.payment_mode }}
+                                    Update Bill
 
-</div>
+                                {% else %}
 
-</div>
+                                    Generate Bill
 
-<hr>
+                                {% endif %}
 
-<div class="text-end">
+                            </button>
 
-<button class="btn btn-success btn-lg">
+                        </div>
 
-<i class="bi bi-check-circle"></i>
+                    </form>
 
-Generate Bill
+                </div>
 
-</button>
+            </div>
 
-</div>
+        </div>
 
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
 <script>
 
-const appointment=document.getElementById("id_appointment");
+document.addEventListener("DOMContentLoaded", function(){
 
-const fee=document.getElementById("id_consultation_fee");
+    const appointment = document.getElementById("id_appointment");
+    const fee = document.getElementById("id_consultation_fee");
 
-const add=document.getElementById("id_additional_charges");
+    if(appointment){
 
-const dis=document.getElementById("id_discount");
+        appointment.addEventListener("change", function(){
 
-const total=document.getElementById("totalAmount");
+            fetch(`/billing/api/appointment/${this.value}/fee/`)
 
-function calculate(){
+            .then(response => response.json())
 
-let f=parseFloat(fee.value)||0;
+            .then(data => {
 
-let a=parseFloat(add.value)||0;
+                fee.value = data.fee;
 
-let d=parseFloat(dis.value)||0;
+            });
 
-total.value=(f+a-d).toFixed(2);
+        });
 
-}
-
-fee.addEventListener("input",calculate);
-
-add.addEventListener("input",calculate);
-
-dis.addEventListener("input",calculate);
-
-appointment.addEventListener("change",function(){
-
-let id=this.value;
-
-if(!id)return;
-
-fetch(`/api/appointment/${id}/fee/`)
-
-.then(r=>r.json())
-
-.then(data=>{
-
-fee.value=data.fee;
-
-document.getElementById("patient_name").innerHTML=data.patient_name;
-
-document.getElementById("doctor_name").innerHTML=data.doctor_name;
-
-document.getElementById("department_name").innerHTML=data.department_name;
-
-document.getElementById("appointment_date").innerHTML=data.appointment_date;
-
-document.getElementById("appointmentInfo").classList.remove("d-none");
-
-calculate();
-
-});
+    }
 
 });
 

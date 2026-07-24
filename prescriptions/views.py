@@ -4,9 +4,10 @@ from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from .models import Prescription
 from .forms import PrescriptionForm
+from django.db.models import Q
 from medical_records.models import MedicalRecord
 from django.contrib.auth.decorators import login_required
-
+from .forms import PrescriptionFormSet
 @login_required
 def download_prescription_pdf(request,pk):
 
@@ -163,78 +164,124 @@ def download_prescription_pdf(request,pk):
 
     return response
 @login_required
-def prescription_list(request):
+def my_prescriptions(request):
 
-    prescriptions=Prescription.objects.select_related(
-        "medical_record",
-        "medical_record__appointment",
-        "medical_record__appointment__patient__user",
-        "medical_record__appointment__doctor__user",
-        "medical_record__appointment__doctor__department",
-    ).order_by("-created_at")
+    patient = getattr(request.user, "patient_profile", None)
 
-    if hasattr(request.user,"doctor_profile"):
+    if not patient:
 
-        prescriptions=prescriptions.filter(
-            medical_record__appointment__doctor=request.user.doctor_profile
+        messages.error(
+            request,
+            "Only patients can access this page."
         )
 
-    elif hasattr(request.user,"patient_profile"):
+        return redirect("dashboard")
 
-        prescriptions=prescriptions.filter(
-            medical_record__appointment__patient=request.user.patient_profile
+    prescriptions = (
+        Prescription.objects
+        .select_related(
+            "medical_record",
+            "medical_record__appointment",
+            "medical_record__appointment__doctor__user",
+            "medical_record__appointment__doctor__department",
+        )
+        .filter(
+            medical_record__appointment__patient=patient
+        )
+        .order_by("-created_at")
+    )
+
+    search = request.GET.get("search")
+
+    if search:
+
+        prescriptions = prescriptions.filter(
+
+            Q(
+                medicine_name__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__diagnosis__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__appointment__doctor__user__first_name__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__appointment__doctor__user__last_name__icontains=search
+            )
+
         )
 
     return render(
+
         request,
-        "prescriptions/prescription_list.html",
+
+        "prescriptions/my_prescriptions.html",
+
         {
-            "prescriptions":prescriptions
+
+            "prescriptions": prescriptions,
+
+            "search": search,
+
         }
+
     )
 @login_required
-def prescription_create(request,record_id):
+def prescription_create(request, record_id):
 
-    doctor=getattr(request.user,"doctor_profile",None)
+    doctor = getattr(request.user, "doctor_profile", None)
 
     if not doctor:
-        messages.error(request,"Only doctors can create prescriptions.")
+        messages.error(
+            request,
+            "Only doctors can create prescriptions."
+        )
         return redirect("prescription_list")
 
-    record=get_object_or_404(
+    record = get_object_or_404(
         MedicalRecord.objects.select_related(
             "appointment",
             "appointment__doctor",
-            "appointment__patient__user"
+            "appointment__patient__user",
         ),
-        pk=record_id
+        pk=record_id,
     )
 
-    if record.appointment.doctor!=doctor:
-        messages.error(request,"You cannot access another doctor's medical record.")
+    if record.appointment.doctor != doctor:
+
+        messages.error(
+            request,
+            "Access Denied."
+        )
+
         return redirect("medical_record_list")
 
-    prescriptions=Prescription.objects.filter(
-        medical_record=record
-    ).order_by("medicine_name")
 
-    if request.method=="POST":
 
-        if "finish" in request.POST:
+    if request.method == "POST":
 
-            if not prescriptions.exists():
-                messages.error(
-                    request,
-                    "Please add at least one medicine before finishing consultation."
-                )
-                return redirect(
-                    "prescription_create",
-                    record_id=record.id
-                )
+        formset = PrescriptionFormSet(
+            request.POST,
+            instance=record
+        )
+
+        if formset.is_valid():
+
+            formset.save()
 
             messages.success(
                 request,
-                "Prescription Completed Successfully."
+                "Prescription Saved Successfully."
             )
 
             return redirect(
@@ -242,54 +289,26 @@ def prescription_create(request,record_id):
                 appointment_id=record.appointment.id
             )
 
-        form=PrescriptionForm(request.POST)
+        else:
 
-        if form.is_valid():
+            print(formset.errors)
 
-            medicine=form.cleaned_data["medicine_name"]
 
-            if Prescription.objects.filter(
-                medical_record=record,
-                medicine_name__iexact=medicine
-            ).exists():
-
-                messages.warning(
-                    request,
-                    f"{medicine} is already added."
-                )
-
-            else:
-
-                prescription=form.save(commit=False)
-
-                prescription.medical_record=record
-
-                prescription.save()
-
-                messages.success(
-                    request,
-                    "Medicine Added Successfully."
-                )
-
-            return redirect(
-                "prescription_create",
-                record_id=record.id
-            )
 
     else:
 
-        form=PrescriptionForm()
+        formset = PrescriptionFormSet(
+            instance=record
+        )
+
+
 
     return render(
         request,
         "prescriptions/prescription_form.html",
         {
-            "form":form,
-            "record":record,
-            "existing":prescriptions,
-            "appointment":record.appointment,
-            "doctor":record.appointment.doctor,
-            "patient":record.appointment.patient,
+            "record": record,
+            "formset": formset,
         }
     )
 @login_required
@@ -468,3 +487,53 @@ def my_prescriptions(request):
             "search":search,
         }
     )
+@login_required
+def prescription_detail(request, record_id):
+
+    patient = getattr(request.user, "patient_profile", None)
+
+    if not patient:
+
+        messages.error(
+            request,
+            "Only patients can access this page."
+        )
+
+        return redirect("dashboard")
+
+    record = get_object_or_404(
+
+        MedicalRecord.objects.select_related(
+            "appointment",
+            "appointment__doctor__user",
+            "appointment__doctor__department",
+            "appointment__patient__user",
+        ),
+
+        pk=record_id,
+
+        appointment__patient=patient,
+
+    )
+
+    prescriptions = record.prescriptions.all()
+
+    return render(
+
+        request,
+
+        "prescriptions/prescription_detail.html",
+
+        {
+
+            "record": record,
+
+            "prescriptions": prescriptions,
+
+        }
+
+    )
+from django.shortcuts import render
+
+def prescription_list(request):
+    return render(request, "prescriptions/prescription_list.html")

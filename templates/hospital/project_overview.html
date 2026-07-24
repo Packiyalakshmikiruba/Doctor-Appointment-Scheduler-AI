@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}Project Overview{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">AI Doctor Appointment Scheduler</h2>
+    <p class="text-muted">Full-stack hospital management platform &mdash; everything in this project at a glance</p>
+  </div>
+
+  <!-- Live stats -->
+  <div class="row g-3 mb-5">
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #0d6efd;">
+        <div class="card-body">
+          <div class="text-muted small">Patients</div>
+          <h3 class="fw-bold mb-0">{{ stats.patients }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #0d9488;">
+        <div class="card-body">
+          <div class="text-muted small">Active Doctors</div>
+          <h3 class="fw-bold mb-0">{{ stats.doctors }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #6f42c1;">
+        <div class="card-body">
+          <div class="text-muted small">Departments</div>
+          <h3 class="fw-bold mb-0">{{ stats.departments }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #198754;">
+        <div class="card-body">
+          <div class="text-muted small">Total Appointments</div>
+          <h3 class="fw-bold mb-0">{{ stats.appointments }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #dc3545;">
+        <div class="card-body">
+          <div class="text-muted small">High No-Show Risk</div>
+          <h3 class="fw-bold mb-0">{{ stats.high_risk }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #fd7e14;">
+        <div class="card-body">
+          <div class="text-muted small">Medical Records</div>
+          <h3 class="fw-bold mb-0">{{ stats.medical_records }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #20c997;">
+        <div class="card-body">
+          <div class="text-muted small">Prescriptions</div>
+          <h3 class="fw-bold mb-0">{{ stats.prescriptions }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-left: 4px solid #0dcaf0;">
+        <div class="card-body">
+          <div class="text-muted small">Bills Generated</div>
+          <h3 class="fw-bold mb-0">{{ stats.bills }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature modules -->
+  <h5 class="mb-3">Modules in this Project</h5>
+  <div class="row g-3 mb-5">
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-people-fill text-primary fs-3"></i>
+          <h6 class="fw-bold mt-2">Patient & Doctor Management</h6>
+          <p class="small text-muted mb-0">Role-based accounts, profiles, department assignment, doctor availability & leave scheduling.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-calendar2-check-fill text-success fs-3"></i>
+          <h6 class="fw-bold mt-2">Appointment Booking</h6>
+          <p class="small text-muted mb-0">Patient self-booking with live doctor-availability validation, confirm/cancel/reschedule workflows.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-graph-up-arrow text-danger fs-3"></i>
+          <h6 class="fw-bold mt-2">ML No-Show Risk Prediction</h6>
+          <p class="small text-muted mb-0">Scikit-learn/XGBoost model scores every appointment Low/Medium/High risk automatically on save.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-robot text-info fs-3"></i>
+          <h6 class="fw-bold mt-2">AI Chatbot Assistant</h6>
+          <p class="small text-muted mb-0">LangChain + Groq LLM with RAG (Hugging Face + FAISS) for doctor search, symptom routing, and hospital FAQs.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-folder-symlink-fill text-warning fs-3"></i>
+          <h6 class="fw-bold mt-2">Medical Records & Prescriptions</h6>
+          <p class="small text-muted mb-0">Doctors document visits, prescribe medicines, and generate downloadable PDF prescriptions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-receipt-cutoff text-teal fs-3"></i>
+          <h6 class="fw-bold mt-2">Billing & Payments</h6>
+          <p class="small text-muted mb-0">Auto-generated bills per appointment, partial payments, and PDF invoice downloads.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-envelope-check-fill text-primary fs-3"></i>
+          <h6 class="fw-bold mt-2">Email & SMS Notifications</h6>
+          <p class="small text-muted mb-0">Automated appointment confirmations and reminders via SMTP email and Twilio SMS.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-chat-square-text-fill text-secondary fs-3"></i>
+          <h6 class="fw-bold mt-2">Patient-Doctor Messaging</h6>
+          <p class="small text-muted mb-0">Direct in-app messaging between patients and their doctors.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <i class="bi bi-shield-lock-fill text-dark fs-3"></i>
+          <h6 class="fw-bold mt-2">Admin Console</h6>
+          <p class="small text-muted mb-0">Manage departments, doctors, patients, appointments, and view the Risk AI Engine dashboard.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tech stack -->
+  <h5 class="mb-3">Tech Stack</h5>
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <span class="badge bg-light text-dark border px-3 py-2">Python</span>
+    <span class="badge bg-light text-dark border px-3 py-2">Django</span>
+    <span class="badge bg-light text-dark border px-3 py-2">MySQL / SQLite</span>
+    <span class="badge bg-light text-dark border px-3 py-2">Scikit-learn</span>
+    <span class="badge bg-light text-dark border px-3 py-2">XGBoost</span>
+    <span class="badge bg-light text-dark border px-3 py-2">LangChain</span>
+    <span class="badge bg-light text-dark border px-3 py-2">Groq LLM</span>
+    <span class="badge bg-light text-dark border px-3 py-2">Hugging Face</span>
+    <span class="badge bg-light text-dark border px-3 py-2">FAISS</span>
+    <span class="badge bg-light text-dark border px-3 py-2">Twilio</span>
+    <span class="badge bg-light text-dark border px-3 py-2">Bootstrap 5</span>
+  </div>
+</div>
+{% endblock %}

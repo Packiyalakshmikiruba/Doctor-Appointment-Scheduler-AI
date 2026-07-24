@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 from dotenv import load_dotenv
 load_dotenv() 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,7 +52,7 @@ INSTALLED_APPS = [
     'chatbot',
     'payment',
     'dashboard',
-    
+    'notifications',
     'messaging'
 ]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -136,6 +138,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_URL = "login"
@@ -146,13 +153,16 @@ LOGOUT_REDIRECT_URL = "login"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 465
 
-EMAIL_PORT = 587
-
-EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
 
 EMAIL_HOST_USER = "packiyalakshmikiruba2020@gmail.com"
-
 EMAIL_HOST_PASSWORD = "ibsd jvoi pgxj egps"
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+X_FRAME_OPTIONS = "SAMEORIGIN"

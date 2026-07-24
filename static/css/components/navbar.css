@@ -1,0 +1,476 @@
+/* ==========================================================
+   AI HOSPITAL NAVBAR
+========================================================== */
+
+.hospital-navbar{
+    background:linear-gradient(135deg,#0d6efd,#2563eb,#4f46e5);
+    padding:12px 22px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+    transition:.35s;
+    z-index:1100;
+}
+
+.hospital-navbar.scrolled{
+    padding:8px 20px;
+    backdrop-filter:blur(12px);
+}
+
+/* ==========================================================
+LOGO
+========================================================== */
+
+.navbar-brand{
+    text-decoration:none;
+    color:#fff!important;
+}
+
+.logo-circle{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.18);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:25px;
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:0 5px 18px rgba(0,0,0,.18);
+
+    transition:.35s;
+
+}
+
+.logo-circle:hover{
+
+    transform:rotate(10deg) scale(1.08);
+
+}
+
+.navbar-brand h4{
+
+    font-size:22px;
+
+    margin:0;
+
+    color:white;
+
+    font-weight:700;
+
+}
+
+.navbar-brand small{
+
+    color:rgba(255,255,255,.85);
+
+    font-size:12px;
+
+}
+
+/* ==========================================================
+MENU
+========================================================== */
+
+.navbar-nav{
+
+    gap:10px;
+
+}
+
+.nav-link{
+
+    color:rgba(255,255,255,.92)!important;
+
+    font-weight:600;
+
+    padding:10px 18px!important;
+
+    border-radius:12px;
+
+    transition:.30s;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.nav-link i{
+
+    font-size:15px;
+
+}
+
+.nav-link:hover{
+
+    background:rgba(255,255,255,.15);
+
+    transform:translateY(-2px);
+
+}
+
+.nav-link.active{
+
+    background:white;
+
+    color:#2563eb!important;
+
+    box-shadow:0 6px 15px rgba(0,0,0,.15);
+
+}
+
+/* ==========================================================
+DROPDOWN
+========================================================== */
+
+.dropdown-menu{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    padding:10px;
+
+    margin-top:12px;
+
+    min-width:250px;
+
+    box-shadow:0 18px 40px rgba(0,0,0,.15);
+
+    animation:dropdownFade .25s ease;
+
+}
+
+@keyframes dropdownFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(10px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.dropdown-item{
+
+    border-radius:12px;
+
+    padding:12px 16px;
+
+    transition:.25s;
+
+    font-weight:500;
+
+}
+
+.dropdown-item i{
+
+    width:22px;
+
+}
+
+.dropdown-item:hover{
+
+    background:#eef4ff;
+
+    color:#0d6efd;
+
+    padding-left:22px;
+
+}
+
+/* ==========================================================
+RIGHT SIDE
+========================================================== */
+
+.navbar-right{
+
+    gap:12px;
+
+}
+
+/* SEARCH */
+
+.search-btn{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:white;
+
+    color:#2563eb;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+
+    transition:.30s;
+
+}
+
+.search-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* NOTIFICATION */
+
+.notification-btn{
+
+    position:relative;
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:white;
+
+    color:#2563eb;
+
+    transition:.30s;
+
+}
+
+.notification-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.notification-btn .badge{
+
+    position:absolute;
+
+    top:4px;
+
+    right:3px;
+
+    font-size:10px;
+
+}
+
+/* ==========================================================
+PROFILE
+========================================================== */
+
+.profile-btn{
+
+    background:white;
+
+    border-radius:50px;
+
+    padding:6px 15px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
+    color:#333;
+
+    transition:.30s;
+
+}
+
+.profile-btn:hover{
+
+    transform:translateY(-2px);
+
+    color:#333;
+
+}
+
+.profile-img{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    border:2px solid #0d6efd;
+
+    object-fit:cover;
+
+}
+
+.profile-btn b{
+
+    font-size:14px;
+
+    display:block;
+
+}
+
+.profile-btn small{
+
+    color:#777;
+
+    font-size:11px;
+
+}
+
+/* ==========================================================
+TOGGLER
+========================================================== */
+
+.navbar-toggler{
+
+    border:none;
+
+    color:white;
+
+    font-size:22px;
+
+    box-shadow:none!important;
+
+}
+
+/* ==========================================================
+MOBILE
+========================================================== */
+
+@media(max-width:1200px){
+
+.navbar-collapse{
+
+    margin-top:18px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:20px;
+
+}
+
+.nav-link{
+
+    color:#333!important;
+
+    margin-bottom:6px;
+
+}
+
+.nav-link.active{
+
+    color:white!important;
+
+    background:#2563eb;
+
+}
+
+.navbar-right{
+
+    margin-top:18px;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+}
+
+.profile-btn{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+.dropdown-menu{
+
+    box-shadow:none;
+
+}
+
+}
+
+/* ==========================================================
+SMALL MOBILE
+========================================================== */
+
+@media(max-width:576px){
+
+.logo-circle{
+
+    width:48px;
+
+    height:48px;
+
+    font-size:20px;
+
+}
+
+.navbar-brand h4{
+
+    font-size:18px;
+
+}
+
+.navbar-brand small{
+
+    display:none;
+
+}
+
+.search-btn,
+.notification-btn{
+
+    width:42px;
+
+    height:42px;
+
+}
+
+.profile-btn{
+
+    padding:8px 12px;
+
+}
+
+.profile-img{
+
+    width:38px;
+
+    height:38px;
+
+}
+
+}

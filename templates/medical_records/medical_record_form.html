@@ -1,155 +1,373 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+
+{% if is_update %}
+
+Update Medical Record
+
+{% else %}
+
+Create Medical Record
+
+{% endif %}
+
+{% endblock %}
 
 {% block content %}
-<div class="container py-5" style="background-color: #f4f7f6; min-height: 100vh;">
-    <div class="row justify-content-center">
-        <div class="col-lg-9">
-            
-            <!-- Main Card Container -->
-            <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-white">
-                
-                <!-- Card Header -->
-                <div class="card-header bg-gradient bg-primary text-white py-4 px-4 d-flex align-items-center justify-content-between">
-                    <div>
-                        <h3 class="mb-1 fw-bold">
-                            <i class="fas fa-notes-medical me-2"></i> Create Medical Record
-                        </h3>
-                        <p class="mb-0 text-white-50 small">Record patient symptoms, diagnosis, and prescription details securely.</p>
-                    </div>
-                    <div class="icon-circle bg-white text-primary p-3 rounded-circle shadow-sm d-none d-sm-block">
-                        <i class="fas fa-stethoscope fa-lg"></i>
-                    </div>
-                </div>
 
-                <!-- Card Body -->
-                <div class="card-body p-4 p-md-5">
+<div class="container mt-4">
 
-                    <form method="POST" class="needs-validation" novalidate>
-                        {% csrf_token %>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-                        <!-- Non-field Errors if any -->
-                        {% if form.non_field_errors %}
-                            <div class="alert alert-danger rounded-3 shadow-sm mb-4">
-                                {% for error in form.non_field_errors %}
-                                    <div class="small"><i class="fas fa-exclamation-circle me-1"></i> {{ error }}</div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+        <div>
 
-                        <!-- Appointment Field -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-secondary">
-                                <i class="fas fa-calendar-check text-primary me-1"></i> Appointment
-                            </label>
-                            <div class="input-group">
-                                {{ form.appointment }}
-                            </div>
-                            {% for error in form.appointment.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+            <h2 class="fw-bold text-primary">
 
-                        <!-- Symptoms Field -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-secondary">
-                                <i class="fas fa-head-side-cough text-primary me-1"></i> Symptoms
-                            </label>
-                            {{ form.symptoms }}
-                            {% for error in form.symptoms.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+                <i class="fas fa-notes-medical"></i>
 
-                        <!-- Diagnosis Field -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-secondary">
-                                <i class="fas fa-file-medical-alt text-primary me-1"></i> Diagnosis
-                            </label>
-                            {{ form.diagnosis }}
-                            {% for error in form.diagnosis.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+                {% if is_update %}
 
-                        <!-- Treatment Field -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-secondary">
-                                <i class="fas fa-pills text-primary me-1"></i> Treatment & Prescription
-                            </label>
-                            {{ form.treatment }}
-                            {% for error in form.treatment.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+                Update Medical Record
 
-                        <!-- Notes Field -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-secondary">
-                                <i class="fas fa-sticky-note text-primary me-1"></i> Clinical Notes
-                            </label>
-                            {{ form.notes }}
-                            {% for error in form.notes.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+                {% else %}
 
-                        <!-- Follow Up Date Field -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold text-secondary">
-                                <i class="fas fa-calendar-plus text-primary me-1"></i> Follow Up Date
-                            </label>
-                            {{ form.follow_up_date }}
-                            {% for error in form.follow_up_date.errors %}
-                                <div class="text-danger small mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
+                Create Medical Record
 
-                        <!-- Action Buttons -->
-                        <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
-                            <a href="javascript:history.back()" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm">
-                                <i class="fas fa-arrow-left me-1"></i> Cancel
-                            </a>
-                            <button type="submit" class="btn btn-success px-5 py-2 rounded-pill fw-semibold shadow-sm">
-                                <i class="fas fa-save me-1"></i> Save & Prescription
-                            </button>
-                        </div>
+                {% endif %}
 
-                    </form>
+            </h2>
 
-                </div>
-            </div>
+            <p class="text-muted">
+
+                Enter patient's diagnosis, symptoms and treatment details
+
+            </p>
 
         </div>
-    </div>
-</div>
 
-<!-- Custom CSS to make Django form fields look professionally styled -->
+        <a href="{% url 'medical_record_list' %}"
+
+           class="btn btn-secondary">
+
+            <i class="fas fa-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                Medical Record Information
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Appointment
+
+                        </label>
+
+                        {{ form.appointment }}
+
+                        {% if form.appointment.errors %}
+
+                        <div class="text-danger small">
+
+                            {{ form.appointment.errors }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Diagnosis
+
+                        </label>
+
+                        {{ form.diagnosis }}
+
+                        {% if form.diagnosis.errors %}
+
+                        <div class="text-danger small">
+
+                            {{ form.diagnosis.errors }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Symptoms
+
+                        </label>
+
+                        {{ form.symptoms }}
+
+                    </div>
+
+                </div>
+                                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Treatment
+
+                        </label>
+
+                        {{ form.treatment }}
+
+                        {% if form.treatment.errors %}
+
+                        <div class="text-danger small">
+
+                            {{ form.treatment.errors }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Doctor Notes
+
+                        </label>
+
+                        {{ form.notes }}
+
+                        {% if form.notes.errors %}
+
+                        <div class="text-danger small">
+
+                            {{ form.notes.errors }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% if form.height %}
+
+                <div class="row">
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Height (cm)
+
+                        </label>
+
+                        {{ form.height }}
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Weight (kg)
+
+                        </label>
+
+                        {{ form.weight }}
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Blood Pressure
+
+                        </label>
+
+                        {{ form.blood_pressure }}
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label fw-bold">
+
+                            Temperature (°C)
+
+                        </label>
+
+                        {{ form.temperature }}
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                <hr>
+
+                <div class="d-flex justify-content-center gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success">
+
+                        <i class="fas fa-save"></i>
+
+                        {% if is_update %}
+
+                        Update Medical Record
+
+                        {% else %}
+
+                        Save Medical Record
+
+                        {% endif %}
+
+                    </button>
+
+                    <a href="{% url 'medical_record_list' %}"
+                       class="btn btn-secondary">
+
+                        <i class="fas fa-times"></i>
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+    </div>
+
 <style>
-    /* Django form fields styling integration */
-    input[type="text"], input[type="date"], input[type="datetime-local"], select, textarea {
-        display: block;
-        width: 100%;
-        padding: 0.65rem 1rem;
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
-        color: #212529;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        appearance: none;
-        border-radius: 0.5rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+.card{
+
+    border-radius:15px;
+
+}
+
+.card-header{
+
+    border-radius:15px 15px 0 0 !important;
+
+}
+
+.form-label{
+
+    font-weight:600;
+
+    color:#495057;
+
+}
+
+.form-control,
+.form-select{
+
+    border-radius:8px;
+
+    padding:10px;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color:#0d6efd;
+
+    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
+
+}
+
+textarea.form-control{
+
+    min-height:120px;
+
+    resize:vertical;
+
+}
+
+.btn{
+
+    border-radius:8px;
+
+    min-width:170px;
+
+}
+
+.btn i{
+
+    margin-right:6px;
+
+}
+
+.text-danger{
+
+    font-size:14px;
+
+}
+
+@media(max-width:768px){
+
+    .btn{
+
+        width:100%;
+
+        margin-bottom:10px;
+
     }
-    input:focus, select:focus, textarea:focus {
-        color: #212529;
-        background-color: #fff;
-        border-color: #86b7fe;
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-    }
-    textarea {
-        min-height: 100px;
-    }
+
+}
+
 </style>
+
 {% endblock %}

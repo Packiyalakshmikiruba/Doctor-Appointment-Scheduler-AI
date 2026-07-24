@@ -1,0 +1,347 @@
+.hero-card{
+    background:white;
+    border-radius:25px;
+    padding:40px;
+    margin-bottom:30px;
+    box-shadow:0 15px 35px rgba(0,0,0,.1);
+}
+
+.patient-photo{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:8px solid white;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.mini-card{
+    background:#f8f9fa;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    transition:.3s;
+}
+
+.mini-card:hover{
+    transform:translateY(-8px);
+    background:#0d6efd;
+    color:white;
+}
+
+.clock-box{
+    background:#0d6efd;
+    color:white;
+    padding:15px;
+    border-radius:20px;
+}
+
+.progress{
+    height:12px;
+    border-radius:20px;
+}
+
+.progress-bar{
+    font-weight:bold;
+    background:linear-gradient(90deg,#0d6efd,#20c997);
+}
+
+.card{
+    border-radius:20px;
+}
+
+.card-header{
+    border-radius:20px 20px 0 0 !important;
+}
+
+.dashboard-card{
+    border-radius:18px;
+    padding:25px;
+    color:white;
+    position:relative;
+    overflow:hidden;
+    transition:.3s;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.dashboard-card:hover{
+    transform:translateY(-8px);
+}
+
+.dashboard-card h6{
+    opacity:.9;
+    margin-top:15px;
+}
+
+.dashboard-card h2{
+    font-size:35px;
+    font-weight:700;
+}
+
+.stat-card-blue{
+    background:linear-gradient(135deg,#3B82F6,#2563EB);
+}
+
+.stat-card-green{
+    background:linear-gradient(135deg,#10B981,#059669);
+}
+
+.stat-card-purple{
+    background:linear-gradient(135deg,#8B5CF6,#6D28D9);
+}
+
+.stat-card-red{
+    background:linear-gradient(135deg,#EF4444,#DC2626);
+}
+
+.table td,
+.table th{
+    vertical-align:middle;
+}
+
+.quick-action-card{
+    background:#fff;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    transition:.35s;
+    border:1px solid #edf1f7;
+    cursor:pointer;
+    height:100%;
+}
+
+.quick-action-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px rgba(0,0,0,.12);
+}
+
+.quick-action-card i{
+    font-size:45px;
+    color:#0d6efd;
+}
+
+.quick-action-card h6{
+    font-weight:700;
+    color:#222;
+}
+
+.quick-action-card small{
+    color:#777;
+}
+
+.stat-card{
+    color:#fff;
+    border-radius:20px;
+    padding:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:.35s;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.stat-card:hover{
+    transform:translateY(-8px);
+}
+
+.stat-card h6{
+    opacity:.9;
+    font-size:14px;
+}
+
+.stat-card h2{
+    font-size:32px;
+    font-weight:700;
+    margin-top:10px;
+}
+
+.stat-card i{
+    font-size:42px;
+    opacity:.35;
+}
+
+.timeline-item{
+    display:flex;
+    align-items:flex-start;
+    position:relative;
+    padding-left:25px;
+}
+
+.timeline-item::before{
+    content:"";
+    position:absolute;
+    left:16px;
+    top:45px;
+    width:2px;
+    height:100%;
+    background:#dbeafe;
+}
+
+.timeline-item:last-child::before{
+    display:none;
+}
+
+.timeline-content{
+    width:100%;
+    background:#f8f9fa;
+    padding:18px;
+    border-radius:15px;
+}
+
+.table thead{
+    background:#f8f9fa;
+}
+
+.table tr:hover{
+    background:#f9fbff;
+}
+
+.activity-item{
+    display:flex;
+    gap:20px;
+    padding:18px;
+    border-bottom:1px solid #ececec;
+    transition:.3s;
+}
+
+.activity-item:hover{
+    background:#f8f9fa;
+}
+
+.activity-item:last-child{
+    border-bottom:none;
+}
+
+.download-card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+    height:100%;
+}
+
+.download-card:hover{
+    transform:translateY(-8px);
+}
+
+.download-card i{
+    font-size:55px;
+}
+
+.download-card h6{
+    font-weight:700;
+    margin-top:15px;
+}
+
+.download-card p{
+    color:#666;
+    font-size:14px;
+    min-height:45px;
+}
+
+.health-card{
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    transition:.3s;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.health-card:hover{
+    transform:translateY(-8px);
+}
+
+.health-card i{
+    font-size:45px;
+    margin-bottom:15px;
+}
+
+.health-card h2{
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.chart-card{
+    background:#fff;
+    height: 220px !important;
+    padding: 15px !important;
+    border-radius:18px;
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+}
+
+.chart-card h6{
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.dark-mode{
+    background:#1e1e1e;
+    color:white;
+}
+
+.dark-mode .card{
+    background:#2d2d2d;
+    color:white;
+}
+
+/* ========================================= */
+/* FIXING FLOATING BUTTONS OVERLAPPING */
+/* ========================================= */
+
+#aiAssistant{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    z-index:999;
+}
+
+#liveChat{
+    position:fixed;
+    bottom:85px;
+    right:20px;
+    z-index:999;
+}
+
+#darkModeBtn, #themeButton{
+    position:fixed;
+    bottom:150px;
+    right:20px;
+    z-index:999;
+}
+
+#languageButton{
+    position:fixed;
+    bottom:215px;
+    right:20px;
+    width:110px;
+    z-index:999;
+}
+
+#notificationBell{
+    position:fixed;
+    top:90px;
+    right:20px;
+    z-index:999;
+}
+
+#floatingReminder{
+    position:fixed;
+    left:20px;
+    bottom:20px;
+    width:240px;
+    z-index:999;
+}
+
+#topBtn{
+    display:none;
+    position:fixed;
+    bottom:20px;
+    left:275px; /* Reminder பக்கத்தில் வரும்படி அமைக்கப்பட்டுள்ளது */
+    z-index:999;
+}
+
+.chart-card canvas {
+    max-height: 150px !important;
+    width: 100% !important;
+}

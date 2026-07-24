@@ -1,32 +1,53 @@
 """
 appointments/booking_flow.py
 
-NOTE: booking + cancellation logic now lives in booking_service.py
-(book_appointment_full, handle_cancellation) to avoid duplicate logic.
-This file only keeps the two reminder functions, used by the
-send_day_before_reminders / send_two_hour_reminders management commands.
+Reminder functions (Email only)
 """
 
-from .notifications import send_email_notification, send_sms_notification
+from .notifications import send_email_notification
 
 
 def send_one_day_reminder(appointment):
     patient = appointment.patient
+
+    subject = "Appointment Reminder (Tomorrow)"
+
     message = (
-        f"Reminder: You have an appointment with Dr. {appointment.doctor} tomorrow, "
-        f"{appointment.appointment_date} at {appointment.appointment_time}."
+        f"Dear {patient.user.get_full_name()},\n\n"
+        f"This is a reminder that you have an appointment tomorrow.\n\n"
+        f"Doctor: Dr. {appointment.doctor.user.get_full_name()}\n"
+        f"Date: {appointment.appointment_date}\n"
+        f"Time: {appointment.appointment_time}\n\n"
+        f"Please arrive 15 minutes early.\n\n"
+        f"Thank you."
     )
-    send_sms_notification(patient.phone_number, message)
-    send_email_notification(getattr(patient.user, "email", None), "Appointment Reminder (Tomorrow)", message)
-    appointment.sms_reminder_sent = True
+
+    send_email_notification(
+        patient.user.email,
+        subject,
+        message
+    )
+
     appointment.status = "Confirmed"
-    appointment.save(update_fields=["sms_reminder_sent", "status"])
+    appointment.save(update_fields=["status"])
 
 
 def send_two_hour_reminder(appointment):
     patient = appointment.patient
+
+    subject = "Appointment Reminder (2 Hours Left)"
+
     message = (
-        f"Reminder: Your appointment with Dr. {appointment.doctor} is in 2 hours, "
-        f"at {appointment.appointment_time} today. Please arrive 15 minutes early."
+        f"Dear {patient.user.get_full_name()},\n\n"
+        f"Your appointment is in 2 hours.\n\n"
+        f"Doctor: Dr. {appointment.doctor.user.get_full_name()}\n"
+        f"Time: {appointment.appointment_time}\n\n"
+        f"Please arrive 15 minutes early.\n\n"
+        f"Thank you."
     )
-    send_sms_notification(patient.phone_number, message)
+
+    send_email_notification(
+        patient.user.email,
+        subject,
+        message
+    )

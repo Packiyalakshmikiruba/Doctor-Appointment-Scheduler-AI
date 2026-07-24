@@ -1,0 +1,66 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/components/notification_toast.css' %}">
+
+<!-- ======================================
+        NOTIFICATION TOAST
+======================================= -->
+
+<div
+    class="toast-container position-fixed top-0 end-0 p-3">
+
+    <div
+        id="notificationToast"
+        class="toast border-0 shadow-lg"
+        role="alert"
+        data-bs-delay="5000">
+
+        <div class="toast-header">
+
+            <div class="notify-icon">
+
+                <i class="fas fa-bell"></i>
+
+            </div>
+
+            <strong class="ms-2 me-auto">
+
+                AI Hospital
+
+            </strong>
+
+            <small id="notifyTime">
+
+                Just Now
+
+            </small>
+
+            <button
+                class="btn-close"
+                data-bs-dismiss="toast">
+            </button>
+
+        </div>
+
+        <div class="toast-body">
+
+            <div id="notifyTitle"
+                 class="fw-bold mb-1">
+
+                Notification
+
+            </div>
+
+            <div id="notifyMessage">
+
+                Welcome to AI Hospital.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'js/components/notification_toast.js' %}"></script>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherCare 3D Luxury Live Chat</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background: #f1f5f9;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-container-card {
+            border-radius: 28px !important;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+        }
+        
+        .sidebar-panel {
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .m-contact-btn {
+            transition: all 0.3s ease;
+            border: none;
+            margin: 8px 16px;
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            width: calc(100% - 32px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1rem;
+            cursor: pointer;
+        }
+
+        .m-contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .m-contact-btn.active-chat {
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.35);
+        }
+
+        .m-contact-btn.active-chat h6 { color: #ffffff !important; }
+        .m-contact-btn.active-chat .avatar-box { 
+            background: #ffffff !important; 
+            color: #6366f1 !important;
+        }
+
+        .msg-bubble {
+            max-width: 65%;
+            padding: 12px 18px;
+            font-size: 14.5px;
+            line-height: 1.5;
+            margin-bottom: 2px;
+        }
+        
+        .msg-sent {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #ffffff;
+            border-radius: 22px 22px 4px 22px;
+        }
+
+        .msg-received-clean {
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
+            color: #1e293b;
+            border-radius: 22px 22px 22px 4px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .custom-scroll { overflow-y: auto; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<!-- 🔔 Notification Toast -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1090;">
+    <div id="msgNotificationToast" class="toast align-items-center text-white bg-dark border-0 rounded-4 shadow-lg hide" role="alert" aria-live="assertive" aria-atomic="true" style="cursor: pointer;">
+        <div class="d-flex p-3">
+            <div class="toast-body d-flex align-items-center gap-3 w-100">
+                <i class="bi bi-bell-fill fs-5 text-warning"></i>
+                <div class="flex-grow-1">
+                    <strong class="d-block text-warning" id="notifSenderName">New Notification</strong>
+                    <span id="notifMessageBody" style="font-size: 13.5px;">Message received.</span>
+                </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white m-auto me-2" data-bs-dismiss="toast" onclick="event.stopPropagation();"></button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid d-flex justify-content-center p-3">
+    <div class="card chat-container-card d-flex flex-row">
+        
+        <!-- 👥 LEFT SIDE: CONTACTS -->
+        <div class="sidebar-panel col-4 d-flex flex-column">
+            <div class="p-4 bg-white border-bottom shadow-sm">
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-patch-check-fill text-primary"></i> AetherCare Hub
+                </h5>
+            </div>
+            
+            <div class="list-group list-group-flush flex-grow-1 custom-scroll py-3" id="modalContactList">
+                {% for user in users %}
+                    <button type="button" class="m-contact-btn" id="contact-{{ user.id }}" data-id="{{ user.id }}" data-name="{{ user.get_full_name|default:user.username }}" onclick="selectModalContact(this)">
+                        <div class="d-flex align-items-center gap-3 w-100">
+                            <div class="avatar-box bg-light text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 42px; height: 42px;">
+                                {{ user.username|slice:":1"|upper }}
+                            </div>
+                            <h6 class="fw-bold mb-0 text-dark text-truncate">{{ user.get_full_name|default:user.username }}</h6>
+                        </div>
+                        <span class="badge bg-danger rounded-pill shadow-sm d-none" id="badge-{{ user.id }}">New</span>
+                    </button>
+                {% empty %}
+                    <div class="text-center py-5 text-muted" id="noContactsPlaceholder">
+                        <i class="bi bi-chat-square-x fs-2 d-block mb-2"></i>
+                        <p>No contacts found.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 💬 RIGHT SIDE: CHAT AREA -->
+        <div class="col-8 d-flex flex-column bg-light h-100">
+            <!-- Header -->
+            <div class="bg-white border-bottom py-3 px-4 d-flex align-items-center gap-3 shadow-sm">
+                <div id="mHeaderAvatar" class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center fw-bold d-none" style="width: 42px; height: 42px;">?</div>
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark" id="mActiveChatName">Encrypted Room</h6>
+                    <small class="text-muted" id="mActiveChatStatus">Select a workspace to chat</small>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="p-4 flex-grow-1 custom-scroll" id="mChatBody">
+                <div class="d-flex flex-column justify-content-center align-items-center h-100 text-muted" id="mPlaceholderView">
+                    <i class="bi bi-shield-lock-fill fs-1 mb-2"></i>
+                    <h6>Connection Secured</h6>
+                    <p>Select a contact to start chatting.</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-3 bg-white border-top" id="mChatFooter" style="display: none;">
+                <div id="mAttachmentPreview" class="d-none pb-2 px-2">
+                    <div class="d-flex align-items-center justify-content-between gap-2 bg-light rounded-3 p-2">
+                        <span id="mAttachmentName" class="small text-truncate flex-grow-1"></span>
+                        <audio id="mPreviewAudio" controls class="d-none" style="height: 30px; max-width: 180px;"></audio>
+                        <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="clearAttachment()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <form id="mMessageForm" class="d-flex gap-2 align-items-center bg-white rounded-pill p-1 border shadow-sm mx-1">
+                    {% csrf_token %}
+                    <input type="hidden" id="mReceiverId">
+                    
+                    <label class="btn btn-light rounded-circle d-flex align-items-center justify-content-center mb-0" style="width: 38px; height: 38px; min-width: 38px; cursor: pointer;" title="Attach file">
+                        <i class="bi bi-paperclip"></i>
+                        <input type="file" id="mFileInput" class="d-none">
+                    </label>
+
+                    <!-- 🎤 Voice Record Button Added Back -->
+                    <button type="button" id="mMicBtn" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center mb-0" style="width: 38px; height: 38px; min-width: 38px;" title="Record voice">
+                        <i class="bi bi-mic-fill" id="mMicIcon"></i>
+                    </button>
+
+                    <input type="text" id="mMessageInput" class="form-control border-0 shadow-none bg-transparent px-3" placeholder="Type a message..." autocomplete="off">
+                    
+                    <button type="submit" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 42px; height: 42px; min-width: 42px;">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let mActiveUserId = null;
+    let localMessageCountCache = {}; 
+    let currentNotificationUserId = null;
+    let selectedAttachment = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let bsToast = null;
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        const toastEl = document.getElementById('msgNotificationToast');
+        bsToast = new bootstrap.Toast(toastEl, { delay: 5000 });
+
+        // Click to open chat from Toast Notification
+        toastEl.addEventListener('click', function() {
+            if (currentNotificationUserId) {
+                const targetBtn = document.getElementById(`contact-${currentNotificationUserId}`);
+                if (targetBtn) {
+                    selectModalContact(targetBtn);
+                    bsToast.hide();
+                }
+            }
+        });
+
+        document.querySelectorAll('.m-contact-btn').forEach(btn => {
+            const userId = btn.getAttribute('data-id');
+            if(userId) {
+                fetch(`/messaging/data/${userId}/`)
+                    .then(res => res.json())
+                    .then(data => { localMessageCountCache[userId] = data.messages.length; })
+                    .catch(e => {});
+            }
+        });
+
+        setTimeout(syncLiveMessagesAndNotifications, 3000);
+    });
+
+    function selectModalContact(element) {
+        mActiveUserId = element.getAttribute('data-id');
+        const userName = element.getAttribute('data-name');
+
+        document.querySelectorAll('.m-contact-btn').forEach(btn => btn.classList.remove('active-chat'));
+        element.classList.add('active-chat');
+
+        const badge = document.getElementById(`badge-${mActiveUserId}`);
+        if(badge) badge.classList.add('d-none');
+
+        document.getElementById('mActiveChatName').innerText = userName;
+        document.getElementById('mActiveChatStatus').innerHTML = '<span class="text-success">●</span> Online';
+        
+        const avatar = document.getElementById('mHeaderAvatar');
+        avatar.classList.remove('d-none');
+        avatar.innerText = userName.charAt(0).toUpperCase();
+
+        document.getElementById('mReceiverId').value = mActiveUserId;
+        document.getElementById('mChatFooter').style.display = 'block';
+
+        loadModalMessages(true);
+    }
+
+    async function loadModalMessages(shouldScroll) {
+        if (!mActiveUserId) return;
+        try {
+            const res = await fetch(`/messaging/data/${mActiveUserId}/`);
+            const data = await res.json();
+            
+            localMessageCountCache[mActiveUserId] = data.messages.length;
+            const body = document.getElementById('mChatBody');
+            
+            if(data.messages.length === 0){
+                body.innerHTML = `<div class="text-center text-muted py-5 my-auto">No messages yet.</div>`;
+                return;
+            }
+            
+            let html = "";
+            data.messages.forEach(msg => {
+                const isMe = msg.sender_id === data.current_id;
+                let content = msg.body || '';
+                
+                if (msg.message_type === "IMAGE" && msg.attachment_url) {
+                    content = `<img src="${msg.attachment_url}" class="rounded-3 mb-1" style="max-width: 200px; max-height: 200px; cursor: pointer;" onclick="window.open('${msg.attachment_url}', '_blank')"><br>${msg.body}`;
+                } else if (msg.message_type === "VOICE" && msg.attachment_url) {
+                    content = `<audio controls src="${msg.attachment_url}" style="max-width: 200px; height: 35px;"></audio>`;
+                } else if (msg.message_type === "FILE" && msg.attachment_url) {
+                    const fileName = msg.attachment_url.split('/').pop();
+                    content = `<a href="${msg.attachment_url}" target="_blank" class="text-reset"><i class="bi bi-file-earmark-arrow-down"></i> ${fileName}</a><br>${msg.body}`;
+                }
+
+                html += `
+                    <div class="d-flex ${isMe ? 'justify-content-end' : 'justify-content-start'} mb-3">
+                        <div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-received-clean'}">
+                            ${content}
+                            <small class="d-block text-end mt-1 ${isMe ? 'text-white-50' : 'text-muted'}" style="font-size: 10px;">${msg.time}</small>
+                        </div>
+                    </div>`;
+            });
+            body.innerHTML = html;
+            if(shouldScroll) body.scrollTop = body.scrollHeight;
+        } catch(e) {}
+    }
+
+    async function syncLiveMessagesAndNotifications() {
+        if (mActiveUserId) {
+            await loadModalMessages(false);
+        }
+        
+        const buttons = document.querySelectorAll('.m-contact-btn');
+        for (let btn of buttons) {
+            const userId = btn.getAttribute('data-id');
+            if (!userId || userId === mActiveUserId) continue;
+
+            try {
+                const res = await fetch(`/messaging/data/${userId}/`);
+                const data = await res.json();
+                
+                if (localMessageCountCache[userId] !== undefined && data.messages.length > localMessageCountCache[userId]) {
+                    const badge = document.getElementById(`badge-${userId}`);
+                    if(badge) badge.classList.remove('d-none');
+                    
+                    // Show Notification Toast
+                    currentNotificationUserId = userId;
+                    document.getElementById('notifSenderName').innerText = btn.getAttribute('data-name');
+                    document.getElementById('notifMessageBody').innerText = data.messages[data.messages.length - 1].body || "New attachment";
+                    bsToast.show();
+                }
+                localMessageCountCache[userId] = data.messages.length;
+            } catch(e) {}
+        }
+        
+        setTimeout(syncLiveMessagesAndNotifications, 4000); 
+    }
+
+    // File Attachment Logic
+    document.getElementById('mFileInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        selectedAttachment = file;
+        document.getElementById('mAttachmentPreview').classList.remove('d-none');
+        document.getElementById('mAttachmentName').textContent = `📎 ${file.name}`;
+    });
+
+    // 🎤 Voice Recorder Logic
+    document.getElementById('mMicBtn').addEventListener('click', async function () {
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    selectedAttachment = new File([audioBlob], `voice_${Date.now()}.webm`, { type: 'audio/webm' });
+                    
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const previewAudio = document.getElementById('mPreviewAudio');
+                    previewAudio.src = audioUrl;
+                    previewAudio.classList.remove('d-none');
+
+                    document.getElementById('mAttachmentPreview').classList.remove('d-none');
+                    document.getElementById('mAttachmentName').textContent = '🎤 Voice message';
+
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                this.classList.add('btn-danger', 'text-white');
+                document.getElementById('mMicIcon').className = 'bi bi-stop-fill';
+
+            } catch (err) {
+                alert('Microphone access denied or not available.');
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            this.classList.remove('btn-danger', 'text-white');
+            document.getElementById('mMicIcon').className = 'bi bi-mic-fill';
+        }
+    });
+
+    function clearAttachment() {
+        selectedAttachment = null;
+        document.getElementById('mFileInput').value = '';
+        const previewAudio = document.getElementById('mPreviewAudio');
+        previewAudio.pause();
+        previewAudio.src = '';
+        previewAudio.classList.add('d-none');
+        document.getElementById('mAttachmentPreview').classList.add('d-none');
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Send Message Form
+    document.getElementById('mMessageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const input = document.getElementById('mMessageInput');
+        const body = input.value.trim();
+
+        if (!body && !selectedAttachment) return;
+
+        const formData = new FormData();
+        formData.append('body', body);
+        formData.append('receiver_id', mActiveUserId);
+        if (selectedAttachment) formData.append('attachment', selectedAttachment);
+
+        fetch('/messaging/send/', { 
+            method: 'POST', 
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            body: formData 
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                input.value = '';
+                clearAttachment();
+                loadModalMessages(true);
+            } else {
+                alert('Server Error: ' + (data.error || 'Failed to send.'));
+            }
+        })
+        .catch(err => alert('Network Error. Is the server running?'));
+    });
+</script>
+</body>
+</html>

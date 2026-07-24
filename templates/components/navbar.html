@@ -1,258 +1,559 @@
-<nav class="navbar navbar-expand-lg sticky-top fresh-aether-nav py-2.5">
-    <div class="container">
+{% load static %}
 
-        <!-- Modern Soft Teal Floating Logo -->
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2.5 px-3 py-1.5 rounded-4 brand-card-light" href="{% url 'dashboard' %}">
-            <div class="brand-teal-badge rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm">
-                <i class="bi bi-hospital-fill fs-5"></i>
-            </div>
-            <div class="d-flex flex-column lh-1">
-                <span class="brand-title-text text-dark fw-bold">Aether<span class="text-teal">Care</span></span>
-                <span class="brand-sub-text text-muted">Smart Medical Suite</span>
-            </div>
-        </a>
+<nav class="navbar navbar-expand-xl hospital-navbar sticky-top">
 
-        <!-- Mobile Toggler -->
-        <button class="navbar-toggler border-0 shadow-none px-2 rounded-3 bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#aetherNavbar">
-            <i class="bi bi-grid-3x3-gap-fill fs-3 text-teal"></i>
-        </button>
+<div class="container-fluid">
 
-        <div class="collapse navbar-collapse mt-3 mt-lg-0" id="aetherNavbar">
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1.5">
+<!-- =======================
+LOGO
+======================= -->
 
-                {% if user.is_authenticated %}
+<a href="{% url 'dashboard' %}"
+class="navbar-brand d-flex align-items-center">
 
-                    <li class="nav-item">
-                        <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'dashboard' %}">
-                            <i class="bi bi-speedometer2 text-teal fs-6"></i> 
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-    <a class="nav-link" href="{% url 'contacts_list' %}">
-        <i class="bi bi-chat-square-text"></i> Messages
-    </a>
-</li>
-                    {% if request.user.role == "PATIENT" %}
-                        
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'appointment_list' %}">
-                                <i class="bi bi-calendar2-pulse-fill text-teal fs-6"></i> 
-                                <span>My Appointments</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'bill_list' %}">
-                                <i class="bi bi-receipt-cutoff text-teal fs-6"></i> 
-                                <span>My Bills</span>
-                            </a>
-                        </li>
+<div class="logo-circle">
 
-                    {% elif request.user.role == "DOCTOR" %}
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'availability_list' %}">
-                                <i class="bi bi-clock-history text-teal fs-6"></i> 
-                                <span>My Availability</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'appointment_list' %}">
-                                <i class="bi bi-calendar2-check-fill text-teal fs-6"></i> 
-                                <span>Appointments</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2"
-   href="{% url 'medical_records:medical_record_list' %}">
-    <i class="bi bi-folder-symlink-fill text-teal fs-6"></i>
-    <span>Medical Records</span>
+<i class="fas fa-hospital-alt"></i>
+
+</div>
+
+<div class="ms-3">
+
+<h4 class="mb-0 fw-bold">
+
+AI Hospital
+
+</h4>
+
+<small>
+
+Doctor Appointment Scheduler
+
+</small>
+
+</div>
+
 </a>
-                        </li>
 
-                    {% elif request.user.role == "ADMIN" %}
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'department_list' %}">
-                                <i class="bi bi-buildings-fill text-teal fs-6"></i> 
-                                <span>Departments</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'doctor_list' %}">
-                                <i class="bi bi-person-vcard-fill text-teal fs-6"></i> 
-                                <span>Doctors</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'patient_list' %}">
-                                <i class="bi bi-people-fill text-teal fs-6"></i> 
-                                <span>Patients</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'appointment_list' %}">
-                                <i class="bi bi-calendar2-check-fill text-teal fs-6"></i> 
-                                <span>Appointments</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="{% url 'bill_list' %}">
-                                <i class="bi bi-receipt-cutoff text-teal fs-6"></i> 
-                                <span>Billing</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link risk-ai-badge px-3 py-2 rounded-pill text-dark d-flex align-items-center gap-2 ms-lg-1" href="{% url 'risk_dashboard' %}">
-                                <i class="bi bi-lightning-charge-fill text-amber fs-6"></i> 
-                                <span class="fw-bold">Risk AI Engine</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-secondary d-flex align-items-center gap-2" href="/admin/">
-                                <i class="bi bi-sliders text-secondary fs-6"></i> 
-                                <span>Admin</span>
-                            </a>
-                        </li>
-                    {% endif %}
+<!-- =======================
+MOBILE BUTTON
+======================= -->
 
-                    <!-- User Profile Card & Soft Logout Button -->
-                    <div class="d-flex align-items-center gap-2.5 ms-lg-3 mt-3 mt-lg-0 pt-2 pt-lg-0 border-top border-secondary border-opacity-10 border-lg-0">
-                        <div class="user-profile-badge d-flex align-items-center gap-2 px-3 py-1.5 rounded-pill bg-white border shadow-sm">
-                            <div class="teal-avatar rounded-circle text-white d-flex align-items-center justify-content-center">
-                                <i class="bi bi-person-fill small"></i>
-                            </div>
-                            <span class="fw-bold text-dark small">{{ request.user.first_name|default:request.user.username }}</span>
-                        </div>
+<button
+class="navbar-toggler"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#mainNavbar">
 
-                        <a class="btn btn-logout-soft rounded-pill px-3 py-1.5 small fw-bold d-flex align-items-center gap-1.5 text-danger" href="{% url 'logout' %}">
-                            <i class="bi bi-power fs-6"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
+<i class="fas fa-bars"></i>
 
-                {% else %}
+</button>
 
-                    <li class="nav-item">
-                        <a class="nav-link teal-pill-link px-3 py-2 rounded-pill text-dark fw-bold" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn btn-teal-action rounded-pill px-4 py-2 fw-bold text-white shadow-sm" href="{% url 'register' %}">
-                            <span>Get Started</span>
-                            <i class="bi bi-arrow-right-short fs-5 ms-1"></i>
-                        </a>
-                    </li>
+<!-- =======================
+MENU
+======================= -->
 
-                {% endif %}
+<div
+class="collapse navbar-collapse"
+id="mainNavbar">
 
-            </ul>
-        </div>
+<ul class="navbar-nav mx-auto">
 
-    </div>
+<!-- Dashboard -->
+
+<li class="nav-item">
+
+<a
+href="{% url 'dashboard' %}"
+class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+
+<i class="fas fa-home"></i>
+
+Dashboard
+
+</a>
+
+</li>
+
+{% if request.user.role == "ADMIN" %}
+
+<li class="nav-item dropdown">
+
+<a
+class="nav-link dropdown-toggle"
+href="#"
+data-bs-toggle="dropdown">
+
+<i class="fas fa-hospital"></i>
+
+Hospital
+
+</a>
+
+<ul class="dropdown-menu shadow">
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'department_list' %}">
+
+<i class="fas fa-building text-primary"></i>
+
+Departments
+
+</a>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'doctor_list' %}">
+
+<i class="fas fa-user-md text-success"></i>
+
+Doctors
+
+</a>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'availability_list' %}">
+
+<i class="fas fa-calendar-check text-info"></i>
+
+Availability
+
+</a>
+
+</li>
+
+</ul>
+
+</li>
+
+<li class="nav-item dropdown">
+
+<a
+class="nav-link dropdown-toggle"
+href="#"
+data-bs-toggle="dropdown">
+
+<i class="fas fa-users"></i>
+
+Patients
+
+</a>
+
+<ul class="dropdown-menu shadow">
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'patient_list' %}">
+
+Patient List
+
+</a>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'appointment_list' %}">
+
+Appointments
+
+</a>
+
+</li>
+
+</ul>
+
+</li>
+
+<li class="nav-item dropdown">
+
+<a
+class="nav-link dropdown-toggle"
+href="#"
+data-bs-toggle="dropdown">
+
+<i class="fas fa-file-medical"></i>
+
+Medical
+
+</a>
+
+<ul class="dropdown-menu shadow">
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'medical_record_list' %}">
+
+Medical Records
+
+</a>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'prescription_list' %}">
+
+Prescriptions
+
+</a>
+
+</li>
+
+</ul>
+
+</li>
+
+<li class="nav-item dropdown">
+
+<a
+class="nav-link dropdown-toggle"
+href="#"
+data-bs-toggle="dropdown">
+
+<i class="fas fa-file-invoice-dollar"></i>
+
+Billing
+
+</a>
+
+<ul class="dropdown-menu shadow">
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'bill_list' %}">
+
+Bills
+
+</a>
+
+</li>
+
+</ul>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'risk_dashboard' %}"
+class="nav-link">
+
+<i class="fas fa-brain"></i>
+
+AI Dashboard
+
+</a>
+
+</li>
+
+{% endif %}
+
+{% if request.user.role == "DOCTOR" %}
+
+<li class="nav-item">
+
+<a
+href="{% url 'appointment_list' %}"
+class="nav-link">
+
+<i class="fas fa-calendar-check"></i>
+
+Appointments
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'patient_list' %}"
+class="nav-link">
+
+<i class="fas fa-user-injured"></i>
+
+Patients
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'medical_record_list' %}"
+class="nav-link">
+
+<i class="fas fa-notes-medical"></i>
+
+Medical Records
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'availability_list' %}"
+class="nav-link">
+
+<i class="fas fa-clock"></i>
+
+Schedule
+
+</a>
+
+</li>
+
+{% endif %}
+
+{% if request.user.role == "PATIENT" %}
+
+<li class="nav-item">
+
+<a
+href="{% url 'appointment_list' %}"
+class="nav-link">
+
+<i class="fas fa-calendar"></i>
+
+Appointments
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'doctor_list' %}"
+class="nav-link">
+
+<i class="fas fa-user-md"></i>
+
+Doctors
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'medical_record_list' %}"
+class="nav-link">
+
+<i class="fas fa-heartbeat"></i>
+
+Medical Records
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+href="{% url 'bill_list' %}"
+class="nav-link">
+
+<i class="fas fa-credit-card"></i>
+
+Bills
+
+</a>
+
+</li>
+
+{% endif %}
+
+</ul>
+
+<!-- =======================
+RIGHT SIDE
+======================= -->
+
+<div class="d-flex align-items-center navbar-right">
+
+<button
+class="btn search-btn me-2"
+data-bs-toggle="modal"
+data-bs-target="#globalSearchModal">
+
+<i class="fas fa-search"></i>
+
+</button>
+
+<div class="dropdown me-2">
+
+<button
+class="btn notification-btn"
+data-bs-toggle="dropdown">
+
+<i class="fas fa-bell"></i>
+
+<span class="badge bg-danger">
+
+3
+
+</span>
+
+</button>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+
+<li>
+
+<h6 class="dropdown-header">
+
+Notifications
+
+</h6>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="#">
+
+New Appointment
+
+</a>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="#">
+
+Bill Generated
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<div class="dropdown">
+
+<a
+href="#"
+class="profile-btn dropdown-toggle"
+data-bs-toggle="dropdown">
+
+<!-- 🩺 Admin, Doctor, Patient ஆகியோருக்குத் தனித்தனி ஐகான்கள் -->
+<div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px; min-width: 42px;">
+    {% if request.user.role == "ADMIN" %}
+        <i class="fas fa-user-shield fs-5 text-danger"></i>
+    {% elif request.user.role == "DOCTOR" %}
+        <i class="fas fa-user-md fs-5 text-success"></i>
+    {% else %}
+        <i class="fas fa-user-injured fs-5 text-primary"></i>
+    {% endif %}
+</div>
+
+<div>
+
+<b>
+
+{{ request.user.get_full_name|default:request.user.username }}
+
+</b>
+
+<br>
+
+<small>
+
+{{ request.user.role }}
+
+</small>
+
+</div>
+
+</a>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'edit_profile' %}">
+
+My Profile
+
+</a>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item"
+href="{% url 'change_password' %}">
+
+Change Password
+
+</a>
+
+</li>
+
+<li>
+
+<hr>
+
+</li>
+
+<li>
+
+<a
+class="dropdown-item text-danger"
+href="{% url 'logout' %}">
+
+Logout
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </nav>
-
-<!-- Clean Aqua-Teal Medical Stylesheet -->
-<style>
-/* Custom Color Tokens */
-:root {
-    --brand-teal: #0284c7;
-    --brand-teal-dark: #0369a1;
-    --brand-teal-light: #e0f2fe;
-    --brand-amber: #d97706;
-}
-
-.text-teal { color: var(--brand-teal) !important; }
-.text-amber { color: var(--brand-amber) !important; }
-
-/* Base Clean Glassmorphism Navbar */
-.fresh-aether-nav {
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.06);
-}
-
-/* Brand Card Styling */
-.brand-card-light {
-    background: rgba(241, 245, 249, 0.8);
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.brand-card-light:hover {
-    background: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.18);
-}
-.brand-teal-badge {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
-}
-.brand-title-text {
-    font-family: 'Outfit', sans-serif;
-    font-size: 1.15rem;
-    letter-spacing: -0.5px;
-}
-.brand-sub-text {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-/* Nav Pills Interactive Hover */
-.teal-pill-link {
-    font-size: 0.92rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-.teal-pill-link:hover {
-    color: var(--brand-teal) !important;
-    background: var(--brand-teal-light);
-    transform: translateY(-1.5px);
-}
-
-/* Risk AI Special Amber Badge */
-.risk-ai-badge {
-    background: rgba(217, 119, 6, 0.12);
-    border: 1px solid rgba(217, 119, 6, 0.25);
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-.risk-ai-badge:hover {
-    background: rgba(217, 119, 6, 0.22);
-    transform: translateY(-1.5px);
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
-}
-
-/* User Avatar & Logout Pill */
-.teal-avatar {
-    width: 26px;
-    height: 26px;
-    background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
-}
-
-.btn-logout-soft {
-    background: rgba(239, 68, 68, 0.08);
-    border: 1px solid rgba(239, 68, 68, 0.15);
-    transition: all 0.2s ease;
-}
-.btn-logout-soft:hover {
-    background: #ef4444;
-    color: #ffffff !important;
-    border-color: #ef4444;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-    transform: translateY(-1.5px);
-}
-
-/* Gradient Action Button */
-.btn-teal-action {
-    background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%) !important;
-    border: none;
-    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25) !important;
-    transition: all 0.25s ease !important;
-}
-.btn-teal-action:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 22px rgba(2, 132, 199, 0.35) !important;
-}
-</style>

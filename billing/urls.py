@@ -3,38 +3,57 @@ from . import views
 
 urlpatterns = [
 
-    path("", views.bill_list, name="bill_list"),
-
-    path("create/", views.bill_create, name="bill_create"),
+    path(
+        "",
+        views.bill_list,
+        name="bill_list"
+    ),
 
     path(
-        "appointment/<int:appointment_id>/create/",
+        "create/",
+        views.bill_create,
+        name="bill_create"
+    ),
+
+    path(
+        "appointment/<int:appointment_id>/",
         views.bill_create_for_appointment,
-        name="bill_create_for_appointment",
+        name="bill_create_for_appointment"
     ),
 
     path(
-        "<int:bill_id>/add-payment/",
-        views.add_payment,
-        name="add_payment",
+        "my-bills/",
+        views.my_bills,
+        name="my_bills"
     ),
 
     path(
-        "<int:pk>/mark-paid/",
-        views.mark_paid,
-        name="mark_paid",
+        "view/<int:pk>/",
+        views.bill_detail,
+        name="bill_detail"
     ),
 
     path(
-        "<int:pk>/download/",
-        views.bill_download,
-        name="bill_download",
+        "update/<int:pk>/",
+        views.bill_update,
+        name="bill_update"
     ),
 
     path(
-        "api/appointment/<int:pk>/fee/",
+        "delete/<int:pk>/",
+        views.bill_delete,
+        name="bill_delete"
+    ),
+
+    path(
+        "download/<int:pk>/",
+        views.download_bill_pdf,
+        name="download_bill_pdf"
+    ),
+
+    path(
+        "consultation-fee/<int:pk>/",
         views.get_consultation_fee,
-        name="get_consultation_fee",
+        name="get_consultation_fee"
     ),
-
 ]

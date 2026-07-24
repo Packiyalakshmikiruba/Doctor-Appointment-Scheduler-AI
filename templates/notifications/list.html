@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Notifications</h3>
+
+{% for n in notifications %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h5>{{ n.title }}</h5>
+
+        <p>{{ n.message }}</p>
+
+        <small>{{ n.created_at }}</small>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="alert alert-info">
+    No notifications.
+</div>
+
+{% endfor %}
+
+{% endblock %}

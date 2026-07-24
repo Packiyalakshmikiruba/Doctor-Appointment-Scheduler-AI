@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}
+Bill Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-success text-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h3 class="mb-0">
+                        Hospital Invoice
+                    </h3>
+
+                    <small>
+                        Invoice #{{ bill.id }}
+                    </small>
+
+                </div>
+
+                <div>
+
+                    {% if bill.payment_status == "Paid" %}
+
+                        <span class="badge bg-light text-success fs-6">
+                            Paid
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger fs-6">
+                            Pending
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h5 class="text-primary">
+                        Patient Information
+                    </h5>
+
+                    <table class="table table-borderless">
+
+                        <tr>
+
+                            <th width="170">
+                                Patient
+                            </th>
+
+                            <td>
+
+                                {{ patient.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Date
+
+                            </th>
+
+                            <td>
+
+                                {{ appointment.appointment_date }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Time
+
+                            </th>
+
+                            <td>
+
+                                {{ appointment.appointment_time }}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <h5 class="text-primary">
+                        Doctor Information
+                    </h5>
+
+                    <table class="table table-borderless">
+
+                        <tr>
+
+                            <th width="170">
+
+                                Doctor
+
+                            </th>
+
+                            <td>
+
+                                Dr.
+                                {{ doctor.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Department
+
+                            </th>
+
+                            <td>
+
+                                {{ doctor.department.department_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Bill Date
+
+                            </th>
+
+                            <td>
+
+                                {{ bill.created_at|date:"d M Y" }}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <table class="table table-striped">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>
+
+                            Description
+
+                        </th>
+
+                        <th class="text-end">
+
+                            Amount
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+
+                            Consultation Fee
+
+                        </td>
+
+                        <td class="text-end">
+
+                            ₹ {{ bill.consultation_fee }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+
+                            Medicine Cost
+
+                        </td>
+
+                        <td class="text-end">
+
+                            ₹ {{ bill.medicine_cost }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+
+                            Lab Test Cost
+
+                        </td>
+
+                        <td class="text-end">
+
+                            ₹ {{ bill.lab_test_cost }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+
+                            GST
+
+                        </td>
+
+                        <td class="text-end">
+
+                            ₹ {{ bill.gst }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+
+                            Discount
+
+                        </td>
+
+                        <td class="text-end text-danger">
+
+                            - ₹ {{ bill.discount }}
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+                <tfoot>
+
+                    <tr class="table-success">
+
+                        <th>
+
+                            Total Amount
+
+                        </th>
+
+                        <th class="text-end">
+
+                            ₹ {{ bill.total_amount }}
+
+                        </th>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+
+        <div class="card-footer bg-light">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+
+                    <a href="{% url 'bill_list' %}"
+
+                       class="btn btn-secondary">
+
+                        Back
+
+                    </a>
+
+                </div>
+
+                <div>
+
+                    <a href="{% url 'bill_download' bill.id %}"
+
+                       class="btn btn-success">
+
+                        <i class="fas fa-download"></i>
+
+                        Download PDF
+
+                    </a>
+
+                    {% if request.user.role != "PATIENT" %}
+
+                    <a href="{% url 'bill_update' bill.id %}"
+
+                       class="btn btn-warning">
+
+                        Edit
+
+                    </a>
+
+                    <a href="{% url 'bill_delete' bill.id %}"
+
+                       class="btn btn-danger">
+
+                        Delete
+
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

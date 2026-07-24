@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+My Payments
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-success">
+
+                <i class="fas fa-wallet"></i>
+
+                My Payments
+
+            </h2>
+
+            <small class="text-muted">
+
+                View your complete payment history
+
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Total Payments
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        {{ payments|length }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Total Paid
+
+                    </h6>
+
+                    <h2 class="text-success">
+
+                        ₹ {{ total_paid }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Successful Payments
+
+                    </h6>
+
+                    <h2 class="text-primary">
+
+                        {{ payments|length }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <input
+
+                            type="text"
+
+                            name="search"
+
+                            value="{{ search }}"
+
+                            class="form-control"
+
+                            placeholder="Search Transaction ID">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <select
+
+                            name="method"
+
+                            class="form-select">
+
+                            <option value="">
+
+                                Payment Method
+
+                            </option>
+
+                            <option value="Cash">
+
+                                Cash
+
+                            </option>
+
+                            <option value="UPI">
+
+                                UPI
+
+                            </option>
+
+                            <option value="Card">
+
+                                Card
+
+                            </option>
+
+                            <option value="Net Banking">
+
+                                Net Banking
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <select
+
+                            name="status"
+
+                            class="form-select">
+
+                            <option value="">
+
+                                Payment Status
+
+                            </option>
+
+                            <option value="Success">
+
+                                Success
+
+                            </option>
+
+                            <option value="Pending">
+
+                                Pending
+
+                            </option>
+
+                            <option value="Failed">
+
+                                Failed
+
+                            </option>
+
+                            <option value="Refunded">
+
+                                Refunded
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button class="btn btn-success w-100">
+
+                            <i class="fas fa-search"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                Payment History
+
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Receipt</th>
+
+                        <th>Doctor</th>
+
+                        <th>Department</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                        <th>Date</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                                    {% for payment in payments %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+
+                            {{ payment.receipt_number }}
+
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+
+                            {{ payment.transaction_id }}
+
+                        </small>
+
+                    </td>
+
+                    <td>
+
+                        Dr.
+
+                        {{ payment.bill.appointment.doctor.user.get_full_name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ payment.bill.appointment.doctor.department.department_name }}
+
+                    </td>
+
+                    <td class="fw-bold text-success">
+
+                        ₹ {{ payment.amount }}
+
+                    </td>
+
+                    <td>
+
+                        {% if payment.payment_status == "Success" %}
+
+                            <span class="badge bg-success">
+
+                                Success
+
+                            </span>
+
+                        {% elif payment.payment_status == "Pending" %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        {% elif payment.payment_status == "Failed" %}
+
+                            <span class="badge bg-danger">
+
+                                Failed
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+
+                                Refunded
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ payment.payment_date|date:"d M Y" }}
+
+                        <br>
+
+                        <small class="text-muted">
+
+                            {{ payment.payment_date|time:"h:i A" }}
+
+                        </small>
+
+                    </td>
+
+                    <td>
+
+                        <a
+
+                            href="{% url 'payment_detail' payment.id %}"
+
+                            class="btn btn-sm btn-primary">
+
+                            <i class="fas fa-eye"></i>
+
+                        </a>
+
+                        <a
+
+                            href="{% url 'download_receipt' payment.id %}"
+
+                            class="btn btn-sm btn-success">
+
+                            <i class="fas fa-download"></i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="7" class="text-center py-5">
+
+                        <i class="fas fa-wallet fa-4x text-muted mb-3"></i>
+
+                        <h5>
+
+                            No Payments Found
+
+                        </h5>
+
+                        <p class="text-muted">
+
+                            You haven't made any payments yet.
+
+                        </p>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

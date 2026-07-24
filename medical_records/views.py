@@ -8,103 +8,232 @@ from appointments.models import Appointment
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 @login_required
 def medical_record_list(request):
 
-    records=MedicalRecord.objects.select_related(
-        "appointment",
-        "appointment__doctor__user",
-        "appointment__patient__user",
-    ).prefetch_related(
-        "prescriptions"
-    ).order_by("-created_at")
+    records = (
+        MedicalRecord.objects.select_related(
+            "appointment",
+            "appointment__doctor__user",
+            "appointment__patient__user",
+            "appointment__doctor__department",
+        )
+        .prefetch_related("prescriptions")
+        .order_by("-created_at")
+    )
 
-    if hasattr(request.user,"doctor_profile"):
-        records=records.filter(
+    # Role Based Access
+    if hasattr(request.user, "doctor_profile"):
+
+        records = records.filter(
             appointment__doctor=request.user.doctor_profile
         )
 
-    elif hasattr(request.user,"patient_profile"):
-        records=records.filter(
+    elif hasattr(request.user, "patient_profile"):
+
+        records = records.filter(
             appointment__patient=request.user.patient_profile
         )
 
+    # ADMIN sees all records
+    elif request.user.role == "ADMIN":
+
+        pass
+
+    # -----------------------------
+    # Search
+    # -----------------------------
+
+    search = request.GET.get("search")
+
+    if search:
+
+        records = records.filter(
+
+            Q(appointment__patient__user__first_name__icontains=search) |
+
+            Q(appointment__patient__user__last_name__icontains=search) |
+
+            Q(appointment__doctor__user__first_name__icontains=search) |
+
+            Q(appointment__doctor__user__last_name__icontains=search) |
+
+            Q(diagnosis__icontains=search)
+
+        )
+
+    # -----------------------------
+    # Appointment Date Filter
+    # -----------------------------
+
+    appointment_date = request.GET.get("date")
+
+    if appointment_date:
+
+        records = records.filter(
+            appointment__appointment_date=appointment_date
+        )
+
+    # -----------------------------
+    # Pagination
+    # -----------------------------
+
+    paginator = Paginator(records, 10)
+
+    page = request.GET.get("page")
+
+    records = paginator.get_page(page)
+
     return render(
+
         request,
+
         "medical_records/medical_record_list.html",
+
         {
-            "records":records
+
+            "records": records,
+
+            "search": search,
+
+            "appointment_date": appointment_date,
+
         }
+
     )
 @login_required
 def medical_record_create(request):
 
-    doctor=getattr(request.user,"doctor_profile",None)
+    doctor = getattr(request.user, "doctor_profile", None)
 
     if not doctor:
-        messages.error(request,"Only doctors can create medical records.")
-        return redirect("medical_record_list")
 
-    if request.method=="POST":
+        messages.error(
+            request,
+            "Only doctors can create medical records."
+        )
 
-        form=MedicalRecordForm(request.POST,doctor=doctor)
+        return redirect(
+            "medical_record_list"
+        )
+
+    if request.method == "POST":
+
+        form = MedicalRecordForm(
+            request.POST,
+            doctor=doctor
+        )
 
         if form.is_valid():
 
-            appointment=form.cleaned_data["appointment"]
+            appointment = form.cleaned_data["appointment"]
 
-            if appointment.doctor!=doctor:
-                messages.error(request,"You cannot create records for another doctor's appointment.")
-                return redirect("medical_record_create")
+            # Doctor validation
+            if appointment.doctor != doctor:
 
-            if appointment.status!="Confirmed":
-                messages.error(request,"Only confirmed appointments can have medical records.")
-                return redirect("medical_record_create")
+                messages.error(
+                    request,
+                    "You cannot create another doctor's medical record."
+                )
 
-            if MedicalRecord.objects.filter(appointment=appointment).exists():
-                messages.error(request,"Medical Record already exists.")
-                return redirect("medical_record_create")
+                return redirect(
+                    "medical_record_create"
+                )
 
-            record=form.save(commit=False)
+            # Appointment validation
+            if appointment.status != "Confirmed":
+
+                messages.error(
+                    request,
+                    "Only Confirmed appointments can create Medical Record."
+                )
+
+                return redirect(
+                    "medical_record_create"
+                )
+
+            # Duplicate validation
+            if MedicalRecord.objects.filter(
+                appointment=appointment
+            ).exists():
+
+                messages.error(
+                    request,
+                    "Medical Record already exists."
+                )
+
+                return redirect(
+                    "medical_record_create"
+                )
+
+            # Save Medical Record
+            record = form.save(
+                commit=False
+            )
+
+            record.created_by = request.user
+
             record.save()
 
-            appointment.patient_checked_in=True
-            appointment.status="Completed"
-            appointment.consultation_completed_at=timezone.now()
+            # Update Appointment
+            appointment.patient_checked_in = True
 
-            appointment.save(update_fields=[
-                "patient_checked_in",
-                "status",
-                "consultation_completed_at"
-            ])
+            appointment.status = "Completed"
+
+            appointment.consultation_completed_at = timezone.now()
+
+            appointment.save()
+
+            print("=================================")
+            print("Medical Record Saved")
+            print("Record ID :", record.id)
+            print("Redirect -> Prescription")
+            print("=================================")
 
             messages.success(
                 request,
-                f"Medical Record created successfully for {appointment.patient.user.get_full_name()}."
+                "Medical Record Created Successfully."
             )
 
+            # Go directly to Prescription Page
             return redirect(
                 "prescription_create",
                 record_id=record.id
             )
 
+        else:
+
+            print("========== FORM ERROR ==========")
+            print(form.errors)
+            print("================================")
+
+            messages.error(
+                request,
+                "Please correct the errors."
+            )
+
     else:
 
-        appointment_id=request.GET.get("appointment")
+        appointment_id = request.GET.get(
+            "appointment"
+        )
 
         if appointment_id:
 
-            form=MedicalRecordForm(
+            form = MedicalRecordForm(
                 initial={
-                    "appointment":appointment_id
+                    "appointment": appointment_id
                 },
                 doctor=doctor
             )
 
         else:
 
-            form=MedicalRecordForm(
+            form = MedicalRecordForm(
                 doctor=doctor
             )
 
@@ -112,8 +241,8 @@ def medical_record_create(request):
         request,
         "medical_records/medical_record_form.html",
         {
-            "form":form,
-            "is_update":False,
+            "form": form,
+            "is_update": False,
         }
     )
 @login_required
@@ -153,11 +282,12 @@ def medical_record_update(request,pk):
             appointment=record.appointment
 
             appointment.patient_checked_in=True
-            appointment.status="Completed"
+            if appointment.status != "Completed":
+             appointment.status = "Completed"
 
             if not appointment.consultation_completed_at:
                 appointment.consultation_completed_at=timezone.now()
-
+            appointment.medical_record_created = False
             appointment.save(update_fields=[
                 "patient_checked_in",
                 "status",
@@ -257,7 +387,8 @@ def medical_record_detail(request,pk):
         if record.appointment.doctor!=request.user.doctor_profile:
             messages.error(request,"Access Denied.")
             return redirect("medical_record_list")
-
+    elif request.user.role == "ADMIN":
+     pass
     elif hasattr(request.user,"patient_profile"):
         if record.appointment.patient!=request.user.patient_profile:
             messages.error(request,"Access Denied.")
@@ -294,6 +425,8 @@ def get_appointment_details(request,pk):
                 {"error":"Access Denied"},
                 status=403
             )
+        elif request.user.role == "ADMIN":
+          pass
 
     elif hasattr(request.user,"patient_profile"):
         if appointment.patient!=request.user.patient_profile:
@@ -329,9 +462,15 @@ def get_appointment_details(request,pk):
 
         "risk_level":
         appointment.risk_level,
+        "doctor_specialization":
+
+appointment.doctor.specialization,
 
         "risk_score":
         appointment.risk_score,
+        "doctor_specialization":
+
+appointment.doctor.specialization,
 
         "checked_in":
         appointment.patient_checked_in,
@@ -347,3 +486,59 @@ def get_appointment_details(request,pk):
     }
 
     return JsonResponse(data)
+@login_required
+def medical_record_pdf(request, pk):
+
+    record = get_object_or_404(
+        MedicalRecord.objects.select_related(
+            "appointment",
+            "appointment__doctor__user",
+            "appointment__doctor__department",
+            "appointment__patient__user",
+        ).prefetch_related(
+            "prescriptions"
+        ),
+        pk=pk
+    )
+
+    if hasattr(request.user, "doctor_profile"):
+
+        if record.appointment.doctor != request.user.doctor_profile:
+
+            messages.error(request, "Access Denied.")
+
+            return redirect("medical_record_list")
+
+    elif hasattr(request.user, "patient_profile"):
+
+        if record.appointment.patient != request.user.patient_profile:
+
+            messages.error(request, "Access Denied.")
+
+            return redirect("medical_record_list")
+
+    elif request.user.role == "ADMIN":
+
+        pass
+
+    return render(
+
+        request,
+
+        "medical_records/medical_record_pdf.html",
+
+        {
+
+            "record": record,
+
+            "appointment": record.appointment,
+
+            "doctor": record.appointment.doctor,
+
+            "patient": record.appointment.patient,
+
+            "prescriptions": record.prescriptions.all(),
+
+        }
+
+    )

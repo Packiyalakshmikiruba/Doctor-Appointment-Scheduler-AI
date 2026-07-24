@@ -73,6 +73,8 @@ class AppointmentForm(forms.ModelForm):
             .select_related("user", "department")
             .order_by("user__first_name")
         )
+        print("Doctor Count:", self.fields["doctor"].queryset.count())
+        print(self.fields["doctor"].queryset)
 
         self.fields["doctor"].label_from_instance = (
             lambda obj: f"Dr. {obj.user.get_full_name() or obj.user.username}"

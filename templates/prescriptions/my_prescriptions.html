@@ -1,28 +1,202 @@
 {% extends "base.html" %}
-{% block title %}My Prescriptions{% endblock %}
+
+{% block title %}
+My Prescriptions
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-  <h4 class="mb-3"><i class="bi bi-capsule"></i> My Prescriptions</h4>
-  <div class="card shadow-sm">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead><tr><th>Date</th><th>Doctor</th><th>Medicine</th><th>Dosage</th><th>Duration</th><th></th></tr></thead>
-        <tbody>
-          {% for p in prescriptions %}
-          <tr>
-            <td>{{ p.medical_record.appointment.appointment_date }}</td>
-            <td>Dr. {{ p.medical_record.appointment.doctor.user.get_full_name }}</td>
-            <td>{{ p.medicine_name }}</td>
-            <td>{{ p.dosage }}</td>
-            <td>{{ p.duration }} days</td>
-            <td><a href="{% url 'download_prescription_pdf' p.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download"></i></a></td>
-          </tr>
-          {% empty %}
-          <tr><td colspan="6" class="text-center text-muted py-4">No prescriptions yet.</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-capsule text-primary"></i>
+
+                My Prescriptions
+
+            </h2>
+
+            <p class="text-muted mb-0">
+                View all your previous prescriptions
+            </p>
+
+        </div>
+
     </div>
-  </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="search"
+                            placeholder="Search medicine / doctor / diagnosis..."
+                            value="{{ search }}"
+                        >
+
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+
+                        <button
+                            class="btn btn-primary"
+                        >
+                            <i class="bi bi-search"></i>
+                            Search
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow mt-4">
+
+        <div class="card-body p-0">
+
+            <table class="table table-hover table-bordered align-middle mb-0">
+
+                <thead class="table-primary">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Date</th>
+
+                        <th>Doctor</th>
+
+                        <th>Department</th>
+
+                        <th>Diagnosis</th>
+
+                        <th>Medicine</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for prescription in prescriptions %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ forloop.counter }}
+
+                        </td>
+
+                        <td>
+
+                            {{ prescription.created_at|date:"d M Y" }}
+
+                        </td>
+
+                        <td>
+
+                            Dr.
+
+                            {{ prescription.medical_record.appointment.doctor.user.get_full_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ prescription.medical_record.appointment.doctor.department.department_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ prescription.medical_record.diagnosis }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                {{ prescription.medicine_name }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+
+                                href="{% url 'prescription_detail' prescription.medical_record.id %}"
+
+                                class="btn btn-sm btn-primary"
+
+                            >
+
+                                <i class="bi bi-eye"></i>
+
+                                View
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="text-center py-5">
+
+                                <i class="bi bi-capsule display-1 text-secondary"></i>
+
+                                <h4 class="mt-3">
+
+                                    No Prescriptions Found
+
+                                </h4>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
 </div>
+
 {% endblock %}

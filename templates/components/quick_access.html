@@ -1,0 +1,284 @@
+{% load static %}
+
+<div class="quick-access-bar">
+
+    <div class="container-fluid">
+
+        <div class="quick-title">
+
+            <div>
+
+                <h5>
+
+                    <i class="fas fa-bolt text-warning me-2"></i>
+
+                    Quick Access
+
+                </h5>
+
+                <small>
+
+                    Frequently Used Hospital Services
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="row g-3 mt-2">
+
+            {% if request.user.role == "ADMIN" %}
+
+            <div class="col-xl col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'patient_create' %}" class="quick-card">
+
+                    <div class="quick-icon bg-primary">
+
+                        <i class="fas fa-user-plus"></i>
+
+                    </div>
+
+                    <h6>Add Patient</h6>
+
+                    <small>Create new patient</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-xl col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'doctor_create' %}" class="quick-card">
+
+                    <div class="quick-icon bg-success">
+
+                        <i class="fas fa-user-md"></i>
+
+                    </div>
+
+                    <h6>Add Doctor</h6>
+
+                    <small>Register doctor</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-xl col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'appointment_create' %}" class="quick-card">
+
+                    <div class="quick-icon bg-warning">
+
+                        <i class="fas fa-calendar-plus"></i>
+
+                    </div>
+
+                    <h6>Appointment</h6>
+
+                    <small>Book appointment</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-xl col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'bill_create' %}" class="quick-card">
+
+                    <div class="quick-icon bg-danger">
+
+                        <i class="fas fa-file-invoice-dollar"></i>
+
+                    </div>
+
+                    <h6>Create Bill</h6>
+
+                    <small>Generate invoice</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-xl col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'risk_dashboard' %}" class="quick-card">
+
+                    <div class="quick-icon bg-info">
+
+                        <i class="fas fa-brain"></i>
+
+                    </div>
+
+                    <h6>AI Dashboard</h6>
+
+                    <small>Analytics</small>
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+            {% if request.user.role == "DOCTOR" %}
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'appointment_list' %}" class="quick-card">
+
+                    <div class="quick-icon bg-primary">
+
+                        <i class="fas fa-calendar-check"></i>
+
+                    </div>
+
+                    <h6>Appointments</h6>
+
+                    <small>Today's schedule</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'medical_record_create' %}" class="quick-card">
+
+                    <div class="quick-icon bg-success">
+
+                        <i class="fas fa-notes-medical"></i>
+
+                    </div>
+
+                    <h6>Medical Record</h6>
+
+                    <small>Create record</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'prescription_list' %}" class="quick-card">
+
+                    <div class="quick-icon bg-warning">
+
+                        <i class="fas fa-prescription"></i>
+
+                    </div>
+
+                    <h6>Prescriptions</h6>
+
+                    <small>Manage medicines</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'availability_list' %}" class="quick-card">
+
+                    <div class="quick-icon bg-info">
+
+                        <i class="fas fa-clock"></i>
+
+                    </div>
+
+                    <h6>Availability</h6>
+
+                    <small>Manage schedule</small>
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+            {% if request.user.role == "PATIENT" %}
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'appointment_create' %}" class="quick-card">
+
+                    <div class="quick-icon bg-primary">
+
+                        <i class="fas fa-calendar-plus"></i>
+
+                    </div>
+
+                    <h6>Book</h6>
+
+                    <small>Appointment</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'patient_medical_history' %}" class="quick-card">
+
+                    <div class="quick-icon bg-success">
+
+                        <i class="fas fa-file-medical"></i>
+
+                    </div>
+
+                    <h6>History</h6>
+
+                    <small>Medical records</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a href="{% url 'bill_list' %}" class="quick-card">
+
+                    <div class="quick-icon bg-danger">
+
+                        <i class="fas fa-credit-card"></i>
+
+                    </div>
+
+                    <h6>Payments</h6>
+
+                    <small>Billing</small>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <button
+                    class="quick-card border-0 w-100"
+                    data-bs-toggle="modal"
+                    data-bs-target="#globalSearchModal">
+
+                    <div class="quick-icon bg-dark">
+
+                        <i class="fas fa-search"></i>
+
+                    </div>
+
+                    <h6>Search</h6>
+
+                    <small>Find anything</small>
+
+                </button>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>

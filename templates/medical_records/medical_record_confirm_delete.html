@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+
+Delete Medical Record
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h3 class="mb-0">
+
+                        <i class="fas fa-trash-alt"></i>
+
+                        Delete Medical Record
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+
+                        <i class="fas fa-exclamation-triangle
+                                  text-danger"
+                           style="font-size:70px;">
+
+                        </i>
+
+                    </div>
+
+                    <h4 class="text-center text-danger">
+
+                        Are you sure?
+
+                    </h4>
+
+                    <p class="text-center text-muted">
+
+                        This medical record will be permanently deleted.
+
+                        This action cannot be undone.
+
+                    </p>
+
+                    <hr>
+
+                    <table class="table table-bordered">
+
+                        <tr>
+
+                            <th width="220">
+
+                                Record ID
+
+                            </th>
+
+                            <td>
+
+                                #{{ record.id }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Patient
+
+                            </th>
+
+                            <td>
+
+                                {{ record.appointment.patient.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Doctor
+
+                            </th>
+
+                            <td>
+
+                                Dr.
+
+                                {{ record.appointment.doctor.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Department
+
+                            </th>
+
+                            <td>
+
+                                {{ record.appointment.doctor.department.department_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Date
+
+                            </th>
+
+                            <td>
+
+                                {{ record.appointment.appointment_date }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Diagnosis
+
+                            </th>
+
+                            <td>
+
+                                {{ record.diagnosis }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Created On
+
+                            </th>
+
+                            <td>
+
+                                {{ record.created_at }}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger">
+
+                                <i class="fas fa-trash"></i>
+
+                                Yes, Delete Record
+
+                            </button>
+
+                            <a href="{% url 'medical_record_detail' record.id %}"
+
+                               class="btn btn-secondary">
+
+                                <i class="fas fa-times"></i>
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+.card{
+
+    border-radius:15px;
+
+}
+
+.card-header{
+
+    border-radius:15px 15px 0 0 !important;
+
+}
+
+.table th{
+
+    background:#f8f9fa;
+
+    font-weight:600;
+
+    width:220px;
+
+}
+
+.btn{
+
+    border-radius:8px;
+
+    min-width:180px;
+
+}
+
+.btn i{
+
+    margin-right:6px;
+
+}
+
+</style>
+
+{% endblock %}

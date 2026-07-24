@@ -1,9 +1,8 @@
 from django.urls import path
 from . import views
 
-# app_name = "medical_records"
-
 urlpatterns = [
+
     path(
         "medical-records/",
         views.medical_record_list,
@@ -35,8 +34,15 @@ urlpatterns = [
     ),
 
     path(
+        "medical-records/<int:pk>/pdf/",
+        views.medical_record_pdf,
+        name="medical_record_pdf",
+    ),
+
+    path(
         "api/appointment/<int:pk>/details/",
         views.get_appointment_details,
         name="get_appointment_details",
     ),
+
 ]

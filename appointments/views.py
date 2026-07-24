@@ -9,7 +9,7 @@ from hospital.models import Department, Doctor
 from .forms import AppointmentForm
 from .models import Appointment
 from patients.models import Patient
-from .notifications import send_appointment_confirmation
+
 from appointments.booking_service import book_appointment_full, handle_cancellation, BookingError
 
 
@@ -213,7 +213,6 @@ def patient_history_view(request, patient_id):
     })
 @login_required
 def appointment_create(request):
-
     if request.user.role not in ("ADMIN", "PATIENT"):
         messages.error(request, "Access denied.")
         return redirect("dashboard")
@@ -221,7 +220,6 @@ def appointment_create(request):
     is_self_booking = request.user.role == "PATIENT"
 
     if request.method == "POST":
-
         form = AppointmentForm(request.POST)
 
         if is_self_booking:
@@ -229,9 +227,7 @@ def appointment_create(request):
             form.data["patient"] = request.user.patient_profile.id
 
         if form.is_valid():
-
             try:
-
                 appointment = book_appointment_full(
                     patient=form.cleaned_data["patient"],
                     doctor=form.cleaned_data["doctor"],
@@ -242,7 +238,7 @@ def appointment_create(request):
 
                 messages.success(
                     request,
-                    "Appointment booked successfully."
+                    "Appointment booked successfully. Confirmation email has been sent."
                 )
 
                 return redirect("dashboard")
@@ -251,16 +247,23 @@ def appointment_create(request):
                 messages.error(request, e.message)
 
     else:
-
         form = AppointmentForm()
 
         if is_self_booking:
             form.fields["patient"].widget = forms.HiddenInput()
             form.fields["patient"].initial = request.user.patient_profile.id
 
+    is_modal = request.GET.get("modal") == "true"
+
+    template_name = (
+        "appointments/appointment_form_modal.html"
+        if is_modal
+        else "appointments/appointment_form.html"
+    )
+
     return render(
         request,
-        "appointments/appointment_form.html",
+        template_name,
         {
             "form": form,
             "is_self_booking": is_self_booking,

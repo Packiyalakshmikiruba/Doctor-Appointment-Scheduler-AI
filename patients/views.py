@@ -556,3 +556,15 @@ def download_prescription(request, pk):
 
 
     return response
+@login_required
+def patient_profile(request):
+
+    patient = request.user.patient_profile
+
+    return render(
+        request,
+        "patients/patient_profile.html",
+        {
+            "patient": patient
+        }
+    )

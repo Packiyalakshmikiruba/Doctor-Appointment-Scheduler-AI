@@ -17,6 +17,7 @@ from .models import (
     DoctorAttendance,
     DoctorStatus,
 )
+
 def department_create(request):
 
     if request.method == "POST":

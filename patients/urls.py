@@ -24,6 +24,11 @@ path(
     views.download_prescription,
     name="download_prescription"
 ),
+path(
+    "patient/profile/",
+    views.patient_profile,
+    name="patient_profile"
+),
 
     path(
         "medical-history/<int:pk>/",

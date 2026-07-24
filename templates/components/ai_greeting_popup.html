@@ -1,176 +1,60 @@
-{% if request.user.is_authenticated and request.user.role == "PATIENT" %}
+{% load static %}
 
-<!-- ================= AI GREETING POPUP (auto-shows once per login) ================= -->
-<div id="ai-greet-overlay" class="d-none position-fixed top-0 start-0 w-100 h-100"
-     style="z-index: 1090; background: rgba(15,23,42,0.35); backdrop-filter: blur(2px);">
+<link rel="stylesheet" href="{% static 'css/components/ai_greeting_popup.css' %}">
 
-    <div id="ai-greet-card" class="position-fixed" style="bottom: 24px; right: 24px; z-index: 1091; width: 320px; max-width: 90vw;">
+<!-- ======================================
+        AI GREETING POPUP
+======================================= -->
 
-        <div class="bg-white rounded-4 shadow-lg p-3 position-relative" style="border: 1px solid #dbe3ea;">
-            <button id="ai-greet-close" class="btn-close position-absolute" style="top: 12px; right: 12px;" aria-label="Close"></button>
+<div id="aiGreetingPopup" class="ai-popup">
 
-            <div class="d-flex align-items-start gap-2">
-                <div id="ai-robot-mount" style="width: 64px; height: 64px; flex-shrink: 0;"></div>
-                <div class="pt-1">
-                    <div class="fw-bold" style="color:#0f172a; font-size: 15px;">AI Assistant</div>
-                    <!-- வெறும் Hi மட்டும் காட்டும் பகுதி -->
-                    <div id="ai-greet-text" class="mt-1 fw-semibold" style="color:#334155; font-size: 16px; line-height: 1.4;"></div>
-                </div>
-            </div>
+    <div class="ai-popup-header">
 
-            <div class="d-flex gap-2 mt-3">
-                <button id="ai-greet-chat-btn" class="btn btn-primary btn-sm flex-fill">Chat now</button>
-                <button id="ai-greet-dismiss" class="btn btn-outline-secondary btn-sm flex-fill">Not now</button>
-            </div>
+        <div class="ai-icon">
+
+            <i class="fas fa-robot"></i>
+
         </div>
+
+        <div>
+
+            <h6>Hello 👋</h6>
+
+            <small>AI Assistant</small>
+
+        </div>
+
+        <button id="closeGreeting">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
     </div>
+
+    <div class="ai-popup-body">
+
+        Welcome to
+
+        <strong>AI Hospital Management System</strong>
+
+        <br><br>
+
+        I'm here to help you with appointments,
+        doctors, patients, billing and reports.
+
+    </div>
+
+    <div class="ai-popup-footer">
+
+        <button id="startChatBtn">
+
+            Open AI Chat
+
+        </button>
+
+    </div>
+
 </div>
 
-<!-- ================= ROBOT SVG (waving, blinking, floating) ================= -->
-<template id="ai-robot-template">
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-  <defs>
-    <linearGradient id="shellG" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#dbe3ea"/>
-    </linearGradient>
-    <radialGradient id="eyeG" cx="35%" cy="35%" r="70%">
-      <stop offset="0%" stop-color="#a6f3ff"/>
-      <stop offset="60%" stop-color="#22c3e6"/>
-      <stop offset="100%" stop-color="#0891b2"/>
-    </radialGradient>
-  </defs>
-
-  <g id="robot-float">
-    <ellipse cx="100" cy="182" rx="46" ry="8" fill="#0891b2" opacity="0.15"/>
-
-    <!-- left waving arm -->
-    <g id="robot-arm" style="transform-origin: 62px 118px;">
-      <rect x="40" y="112" width="14" height="46" rx="7" fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
-      <circle cx="47" cy="108" r="8" fill="#cbd5e1"/>
-    </g>
-
-    <!-- right arm (static) -->
-    <rect x="146" y="118" width="14" height="42" rx="7" fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
-
-    <!-- antenna -->
-    <line x1="100" y1="26" x2="100" y2="40" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
-    <circle id="robot-antenna-tip" cx="100" cy="22" r="8" fill="#22c3e6"/>
-
-    <!-- ears -->
-    <rect x="52" y="66" width="16" height="44" rx="8" fill="#cbd5e1"/>
-    <rect x="132" y="66" width="16" height="44" rx="8" fill="#cbd5e1"/>
-
-    <!-- head -->
-    <rect x="46" y="40" width="108" height="86" rx="30" fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
-
-    <!-- face screen -->
-    <rect x="62" y="60" width="76" height="52" rx="16" fill="#0f172a"/>
-
-    <!-- eyes (blink via scaleY) -->
-    <g id="robot-eyes" style="transform-origin: 100px 84px;">
-      <circle cx="82" cy="84" r="8" fill="url(#eyeG)"/>
-      <circle cx="118" cy="84" r="8" fill="url(#eyeG)"/>
-    </g>
-
-    <path d="M82 104 Q100 116 118 104" stroke="#7ff0ff" stroke-width="4" stroke-linecap="round" fill="none"/>
-
-    <!-- neck -->
-    <rect x="88" y="124" width="24" height="10" fill="#cbd5e1"/>
-
-    <!-- body -->
-    <path d="M56 148 Q56 134 100 134 Q144 134 144 148 L144 160 Q144 178 100 178 Q56 178 56 160 Z"
-          fill="url(#shellG)" stroke="#c7cfd8" stroke-width="1"/>
-    <line x1="70" y1="150" x2="130" y2="150" stroke="#b6c0cb" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="100" cy="160" r="7" fill="#22c3e6" opacity="0.9"/>
-  </g>
-</svg>
-</template>
-
-<style>
-@keyframes aiFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
-@keyframes aiWave {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-28deg); }
-    50% { transform: rotate(-6deg); }
-    75% { transform: rotate(-28deg); }
-}
-@keyframes aiBlink {
-    0%, 92%, 100% { transform: scaleY(1); }
-    96% { transform: scaleY(0.15); }
-}
-@keyframes aiPopIn {
-    from { opacity: 0; transform: translateY(16px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-#robot-float { animation: aiFloat 2.6s ease-in-out infinite; }
-#robot-arm { animation: aiWave 1.4s ease-in-out infinite; }
-#robot-eyes { animation: aiBlink 4s ease-in-out infinite; }
-#ai-greet-card > div { animation: aiPopIn 0.35s ease-out; }
-</style>
-
-<script>
-(function () {
-    const overlay = document.getElementById('ai-greet-overlay');
-    const card = document.getElementById('ai-greet-card');
-    const mount = document.getElementById('ai-robot-mount');
-    const template = document.getElementById('ai-robot-template');
-    const textEl = document.getElementById('ai-greet-text');
-    const closeBtn = document.getElementById('ai-greet-close');
-    const dismissBtn = document.getElementById('ai-greet-dismiss');
-    const chatBtn = document.getElementById('ai-greet-chat-btn');
-
-    mount.appendChild(template.content.cloneNode(true));
-
-    const firstName = "{{ request.user.first_name|default:request.user.username|escapejs }}";
-    // வாக்கியம் சுருக்கப்பட்டு வெறும் "Hi [பெயர்]!" என மாற்றப்பட்டுள்ளது
-    const greetText = `Hi ${firstName}!`; 
-
-    function hideGreeting() {
-        overlay.classList.add('d-none');
-    }
-
-    function showGreeting() {
-        overlay.classList.remove('d-none');
-        textEl.textContent = '';
-        let i = 0;
-        const typeSpeed = 50; // வேகம் சிறிது கூட்டப்பட்டுள்ளது
-        function typeNext() {
-            if (i <= greetText.length) {
-                textEl.textContent = greetText.slice(0, i);
-                i++;
-                setTimeout(typeNext, typeSpeed);
-            }
-        }
-        typeNext();
-
-        if ('speechSynthesis' in window) {
-            try {
-                const utter = new SpeechSynthesisUtterance(greetText);
-                utter.rate = 1.0;
-                utter.pitch = 1.05;
-                speechSynthesis.speak(utter);
-            } catch (e) {}
-        }
-    }
-
-    closeBtn.addEventListener('click', hideGreeting);
-    dismissBtn.addEventListener('click', hideGreeting);
-
-    chatBtn.addEventListener('click', function () {
-        hideGreeting();
-        const chatToggle = document.getElementById('chat-toggle-btn');
-        if (chatToggle) chatToggle.click();
-    });
-
-    if (!sessionStorage.getItem('ai_greeted')) {
-        sessionStorage.setItem('ai_greeted', '1');
-        setTimeout(showGreeting, 900);
-    }
-})();
-</script>
-
-{% endif %}
+<script src="{% static 'js/components/ai_greeting_popup.js' %}"></script>

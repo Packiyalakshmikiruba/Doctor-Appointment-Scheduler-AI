@@ -9,4 +9,6 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         call_command("build_knowledge_base")
         build_vectorstore()
-        self.stdout.write(self.style.SUCCESS("Knowledge base + vector index rebuilt."))
+        self.stdout.write(
+            self.style.SUCCESS("Knowledge base + vector index rebuilt.")
+        )

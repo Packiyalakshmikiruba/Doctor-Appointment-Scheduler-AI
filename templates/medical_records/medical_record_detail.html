@@ -1,74 +1,614 @@
-<!-- Card Header -->
-            <div class="card-header bg-gradient bg-primary text-white py-4 px-4 d-flex justify-content-between align-items-center">
-                <div>
-                    <h3 class="mb-0 fw-bold"><i class="fas fa-file-medical me-2"></i> Medical Record Details</h3>
-                    <p class="mb-0 text-white-50 small mt-1">Complete clinical history and consultation overview</p>
-                </div>
-                <span class="badge bg-light text-primary px-3 py-2 rounded-pill fw-semibold shadow-sm">
-                    <i class="fas fa-calendar-alt me-1"></i> {{ record.created_at|date:"M d, Y" }}
-                </span>
-            </div>
+{% extends "base.html" %}
+{% load static %}
 
-            <!-- Card Body -->
-            <div class="card-body p-4 p-md-5 bg-light">
-                
-                <div class="row g-4 mb-4">
-                    <!-- Patient Info Box -->
-                    <div class="col-md-6">
-                        <div class="p-3 bg-white rounded-3 shadow-sm border-start border-primary border-4 h-100">
-                            <span class="text-uppercase small text-muted fw-bold d-block mb-1">Patient Name</span>
-                            <h5 class="text-dark mb-0 fw-semibold">
-                                <i class="fas fa-user-injured text-primary me-2"></i> {{ record.patient.user.username }}
-                            </h5>
-                        </div>
-                    </div>
+{% block title %}
 
-                    <!-- Doctor Info Box -->
-                    <div class="col-md-6">
-                        <div class="p-3 bg-white rounded-3 shadow-sm border-start border-success border-4 h-100">
-                            <span class="text-uppercase small text-muted fw-bold d-block mb-1">Attending Doctor</span>
-                            <h5 class="text-dark mb-0 fw-semibold">
-                                <i class="fas fa-user-md text-success me-2"></i> Dr. {{ record.doctor.user.username }}
-                            </h5>
-                        </div>
-                    </div>
-                </div>
+Medical Record Details
 
-                <!-- Diagnosis Section -->
-                <div class="card border-0 shadow-sm mb-4 rounded-3">
-                    <div class="card-body p-4">
-                        <h5 class="text-primary fw-bold mb-3">
-                            <i class="fas fa-stethoscope me-2"></i> Diagnosis
-                        </h5>
-                        <p class="text-secondary mb-0 bg-light p-3 rounded-2 border">
-                            {{ record.diagnosis|default:"No diagnosis recorded." }}
-                        </p>
-                    </div>
-                </div>
+{% endblock %}
 
-                <!-- Treatment Section -->
-                <div class="card border-0 shadow-sm mb-4 rounded-3">
-                    <div class="card-body p-4">
-                        <h5 class="text-success fw-bold mb-3">
-                            <i class="fas fa-prescription-bottle-alt me-2"></i> Treatment & Prescription
-                        </h5>
-                        <p class="text-secondary mb-0 bg-light p-3 rounded-2 border">
-                            {{ record.treatment|default:"No treatment plan recorded." }}
-                        </p>
-                    </div>
-                </div>
+{% block content %}
 
-                <!-- Action Footer -->
-                <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
-                    <a href="{% url 'medical_record_list' %}" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm">
-                        <i class="fas fa-arrow-left me-1"></i> Back to List
-                    </a>
-                    <button onclick="window.print()" class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow-sm">
-                        <i class="fas fa-print me-1"></i> Print Record
-                    </button>
-                </div>
+<div class="container mt-4">
 
-            </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-primary">
+
+                <i class="fas fa-notes-medical"></i>
+
+                Medical Record Details
+
+            </h2>
+
+            <p class="text-muted">
+
+                Complete Patient Consultation Record
+
+            </p>
+
         </div>
+
+        <div>
+
+            <a href="{% url 'medical_record_list' %}"
+
+               class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
     </div>
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <div class="d-flex justify-content-between">
+
+                <h4 class="mb-0">
+
+                    Medical Record #{{ record.id }}
+
+                </h4>
+
+                <span class="badge bg-success">
+
+                    {{ appointment.status }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-lg-6">
+
+                    <h5 class="text-primary mb-3">
+
+                        Patient Information
+
+                    </h5>
+
+                    <table class="table table-bordered">
+
+                        <tr>
+
+                            <th width="220">
+
+                                Patient Name
+
+                            </th>
+
+                            <td>
+
+                                {{ patient.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Doctor
+
+                            </th>
+
+                            <td>
+
+                                Dr. {{ doctor.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Department
+
+                            </th>
+
+                            <td>
+
+                                {{ doctor.department.department_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Date
+
+                            </th>
+
+                            <td>
+
+                                {{ appointment.appointment_date }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Time
+
+                            </th>
+
+                            <td>
+
+                                {{ appointment.appointment_time }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Record Created
+
+                            </th>
+
+                            <td>
+
+                                {{ record.created_at }}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="card border-success">
+
+                        <div class="card-header bg-success text-white">
+
+                            <h5 class="mb-0">
+
+                                Consultation Summary
+
+                            </h5>
+
+                        </div>
+
+                        <div class="card-body">
+                                                        <table class="table table-bordered align-middle">
+
+                                <tr>
+
+                                    <th width="220">
+
+                                        Diagnosis
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ record.diagnosis }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Symptoms
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if record.symptoms %}
+
+                                            {{ record.symptoms|linebreaks }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                No Symptoms Recorded
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Treatment
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if record.treatment %}
+
+                                            {{ record.treatment|linebreaks }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                No Treatment Added
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Doctor Notes
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if record.notes %}
+
+                                            {{ record.notes|linebreaks }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                No Notes Available
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Prescription Count
+
+                                    </th>
+
+                                    <td>
+
+                                        <span class="badge bg-info">
+
+                                            {{ prescription_count }}
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Consultation Status
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if appointment.status == "Completed" %}
+
+                                            <span class="badge bg-success">
+
+                                                Consultation Completed
+
+                                            </span>
+
+                                        {% elif appointment.status == "Confirmed" %}
+
+                                            <span class="badge bg-primary">
+
+                                                Confirmed
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-warning text-dark">
+
+                                                {{ appointment.status }}
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+                        <h4 class="text-primary mb-3">
+
+                <i class="fas fa-prescription-bottle-alt"></i>
+
+                Prescriptions
+
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Medicine</th>
+
+                            <th>Dosage</th>
+
+                            <th>Frequency</th>
+
+                            <th>Duration</th>
+
+                            <th>Instructions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for prescription in prescriptions %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ forloop.counter }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.medicine_name }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.dosage }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.frequency }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.duration }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.instructions|default:"-" }}
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="6" class="text-center text-muted py-4">
+
+                                No Prescriptions Available
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <hr>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+
+                {% if request.user.role == "DOCTOR" %}
+
+                <a href="{% url 'medical_record_update' record.id %}"
+
+                   class="btn btn-warning">
+
+                    <i class="fas fa-edit"></i>
+
+                    Edit Record
+
+                </a>
+
+                <a href="{% url 'medical_record_delete' record.id %}"
+
+                   class="btn btn-danger">
+
+                    <i class="fas fa-trash"></i>
+
+                    Delete Record
+
+                </a>
+
+                <a href="{% url 'prescription_create' record.id %}"
+
+                   class="btn btn-success">
+
+                    <i class="fas fa-plus-circle"></i>
+
+                    Add Prescription
+
+                </a>
+
+                {% endif %}
+
+                {% if prescriptions %}
+
+                <a href="{% url 'prescription_list' %}"
+
+                   class="btn btn-info text-white">
+
+                    <i class="fas fa-pills"></i>
+
+                    View All Prescriptions
+
+                </a>
+
+                {% endif %}
+
+                <button
+                    onclick="window.print();"
+                    class="btn btn-primary">
+
+                    <i class="fas fa-print"></i>
+
+                    Print Record
+
+                </button>
+
+                <a href="{% url 'medical_record_list' %}"
+
+                   class="btn btn-secondary">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+<style>
+
+.card{
+
+    border-radius:15px;
+
+}
+
+.card-header{
+
+    border-radius:15px 15px 0 0 !important;
+
+}
+
+.table th{
+
+    width:220px;
+
+    font-weight:600;
+
+    background:#f8f9fa;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+.badge{
+
+    font-size:13px;
+
+    padding:8px 12px;
+
+}
+
+.btn{
+
+    border-radius:8px;
+
+}
+
+.btn i{
+
+    margin-right:5px;
+
+}
+
+@media print{
+
+    .btn,
+
+    .card-header{
+
+        display:none;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,18 +1,44 @@
-Department: General Medicine. Room: 101. Description: General Medicine Department
+Department: General Medicine. Room: GM101. Description: General health consultation and fever treatment
 
-Department: Cardiology. Room: 102. Description: Heart Department
+Department: Cardiology. Room: CD201. Description: Heart related diagnosis and treatment
 
-Department: Neurology. Room: 103. Description: Brain Department
+Department: Neurology. Room: NE301. Description: Brain and nervous system disorders
 
-Department: Orthopedics. Room: 104. Description: Bone Department
+Department: Orthopedics. Room: OR401. Description: Bone, joint and fracture treatment
 
-Department: Dermatology. Room: 105. Description: Skin Department
+Department: Dermatology. Room: DR501. Description: Skin, hair and nail treatment
 
-Doctor: Dr. Arun Kumar. Specialization: Neurologist. Department: Neurology. Consultation Fee: Rs.700.00. Available: Monday 09:00 AM-06:00 PM, Tuesday 09:00 AM-05:00 PM, Wednesday 09:00 AM-05:00 PM, Thursday 09:00 AM-05:00 PM, Friday 09:00 AM-05:00 PM, Saturday 09:00 AM-05:00 PM.
+Department: Pediatrics. Room: PD601. Description: Child healthcare and vaccination
 
-Doctor: Dr. Saran K. Specialization: Cardiologist. Department: Cardiology. Consultation Fee: Rs.700.00. Available: Monday 09:00 AM-05:00 PM, Tuesday 09:00 AM-05:00 PM, Wednesday 09:00 AM-05:00 PM, Thursday 09:00 AM-05:00 PM, Friday 09:00 AM-05:00 PM, Saturday 09:00 AM-05:00 PM.
+Department: Gynecology. Room: GY701. Description: Women's healthcare and pregnancy
 
-Doctor: Dr. Devi H. Specialization: General Physician. Department: General Medicine. Consultation Fee: Rs.500.00. Available: Friday 09:00 AM-05:00 PM, Tuesday 09:00 AM-05:00 PM, Wednesday 09:00 AM-05:00 PM, Thursday 09:00 AM-05:00 PM, Saturday 09:00 AM-05:00 PM, Monday 09:00 AM-05:00 PM.
+Department: ENT. Room: ENT801. Description: Ear, Nose and Throat treatment
+
+Department: Ophthalmology. Room: OP901. Description: Eye examination and vision care
+
+Department: Psychiatry. Room: PS1001. Description: Mental health counseling and treatment
+
+Doctor: Dr. Dr Ravi Kumar. Specialization: Neurologist. Department: Neurology. Consultation Fee: Rs.900.00. Available: Monday 09:00 AM-02:00 PM, Tuesday 02:00 PM-05:00 PM, Wednesday 10:00 AM-05:00 PM, Thursday 05:00 PM-11:00 PM, Friday 12:00 PM-06:00 PM, Sunday 09:00 AM-06:00 PM, Saturday 09:09 AM-06:06 PM.
+
+Doctor: Dr. Priya Sharma. Specialization: Cardiologist. Department: Cardiology. Consultation Fee: Rs.800.00. Available: Monday 02:00 PM-05:00 PM, Tuesday 09:00 AM-01:00 PM, Wednesday 09:00 AM-04:00 PM, Wednesday 02:00 PM-07:00 PM, Saturday 05:00 PM-11:00 PM.
+
+Doctor: Dr. Arun Raj. Specialization: General Physician. Department: General Medicine. Consultation Fee: Rs.500.00. Available: Sunday 01:00 PM-04:00 PM, Monday 09:00 AM-05:00 PM, Tuesday 05:00 AM-04:00 PM, Thursday 06:00 AM-01:20 PM.
+
+Doctor: Dr. Meena Devi. Specialization: Orthopedic Surgeon. Department: Orthopedics. Consultation Fee: Rs.700.00. Available: Saturday 09:00 AM-05:00 PM, Friday 09:00 AM-04:00 PM.
+
+Doctor: Dr. Vijay Kumar. Specialization: Dermatologist. Department: Dermatology. Consultation Fee: Rs.600.00. Available: Tuesday 09:00 AM-06:00 PM.
+
+Doctor: Dr. Karthik Raj. Specialization: Pediatrician. Department: Pediatrics. Consultation Fee: Rs.650.00. Available: Saturday 02:00 PM-08:00 PM, Wednesday 09:00 AM-02:00 PM.
+
+Doctor: Dr. Lakshmi Priya. Specialization: Gynecologist. Department: Gynecology. Consultation Fee: Rs.750.00. Available: Thursday 09:00 AM-03:00 PM.
+
+Doctor: Dr. Suresh Kumar. Specialization: ENT Specialist. Department: ENT. Consultation Fee: Rs.550.00. Available: Thursday 09:00 AM-04:00 PM.
+
+Doctor: Dr. Divya Sri. Specialization: Ophthalmologist. Department: Orthopedics. Consultation Fee: Rs.700.00. Available: Friday 09:00 AM-06:00 PM.
+
+Doctor: Dr. Naveen Raj. Specialization: Psychiatrist. Department: Psychiatry. Consultation Fee: Rs.850.00. Available: Thursday 09:00 AM-05:00 PM.
+
+Doctor: Dr. divya Sri. Specialization: General Physician. Department: General Medicine. Consultation Fee: Rs.500.00. Available: Friday 10:00 AM-12:00 PM.
 
 Clinic General Info: OPD hours are Monday to Saturday, 9 AM to 6 PM. Patients are advised to arrive 15 minutes before their appointment. SMS reminders are sent 24 hours before scheduled appointments.
 

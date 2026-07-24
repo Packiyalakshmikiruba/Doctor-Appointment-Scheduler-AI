@@ -8,10 +8,9 @@ from medical_records.models import MedicalRecord
 class PrescriptionForm(forms.ModelForm):
 
     class Meta:
+        model = Prescription
 
-        model=Prescription
-
-        fields=[
+        fields = [
             "medicine_name",
             "dosage",
             "frequency",
@@ -20,46 +19,51 @@ class PrescriptionForm(forms.ModelForm):
             "instructions",
         ]
 
-        widgets={
+        widgets = {
 
-            "medicine_name":forms.TextInput(attrs={
-                "class":"form-control",
-                "placeholder":"Medicine Name"
+            "medicine_name": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Medicine Name"
             }),
 
-            "dosage":forms.TextInput(attrs={
-                "class":"form-control",
-                "placeholder":"Example : 500 mg / 1 Tablet"
+            "dosage": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Example : 500 mg / 1 Tablet"
             }),
 
-            "frequency":forms.Select(attrs={
-                "class":"form-select"
+            "frequency": forms.Select(attrs={
+                "class": "form-select"
             }),
 
-            "duration":forms.NumberInput(attrs={
-                "class":"form-control",
-                "min":1,
-                "placeholder":"Number of Days"
+            "duration": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": 1,
+                "placeholder": "Number of Days"
             }),
 
-            "before_after_food":forms.Select(attrs={
-                "class":"form-select"
+            "before_after_food": forms.Select(attrs={
+                "class": "form-select"
             }),
 
-            "instructions":forms.Textarea(attrs={
-                "class":"form-control",
-                "rows":2,
-                "placeholder":"Additional Instructions (Optional)"
+            "instructions": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 2,
+                "placeholder": "Additional Instructions (Optional)"
             }),
-
         }
+
+    # Optional fields
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["before_after_food"].required = False
+        self.fields["instructions"].required = False
 
     def clean_medicine_name(self):
 
-        medicine=self.cleaned_data.get("medicine_name")
+        medicine = self.cleaned_data.get("medicine_name")
 
         if not medicine or not medicine.strip():
-
             raise forms.ValidationError(
                 "Medicine name is required."
             )
@@ -68,10 +72,9 @@ class PrescriptionForm(forms.ModelForm):
 
     def clean_duration(self):
 
-        duration=self.cleaned_data.get("duration")
+        duration = self.cleaned_data.get("duration")
 
-        if duration<=0:
-
+        if duration <= 0:
             raise forms.ValidationError(
                 "Duration must be greater than zero."
             )
@@ -80,10 +83,9 @@ class PrescriptionForm(forms.ModelForm):
 
     def clean_dosage(self):
 
-        dosage=self.cleaned_data.get("dosage")
+        dosage = self.cleaned_data.get("dosage")
 
         if not dosage or not dosage.strip():
-
             raise forms.ValidationError(
                 "Dosage is required."
             )
@@ -92,19 +94,18 @@ class PrescriptionForm(forms.ModelForm):
 
     def clean(self):
 
-        cleaned_data=super().clean()
+        cleaned_data = super().clean()
 
-        medicine=cleaned_data.get("medicine_name")
-        dosage=cleaned_data.get("dosage")
+        medicine = cleaned_data.get("medicine_name")
+        dosage = cleaned_data.get("dosage")
 
         if medicine and dosage:
-
-            cleaned_data["medicine_name"]=medicine.title()
+            cleaned_data["medicine_name"] = medicine.title()
 
         return cleaned_data
 
 
-PrescriptionFormSet=inlineformset_factory(
+PrescriptionFormSet = inlineformset_factory(
 
     MedicalRecord,
 

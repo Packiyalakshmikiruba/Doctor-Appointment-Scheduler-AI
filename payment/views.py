@@ -1,9 +1,16 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render,redirect
-from .models import Payment
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render,get_object_or_404,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
+from django.db.models import Sum
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+import uuid
+
+from .models import Payment
+from .forms import PaymentForm
+from billing.models import Bill
+
 
 @login_required
 def payment_list(request):
@@ -15,6 +22,7 @@ def payment_list(request):
             "bill__appointment",
             "bill__appointment__patient__user",
             "bill__appointment__doctor__user",
+            "bill__appointment__doctor__department",
         ).order_by("-payment_date")
 
     elif request.user.role=="PATIENT":
@@ -23,6 +31,7 @@ def payment_list(request):
             "bill",
             "bill__appointment",
             "bill__appointment__doctor__user",
+            "bill__appointment__doctor__department",
         ).filter(
             bill__appointment__patient=request.user.patient_profile
         ).order_by("-payment_date")
@@ -31,11 +40,11 @@ def payment_list(request):
 
         return redirect("dashboard")
 
-    total_amount=sum(
-        payment.amount
-        for payment in payments
-        if payment.payment_status=="Success"
-    )
+    total_amount=payments.filter(
+        payment_status="Success"
+    ).aggregate(
+        total=Sum("amount")
+    )["total"] or 0
 
     return render(
         request,
@@ -45,8 +54,6 @@ def payment_list(request):
             "total_amount":total_amount,
         }
     )
-
-
 @login_required
 def payment_detail(request,pk):
 
@@ -70,7 +77,9 @@ def payment_detail(request,pk):
                 "Access Denied."
             )
 
-            return redirect("payment_list")
+            return redirect(
+                "payment_list"
+            )
 
     elif request.user.role!="ADMIN":
 
@@ -79,7 +88,9 @@ def payment_detail(request,pk):
             "Access Denied."
         )
 
-        return redirect("dashboard")
+        return redirect(
+            "dashboard"
+        )
 
     return render(
         request,
@@ -92,3 +103,516 @@ def payment_detail(request,pk):
             "patient":payment.bill.appointment.patient,
         }
     )
+@login_required
+def payment_create(request, bill_id):
+
+    if request.user.role != "ADMIN":
+
+        messages.error(
+            request,
+            "Only Admin can create payment."
+        )
+
+        return redirect("dashboard")
+
+    bill = get_object_or_404(
+        Bill.objects.select_related(
+            "appointment",
+            "appointment__patient__user",
+            "appointment__doctor__user",
+            "appointment__doctor__department",
+        ),
+        pk=bill_id
+    )
+
+    # OneToOneField check
+    if hasattr(bill, "payment"):
+
+        messages.warning(
+            request,
+            "Payment already exists for this bill."
+        )
+
+        return redirect(
+            "payment_detail",
+            pk=bill.payment.id
+        )
+
+    if request.method == "POST":
+
+        form = PaymentForm(request.POST)
+
+        if form.is_valid():
+
+            payment = form.save(commit=False)
+
+            payment.bill = bill
+
+            payment.amount = bill.total_amount
+
+            payment.transaction_id = uuid.uuid4().hex[:12].upper()
+
+            payment.receipt_number = f"RCPT-{bill.id:05d}"
+
+            payment.received_by = (
+                request.user.get_full_name()
+                or
+                request.user.username
+            )
+
+            payment.save()
+
+            if payment.payment_status == "Success":
+
+                bill.payment_status = "Paid"
+
+            else:
+
+                bill.payment_status = "Pending"
+
+            bill.save()
+
+            messages.success(
+                request,
+                f"Payment of ₹{payment.amount} received successfully."
+            )
+
+            return redirect(
+                "payment_detail",
+                pk=payment.id
+            )
+
+    else:
+
+        form = PaymentForm(
+            initial={
+                "amount": bill.total_amount,
+                "payment_status": "Success",
+            }
+        )
+
+    return render(
+        request,
+        "payments/payment_form.html",
+        {
+            "form": form,
+            "bill": bill,
+            "is_update": False,
+        }
+    )
+@login_required
+def payment_update(request, pk):
+
+    if request.user.role != "ADMIN":
+
+        messages.error(
+            request,
+            "Only Admin can update payment."
+        )
+
+        return redirect("dashboard")
+
+    payment = get_object_or_404(
+        Payment.objects.select_related(
+            "bill",
+            "bill__appointment",
+            "bill__appointment__patient__user",
+            "bill__appointment__doctor__user",
+            "bill__appointment__doctor__department",
+        ),
+        pk=pk
+    )
+
+    bill = payment.bill
+
+    if request.method == "POST":
+
+        form = PaymentForm(
+            request.POST,
+            instance=payment
+        )
+
+        if form.is_valid():
+
+            payment = form.save(commit=False)
+
+            if payment.payment_status == "Success":
+
+                bill.payment_status = "Paid"
+
+            else:
+
+                bill.payment_status = "Pending"
+
+            bill.save()
+
+            payment.save()
+
+            messages.success(
+                request,
+                "Payment Updated Successfully."
+            )
+
+            return redirect(
+                "payment_detail",
+                pk=payment.id
+            )
+
+    else:
+
+        form = PaymentForm(
+            instance=payment
+        )
+
+    return render(
+        request,
+        "payments/payment_form.html",
+        {
+            "form": form,
+            "payment": payment,
+            "bill": bill,
+            "is_update": True,
+        }
+    )
+@login_required
+def payment_delete(request,pk):
+
+    if request.user.role!="ADMIN":
+
+        messages.error(
+            request,
+            "Only Admin can delete payment."
+        )
+
+        return redirect(
+            "dashboard"
+        )
+
+    payment=get_object_or_404(
+        Payment.objects.select_related(
+            "bill",
+            "bill__appointment",
+            "bill__appointment__patient__user",
+            "bill__appointment__doctor__user",
+        ),
+        pk=pk
+    )
+
+    bill=payment.bill
+
+    if request.method=="POST":
+
+        payment.delete()
+
+        bill.payment_status="Pending"
+        bill.save()
+
+        messages.success(
+            request,
+            "Payment Deleted Successfully."
+        )
+
+        return redirect(
+            "payment_list"
+        )
+
+    return render(
+        request,
+        "payments/payment_confirm_delete.html",
+        {
+            "payment":payment,
+            "bill":bill,
+        }
+    )
+@login_required
+def my_payments(request):
+
+    if request.user.role != "PATIENT":
+
+        messages.error(
+            request,
+            "Access Denied."
+        )
+
+        return redirect(
+            "dashboard"
+        )
+
+    patient = request.user.patient_profile
+
+    payments = (
+        Payment.objects
+        .select_related(
+            "bill",
+            "bill__appointment",
+            "bill__appointment__doctor__user",
+            "bill__appointment__doctor__department",
+        )
+        .filter(
+            bill__appointment__patient=patient
+        )
+        .order_by("-payment_date")
+    )
+
+    search = request.GET.get("search")
+
+    if search:
+
+        payments = payments.filter(
+            transaction_id__icontains=search
+        )
+
+    method = request.GET.get("method")
+
+    if method:
+
+        payments = payments.filter(
+            payment_method=method
+        )
+
+    status = request.GET.get("status")
+
+    if status:
+
+        payments = payments.filter(
+            payment_status=status
+        )
+
+    total_paid = payments.filter(
+        payment_status="Success"
+    ).aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    return render(
+        request,
+        "payments/my_payments.html",
+        {
+            "payments": payments,
+            "total_paid": total_paid,
+            "search": search,
+            "method": method,
+            "status": status,
+        }
+    )
+@login_required
+def download_receipt(request, pk):
+
+    payment = get_object_or_404(
+        Payment.objects.select_related(
+            "bill",
+            "bill__appointment",
+            "bill__appointment__patient__user",
+            "bill__appointment__doctor__user",
+            "bill__appointment__doctor__department",
+        ),
+        pk=pk
+    )
+
+    if request.user.role == "PATIENT":
+
+        if payment.bill.appointment.patient != request.user.patient_profile:
+
+            messages.error(
+                request,
+                "Access Denied."
+            )
+
+            return redirect("dashboard")
+
+    elif request.user.role != "ADMIN":
+
+        messages.error(
+            request,
+            "Access Denied."
+        )
+
+        return redirect("dashboard")
+
+    response = HttpResponse(
+        content_type="application/pdf"
+    )
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="Receipt_{payment.id}.pdf"'
+    )
+
+    pdf = canvas.Canvas(
+        response,
+        pagesize=A4
+    )
+
+    width, height = A4
+
+    y = height - 50
+
+    pdf.setFont(
+        "Helvetica-Bold",
+        18
+    )
+    pdf.drawString(
+        180,
+        y,
+        "AI HOSPITAL"
+    )
+
+    y -= 25
+
+    pdf.setFont(
+        "Helvetica",
+        11
+    )
+    pdf.drawString(
+        135,
+        y,
+        "Doctor Appointment Scheduler"
+    )
+
+    y -= 30
+
+    pdf.line(
+        40,
+        y,
+        560,
+        y
+    )
+
+    y -= 25
+
+    pdf.setFont(
+        "Helvetica-Bold",
+        13
+    )
+    pdf.drawString(
+        40,
+        y,
+        "PAYMENT RECEIPT"
+    )
+
+    y -= 30
+
+    pdf.setFont(
+        "Helvetica",
+        11
+    )
+
+    pdf.drawString(
+        40,
+        y,
+        f"Receipt No : {payment.receipt_number}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Transaction ID : {payment.transaction_id}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Patient : {payment.bill.appointment.patient.user.get_full_name()
+or
+payment.bill.appointment.patient.user.username}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Doctor : Dr. {payment.bill.appointment.doctor.user.get_full_name()
+or
+payment.bill.appointment.doctor.user.username}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Department : {payment.bill.appointment.doctor.department.department_name}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Bill Amount : ₹ {payment.bill.total_amount}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Paid Amount : ₹ {payment.amount}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Payment Method : {payment.payment_method}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Payment Status : {payment.payment_status}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Payment Date : {payment.payment_date.strftime('%d-%m-%Y %I:%M %p')}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Received By : {payment.received_by}"
+    )
+
+    y -= 20
+
+    pdf.drawString(
+        40,
+        y,
+        f"Remarks : {payment.remarks or '-'}"
+    )
+
+    y -= 70
+
+    pdf.line(
+        360,
+        y,
+        520,
+        y
+    )
+
+    y -= 15
+
+    pdf.drawString(
+        385,
+        y,
+        "Authorized Signature"
+    )
+
+    pdf.showPage()
+
+    pdf.save()
+
+    return response

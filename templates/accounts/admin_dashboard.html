@@ -1,65 +1,116 @@
 {% extends "base.html" %}
 {% block title %}Admin Dashboard{% endblock %}
+
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold">Admin Dashboard</h2>
-        <p class="text-muted mb-0">Hospital-wide overview</p>
+        <h2 class="fw-bold">📊 Admin Dashboard</h2>
+        <p class="text-muted mb-0">Hospital-wide analytics & overview</p>
     </div>
     <a href="{% url 'contacts_list' %}" class="btn btn-outline-dark">💬 Messages</a>
 </div>
 
+<!-- KPI Cards -->
 <div class="row g-3 mb-4">
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
+        <div class="card shadow-sm border-0 text-center h-100"><div class="card-body">
             <i class="bi bi-calendar-check fs-3 text-primary"></i>
-            <h3 class="mt-2">{{ total_appointments }}</h3><span class="text-muted small">Total Appointments</span>
+            <h3 class="mt-2 mb-0">{{ total_appointments }}</h3><span class="text-muted small">Total Appointments</span>
         </div></div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
+        <div class="card shadow-sm border-0 text-center h-100"><div class="card-body">
             <i class="bi bi-exclamation-triangle fs-3 text-danger"></i>
-            <h3 class="mt-2">{{ high_risk_count }}</h3><span class="text-muted small">High Risk (Active)</span>
+            <h3 class="mt-2 mb-0">{{ high_risk_count }}</h3><span class="text-muted small">High Risk (Active)</span>
         </div></div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
+        <div class="card shadow-sm border-0 text-center h-100"><div class="card-body">
             <i class="bi bi-cash-coin fs-3 text-success"></i>
-            <h3 class="mt-2">₹{{ total_revenue }}</h3><span class="text-muted small">Collected Revenue</span>
+            <h3 class="mt-2 mb-0">₹{{ total_revenue }}</h3><span class="text-muted small">Collected Revenue</span>
         </div></div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
+        <div class="card shadow-sm border-0 text-center h-100"><div class="card-body">
             <i class="bi bi-hourglass-split fs-3 text-warning"></i>
-            <h3 class="mt-2">₹{{ pending_revenue }}</h3><span class="text-muted small">Pending Revenue</span>
+            <h3 class="mt-2 mb-0">₹{{ pending_revenue }}</h3><span class="text-muted small">Pending Revenue</span>
         </div></div>
     </div>
 </div>
 
 <div class="row g-3 mb-4">
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
-            <h4>{{ total_doctors }}</h4><span class="text-muted small">Active Doctors</span>
+        <div class="card shadow-sm border-0 text-center"><div class="card-body py-3">
+            <h4 class="mb-0">{{ total_doctors }}</h4><span class="text-muted small">Active Doctors</span>
         </div></div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
-            <h4>{{ total_patients }}</h4><span class="text-muted small">Total Patients</span>
+        <div class="card shadow-sm border-0 text-center"><div class="card-body py-3">
+            <h4 class="mb-0">{{ total_patients }}</h4><span class="text-muted small">Total Patients</span>
         </div></div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
-            <h4>{{ total_departments }}</h4><span class="text-muted small">Departments</span>
+        <div class="card shadow-sm border-0 text-center"><div class="card-body py-3">
+            <h4 class="mb-0">{{ total_departments }}</h4><span class="text-muted small">Departments</span>
         </div></div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm text-center"><div class="card-body">
-            <h4>{{ noshow_count }}</h4><span class="text-muted small">Total No-Shows</span>
+        <div class="card shadow-sm border-0 text-center"><div class="card-body py-3">
+            <h4 class="mb-0">{{ noshow_count }}</h4><span class="text-muted small">Total No-Shows</span>
         </div></div>
     </div>
 </div>
 
+<!-- Charts Row 1 -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold">Appointment Status</div>
+            <div class="card-body"><canvas id="statusChart" height="220"></canvas></div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold">No-Show Risk Distribution</div>
+            <div class="card-body"><canvas id="riskChart" height="220"></canvas></div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold">Appointments by Department</div>
+            <div class="card-body"><canvas id="deptChart" height="220"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2 -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold">7-Day Appointment Trend</div>
+            <div class="card-body"><canvas id="trendChart" height="200"></canvas></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold">7-Day Revenue Trend</div>
+            <div class="card-body"><canvas id="revenueChart" height="200"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 3 -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-bold">Top 5 Doctors by Appointment Volume</div>
+            <div class="card-body"><canvas id="doctorChart" height="120"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<!-- Today's Appointments + Quick Links -->
 <div class="row g-4">
     <div class="col-lg-8">
         <div class="card shadow-sm">
@@ -91,11 +142,85 @@
                 <a href="{% url 'patient_list' %}" class="btn btn-outline-primary">Manage Patients</a>
                 <a href="{% url 'appointment_list' %}" class="btn btn-outline-primary">All Appointments</a>
                 <a href="{% url 'bill_list' %}" class="btn btn-outline-primary">Billing</a>
-                <a href="{% url 'risk_dashboard' %}" class="btn btn-outline-warning">AI Risk Dashboard</a>
                 <a href="/admin/" class="btn btn-outline-secondary">Django Admin Console</a>
             </div>
         </div>
     </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+const COLORS = ["#0d6efd", "#20c997", "#ffc107", "#dc3545", "#6f42c1", "#fd7e14", "#0dcaf0", "#6c757d"];
+
+// 1. Status Donut
+new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ status_labels|safe }},
+        datasets: [{ data: {{ status_data|safe }}, backgroundColor: COLORS }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+});
+
+// 2. Risk Pie
+new Chart(document.getElementById('riskChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ risk_labels|safe }},
+        datasets: [{ data: {{ risk_data|safe }}, backgroundColor: ["#20c997", "#ffc107", "#dc3545"] }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+});
+
+// 3. Department Bar
+new Chart(document.getElementById('deptChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ dept_labels|safe }},
+        datasets: [{ label: 'Appointments', data: {{ dept_data|safe }}, backgroundColor: '#0d6efd' }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+
+// 4. 7-Day Trend Line
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels: {{ trend_labels|safe }},
+        datasets: [{
+            label: 'Appointments', data: {{ trend_data|safe }},
+            borderColor: '#0d6efd', backgroundColor: 'rgba(13,110,253,0.1)',
+            tension: 0.3, fill: true,
+        }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+});
+
+// 5. Revenue Trend Line
+new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+        labels: {{ revenue_labels|safe }},
+        datasets: [{
+            label: 'Revenue (₹)', data: {{ revenue_data|safe }},
+            borderColor: '#20c997', backgroundColor: 'rgba(32,201,151,0.1)',
+            tension: 0.3, fill: true,
+        }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+});
+
+// 6. Top Doctors Bar
+new Chart(document.getElementById('doctorChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ doctor_labels|safe }},
+        datasets: [{ label: 'Appointments', data: {{ doctor_data|safe }}, backgroundColor: '#6f42c1' }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+});
+</script>
 {% endblock %}

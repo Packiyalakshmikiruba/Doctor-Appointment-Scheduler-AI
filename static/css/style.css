@@ -1,0 +1,90 @@
+/* ===========================
+   GLOBAL
+=========================== */
+
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+    font-family:'Segoe UI','Poppins',sans-serif;
+    background:linear-gradient(135deg,#e6f7f4 0%,#eef5ff 50%,#ffffff 100%);
+}
+
+body{
+    display:flex;
+    flex-direction:column;
+}
+
+/* Main Content */
+
+.main-wrapper{
+    flex:1;
+    width:100%;
+    padding:25px 0;
+}
+
+/* DON'T override Bootstrap container */
+
+.container{
+    position:relative;
+    z-index:1;
+}
+
+/* ===========================
+   NAVBAR
+=========================== */
+
+.navbar{
+    width:100%;
+}
+
+.hospital-navbar{
+    z-index:1100;
+}
+
+/* ===========================
+   QUICK ACCESS
+=========================== */
+
+.quick-access-bar{
+    width:100%;
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.card{
+    border:none;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.btn{
+    border-radius:10px;
+}
+
+/* ===========================
+   TABLE
+=========================== */
+
+.table-hover tbody tr:hover{
+    background:#f4f8ff;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+footer{
+    width:100%;
+    margin-top:auto;
+}

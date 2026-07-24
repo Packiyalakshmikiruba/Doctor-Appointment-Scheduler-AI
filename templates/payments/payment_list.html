@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment List{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-success">
+
+                <i class="fas fa-credit-card"></i>
+
+                {% if request.user.role == "PATIENT" %}
+
+                    My Payments
+
+                {% else %}
+
+                    Payment Management
+
+                {% endif %}
+
+            </h2>
+
+            <small class="text-muted">
+
+                Manage all payment transactions
+
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- Summary Cards -->
+
+    <div class="row mb-4">
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Total Payments
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        {{ payments|length }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Successful
+
+                    </h6>
+
+                    <h2 class="text-success fw-bold">
+
+                        {{ payments|length }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Total Collection
+
+                    </h6>
+
+                    <h4 class="text-primary fw-bold">
+
+                        ₹ {{ total_amount }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+
+                        Today's Payments
+
+                    </h6>
+
+                    <h4 class="fw-bold text-info">
+
+                        {{ payments|length }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Search -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="search"
+                            placeholder="Transaction ID"
+                            value="{{ request.GET.search }}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <select
+                            class="form-select"
+                            name="method">
+
+                            <option value="">Payment Method</option>
+
+                            <option value="Cash">Cash</option>
+
+                            <option value="UPI">UPI</option>
+
+                            <option value="Card">Card</option>
+
+                            <option value="Net Banking">Net Banking</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <select
+                            class="form-select"
+                            name="status">
+
+                            <option value="">Payment Status</option>
+
+                            <option value="Success">Success</option>
+
+                            <option value="Pending">Pending</option>
+
+                            <option value="Failed">Failed</option>
+
+                            <option value="Refunded">Refunded</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button class="btn btn-success w-100">
+
+                            <i class="fas fa-search"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                Payment List
+
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Patient</th>
+
+                        <th>Doctor</th>
+
+                        <th>Amount</th>
+
+                        <th>Method</th>
+
+                        <th>Status</th>
+
+                        <th>Date</th>
+
+                        <th width="220">
+
+                            Action
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    {% for payment in payments %}
+
+<tr>
+
+    <td>
+
+        <span class="badge bg-dark">
+
+            #{{ payment.id }}
+
+        </span>
+
+    </td>
+
+    <td>
+
+        {{ payment.bill.appointment.patient.user.get_full_name }}
+
+    </td>
+
+    <td>
+
+        Dr. {{ payment.bill.appointment.doctor.user.get_full_name }}
+
+    </td>
+
+    <td>
+
+        <strong class="text-success">
+
+            ₹ {{ payment.amount }}
+
+        </strong>
+
+    </td>
+
+    <td>
+
+        {% if payment.payment_method == "Cash" %}
+
+            <span class="badge bg-secondary">
+
+                Cash
+
+            </span>
+
+        {% elif payment.payment_method == "UPI" %}
+
+            <span class="badge bg-primary">
+
+                UPI
+
+            </span>
+
+        {% elif payment.payment_method == "Card" %}
+
+            <span class="badge bg-info text-dark">
+
+                Card
+
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-dark">
+
+                Net Banking
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        {% if payment.payment_status == "Success" %}
+
+            <span class="badge bg-success">
+
+                Success
+
+            </span>
+
+        {% elif payment.payment_status == "Pending" %}
+
+            <span class="badge bg-warning text-dark">
+
+                Pending
+
+            </span>
+
+        {% elif payment.payment_status == "Failed" %}
+
+            <span class="badge bg-danger">
+
+                Failed
+
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-secondary">
+
+                Refunded
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        {{ payment.payment_date|date:"d M Y" }}
+
+        <br>
+
+        <small class="text-muted">
+
+            {{ payment.payment_date|time:"h:i A" }}
+
+        </small>
+
+    </td>
+
+    <td>
+
+        <div class="btn-group">
+
+            <a href="{% url 'payment_detail' payment.id %}"
+
+               class="btn btn-info btn-sm text-white"
+
+               title="View">
+
+                <i class="fas fa-eye"></i>
+
+            </a>
+
+            {% if request.user.role == "ADMIN" %}
+
+            <a href="{% url 'payment_update' payment.id %}"
+
+               class="btn btn-warning btn-sm"
+
+               title="Edit">
+
+                <i class="fas fa-edit"></i>
+
+            </a>
+
+            {% endif %}
+
+            <a href="{% url 'download_receipt' payment.id %}"
+
+               class="btn btn-success btn-sm"
+
+               title="Receipt">
+
+                <i class="fas fa-file-pdf"></i>
+
+            </a>
+
+            {% if request.user.role == "ADMIN" %}
+
+            <a href="{% url 'payment_delete' payment.id %}"
+
+               class="btn btn-danger btn-sm"
+
+               title="Delete">
+
+                <i class="fas fa-trash"></i>
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+{% if payments|length == 0 %}
+
+<tr>
+
+    <td colspan="8" class="text-center py-5">
+
+        <i class="fas fa-wallet fa-4x text-muted mb-3"></i>
+
+        <h5 class="text-muted">
+
+            No Payment Records Found
+
+        </h5>
+
+        <p class="text-secondary">
+
+            There are no payment transactions available.
+
+        </p>
+
+    </td>
+
+</tr>
+
+{% endif %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
