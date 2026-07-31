@@ -1,559 +1,325 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-xl hospital-navbar sticky-top">
-
-<div class="container-fluid">
-
-<!-- =======================
-LOGO
-======================= -->
-
-<a href="{% url 'dashboard' %}"
-class="navbar-brand d-flex align-items-center">
-
-<div class="logo-circle">
-
-<i class="fas fa-hospital-alt"></i>
-
-</div>
-
-<div class="ms-3">
-
-<h4 class="mb-0 fw-bold">
-
-AI Hospital
-
-</h4>
-
-<small>
-
-Doctor Appointment Scheduler
-
-</small>
-
-</div>
-
-</a>
-
-<!-- =======================
-MOBILE BUTTON
-======================= -->
-
-<button
-class="navbar-toggler"
-type="button"
-data-bs-toggle="collapse"
-data-bs-target="#mainNavbar">
-
-<i class="fas fa-bars"></i>
-
-</button>
-
-<!-- =======================
-MENU
-======================= -->
-
-<div
-class="collapse navbar-collapse"
-id="mainNavbar">
-
-<ul class="navbar-nav mx-auto">
-
-<!-- Dashboard -->
-
-<li class="nav-item">
-
-<a
-href="{% url 'dashboard' %}"
-class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-
-<i class="fas fa-home"></i>
-
-Dashboard
-
-</a>
-
-</li>
-
-{% if request.user.role == "ADMIN" %}
-
-<li class="nav-item dropdown">
-
-<a
-class="nav-link dropdown-toggle"
-href="#"
-data-bs-toggle="dropdown">
-
-<i class="fas fa-hospital"></i>
-
-Hospital
-
-</a>
-
-<ul class="dropdown-menu shadow">
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'department_list' %}">
-
-<i class="fas fa-building text-primary"></i>
-
-Departments
-
-</a>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'doctor_list' %}">
-
-<i class="fas fa-user-md text-success"></i>
-
-Doctors
-
-</a>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'availability_list' %}">
-
-<i class="fas fa-calendar-check text-info"></i>
-
-Availability
-
-</a>
-
-</li>
-
-</ul>
-
-</li>
-
-<li class="nav-item dropdown">
-
-<a
-class="nav-link dropdown-toggle"
-href="#"
-data-bs-toggle="dropdown">
-
-<i class="fas fa-users"></i>
-
-Patients
-
-</a>
-
-<ul class="dropdown-menu shadow">
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'patient_list' %}">
-
-Patient List
-
-</a>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'appointment_list' %}">
-
-Appointments
-
-</a>
-
-</li>
-
-</ul>
-
-</li>
-
-<li class="nav-item dropdown">
-
-<a
-class="nav-link dropdown-toggle"
-href="#"
-data-bs-toggle="dropdown">
-
-<i class="fas fa-file-medical"></i>
-
-Medical
-
-</a>
-
-<ul class="dropdown-menu shadow">
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'medical_record_list' %}">
-
-Medical Records
-
-</a>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'prescription_list' %}">
-
-Prescriptions
-
-</a>
-
-</li>
-
-</ul>
-
-</li>
-
-<li class="nav-item dropdown">
-
-<a
-class="nav-link dropdown-toggle"
-href="#"
-data-bs-toggle="dropdown">
-
-<i class="fas fa-file-invoice-dollar"></i>
-
-Billing
-
-</a>
-
-<ul class="dropdown-menu shadow">
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'bill_list' %}">
-
-Bills
-
-</a>
-
-</li>
-
-</ul>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'risk_dashboard' %}"
-class="nav-link">
-
-<i class="fas fa-brain"></i>
-
-AI Dashboard
-
-</a>
-
-</li>
-
-{% endif %}
-
-{% if request.user.role == "DOCTOR" %}
-
-<li class="nav-item">
-
-<a
-href="{% url 'appointment_list' %}"
-class="nav-link">
-
-<i class="fas fa-calendar-check"></i>
-
-Appointments
-
-</a>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'patient_list' %}"
-class="nav-link">
-
-<i class="fas fa-user-injured"></i>
-
-Patients
-
-</a>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'medical_record_list' %}"
-class="nav-link">
-
-<i class="fas fa-notes-medical"></i>
-
-Medical Records
-
-</a>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'availability_list' %}"
-class="nav-link">
-
-<i class="fas fa-clock"></i>
-
-Schedule
-
-</a>
-
-</li>
-
-{% endif %}
-
-{% if request.user.role == "PATIENT" %}
-
-<li class="nav-item">
-
-<a
-href="{% url 'appointment_list' %}"
-class="nav-link">
-
-<i class="fas fa-calendar"></i>
-
-Appointments
-
-</a>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'doctor_list' %}"
-class="nav-link">
-
-<i class="fas fa-user-md"></i>
-
-Doctors
-
-</a>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'medical_record_list' %}"
-class="nav-link">
-
-<i class="fas fa-heartbeat"></i>
-
-Medical Records
-
-</a>
-
-</li>
-
-<li class="nav-item">
-
-<a
-href="{% url 'bill_list' %}"
-class="nav-link">
-
-<i class="fas fa-credit-card"></i>
-
-Bills
-
-</a>
-
-</li>
-
-{% endif %}
-
-</ul>
-
-<!-- =======================
-RIGHT SIDE
-======================= -->
-
-<div class="d-flex align-items-center navbar-right">
-
-<button
-class="btn search-btn me-2"
-data-bs-toggle="modal"
-data-bs-target="#globalSearchModal">
-
-<i class="fas fa-search"></i>
-
-</button>
-
-<div class="dropdown me-2">
-
-<button
-class="btn notification-btn"
-data-bs-toggle="dropdown">
-
-<i class="fas fa-bell"></i>
-
-<span class="badge bg-danger">
-
-3
-
-</span>
-
-</button>
-
-<ul class="dropdown-menu dropdown-menu-end shadow">
-
-<li>
-
-<h6 class="dropdown-header">
-
-Notifications
-
-</h6>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="#">
-
-New Appointment
-
-</a>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="#">
-
-Bill Generated
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-<div class="dropdown">
-
-<a
-href="#"
-class="profile-btn dropdown-toggle"
-data-bs-toggle="dropdown">
-
-<!-- 🩺 Admin, Doctor, Patient ஆகியோருக்குத் தனித்தனி ஐகான்கள் -->
-<div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px; min-width: 42px;">
-    {% if request.user.role == "ADMIN" %}
-        <i class="fas fa-user-shield fs-5 text-danger"></i>
-    {% elif request.user.role == "DOCTOR" %}
-        <i class="fas fa-user-md fs-5 text-success"></i>
-    {% else %}
-        <i class="fas fa-user-injured fs-5 text-primary"></i>
-    {% endif %}
-</div>
-
-<div>
-
-<b>
-
-{{ request.user.get_full_name|default:request.user.username }}
-
-</b>
-
-<br>
-
-<small>
-
-{{ request.user.role }}
-
-</small>
-
-</div>
-
-</a>
-
-<ul class="dropdown-menu dropdown-menu-end shadow">
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'edit_profile' %}">
-
-My Profile
-
-</a>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item"
-href="{% url 'change_password' %}">
-
-Change Password
-
-</a>
-
-</li>
-
-<li>
-
-<hr>
-
-</li>
-
-<li>
-
-<a
-class="dropdown-item text-danger"
-href="{% url 'logout' %}">
-
-Logout
-
-</a>
-
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+{% if request.user.is_authenticated %}
+
+<nav class="navbar navbar-expand-xl hospital-navbar sticky-top bg-white border-bottom shadow-sm py-3 px-lg-4">
+    <div class="container-fluid">
+
+        <!-- =======================
+        LOGO SECTION (Redesigned & Premium)
+        ======================= -->
+        <a href="{% url 'dashboard' %}" class="navbar-brand d-flex align-items-center text-decoration-none group">
+            <div class="position-relative">
+                <!-- Outer Glowing Ring -->
+                <div class="position-absolute inset-0 rounded-circle bg-primary opacity-25 blur-sm" style="width: 50px; height: 50px;"></div>
+                
+                <!-- Main Logo Circle with Gradient -->
+                <div class="logo-circle position-relative text-white rounded-4 d-flex align-items-center justify-content-center shadow-lg" 
+                     style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
+                    <i class="fas fa-heartbeat fs-4 animate-pulse"></i>
+                </div>
+            </div>
+
+            <div class="ms-3">
+                <div class="d-flex align-items-center gap-2">
+                    <h4 class="mb-0 fw-extrabold text-dark tracking-tight" style="letter-spacing: -0.5px;">
+                        AI <span class="text-primary">Hospital</span>
+                    </h4>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-0 fs-8 fw-bold">PRO</span>
+                </div>
+                <small class="text-muted fw-semibold fs-7 tracking-wide d-block mt-0.5">
+                    Smart Doctor & Care Management
+                </small>
+            </div>
+        </a>
+
+        <!-- =======================
+        MOBILE TOGGLE BUTTON
+        ======================= -->
+        <button class="navbar-toggler border-0 shadow-none bg-light rounded-3 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <i class="fas fa-bars text-dark fs-5"></i>
+        </button>
+
+        <!-- =======================
+        MAIN MENU COLLAPSE
+        ======================= -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <ul class="navbar-nav mx-auto align-items-xl-center gap-xl-2 my-3 my-xl-0">
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link px-3 py-2 rounded-pill fw-semibold {% if request.resolver_match.url_name == 'dashboard' %}active bg-primary text-white shadow-sm{% else %}text-secondary hover-bg-light{% endif %}">
+                        <i class="fas fa-home me-1"></i> Dashboard
+                    </a>
+                </li>
+
+                <!-- =======================
+                ADMIN MENU
+                ======================= -->
+                {% if request.user.role == "ADMIN" %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill text-secondary fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-hospital text-primary me-1"></i> Hospital
+                    </a>
+                    <ul class="dropdown-menu shadow border-0 rounded-3 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'department_list' %}">
+                                <i class="fas fa-building text-primary me-2"></i> Departments
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'doctor_list' %}">
+                                <i class="fas fa-user-md text-success me-2"></i> Doctors
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'availability_list' %}">
+                                <i class="fas fa-calendar-check text-info me-2"></i> Availability
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill text-secondary fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-users text-info me-1"></i> Patients
+                    </a>
+                    <ul class="dropdown-menu shadow border-0 rounded-3 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'patient_list' %}">
+                                <i class="fas fa-user-injured text-primary me-2"></i> Patient List
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'appointment_list' %}">
+                                <i class="fas fa-calendar-alt text-success me-2"></i> Appointments
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill text-secondary fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-file-medical text-warning me-1"></i> Medical
+                    </a>
+                    <ul class="dropdown-menu shadow border-0 rounded-3 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'medical_record_list' %}">
+                                <i class="fas fa-notes-medical text-primary me-2"></i> Medical Records
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'prescription_list' %}">
+                                <i class="fas fa-prescription text-success me-2"></i> Prescriptions
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill text-secondary fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-file-invoice-dollar text-success me-1"></i> Billing
+                    </a>
+                    <ul class="dropdown-menu shadow border-0 rounded-3 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'bill_list' %}">
+                                <i class="fas fa-receipt text-primary me-2"></i> Bills
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'risk_dashboard' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-brain text-danger me-1"></i> AI Dashboard
+                    </a>
+                </li>
+
+                {% endif %}
+
+                <!-- =======================
+                DOCTOR MENU
+                ======================= -->
+                {% if request.user.role == "DOCTOR" %}
+
+                <li class="nav-item">
+                    <a href="{% url 'appointment_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-calendar-check text-primary me-1"></i> Appointments
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'patient_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-user-injured text-success me-1"></i> Patients
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'medical_record_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-notes-medical text-info me-1"></i> Medical Records
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'availability_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-clock text-warning me-1"></i> Schedule
+                    </a>
+                </li>
+
+                {% endif %}
+
+                <!-- =======================
+                PATIENT MENU
+                ======================= -->
+                {% if request.user.role == "PATIENT" %}
+
+                <li class="nav-item">
+                    <a href="{% url 'appointment_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-calendar text-primary me-1"></i> Appointments
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'doctor_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-user-md text-success me-1"></i> Doctors
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'medical_record_list' %}" class="nav-link px-3 py-2 rounded-pill text-secondary fw-semibold">
+                        <i class="fas fa-heartbeat text-danger me-1"></i> Medical Records
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-pill text-secondary fw-semibold" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-credit-card text-info me-1"></i> Billing
+                    </a>
+                    <ul class="dropdown-menu shadow border-0 rounded-3 p-2 mt-2">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'my_bills' %}">
+                                <i class="fas fa-file-invoice-dollar text-primary me-2"></i> My Bills
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'my_payments' %}">
+                                <i class="fas fa-money-check-alt text-success me-2"></i> My Payments
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {% endif %}
+
+            </ul>
+
+            <!-- =======================
+            RIGHT SIDE ACTIONS
+            ======================= -->
+            <div class="d-flex align-items-center gap-3 navbar-right mt-3 mt-xl-0">
+
+                <!-- Global Search Button -->
+                <button class="btn btn-light rounded-circle shadow-sm border text-secondary d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;" data-bs-toggle="modal" data-bs-target="#globalSearchModal" title="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+
+                <!-- Notifications Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-light rounded-circle shadow-sm border text-secondary position-relative d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell"></i>
+                        {% if unread_notification_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white">
+                            {{ unread_notification_count }}
+                        </span>
+                        {% endif %}
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2 mt-2" style="width: 360px; max-height: 420px; overflow-y: auto;">
+                        <li>
+                            <h6 class="dropdown-header fw-bold text-dark px-3 py-2">
+                                <i class="fas fa-bell me-2 text-primary"></i> Notifications
+                            </h6>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+
+                        {% for notification in recent_notifications %}
+                        <li>
+                            <a href="{% url 'notification_list' %}" class="dropdown-item rounded-3 p-3 {% if not notification.is_read %}fw-semibold bg-light text-dark{% else %}text-muted{% endif %} mb-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="text-dark fw-bold mb-1">{{ notification.title }}</div>
+                                        <small class="text-muted d-block mb-1">{{ notification.message|truncatechars:55 }}</small>
+                                        <small class="text-secondary fs-7"><i class="far fa-clock me-1"></i> {{ notification.created_at|timesince }} ago</small>
+                                    </div>
+                                    {% if not notification.is_read %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2 py-1 fs-8">New</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <div class="dropdown-item text-center text-muted py-4">
+                                <i class="far fa-bell-slash fa-2x mb-2 opacity-50"></i><br>
+                                <span class="small fw-medium">No Notifications</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a href="{% url 'notification_list' %}" class="dropdown-item text-center fw-bold text-primary py-2 rounded-3">
+                                <i class="fas fa-list me-2"></i> View All Notifications
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="profile-btn dropdown-toggle d-flex align-items-center text-decoration-none bg-light border rounded-pill p-1 pe-3 shadow-sm" data-bs-toggle="dropdown">
+                        <div class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px; min-width: 38px;">
+                            {% if request.user.role == "ADMIN" %}
+                                <i class="fas fa-user-shield text-danger"></i>
+                            {% elif request.user.role == "DOCTOR" %}
+                                <i class="fas fa-user-md text-success"></i>
+                            {% else %}
+                                <i class="fas fa-user-injured text-primary"></i>
+                            {% endif %}
+                        </div>
+                        <div class="ms-2 text-start d-none d-sm-block">
+                            <span class="d-block fw-bold text-dark lh-1 fs-7">{{ request.user.get_full_name|default:request.user.username }}</span>
+                            <small class="text-muted fs-8 text-uppercase tracking-wider fw-semibold">{{ request.user.role }}</small>
+                        </div>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2 mt-2" style="min-width: 220px;">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'edit_profile' %}">
+                                <i class="fas fa-user-circle me-2 text-primary"></i> My Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-dark fw-medium" href="{% url 'change_password' %}">
+                                <i class="fas fa-key me-2 text-warning"></i> Change Password
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 px-3 text-danger fw-semibold" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 </nav>
+
+{% endif %}

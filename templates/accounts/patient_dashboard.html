@@ -11,60 +11,101 @@
 <div class="container-fluid py-4">
 
     <!-- 1. Premium Hero Section -->
-    <div class="hero-card shadow-lg p-4 mb-4 rounded-4 bg-white">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h2 class="fw-bold mb-2">
-                    Welcome, {{ patient.user.get_full_name }}
-                </h2>
-                <p class="text-muted">
-                    We wish you a healthy and happy day.
-                </p>
+    <div class="hero-card shadow-sm p-4 p-lg-5 mb-4 rounded-4 position-relative overflow-hidden bg-white border border-light">
+    <!-- Subtle gradient background header accent -->
+    <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
+    
+    <div class="row align-items-center g-4">
+        <!-- LEFT CONTENT & METRICS -->
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1.5 rounded-pill me-2">
+                    <i class="fas fa-hospital-user me-1"></i> Patient Portal
+                </span>
+                <span class="text-muted small fw-medium">
+                    <i class="fas fa-check-circle text-success me-1"></i> Verified Account
+                </span>
+            </div>
+            
+            <h1 class="fw-bold text-dark mb-2" style="font-size: 2.1rem; letter-spacing: -0.5px;">
+                Welcome back, {{ patient.user.get_full_name }}! 👋
+            </h1>
+            <p class="text-secondary mb-4" style="font-size: 0.95rem;">
+                Here is your health activity overview, upcoming schedules, and medical summaries for today.
+            </p>
 
-                <div class="row mt-4">
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="mini-card p-3 border rounded-3 bg-light">
-                            <small class="text-muted">Total Appointments</small>
-                            <h3 class="fw-bold mb-0">{{ stats.appointments }}</h3>
+            <!-- STATS MINI CARDS -->
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <div class="p-3 border rounded-4 bg-light bg-opacity-50 h-100 transition-hover">
+                        <div class="d-flex align-items-center text-muted mb-1">
+                            <i class="fas fa-calendar-check text-primary me-2"></i>
+                            <small class="fw-semibold" style="font-size: 0.75rem;">Appointments</small>
                         </div>
+                        <h3 class="fw-bold text-dark mb-0 ps-4">{{ stats.appointments }}</h3>
                     </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="mini-card p-3 border rounded-3 bg-light">
-                            <small class="text-muted">Medical Records</small>
-                            <h3 class="fw-bold mb-0">{{ stats.medical_records }}</h3>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="p-3 border rounded-4 bg-light bg-opacity-50 h-100 transition-hover">
+                        <div class="d-flex align-items-center text-muted mb-1">
+                            <i class="fas fa-notes-medical text-success me-2"></i>
+                            <small class="fw-semibold" style="font-size: 0.75rem;">Records</small>
                         </div>
+                        <h3 class="fw-bold text-dark mb-0 ps-4">{{ stats.medical_records }}</h3>
                     </div>
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <div class="mini-card p-3 border rounded-3 bg-light">
-                            <small class="text-muted">Prescriptions</small>
-                            <h3 class="fw-bold mb-0">{{ stats.prescriptions }}</h3>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="p-3 border rounded-4 bg-light bg-opacity-50 h-100 transition-hover">
+                        <div class="d-flex align-items-center text-muted mb-1">
+                            <i class="fas fa-prescription text-warning me-2"></i>
+                            <small class="fw-semibold" style="font-size: 0.75rem;">Prescriptions</small>
                         </div>
+                        <h3 class="fw-bold text-dark mb-0 ps-4">{{ stats.prescriptions }}</h3>
                     </div>
-                    <div class="col-md-3">
-                        <div class="mini-card p-3 border rounded-3 bg-light">
-                            <small class="text-muted">Pending Bills</small>
-                            <h3 class="fw-bold mb-0">{{ stats.pending_bills }}</h3>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="p-3 border rounded-4 bg-light bg-opacity-50 h-100 transition-hover">
+                        <div class="d-flex align-items-center text-muted mb-1">
+                            <i class="fas fa-file-invoice-dollar text-danger me-2"></i>
+                            <small class="fw-semibold" style="font-size: 0.75rem;">Pending Bills</small>
                         </div>
+                        <h3 class="fw-bold text-dark mb-0 ps-4">{{ stats.pending_bills }}</h3>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- RIGHT PROFILE -->
-            <div class="col-lg-4 text-center mt-3 mt-lg-0">
-                <img src="https://ui-avatars.com/api/?name={{ patient.user.first_name }}+{{ patient.user.last_name }}&background=0D6EFD&color=fff&size=220"
-                     class="patient-photo rounded-circle shadow" width="120" height="120">
-                <h4 class="mt-3 fw-bold">{{ patient.user.get_full_name }}</h4>
-                <p class="text-muted mb-1">Patient ID : {{ patient.id }}</p>
-                <span class="badge bg-success px-3 py-2">Healthy</span>
+        <!-- RIGHT PROFILE & LIVE CLOCK CARD -->
+        <div class="col-lg-4 text-center">
+            <div class="p-4 bg-light bg-gradient rounded-4 border border-light shadow-sm text-center">
+                <div class="position-relative d-inline-block mb-3">
+                    <img src="https://ui-avatars.com/api/?name={{ patient.user.first_name }}+{{ patient.user.last_name }}&background=0D6EFD&color=fff&size=220"
+                         class="rounded-circle shadow border border-3 border-white" width="95" height="95" alt="Profile">
+                    <span class="position-absolute bottom-0 end-0 p-1.5 bg-success border border-white rounded-circle shadow-sm" title="Active">
+                        <span class="visually-hidden">Active</span>
+                    </span>
+                </div>
+                
+                <h5 class="fw-bold text-dark mb-1">{{ patient.user.get_full_name }}</h5>
+                <p class="text-muted small mb-2">Patient ID : <span class="fw-semibold text-dark">#{{ patient.id }}</span></p>
+                
+                <div class="mb-3">
+                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-1.5 rounded-pill fw-semibold">
+                        <i class="fas fa-shield-alt me-1"></i> Healthy Profile
+                    </span>
+                </div>
 
-                <div class="clock-box mt-3 p-2 bg-light rounded-3">
-                    <h5 id="liveTime" class="mb-0 fw-bold text-primary"></h5>
-                    <p id="liveDate" class="mb-0 small text-muted"></p>
+                <div class="clock-box p-2 bg-white rounded-3 border shadow-sm">
+                    <h6 id="liveTime" class="mb-0 fw-bold text-primary"></h6>
+                    <p id="liveDate" class="mb-0 text-muted" style="font-size: 0.75rem;"></p>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
     <!-- 2. Appointment Booking & Smart Reminder / Message Center -->
     <div class="row g-4">
         <!-- Appointment Card -->
@@ -199,66 +240,245 @@
         </div>
     </div>
 
-    <!-- 3. Billing & Payment Summary Cards -->
     <div class="row g-4 mt-2">
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-lg rounded-4 h-100">
-                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="fas fa-file-invoice-dollar me-2"></i>Billing Summary
-                    </h5>
-                    {% if pending_bills.count %}
-                        <span class="badge bg-warning text-dark">{{ pending_bills.count }} Pending</span>
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <h2 class="fw-bold text-danger">₹ {{ total_due }}</h2>
-                    <p class="text-muted">Total Pending Amount</p>
-                    <hr>
-                    <p class="mb-1">Pending Bills <span class="badge bg-danger float-end">{{ pending_bills.count }}</span></p>
-                    <p class="mb-3">Total Bills <span class="badge bg-primary float-end">{{ bills.count }}</span></p>
-                    
-                    <div class="d-grid mt-4">
-                        <a href="{% url 'bill_list' %}" class="btn btn-danger">
-                            <i class="fas fa-eye me-2"></i> View All Bills
-                        </a>
-                    </div>
-                </div>
+
+    <!-- Billing Summary -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-lg rounded-4 h-100">
+
+            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+                    <i class="fas fa-file-invoice-dollar me-2"></i>
+                    Billing Summary
+                </h5>
+
+                {% if pending_bills.count %}
+                    <span class="badge bg-warning text-dark">
+                        {{ pending_bills.count }} Pending
+                    </span>
+                {% endif %}
+
             </div>
+
+            <div class="card-body">
+
+                <h2 class="fw-bold text-danger">
+                    ₹ {{ total_due }}
+                </h2>
+
+                <p class="text-muted">
+                    Total Pending Amount
+                </p>
+
+                <hr>
+
+                <p class="mb-1">
+                    Pending Bills
+                    <span class="badge bg-danger float-end">
+                        {{ pending_bills.count }}
+                    </span>
+                </p>
+
+                <p class="mb-3">
+                    Total Bills
+                    <span class="badge bg-primary float-end">
+                        {{ bills.count }}
+                    </span>
+                </p>
+
+                <div class="d-grid gap-2 mt-4">
+
+                    <a href="{% url 'bill_list' %}"
+                       class="btn btn-danger">
+
+                        <i class="fas fa-eye me-2"></i>
+
+                        View All Bills
+
+                    </a>
+
+                    {% if bills.first %}
+
+                        {% if bills.first.payment %}
+
+                            {% if bills.first.payment.payment_status == "Success" %}
+
+                                <a href="{% url 'download_receipt' bills.first.payment.id %}"
+                                   class="btn btn-success">
+
+                                    <i class="fas fa-download me-2"></i>
+
+                                    Download Receipt
+
+                                </a>
+
+                            {% else %}
+
+                                <a href="{% url 'payment_create' bills.first.id %}"
+                                   class="btn btn-warning">
+
+                                    <i class="fas fa-credit-card me-2"></i>
+
+                                    Complete Payment
+
+                                </a>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <a href="{% url 'payment_create' bills.first.id %}"
+                               class="btn btn-primary">
+
+                                <i class="fas fa-credit-card me-2"></i>
+
+                                Pay Now
+
+                            </a>
+
+                        {% endif %}
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-lg rounded-4 h-100">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-credit-card me-2"></i>Payment Summary
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <h2 class="fw-bold text-success">₹ {{ total_paid }}</h2>
-                    <p class="text-muted">Total Amount Paid</p>
-                    <hr>
-                    <p class="mb-2">Recent Payments</p>
-                    <div style="max-height:180px; overflow:auto;">
-                        {% for payment in payments|slice:":5" %}
-                        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                            <div>
-                                <strong>{{ payment.payment_date|date:"d M Y" }}</strong><br>
-                                <small class="text-muted">{{ payment.payment_method }}</small>
-                            </div>
-                            <div class="text-success fw-bold">
-                                ₹ {{ payment.amount }}
-                            </div>
-                        </div>
-                        {% empty %}
-                        <p class="text-muted text-center py-2">No Payments Found</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
+
+    <!-- Payment Summary -->
+<div class="card border-0 shadow-lg rounded-4 h-100">
+
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+
+        <h5 class="mb-0">
+            <i class="fas fa-credit-card me-2"></i>
+            Payment Summary
+        </h5>
+
+        <span class="badge bg-light text-success">
+            {{ payments.count }} Payments
+        </span>
+
+    </div>
+
+    <div class="card-body">
+
+        <h2 class="fw-bold text-success">
+            ₹ {{ total_paid }}
+        </h2>
+
+        <p class="text-muted">
+            Total Amount Paid
+        </p>
+
+        <hr>
+
+        <div style="max-height:220px; overflow:auto;">
+
+            {% for payment in payments|slice:":5" %}
+
+            <div class="border rounded-3 p-3 mb-3">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <strong>
+                            {{ payment.payment_date|date:"d M Y" }}
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+                            {{ payment.payment_method }}
+                        </small>
+
+                    </div>
+
+                    <div class="text-end">
+
+                        <div class="fw-bold text-success">
+                            ₹ {{ payment.amount }}
+                        </div>
+
+                        {% if payment.payment_status == "Success" %}
+                            <span class="badge bg-success">
+                                Success
+                            </span>
+                        {% elif payment.payment_status == "Pending" %}
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                Failed
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% if payment.payment_status == "Success" %}
+
+                <div class="mt-3">
+
+                    <a href="{% url 'download_receipt' payment.id %}"
+                       class="btn btn-outline-success btn-sm w-100">
+
+                        <i class="fas fa-download me-2"></i>
+
+                        Download Receipt
+
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            {% empty %}
+
+            <div class="text-center py-5">
+
+                <i class="fas fa-credit-card fa-4x text-muted mb-3"></i>
+
+                <h6>No Payments Found</h6>
+
+                <p class="text-muted">
+                    Payment history will appear here.
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="d-grid mt-3">
+
+            <a href="{% url 'payment_list' %}"
+               class="btn btn-success">
+
+                <i class="fas fa-eye me-2"></i>
+
+                View All Payments
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
     <!-- 4. Stat Cards Section -->
     <div class="row g-4 mt-2">
         <div class="col-lg-3 col-md-6">
@@ -412,7 +632,7 @@
                             <td>{{ prescription.medical_record.diagnosis }}</td>
                             <td>{{ prescription.medicine_name }}</td>
                             <td>
-                                <a href="{% url 'prescription_pdf' prescription.id %}" class="btn btn-success btn-sm">
+                                <a href="{% url 'download_prescription_pdf' prescription.id %}" class="btn btn-success btn-sm">
                                     <i class="fas fa-download me-1"></i> PDF
                                 </a>
                             </td>
@@ -462,138 +682,387 @@
 
     <!-- 9. Download Center -->
     <div class="card shadow-lg border-0 rounded-4 mt-4">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">
-                <i class="fas fa-download me-2"></i>Download Center
-            </h5>
-        </div>
-        <div class="card-body">
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="download-card p-3 border rounded-3 text-center bg-light">
-                        <i class="fas fa-prescription-bottle text-success fa-2x mb-2"></i>
-                        <h6 class="mt-2 fw-bold">Prescription</h6>
-                        <p class="small text-muted">Download latest prescription.</p>
-                        {% if prescriptions %}
-                        <a href="{% url 'prescription_pdf' prescriptions.first.id %}" class="btn btn-success btn-sm w-100"><i class="fas fa-download"></i> Download</a>
-                        {% else %}
-                        <button class="btn btn-secondary btn-sm w-100" disabled>Not Available</button>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="download-card p-3 border rounded-3 text-center bg-light">
-                        <i class="fas fa-notes-medical text-primary fa-2x mb-2"></i>
-                        <h6 class="mt-2 fw-bold">Medical Record</h6>
-                        <p class="small text-muted">Consultation report PDF.</p>
-                        {% if latest_record %}
-                        <a href="{% url 'medical_record_pdf' latest_record.id %}" class="btn btn-primary btn-sm w-100"><i class="fas fa-download"></i> Download</a>
-                        {% else %}
-                        <button class="btn btn-secondary btn-sm w-100" disabled>Not Available</button>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="download-card p-3 border rounded-3 text-center bg-light">
-                        <i class="fas fa-file-invoice-dollar text-danger fa-2x mb-2"></i>
-                        <h6 class="mt-2 fw-bold">Bill</h6>
-                        <p class="small text-muted">Latest hospital bill.</p>
-                        {% if bills %}
-                        <a href="{% url 'bill_pdf' bills.first.id %}" class="btn btn-danger btn-sm w-100"><i class="fas fa-download"></i> Download</a>
-                        {% else %}
-                        <button class="btn btn-secondary btn-sm w-100" disabled>Not Available</button>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="download-card p-3 border rounded-3 text-center bg-light">
-                        <i class="fas fa-receipt text-warning fa-2x mb-2"></i>
-                        <h6 class="mt-2 fw-bold">Receipt</h6>
-                        <p class="small text-muted">Payment receipt PDF.</p>
-                        {% if payments %}
-                        <a href="{% url 'payment_receipt_pdf' payments.first.id %}" class="btn btn-warning btn-sm w-100"><i class="fas fa-download"></i> Download</a>
-                        {% else %}
-                        <button class="btn btn-secondary btn-sm w-100" disabled>Not Available</button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-download me-2"></i>
+            Download Center
+        </h5>
     </div>
 
+    <div class="card-body">
+
+        <div class="row g-4">
+
+            <!-- Prescription -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="download-card p-3 border rounded-3 text-center bg-light h-100">
+
+                    <i class="fas fa-prescription-bottle text-success fa-2x mb-3"></i>
+
+                    <h6 class="fw-bold">Prescription</h6>
+
+                    <p class="small text-muted">
+                        Download latest prescription.
+                    </p>
+
+                    {% if prescriptions.first %}
+
+                        <a href="{% url 'download_prescription_pdf' prescriptions.first.id %}"
+                           class="btn btn-success btn-sm w-100">
+
+                            <i class="fas fa-download me-2"></i>
+                            Download
+
+                        </a>
+
+                    {% else %}
+
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+
+                            <i class="fas fa-ban me-2"></i>
+                            Not Available
+
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- Medical Record -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="download-card p-3 border rounded-3 text-center bg-light h-100">
+
+                    <i class="fas fa-notes-medical text-primary fa-2x mb-3"></i>
+
+                    <h6 class="fw-bold">Medical Record</h6>
+
+                    <p class="small text-muted">
+                        Consultation report PDF.
+                    </p>
+
+                    {% if latest_record %}
+
+                        <a href="{% url 'medical_record_pdf' latest_record.id %}"
+                           class="btn btn-primary btn-sm w-100">
+
+                            <i class="fas fa-download me-2"></i>
+                            Download
+
+                        </a>
+
+                    {% else %}
+
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+
+                            <i class="fas fa-ban me-2"></i>
+                            Not Available
+
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- Bill -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="download-card p-3 border rounded-3 text-center bg-light h-100">
+
+                    <i class="fas fa-file-invoice-dollar text-danger fa-2x mb-3"></i>
+
+                    <h6 class="fw-bold">Hospital Bill</h6>
+
+                    <p class="small text-muted">
+                        Download latest hospital bill.
+                    </p>
+
+                    {% if bills.first %}
+
+                        <a href="{% url 'download_bill_pdf' bills.first.id %}"
+                           class="btn btn-danger btn-sm w-100">
+
+                            <i class="fas fa-download me-2"></i>
+                            Download Bill
+
+                        </a>
+
+                    {% else %}
+
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+
+                            <i class="fas fa-ban me-2"></i>
+                            Not Available
+
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- Payment Receipt -->
+            <div class="col-lg-3 col-md-6">
+
+                <div class="download-card p-3 border rounded-3 text-center bg-light h-100">
+
+                    <i class="fas fa-receipt text-warning fa-2x mb-3"></i>
+
+                    <h6 class="fw-bold">Payment Receipt</h6>
+
+                    <p class="small text-muted">
+                        Download latest payment receipt.
+                    </p>
+
+                    {% if payments.first %}
+
+                        <a href="{% url 'download_receipt' payments.first.id %}"
+                           class="btn btn-warning btn-sm w-100">
+
+                            <i class="fas fa-download me-2"></i>
+                            Download Receipt
+
+                        </a>
+
+                    {% else %}
+
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+
+                            <i class="fas fa-ban me-2"></i>
+                            Not Available
+
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
     <!-- 10. AI Health Dashboard -->
     <div class="card shadow-lg border-0 rounded-4 mt-4">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0">
-                <i class="fas fa-heartbeat me-2"></i>AI Health Dashboard
-            </h5>
-        </div>
-        <div class="card-body">
-            <div class="row text-center">
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="health-card bg-success text-white p-3 rounded-3">
-                        <i class="fas fa-heart fa-2x mb-2"></i>
-                        <h6>Health Score</h6>
-                        <h2 class="fw-bold">96%</h2>
-                        <small>Excellent</small>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="health-card bg-primary text-white p-3 rounded-3">
-                        <i class="fas fa-weight fa-2x mb-2"></i>
-                        <h6>BMI</h6>
-                        <h2 class="fw-bold">22.4</h2>
-                        <small>Normal</small>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="health-card bg-info text-white p-3 rounded-3">
-                        <i class="fas fa-tint fa-2x mb-2"></i>
-                        <h6>Water Intake</h6>
-                        <h2 class="fw-bold">5 / 8</h2>
-                        <small>Glasses</small>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="health-card bg-warning text-dark p-3 rounded-3">
-                        <i class="fas fa-walking fa-2x mb-2"></i>
-                        <h6>Today's Steps</h6>
-                        <h2 class="fw-bold">8240</h2>
-                        <small>Goal 10000</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-wallet me-2"></i>
+            Billing & Payment Dashboard
+        </h5>
     </div>
 
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <!-- Total Bills -->
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="p-4 rounded-4 bg-primary text-white shadow-sm">
+
+                    <i class="fas fa-file-invoice fa-2x mb-3"></i>
+
+                    <h6>Total Bills</h6>
+
+                    <h2 class="fw-bold">
+                        {{ bills.count }}
+                    </h2>
+
+                    <small>Hospital Bills</small>
+
+                </div>
+
+            </div>
+
+            <!-- Pending Bills -->
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="p-4 rounded-4 bg-danger text-white shadow-sm">
+
+                    <i class="fas fa-exclamation-circle fa-2x mb-3"></i>
+
+                    <h6>Pending Bills</h6>
+
+                    <h2 class="fw-bold">
+                        {{ pending_bills.count }}
+                    </h2>
+
+                    <small>Need Payment</small>
+
+                </div>
+
+            </div>
+
+            <!-- Total Paid -->
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="p-4 rounded-4 bg-success text-white shadow-sm">
+
+                    <i class="fas fa-check-circle fa-2x mb-3"></i>
+
+                    <h6>Total Paid</h6>
+
+                    <h2 class="fw-bold">
+                        ₹ {{ total_paid }}
+                    </h2>
+
+                    <small>Successfully Paid</small>
+
+                </div>
+
+            </div>
+
+            <!-- Payment Receipts -->
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="p-4 rounded-4 bg-warning text-dark shadow-sm">
+
+                    <i class="fas fa-receipt fa-2x mb-3"></i>
+
+                    <h6>Receipts</h6>
+
+                    <h2 class="fw-bold">
+                        {{ payments.count }}
+                    </h2>
+
+                    <small>Available PDFs</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
     <!-- 11. AI Health Insights -->
-    <div class="card shadow border-0 mt-4 rounded-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">
-                <i class="fas fa-robot me-2"></i>AI Health Insights
-            </h5>
-        </div>
-        <div class="card-body">
-            {% if latest_record %}
-            <div class="alert alert-success">
-                <strong>Latest Diagnosis</strong><br>
-                {{ latest_record.diagnosis }}
-            </div>
-            {% endif %}
+    <div class="card shadow-lg border-0 rounded-4 mt-4">
 
-            {% if next_appointment %}
-            <div class="alert alert-warning">
-                Next consultation with <strong>Dr. {{ next_appointment.doctor.user.get_full_name }}</strong>
-            </div>
-            {% endif %}
-
-            {% if pending_bills %}
-            <div class="alert alert-danger mb-0">
-                Pending Bill Amount: ₹ {{ total_due }}
-            </div>
-            {% endif %}
-        </div>
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-credit-card me-2"></i>
+            Billing & Payment Insights
+        </h5>
     </div>
+
+    <div class="card-body">
+
+        {% if pending_bills %}
+
+        <div class="alert alert-danger d-flex align-items-center">
+
+            <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+
+            <div>
+
+                <h6 class="mb-1">
+                    Pending Payment
+                </h6>
+
+                <p class="mb-0">
+                    You have
+                    <strong>{{ pending_bills.count }}</strong>
+                    pending bill(s).
+                    Total Due :
+                    <strong>₹ {{ total_due }}</strong>
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if payments.first %}
+
+        <div class="alert alert-success d-flex align-items-center">
+
+            <i class="fas fa-check-circle fa-2x me-3"></i>
+
+            <div>
+
+                <h6 class="mb-1">
+                    Latest Payment
+                </h6>
+
+                <p class="mb-0">
+
+                    ₹ {{ payments.first.amount }}
+
+                    paid successfully via
+
+                    <strong>{{ payments.first.payment_method }}</strong>
+
+                    on
+
+                    {{ payments.first.payment_date|date:"d M Y" }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if payments.first %}
+
+        <div class="alert alert-info d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h6 class="mb-1">
+                    Download Receipt
+                </h6>
+
+                <p class="mb-0">
+                    Your latest payment receipt is ready.
+                </p>
+
+            </div>
+
+            <a href="{% url 'download_receipt' payments.first.id %}"
+               class="btn btn-primary">
+
+                <i class="fas fa-download me-2"></i>
+
+                Download
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if not pending_bills and not payments.first %}
+
+        <div class="alert alert-secondary text-center mb-0">
+
+            <i class="fas fa-info-circle me-2"></i>
+
+            No billing or payment information available.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
 
     <!-- 12. Emergency Contacts -->
     <div class="card shadow border-0 mt-4 rounded-4">
@@ -696,12 +1165,75 @@
                 </div>
             </div>
             <!-- Payment Summary Chart -->
-            <div class="col-lg-6 mb-4">
-                <div class="chart-card p-3 border rounded-3 bg-light">
-                    <h6 class="fw-bold mb-3">Payment Summary</h6>
-                    <canvas id="paymentChart"></canvas>
+            <!-- Payment Analysis -->
+
+<div class="col-lg-6 mb-4">
+
+    <div class="chart-card p-3 border rounded-3 bg-light h-100">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h6 class="fw-bold mb-0">
+
+                <i class="fas fa-wallet text-success me-2"></i>
+
+                Payment Analysis
+
+            </h6>
+
+            <span class="badge bg-success">
+
+                {{ payments.count }} Payments
+
+            </span>
+
+        </div>
+
+        <div class="row text-center mb-4">
+
+            <div class="col-6">
+
+                <div class="border rounded-3 p-3 bg-white shadow-sm">
+
+                    <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
+
+                    <h6>Paid</h6>
+
+                    <h4 class="fw-bold text-success">
+
+                        ₹ {{ total_paid }}
+
+                    </h4>
+
                 </div>
+
             </div>
+
+            <div class="col-6">
+
+                <div class="border rounded-3 p-3 bg-white shadow-sm">
+
+                    <i class="fas fa-clock text-danger fa-2x mb-2"></i>
+
+                    <h6>Pending</h6>
+
+                    <h4 class="fw-bold text-danger">
+
+                        ₹ {{ total_due }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <canvas id="paymentChart" height="160"></canvas>
+
+    </div>
+
+</div>
             <!-- Bills Chart -->
             <div class="col-lg-6">
                 <div class="chart-card p-3 border rounded-3 bg-light">
@@ -731,39 +1263,7 @@
     </button>
 </div>
 
-<!-- Floating Live Chat -->
-<div id="liveChat" style="position: fixed; bottom: 70px; right: 20px; z-index: 1000;">
-    <button id="openMessage" class="btn btn-success rounded-circle shadow-lg p-3" data-bs-toggle="modal" data-bs-target="#messageModal" title="Live Chat">
-        <i class="fas fa-comments fa-lg"></i>
-    </button>
-</div>
 
-<!-- Notification Bell -->
-<div id="notificationBell" style="position: fixed; top: 90px; right: 20px; z-index: 1000;">
-    <button class="btn btn-danger rounded-circle shadow-lg position-relative p-3" title="Notifications">
-        <i class="fas fa-bell fa-lg"></i>
-        {% if unread_messages > 0 %}
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-            {{ unread_messages }}
-        </span>
-        {% endif %}
-    </button>
-</div>
-
-<!-- Dark Mode Toggle Button -->
-<div id="themeButton" style="position: fixed; top: 155px; right: 20px; z-index: 1000;">
-    <button id="darkModeBtn" class="btn btn-dark rounded-circle shadow p-3" title="Toggle Dark Mode">
-        <i class="fas fa-moon fa-lg"></i>
-    </button>
-</div>
-
-<!-- Language Switcher -->
-<div id="languageButton" style="position: fixed; top: 220px; right: 20px; z-index: 1000; width: 110px;">
-    <select class="form-select form-select-sm shadow">
-        <option>English</option>
-        <option>தமிழ்</option>
-    </select>
-</div>
 
 <!-- Floating Appointment Reminder -->
 <div id="floatingReminder" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; max-width: 250px;">

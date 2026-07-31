@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import ssl
+from django.conf.urls.i18n import i18n_patterns
 ssl._create_default_https_context = ssl._create_unverified_context
 from dotenv import load_dotenv
 load_dotenv() 
@@ -53,14 +54,15 @@ INSTALLED_APPS = [
     'payment',
     'dashboard',
     'notifications',
-    'messaging'
+    'messaging',
+    
 ]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -74,6 +76,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                "notifications.context_processors.notification_context",
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -125,14 +128,31 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGE_CODE = "en"
+
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = [
+
+    ("en", _("English")),
+    ("ta", _("Tamil")),
+
+]
+
+LOCALE_PATHS = [
+
+    BASE_DIR / "locale",
+
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/

@@ -2,38 +2,40 @@
 // NOTIFICATION TOAST
 //==========================================
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
 
-const toastElement=document.getElementById("notificationToast");
+    const toastElement = document.getElementById("notificationToast");
 
-if(!toastElement) return;
+    if (!toastElement) return;
 
-const toast=new bootstrap.Toast(toastElement);
+    const toast = new bootstrap.Toast(toastElement);
 
-window.showNotification=function(title,message){
+    window.showNotification = function (title, message) {
 
-document.getElementById("notifyTitle").innerHTML=title;
+        document.getElementById("notifyTitle").innerHTML = title;
+        document.getElementById("notifyMessage").innerHTML = message;
+        document.getElementById("notifyTime").innerHTML = "Just Now";
 
-document.getElementById("notifyMessage").innerHTML=message;
+        toast.show();
+    };
 
-document.getElementById("notifyTime").innerHTML="Just Now";
+    //==========================================
+    // Show Welcome Notification Only Once
+    //==========================================
 
-toast.show();
+    if (!sessionStorage.getItem("welcome_notification_shown")) {
 
-};
+        setTimeout(() => {
 
-// Demo Welcome Notification
+            showNotification(
+                "Welcome 👋",
+                "Welcome to AI Hospital Management System."
+            );
 
-setTimeout(()=>{
+            sessionStorage.setItem("welcome_notification_shown", "true");
 
-showNotification(
+        }, 2500);
 
-"Welcome 👋",
-
-"Welcome to AI Hospital Management System."
-
-);
-
-},2500);
+    }
 
 });

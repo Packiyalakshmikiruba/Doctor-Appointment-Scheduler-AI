@@ -1,38 +1,21 @@
-"""
-chatbot/tools.py
-
-Production Ready LangChain Tools
-Doctor Appointment Scheduler AI
-"""
-
 import os
 import json
-
 from datetime import datetime
 from datetime import timedelta
 from datetime import date
-
 import joblib
-
 from django.conf import settings
 from django.db.models import Q
-
 from langchain.tools import tool
-
 from hospital.models import (
     Doctor,
     DoctorAvailability,
     DoctorLeave,
     DoctorStatus,
 )
-
 from patients.models import Patient
-
 from appointments.models import Appointment
-
 from billing.models import Bill
-
-
 # =====================================================
 # ML MODEL LOADING
 # =====================================================

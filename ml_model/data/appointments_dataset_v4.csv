@@ -1,1094 +1,1094 @@
 patient_id,age,gender,department,lead_time_days,appointment_weekday,appointment_time,sms_reminder_sent,prior_visits,prior_noshows,history_noshow_ratio,distance_from_clinic,no_show
-P100000,52,Male,Dermatology,8,4,Evening,0,4,0,0.0,3.6,0
-P100001,15,Female,General Medicine,10,5,Evening,1,3,0,0.0,3.6,1
-P100002,72,Female,Cardiology,5,6,Afternoon,1,2,0,0.0,3.7,0
-P100003,61,Female,Cardiology,8,2,Afternoon,0,1,0,0.0,1.8,0
+P100000,52,Male,Dermatology,8,4,Evening,0,4,0,0,3.6,0
+P100001,15,Female,General Medicine,10,5,Evening,1,3,0,0,3.6,1
+P100002,72,Female,Cardiology,5,6,Afternoon,1,2,0,0,3.7,0
+P100003,61,Female,Cardiology,8,2,Afternoon,0,1,0,0,1.8,0
 P100004,21,Male,Neurology,13,0,Evening,0,4,1,0.25,7.5,0
-P100005,83,Female,Neurology,4,4,Morning,1,4,0,0.0,7.7,0
-P100006,87,Female,General Medicine,13,2,Morning,1,3,0,0.0,2.0,0
-P100007,75,Female,Orthopedics,7,3,Evening,1,2,0,0.0,10.8,1
+P100005,83,Female,Neurology,4,4,Morning,1,4,0,0,7.7,0
+P100006,87,Female,General Medicine,13,2,Morning,1,3,0,0,2,0
+P100007,75,Female,Orthopedics,7,3,Evening,1,2,0,0,10.8,1
 P100008,75,Female,General Medicine,1,6,Afternoon,0,4,1,0.25,2.3,0
 P100009,88,Male,General Medicine,0,6,Morning,0,6,1,0.167,7.7,1
 P100010,24,Female,Dermatology,3,4,Afternoon,0,3,2,0.667,0.8,0
-P100011,3,Female,Orthopedics,6,6,Afternoon,0,2,0,0.0,1.1,0
-P100012,22,Male,Cardiology,14,2,Afternoon,0,5,0,0.0,2.3,1
-P100013,53,Female,Orthopedics,1,4,Afternoon,1,1,0,0.0,5.4,0
-P100014,2,Female,Neurology,12,1,Afternoon,1,1,0,0.0,6.2,1
-P100015,88,Male,Cardiology,15,5,Afternoon,1,1,0,0.0,3.0,0
-P100016,30,Male,General Medicine,1,2,Afternoon,0,1,0,0.0,0.5,0
-P100017,38,Male,Orthopedics,15,5,Afternoon,0,2,0,0.0,2.8,0
-P100018,2,Male,General Medicine,38,1,Afternoon,1,3,0,0.0,7.0,0
-P100019,64,Male,Orthopedics,10,1,Afternoon,1,1,0,0.0,6.7,0
-P100020,60,Female,Orthopedics,12,5,Morning,1,1,0,0.0,1.0,0
-P100021,21,Male,General Medicine,41,2,Afternoon,1,2,1,0.5,0.0,0
-P100022,33,Male,Dermatology,7,5,Evening,1,3,0,0.0,8.4,0
+P100011,3,Female,Orthopedics,6,6,Afternoon,0,2,0,0,1.1,0
+P100012,22,Male,Cardiology,14,2,Afternoon,0,5,0,0,2.3,1
+P100013,53,Female,Orthopedics,1,4,Afternoon,1,1,0,0,5.4,0
+P100014,2,Female,Neurology,12,1,Afternoon,1,1,0,0,6.2,1
+P100015,88,Male,Cardiology,15,5,Afternoon,1,1,0,0,3,0
+P100016,30,Male,General Medicine,1,2,Afternoon,0,1,0,0,0.5,0
+P100017,38,Male,Orthopedics,15,5,Afternoon,0,2,0,0,2.8,0
+P100018,2,Male,General Medicine,38,1,Afternoon,1,3,0,0,7,0
+P100019,64,Male,Orthopedics,10,1,Afternoon,1,1,0,0,6.7,0
+P100020,60,Female,Orthopedics,12,5,Morning,1,1,0,0,1,0
+P100021,21,Male,General Medicine,41,2,Afternoon,1,2,1,0.5,0,0
+P100022,33,Male,Dermatology,7,5,Evening,1,3,0,0,8.4,0
 P100023,76,Female,Orthopedics,2,5,Morning,1,5,1,0.2,0.7,0
-P100024,58,Female,General Medicine,14,0,Morning,1,4,0,0.0,0.5,0
-P100025,22,Male,Cardiology,7,2,Afternoon,1,3,0,0.0,0.0,0
-P100026,89,Male,Cardiology,6,0,Evening,0,1,1,1.0,3.4,0
-P100027,49,Male,General Medicine,2,4,Morning,1,2,0,0.0,4.2,0
-P100028,59,Female,Orthopedics,11,6,Morning,0,0,0,0.0,6.1,0
-P100029,42,Male,Orthopedics,0,5,Morning,1,2,0,0.0,2.1,0
-P100030,60,Female,General Medicine,20,4,Afternoon,1,2,0,0.0,7.4,0
-P100031,80,Female,Cardiology,3,2,Morning,1,5,0,0.0,1.1,0
+P100024,58,Female,General Medicine,14,0,Morning,1,4,0,0,0.5,0
+P100025,22,Male,Cardiology,7,2,Afternoon,1,3,0,0,0,0
+P100026,89,Male,Cardiology,6,0,Evening,0,1,1,1,3.4,0
+P100027,49,Male,General Medicine,2,4,Morning,1,2,0,0,4.2,0
+P100028,59,Female,Orthopedics,11,6,Morning,0,0,0,0,6.1,0
+P100029,42,Male,Orthopedics,0,5,Morning,1,2,0,0,2.1,0
+P100030,60,Female,General Medicine,20,4,Afternoon,1,2,0,0,7.4,0
+P100031,80,Female,Cardiology,3,2,Morning,1,5,0,0,1.1,0
 P100032,15,Male,Dermatology,1,5,Morning,1,3,1,0.333,10.7,0
 P100033,62,Female,Orthopedics,4,6,Afternoon,1,2,1,0.5,5.1,0
-P100034,62,Female,Cardiology,0,4,Evening,1,4,0,0.0,5.3,0
+P100034,62,Female,Cardiology,0,4,Evening,1,4,0,0,5.3,0
 P100035,47,Male,Dermatology,9,3,Afternoon,0,5,1,0.2,1.4,0
 P100036,62,Female,Cardiology,18,1,Morning,0,3,1,0.333,0.5,1
-P100037,51,Female,General Medicine,14,5,Afternoon,1,2,0,0.0,3.7,0
-P100038,55,Female,Orthopedics,1,6,Evening,1,0,0,0.0,5.7,0
-P100039,64,Female,Dermatology,1,1,Afternoon,1,3,0,0.0,0.6,0
-P100040,3,Female,General Medicine,13,0,Evening,1,1,0,0.0,18.0,0
+P100037,51,Female,General Medicine,14,5,Afternoon,1,2,0,0,3.7,0
+P100038,55,Female,Orthopedics,1,6,Evening,1,0,0,0,5.7,0
+P100039,64,Female,Dermatology,1,1,Afternoon,1,3,0,0,0.6,0
+P100040,3,Female,General Medicine,13,0,Evening,1,1,0,0,18,0
 P100041,51,Female,General Medicine,20,4,Evening,1,6,1,0.167,23.6,0
 P100042,7,Female,Orthopedics,4,0,Morning,0,4,1,0.25,4.7,1
-P100043,21,Female,Cardiology,5,6,Afternoon,1,3,0,0.0,18.0,0
-P100044,73,Female,General Medicine,3,5,Morning,0,7,0,0.0,1.2,0
+P100043,21,Female,Cardiology,5,6,Afternoon,1,3,0,0,18,0
+P100044,73,Female,General Medicine,3,5,Morning,0,7,0,0,1.2,0
 P100045,39,Female,Dermatology,17,1,Afternoon,1,4,1,0.25,0.2,0
 P100046,18,Male,Orthopedics,8,1,Morning,0,3,1,0.333,0.2,1
-P100047,4,Male,General Medicine,2,4,Morning,1,1,0,0.0,5.3,0
+P100047,4,Male,General Medicine,2,4,Morning,1,1,0,0,5.3,0
 P100048,89,Male,Cardiology,2,5,Evening,0,2,1,0.5,0.4,0
-P100049,60,Male,General Medicine,17,3,Morning,1,1,0,0.0,19.1,0
-P100050,14,Male,Neurology,0,3,Evening,1,4,0,0.0,0.9,0
-P100051,9,Female,Cardiology,3,4,Morning,1,2,0,0.0,2.2,0
-P100052,53,Male,Orthopedics,6,5,Morning,1,1,0,0.0,10.4,0
-P100053,2,Female,Cardiology,1,4,Evening,1,2,0,0.0,1.5,0
-P100054,84,Male,General Medicine,0,5,Afternoon,1,1,1,1.0,1.7,0
+P100049,60,Male,General Medicine,17,3,Morning,1,1,0,0,19.1,0
+P100050,14,Male,Neurology,0,3,Evening,1,4,0,0,0.9,0
+P100051,9,Female,Cardiology,3,4,Morning,1,2,0,0,2.2,0
+P100052,53,Male,Orthopedics,6,5,Morning,1,1,0,0,10.4,0
+P100053,2,Female,Cardiology,1,4,Evening,1,2,0,0,1.5,0
+P100054,84,Male,General Medicine,0,5,Afternoon,1,1,1,1,1.7,0
 P100055,60,Female,General Medicine,13,6,Afternoon,1,3,1,0.333,6.2,1
-P100056,71,Female,Neurology,17,6,Morning,0,1,0,0.0,1.9,0
-P100057,44,Male,Dermatology,13,0,Afternoon,1,3,0,0.0,1.5,0
+P100056,71,Female,Neurology,17,6,Morning,0,1,0,0,1.9,0
+P100057,44,Male,Dermatology,13,0,Afternoon,1,3,0,0,1.5,0
 P100058,8,Female,Orthopedics,18,4,Afternoon,0,3,1,0.333,1.8,0
-P100059,47,Male,Neurology,6,5,Afternoon,0,1,0,0.0,4.0,0
-P100060,35,Female,General Medicine,13,3,Afternoon,1,2,0,0.0,20.3,0
-P100061,78,Male,Neurology,3,5,Evening,1,3,0,0.0,10.7,0
-P100062,81,Female,Neurology,8,6,Afternoon,1,6,0,0.0,2.0,0
-P100063,36,Male,Cardiology,35,5,Evening,1,3,0,0.0,2.7,0
-P100064,50,Female,Dermatology,2,4,Afternoon,0,5,0,0.0,3.7,0
-P100065,4,Female,Orthopedics,3,0,Afternoon,0,1,0,0.0,23.2,0
-P100066,2,Male,Cardiology,5,0,Morning,1,2,0,0.0,1.1,0
+P100059,47,Male,Neurology,6,5,Afternoon,0,1,0,0,4,0
+P100060,35,Female,General Medicine,13,3,Afternoon,1,2,0,0,20.3,0
+P100061,78,Male,Neurology,3,5,Evening,1,3,0,0,10.7,0
+P100062,81,Female,Neurology,8,6,Afternoon,1,6,0,0,2,0
+P100063,36,Male,Cardiology,35,5,Evening,1,3,0,0,2.7,0
+P100064,50,Female,Dermatology,2,4,Afternoon,0,5,0,0,3.7,0
+P100065,4,Female,Orthopedics,3,0,Afternoon,0,1,0,0,23.2,0
+P100066,2,Male,Cardiology,5,0,Morning,1,2,0,0,1.1,0
 P100067,6,Male,Neurology,1,0,Morning,1,3,1,0.333,2.7,1
-P100068,54,Male,Orthopedics,0,0,Evening,0,3,0,0.0,7.8,0
-P100069,4,Male,Cardiology,14,6,Morning,1,1,0,0.0,19.9,0
-P100070,54,Female,Neurology,30,2,Morning,1,3,0,0.0,1.0,0
-P100071,63,Male,General Medicine,4,4,Morning,1,3,0,0.0,1.5,0
-P100072,18,Male,General Medicine,0,1,Morning,1,1,0,0.0,1.5,0
+P100068,54,Male,Orthopedics,0,0,Evening,0,3,0,0,7.8,0
+P100069,4,Male,Cardiology,14,6,Morning,1,1,0,0,19.9,0
+P100070,54,Female,Neurology,30,2,Morning,1,3,0,0,1,0
+P100071,63,Male,General Medicine,4,4,Morning,1,3,0,0,1.5,0
+P100072,18,Male,General Medicine,0,1,Morning,1,1,0,0,1.5,0
 P100073,44,Male,Cardiology,0,4,Evening,1,3,2,0.667,0.1,0
-P100074,34,Female,Cardiology,17,2,Evening,1,2,0,0.0,5.6,0
-P100075,74,Male,General Medicine,4,0,Afternoon,0,4,0,0.0,6.7,0
+P100074,34,Female,Cardiology,17,2,Evening,1,2,0,0,5.6,0
+P100075,74,Male,General Medicine,4,0,Afternoon,0,4,0,0,6.7,0
 P100076,62,Male,Neurology,3,2,Morning,1,4,1,0.25,5.5,0
-P100077,14,Male,Neurology,5,3,Afternoon,1,3,0,0.0,0.4,0
-P100078,48,Male,General Medicine,3,3,Afternoon,0,4,0,0.0,0.4,0
+P100077,14,Male,Neurology,5,3,Afternoon,1,3,0,0,0.4,0
+P100078,48,Male,General Medicine,3,3,Afternoon,0,4,0,0,0.4,0
 P100079,15,Female,Cardiology,5,6,Evening,1,5,2,0.4,1.4,0
-P100080,72,Male,Neurology,15,4,Afternoon,1,3,0,0.0,2.1,0
-P100081,78,Male,Dermatology,7,4,Morning,1,2,0,0.0,9.3,0
-P100082,87,Female,Orthopedics,9,1,Afternoon,0,6,3,0.5,1.0,0
-P100083,62,Female,Neurology,3,6,Evening,1,2,0,0.0,0.3,0
-P100084,40,Male,Neurology,10,1,Afternoon,1,2,0,0.0,3.0,0
-P100085,85,Female,Orthopedics,8,3,Afternoon,0,4,0,0.0,3.2,0
-P100086,80,Female,Cardiology,1,0,Morning,1,1,0,0.0,3.6,0
-P100087,82,Male,Neurology,6,2,Afternoon,1,0,0,0.0,10.5,0
-P100088,53,Female,Dermatology,2,1,Afternoon,1,4,0,0.0,0.6,0
+P100080,72,Male,Neurology,15,4,Afternoon,1,3,0,0,2.1,0
+P100081,78,Male,Dermatology,7,4,Morning,1,2,0,0,9.3,0
+P100082,87,Female,Orthopedics,9,1,Afternoon,0,6,3,0.5,1,0
+P100083,62,Female,Neurology,3,6,Evening,1,2,0,0,0.3,0
+P100084,40,Male,Neurology,10,1,Afternoon,1,2,0,0,3,0
+P100085,85,Female,Orthopedics,8,3,Afternoon,0,4,0,0,3.2,0
+P100086,80,Female,Cardiology,1,0,Morning,1,1,0,0,3.6,0
+P100087,82,Male,Neurology,6,2,Afternoon,1,0,0,0,10.5,0
+P100088,53,Female,Dermatology,2,1,Afternoon,1,4,0,0,0.6,0
 P100089,24,Female,Orthopedics,13,5,Morning,0,4,1,0.25,7.3,0
 P100090,26,Male,Dermatology,4,1,Afternoon,1,2,1,0.5,2.5,0
-P100091,89,Male,Neurology,41,0,Morning,1,0,0,0.0,2.2,0
+P100091,89,Male,Neurology,41,0,Morning,1,0,0,0,2.2,0
 P100092,60,Male,Orthopedics,0,0,Morning,1,3,1,0.333,16.2,0
-P100093,41,Female,Cardiology,12,4,Morning,1,6,0,0.0,1.7,0
+P100093,41,Female,Cardiology,12,4,Morning,1,6,0,0,1.7,0
 P100094,29,Female,Dermatology,8,2,Morning,1,4,1,0.25,6.2,0
-P100095,15,Female,Neurology,11,0,Afternoon,0,3,0,0.0,1.9,0
-P100096,45,Male,General Medicine,2,6,Morning,1,1,0,0.0,4.2,0
-P100097,65,Female,Dermatology,5,1,Morning,1,4,0,0.0,9.3,0
-P100098,89,Female,Cardiology,12,1,Evening,1,4,0,0.0,12.8,0
+P100095,15,Female,Neurology,11,0,Afternoon,0,3,0,0,1.9,0
+P100096,45,Male,General Medicine,2,6,Morning,1,1,0,0,4.2,0
+P100097,65,Female,Dermatology,5,1,Morning,1,4,0,0,9.3,0
+P100098,89,Female,Cardiology,12,1,Evening,1,4,0,0,12.8,0
 P100099,71,Male,Cardiology,2,3,Afternoon,0,2,1,0.5,10.9,0
 P100100,9,Male,Orthopedics,2,0,Afternoon,1,7,1,0.143,5.2,0
 P100101,88,Female,General Medicine,6,5,Afternoon,1,2,1,0.5,1.7,0
 P100102,1,Male,Cardiology,5,4,Afternoon,1,4,1,0.25,6.5,0
-P100103,8,Female,Dermatology,2,2,Morning,0,1,0,0.0,7.4,0
-P100104,88,Male,Dermatology,2,5,Evening,0,3,0,0.0,0.1,0
-P100105,63,Male,Cardiology,2,4,Morning,0,0,0,0.0,3.5,0
-P100106,11,Male,General Medicine,11,1,Afternoon,1,1,0,0.0,11.1,0
-P100107,81,Male,Dermatology,8,5,Morning,0,3,1,0.333,4.0,0
-P100108,8,Female,Dermatology,14,4,Afternoon,0,2,0,0.0,2.2,1
+P100103,8,Female,Dermatology,2,2,Morning,0,1,0,0,7.4,0
+P100104,88,Male,Dermatology,2,5,Evening,0,3,0,0,0.1,0
+P100105,63,Male,Cardiology,2,4,Morning,0,0,0,0,3.5,0
+P100106,11,Male,General Medicine,11,1,Afternoon,1,1,0,0,11.1,0
+P100107,81,Male,Dermatology,8,5,Morning,0,3,1,0.333,4,0
+P100108,8,Female,Dermatology,14,4,Afternoon,0,2,0,0,2.2,1
 P100109,35,Male,Neurology,29,1,Afternoon,0,2,1,0.5,12.3,0
-P100110,35,Female,Dermatology,5,1,Afternoon,1,2,0,0.0,1.0,0
-P100111,33,Female,General Medicine,0,1,Morning,0,4,0,0.0,1.4,0
-P100112,5,Female,General Medicine,0,1,Afternoon,1,2,0,0.0,7.0,0
+P100110,35,Female,Dermatology,5,1,Afternoon,1,2,0,0,1,0
+P100111,33,Female,General Medicine,0,1,Morning,0,4,0,0,1.4,0
+P100112,5,Female,General Medicine,0,1,Afternoon,1,2,0,0,7,0
 P100113,41,Male,General Medicine,2,6,Evening,0,3,1,0.333,2.6,0
-P100114,28,Female,General Medicine,21,1,Evening,1,4,0,0.0,7.5,0
-P100115,7,Female,General Medicine,5,3,Morning,1,3,1,0.333,1.0,0
+P100114,28,Female,General Medicine,21,1,Evening,1,4,0,0,7.5,0
+P100115,7,Female,General Medicine,5,3,Morning,1,3,1,0.333,1,0
 P100116,73,Male,Orthopedics,2,5,Morning,1,5,1,0.2,1.7,0
-P100117,72,Male,General Medicine,4,4,Evening,1,1,0,0.0,1.0,0
-P100118,12,Female,General Medicine,7,3,Afternoon,1,6,0,0.0,18.3,0
-P100119,34,Female,Neurology,8,6,Afternoon,1,3,0,0.0,3.1,0
-P100120,33,Male,General Medicine,1,3,Evening,1,4,0,0.0,2.5,0
-P100121,48,Female,Dermatology,30,0,Evening,1,4,0,0.0,0.1,0
-P100122,23,Female,Cardiology,6,0,Afternoon,1,4,0,0.0,1.0,0
-P100123,62,Female,Cardiology,1,0,Afternoon,1,2,0,0.0,3.3,0
+P100117,72,Male,General Medicine,4,4,Evening,1,1,0,0,1,0
+P100118,12,Female,General Medicine,7,3,Afternoon,1,6,0,0,18.3,0
+P100119,34,Female,Neurology,8,6,Afternoon,1,3,0,0,3.1,0
+P100120,33,Male,General Medicine,1,3,Evening,1,4,0,0,2.5,0
+P100121,48,Female,Dermatology,30,0,Evening,1,4,0,0,0.1,0
+P100122,23,Female,Cardiology,6,0,Afternoon,1,4,0,0,1,0
+P100123,62,Female,Cardiology,1,0,Afternoon,1,2,0,0,3.3,0
 P100124,88,Female,Orthopedics,17,2,Morning,1,6,1,0.167,0.4,0
-P100125,37,Female,Neurology,0,0,Afternoon,1,1,0,0.0,4.3,0
-P100126,44,Male,Orthopedics,19,4,Morning,1,6,0,0.0,3.6,0
-P100127,86,Male,General Medicine,45,3,Morning,0,3,0,0.0,8.7,1
-P100128,35,Male,General Medicine,9,4,Morning,0,3,0,0.0,6.5,0
-P100129,65,Female,Cardiology,11,5,Morning,1,2,0,0.0,3.5,0
-P100130,47,Female,General Medicine,3,0,Afternoon,0,3,0,0.0,1.5,0
-P100131,78,Male,General Medicine,22,6,Afternoon,1,5,0,0.0,7.8,0
+P100125,37,Female,Neurology,0,0,Afternoon,1,1,0,0,4.3,0
+P100126,44,Male,Orthopedics,19,4,Morning,1,6,0,0,3.6,0
+P100127,86,Male,General Medicine,45,3,Morning,0,3,0,0,8.7,1
+P100128,35,Male,General Medicine,9,4,Morning,0,3,0,0,6.5,0
+P100129,65,Female,Cardiology,11,5,Morning,1,2,0,0,3.5,0
+P100130,47,Female,General Medicine,3,0,Afternoon,0,3,0,0,1.5,0
+P100131,78,Male,General Medicine,22,6,Afternoon,1,5,0,0,7.8,0
 P100132,3,Female,Orthopedics,6,2,Afternoon,0,4,1,0.25,7.4,0
-P100133,1,Female,Dermatology,10,5,Morning,1,4,1,0.25,1.0,1
-P100134,5,Female,General Medicine,20,6,Evening,1,2,0,0.0,14.8,0
-P100135,14,Male,General Medicine,29,2,Morning,1,4,0,0.0,0.4,1
-P100136,27,Female,General Medicine,14,5,Afternoon,1,5,0,0.0,0.3,0
-P100137,9,Male,General Medicine,2,3,Evening,0,3,0,0.0,1.2,0
-P100138,79,Male,Neurology,27,4,Afternoon,0,5,0,0.0,14.4,0
-P100139,15,Male,Cardiology,7,1,Afternoon,1,1,0,0.0,4.4,0
-P100140,42,Male,Neurology,21,4,Evening,1,4,0,0.0,9.3,0
+P100133,1,Female,Dermatology,10,5,Morning,1,4,1,0.25,1,1
+P100134,5,Female,General Medicine,20,6,Evening,1,2,0,0,14.8,0
+P100135,14,Male,General Medicine,29,2,Morning,1,4,0,0,0.4,1
+P100136,27,Female,General Medicine,14,5,Afternoon,1,5,0,0,0.3,0
+P100137,9,Male,General Medicine,2,3,Evening,0,3,0,0,1.2,0
+P100138,79,Male,Neurology,27,4,Afternoon,0,5,0,0,14.4,0
+P100139,15,Male,Cardiology,7,1,Afternoon,1,1,0,0,4.4,0
+P100140,42,Male,Neurology,21,4,Evening,1,4,0,0,9.3,0
 P100141,77,Male,General Medicine,9,0,Morning,1,3,2,0.667,1.6,0
-P100142,51,Female,Orthopedics,2,6,Afternoon,1,6,0,0.0,4.0,0
+P100142,51,Female,Orthopedics,2,6,Afternoon,1,6,0,0,4,0
 P100143,63,Male,Orthopedics,3,1,Afternoon,1,4,1,0.25,2.7,0
 P100144,52,Female,Dermatology,6,2,Morning,1,3,1,0.333,10.6,0
-P100145,4,Male,Dermatology,12,3,Evening,1,2,0,0.0,0.1,0
-P100146,23,Female,Orthopedics,3,3,Evening,0,3,0,0.0,1.7,0
-P100147,15,Female,General Medicine,6,2,Afternoon,1,3,0,0.0,1.0,0
-P100148,43,Male,Orthopedics,3,0,Morning,1,1,1,1.0,11.8,0
-P100149,29,Male,Cardiology,13,2,Morning,0,2,0,0.0,3.8,0
-P100150,36,Male,General Medicine,5,5,Afternoon,1,3,0,0.0,3.1,0
-P100151,13,Female,Neurology,0,6,Morning,0,4,0,0.0,3.6,0
-P100152,32,Female,Orthopedics,1,6,Afternoon,1,3,0,0.0,21.4,0
-P100153,71,Male,Dermatology,0,0,Afternoon,1,1,1,1.0,11.4,1
-P100154,59,Female,Neurology,5,1,Afternoon,1,1,0,0.0,7.4,0
-P100155,86,Male,General Medicine,0,2,Afternoon,1,1,0,0.0,2.1,0
-P100156,28,Male,Cardiology,0,0,Afternoon,1,4,0,0.0,1.1,0
-P100157,66,Female,Neurology,22,6,Morning,1,2,0,0.0,15.3,0
+P100145,4,Male,Dermatology,12,3,Evening,1,2,0,0,0.1,0
+P100146,23,Female,Orthopedics,3,3,Evening,0,3,0,0,1.7,0
+P100147,15,Female,General Medicine,6,2,Afternoon,1,3,0,0,1,0
+P100148,43,Male,Orthopedics,3,0,Morning,1,1,1,1,11.8,0
+P100149,29,Male,Cardiology,13,2,Morning,0,2,0,0,3.8,0
+P100150,36,Male,General Medicine,5,5,Afternoon,1,3,0,0,3.1,0
+P100151,13,Female,Neurology,0,6,Morning,0,4,0,0,3.6,0
+P100152,32,Female,Orthopedics,1,6,Afternoon,1,3,0,0,21.4,0
+P100153,71,Male,Dermatology,0,0,Afternoon,1,1,1,1,11.4,1
+P100154,59,Female,Neurology,5,1,Afternoon,1,1,0,0,7.4,0
+P100155,86,Male,General Medicine,0,2,Afternoon,1,1,0,0,2.1,0
+P100156,28,Male,Cardiology,0,0,Afternoon,1,4,0,0,1.1,0
+P100157,66,Female,Neurology,22,6,Morning,1,2,0,0,15.3,0
 P100158,42,Male,Neurology,16,1,Morning,1,4,1,0.25,3.3,0
-P100159,45,Female,Orthopedics,4,2,Afternoon,1,2,1,0.5,2.0,1
-P100160,62,Male,General Medicine,34,3,Afternoon,1,3,0,0.0,3.8,0
-P100161,57,Female,Dermatology,0,2,Afternoon,1,5,0,0.0,15.0,0
+P100159,45,Female,Orthopedics,4,2,Afternoon,1,2,1,0.5,2,1
+P100160,62,Male,General Medicine,34,3,Afternoon,1,3,0,0,3.8,0
+P100161,57,Female,Dermatology,0,2,Afternoon,1,5,0,0,15,0
 P100162,6,Male,Cardiology,7,4,Afternoon,0,4,2,0.5,2.9,1
-P100163,28,Male,General Medicine,7,2,Evening,1,3,0,0.0,5.0,0
-P100164,28,Female,Dermatology,4,4,Morning,0,1,0,0.0,9.7,0
-P100165,44,Male,Neurology,4,1,Morning,0,4,0,0.0,3.3,0
-P100166,84,Female,Dermatology,4,2,Morning,1,4,0,0.0,1.6,0
-P100167,30,Female,Orthopedics,4,1,Afternoon,0,3,0,0.0,31.2,0
+P100163,28,Male,General Medicine,7,2,Evening,1,3,0,0,5,0
+P100164,28,Female,Dermatology,4,4,Morning,0,1,0,0,9.7,0
+P100165,44,Male,Neurology,4,1,Morning,0,4,0,0,3.3,0
+P100166,84,Female,Dermatology,4,2,Morning,1,4,0,0,1.6,0
+P100167,30,Female,Orthopedics,4,1,Afternoon,0,3,0,0,31.2,0
 P100168,62,Female,Orthopedics,10,1,Afternoon,1,4,2,0.5,18.8,0
 P100169,75,Female,General Medicine,1,6,Evening,1,4,1,0.25,11.1,0
-P100170,89,Female,Orthopedics,1,0,Afternoon,1,3,0,0.0,7.0,0
-P100171,62,Female,Neurology,1,1,Evening,1,1,0,0.0,2.1,0
-P100172,1,Female,General Medicine,2,1,Evening,1,1,0,0.0,14.7,0
-P100173,27,Female,Cardiology,5,6,Morning,0,4,0,0.0,1.9,0
-P100174,62,Male,General Medicine,0,6,Afternoon,1,4,0,0.0,9.7,0
-P100175,77,Male,General Medicine,16,2,Afternoon,1,3,0,0.0,15.0,0
+P100170,89,Female,Orthopedics,1,0,Afternoon,1,3,0,0,7,0
+P100171,62,Female,Neurology,1,1,Evening,1,1,0,0,2.1,0
+P100172,1,Female,General Medicine,2,1,Evening,1,1,0,0,14.7,0
+P100173,27,Female,Cardiology,5,6,Morning,0,4,0,0,1.9,0
+P100174,62,Male,General Medicine,0,6,Afternoon,1,4,0,0,9.7,0
+P100175,77,Male,General Medicine,16,2,Afternoon,1,3,0,0,15,0
 P100176,3,Female,Orthopedics,2,6,Morning,1,2,1,0.5,5.5,1
-P100177,70,Male,General Medicine,1,2,Afternoon,1,3,0,0.0,9.7,0
-P100178,72,Female,Orthopedics,9,3,Afternoon,1,3,0,0.0,9.4,0
-P100179,27,Male,General Medicine,0,6,Morning,1,4,0,0.0,1.3,0
-P100180,9,Male,Cardiology,7,0,Afternoon,1,3,0,0.0,6.6,0
-P100181,62,Female,Orthopedics,9,1,Afternoon,0,0,0,0.0,0.6,0
+P100177,70,Male,General Medicine,1,2,Afternoon,1,3,0,0,9.7,0
+P100178,72,Female,Orthopedics,9,3,Afternoon,1,3,0,0,9.4,0
+P100179,27,Male,General Medicine,0,6,Morning,1,4,0,0,1.3,0
+P100180,9,Male,Cardiology,7,0,Afternoon,1,3,0,0,6.6,0
+P100181,62,Female,Orthopedics,9,1,Afternoon,0,0,0,0,0.6,0
 P100182,37,Female,General Medicine,1,0,Morning,1,5,2,0.4,4.3,0
-P100183,51,Male,Dermatology,0,4,Afternoon,1,2,0,0.0,1.1,0
-P100184,44,Female,General Medicine,3,6,Morning,0,2,0,0.0,3.2,0
-P100185,24,Female,Cardiology,0,1,Afternoon,1,3,0,0.0,10.7,0
-P100186,79,Male,General Medicine,0,0,Morning,1,2,0,0.0,26.1,0
-P100187,59,Female,General Medicine,2,6,Evening,1,2,0,0.0,2.3,0
+P100183,51,Male,Dermatology,0,4,Afternoon,1,2,0,0,1.1,0
+P100184,44,Female,General Medicine,3,6,Morning,0,2,0,0,3.2,0
+P100185,24,Female,Cardiology,0,1,Afternoon,1,3,0,0,10.7,0
+P100186,79,Male,General Medicine,0,0,Morning,1,2,0,0,26.1,0
+P100187,59,Female,General Medicine,2,6,Evening,1,2,0,0,2.3,0
 P100188,32,Male,General Medicine,2,6,Afternoon,0,2,1,0.5,4.6,0
-P100189,88,Male,Orthopedics,6,3,Morning,1,1,0,0.0,4.3,0
-P100190,52,Female,General Medicine,9,3,Afternoon,0,3,0,0.0,18.5,0
+P100189,88,Male,Orthopedics,6,3,Morning,1,1,0,0,4.3,0
+P100190,52,Female,General Medicine,9,3,Afternoon,0,3,0,0,18.5,0
 P100191,62,Male,Cardiology,7,1,Afternoon,1,4,2,0.5,3.9,0
-P100192,58,Female,General Medicine,1,4,Afternoon,0,1,0,0.0,7.2,0
-P100193,52,Female,Orthopedics,1,3,Afternoon,1,2,0,0.0,15.3,0
+P100192,58,Female,General Medicine,1,4,Afternoon,0,1,0,0,7.2,0
+P100193,52,Female,Orthopedics,1,3,Afternoon,1,2,0,0,15.3,0
 P100194,12,Male,Cardiology,16,3,Afternoon,1,3,1,0.333,2.8,1
 P100195,39,Female,Cardiology,6,4,Morning,1,2,1,0.5,13.9,1
-P100196,2,Female,Cardiology,16,0,Morning,0,4,1,0.25,15.0,0
-P100197,3,Male,Cardiology,3,3,Afternoon,1,0,0,0.0,16.0,0
+P100196,2,Female,Cardiology,16,0,Morning,0,4,1,0.25,15,0
+P100197,3,Male,Cardiology,3,3,Afternoon,1,0,0,0,16,0
 P100198,56,Female,Neurology,7,2,Afternoon,1,4,1,0.25,1.9,0
-P100199,81,Female,Neurology,5,5,Morning,1,2,0,0.0,3.1,0
+P100199,81,Female,Neurology,5,5,Morning,1,2,0,0,3.1,0
 P100200,59,Female,Dermatology,3,5,Evening,1,7,1,0.143,12.3,0
-P100201,2,Female,Neurology,5,3,Morning,1,4,0,0.0,2.7,0
-P100202,2,Male,Dermatology,5,0,Afternoon,1,2,0,0.0,5.5,0
-P100203,54,Female,Orthopedics,1,6,Morning,0,2,0,0.0,0.8,0
-P100204,87,Female,Orthopedics,3,0,Morning,0,6,0,0.0,0.3,0
+P100201,2,Female,Neurology,5,3,Morning,1,4,0,0,2.7,0
+P100202,2,Male,Dermatology,5,0,Afternoon,1,2,0,0,5.5,0
+P100203,54,Female,Orthopedics,1,6,Morning,0,2,0,0,0.8,0
+P100204,87,Female,Orthopedics,3,0,Morning,0,6,0,0,0.3,0
 P100205,1,Female,Dermatology,12,1,Evening,1,2,1,0.5,3.2,1
 P100206,19,Female,Orthopedics,19,2,Morning,0,8,1,0.125,5.2,1
-P100207,2,Female,Neurology,3,0,Afternoon,1,3,0,0.0,3.0,0
-P100208,53,Female,Dermatology,2,4,Morning,1,2,0,0.0,5.2,0
-P100209,44,Female,Dermatology,1,2,Afternoon,1,2,0,0.0,4.3,1
-P100210,32,Female,General Medicine,9,5,Evening,0,4,0,0.0,6.9,0
-P100211,70,Female,Neurology,3,2,Morning,0,4,0,0.0,6.3,0
-P100212,32,Female,Orthopedics,35,4,Evening,1,6,0,0.0,3.3,0
-P100213,68,Female,Neurology,3,3,Afternoon,1,4,0,0.0,3.3,0
-P100214,55,Male,Orthopedics,4,4,Afternoon,1,4,0,0.0,0.9,0
-P100215,75,Male,General Medicine,7,4,Afternoon,0,5,0,0.0,4.3,0
-P100216,56,Male,Neurology,12,3,Evening,0,3,0,0.0,5.3,0
-P100217,17,Female,Neurology,5,3,Morning,0,2,0,0.0,3.9,0
-P100218,38,Female,Dermatology,4,3,Morning,1,3,0,0.0,2.4,0
+P100207,2,Female,Neurology,3,0,Afternoon,1,3,0,0,3,0
+P100208,53,Female,Dermatology,2,4,Morning,1,2,0,0,5.2,0
+P100209,44,Female,Dermatology,1,2,Afternoon,1,2,0,0,4.3,1
+P100210,32,Female,General Medicine,9,5,Evening,0,4,0,0,6.9,0
+P100211,70,Female,Neurology,3,2,Morning,0,4,0,0,6.3,0
+P100212,32,Female,Orthopedics,35,4,Evening,1,6,0,0,3.3,0
+P100213,68,Female,Neurology,3,3,Afternoon,1,4,0,0,3.3,0
+P100214,55,Male,Orthopedics,4,4,Afternoon,1,4,0,0,0.9,0
+P100215,75,Male,General Medicine,7,4,Afternoon,0,5,0,0,4.3,0
+P100216,56,Male,Neurology,12,3,Evening,0,3,0,0,5.3,0
+P100217,17,Female,Neurology,5,3,Morning,0,2,0,0,3.9,0
+P100218,38,Female,Dermatology,4,3,Morning,1,3,0,0,2.4,0
 P100219,24,Female,General Medicine,43,3,Evening,0,2,1,0.5,7.7,0
 P100220,69,Male,Neurology,0,3,Afternoon,0,2,1,0.5,0.5,0
-P100221,70,Female,Cardiology,18,4,Morning,0,8,0,0.0,14.8,1
-P100222,86,Male,Neurology,1,1,Afternoon,1,2,0,0.0,0.1,0
+P100221,70,Female,Cardiology,18,4,Morning,0,8,0,0,14.8,1
+P100222,86,Male,Neurology,1,1,Afternoon,1,2,0,0,0.1,0
 P100223,11,Male,Cardiology,12,1,Afternoon,1,4,1,0.25,19.7,0
 P100224,16,Female,General Medicine,7,0,Afternoon,1,8,1,0.125,3.7,1
 P100225,73,Female,Neurology,3,1,Morning,0,5,2,0.4,3.2,0
 P100226,59,Male,Dermatology,16,5,Afternoon,1,7,1,0.143,1.8,0
 P100227,70,Male,Dermatology,0,1,Morning,1,3,1,0.333,0.1,1
-P100228,80,Male,General Medicine,2,4,Afternoon,0,1,1,1.0,1.9,0
-P100229,3,Male,Orthopedics,6,3,Evening,0,2,0,0.0,0.7,0
-P100230,20,Female,Cardiology,3,3,Afternoon,1,2,0,0.0,6.5,0
-P100231,59,Male,Orthopedics,7,6,Morning,0,2,0,0.0,2.3,0
-P100232,36,Female,Cardiology,0,6,Morning,0,6,0,0.0,8.7,1
-P100233,19,Female,Orthopedics,0,6,Afternoon,1,2,0,0.0,1.4,0
+P100228,80,Male,General Medicine,2,4,Afternoon,0,1,1,1,1.9,0
+P100229,3,Male,Orthopedics,6,3,Evening,0,2,0,0,0.7,0
+P100230,20,Female,Cardiology,3,3,Afternoon,1,2,0,0,6.5,0
+P100231,59,Male,Orthopedics,7,6,Morning,0,2,0,0,2.3,0
+P100232,36,Female,Cardiology,0,6,Morning,0,6,0,0,8.7,1
+P100233,19,Female,Orthopedics,0,6,Afternoon,1,2,0,0,1.4,0
 P100234,67,Male,Orthopedics,1,4,Afternoon,1,5,1,0.2,13.8,0
-P100235,19,Male,General Medicine,1,5,Morning,1,2,0,0.0,4.4,0
-P100236,20,Male,General Medicine,4,1,Afternoon,1,4,0,0.0,0.7,0
+P100235,19,Male,General Medicine,1,5,Morning,1,2,0,0,4.4,0
+P100236,20,Male,General Medicine,4,1,Afternoon,1,4,0,0,0.7,0
 P100237,71,Male,General Medicine,11,4,Morning,1,5,2,0.4,3.1,0
-P100238,52,Male,General Medicine,18,0,Morning,1,1,0,0.0,1.4,0
-P100239,33,Female,Cardiology,14,3,Morning,0,4,0,0.0,1.3,0
-P100240,40,Male,Cardiology,1,6,Morning,1,1,0,0.0,4.2,0
-P100241,39,Female,Cardiology,4,2,Morning,0,5,0,0.0,6.7,0
-P100242,82,Male,General Medicine,1,0,Afternoon,1,6,0,0.0,14.6,0
+P100238,52,Male,General Medicine,18,0,Morning,1,1,0,0,1.4,0
+P100239,33,Female,Cardiology,14,3,Morning,0,4,0,0,1.3,0
+P100240,40,Male,Cardiology,1,6,Morning,1,1,0,0,4.2,0
+P100241,39,Female,Cardiology,4,2,Morning,0,5,0,0,6.7,0
+P100242,82,Male,General Medicine,1,0,Afternoon,1,6,0,0,14.6,0
 P100243,1,Female,Dermatology,2,6,Evening,1,4,1,0.25,4.2,0
-P100244,11,Female,General Medicine,5,5,Afternoon,1,3,0,0.0,20.3,0
-P100245,57,Female,Orthopedics,0,0,Morning,1,1,0,0.0,17.0,0
-P100246,89,Female,Dermatology,1,4,Morning,1,1,0,0.0,12.0,0
-P100247,50,Female,General Medicine,21,1,Morning,1,1,1,1.0,4.2,1
-P100248,23,Female,General Medicine,5,3,Morning,1,3,0,0.0,0.9,0
+P100244,11,Female,General Medicine,5,5,Afternoon,1,3,0,0,20.3,0
+P100245,57,Female,Orthopedics,0,0,Morning,1,1,0,0,17,0
+P100246,89,Female,Dermatology,1,4,Morning,1,1,0,0,12,0
+P100247,50,Female,General Medicine,21,1,Morning,1,1,1,1,4.2,1
+P100248,23,Female,General Medicine,5,3,Morning,1,3,0,0,0.9,0
 P100249,31,Female,Orthopedics,4,5,Afternoon,1,2,1,0.5,1.5,0
-P100250,42,Female,Orthopedics,0,5,Afternoon,1,0,0,0.0,6.3,0
-P100251,7,Male,Orthopedics,2,2,Morning,1,1,0,0.0,3.3,0
-P100252,16,Male,Orthopedics,16,0,Morning,1,6,2,0.333,1.0,0
+P100250,42,Female,Orthopedics,0,5,Afternoon,1,0,0,0,6.3,0
+P100251,7,Male,Orthopedics,2,2,Morning,1,1,0,0,3.3,0
+P100252,16,Male,Orthopedics,16,0,Morning,1,6,2,0.333,1,0
 P100253,60,Female,Cardiology,1,2,Morning,1,4,1,0.25,3.9,0
-P100254,2,Female,Neurology,4,1,Morning,0,2,0,0.0,0.1,1
-P100255,1,Female,Neurology,0,6,Afternoon,1,4,0,0.0,7.9,0
-P100256,48,Female,Dermatology,5,1,Morning,1,5,0,0.0,0.5,0
-P100257,12,Female,Orthopedics,0,6,Afternoon,1,0,0,0.0,6.0,0
-P100258,69,Male,Cardiology,13,2,Afternoon,1,0,0,0.0,9.5,1
-P100259,37,Male,General Medicine,13,3,Evening,1,4,0,0.0,0.9,0
-P100260,32,Male,Dermatology,12,1,Evening,0,3,0,0.0,4.4,0
+P100254,2,Female,Neurology,4,1,Morning,0,2,0,0,0.1,1
+P100255,1,Female,Neurology,0,6,Afternoon,1,4,0,0,7.9,0
+P100256,48,Female,Dermatology,5,1,Morning,1,5,0,0,0.5,0
+P100257,12,Female,Orthopedics,0,6,Afternoon,1,0,0,0,6,0
+P100258,69,Male,Cardiology,13,2,Afternoon,1,0,0,0,9.5,1
+P100259,37,Male,General Medicine,13,3,Evening,1,4,0,0,0.9,0
+P100260,32,Male,Dermatology,12,1,Evening,0,3,0,0,4.4,0
 P100261,9,Male,General Medicine,2,2,Afternoon,0,4,1,0.25,9.1,0
-P100262,19,Female,Neurology,14,0,Morning,1,1,0,0.0,1.8,0
-P100263,48,Male,General Medicine,6,2,Afternoon,0,3,0,0.0,1.1,0
-P100264,80,Female,General Medicine,3,2,Afternoon,1,4,0,0.0,2.5,1
-P100265,3,Male,Dermatology,7,4,Morning,1,2,0,0.0,4.9,0
-P100266,20,Female,Neurology,0,1,Afternoon,1,5,0,0.0,5.1,0
-P100267,24,Female,Cardiology,1,3,Evening,1,2,0,0.0,0.8,0
+P100262,19,Female,Neurology,14,0,Morning,1,1,0,0,1.8,0
+P100263,48,Male,General Medicine,6,2,Afternoon,0,3,0,0,1.1,0
+P100264,80,Female,General Medicine,3,2,Afternoon,1,4,0,0,2.5,1
+P100265,3,Male,Dermatology,7,4,Morning,1,2,0,0,4.9,0
+P100266,20,Female,Neurology,0,1,Afternoon,1,5,0,0,5.1,0
+P100267,24,Female,Cardiology,1,3,Evening,1,2,0,0,0.8,0
 P100268,54,Male,General Medicine,10,3,Afternoon,0,4,1,0.25,3.7,0
-P100269,33,Female,Orthopedics,2,4,Morning,1,2,0,0.0,1.9,0
+P100269,33,Female,Orthopedics,2,4,Morning,1,2,0,0,1.9,0
 P100270,24,Male,Orthopedics,7,6,Morning,1,3,1,0.333,11.1,1
-P100271,75,Male,General Medicine,3,5,Afternoon,1,3,0,0.0,2.3,0
-P100272,72,Male,Neurology,15,6,Morning,0,0,0,0.0,10.9,0
+P100271,75,Male,General Medicine,3,5,Afternoon,1,3,0,0,2.3,0
+P100272,72,Male,Neurology,15,6,Morning,0,0,0,0,10.9,0
 P100273,36,Male,Neurology,24,3,Afternoon,1,5,2,0.4,3.4,0
-P100274,38,Male,Orthopedics,17,2,Afternoon,0,5,0,0.0,7.8,0
-P100275,84,Female,General Medicine,2,4,Morning,1,2,0,0.0,4.3,0
-P100276,89,Female,Cardiology,1,0,Evening,0,2,0,0.0,5.8,0
-P100277,25,Female,Dermatology,5,1,Afternoon,0,1,0,0.0,3.0,0
-P100278,18,Male,Dermatology,0,1,Morning,0,0,0,0.0,8.8,0
+P100274,38,Male,Orthopedics,17,2,Afternoon,0,5,0,0,7.8,0
+P100275,84,Female,General Medicine,2,4,Morning,1,2,0,0,4.3,0
+P100276,89,Female,Cardiology,1,0,Evening,0,2,0,0,5.8,0
+P100277,25,Female,Dermatology,5,1,Afternoon,0,1,0,0,3,0
+P100278,18,Male,Dermatology,0,1,Morning,0,0,0,0,8.8,0
 P100279,82,Female,General Medicine,0,1,Afternoon,1,5,1,0.2,3.3,0
 P100280,66,Male,Cardiology,6,2,Afternoon,1,2,1,0.5,3.7,0
-P100281,54,Male,General Medicine,5,0,Afternoon,1,5,0,0.0,4.4,0
-P100282,35,Female,Dermatology,41,4,Evening,1,3,0,0.0,10.7,0
-P100283,80,Male,Dermatology,1,4,Afternoon,1,1,0,0.0,6.5,0
-P100284,61,Female,Orthopedics,2,1,Evening,1,1,0,0.0,2.6,0
-P100285,41,Female,General Medicine,0,0,Afternoon,1,4,0,0.0,6.7,1
+P100281,54,Male,General Medicine,5,0,Afternoon,1,5,0,0,4.4,0
+P100282,35,Female,Dermatology,41,4,Evening,1,3,0,0,10.7,0
+P100283,80,Male,Dermatology,1,4,Afternoon,1,1,0,0,6.5,0
+P100284,61,Female,Orthopedics,2,1,Evening,1,1,0,0,2.6,0
+P100285,41,Female,General Medicine,0,0,Afternoon,1,4,0,0,6.7,1
 P100286,33,Male,Cardiology,19,0,Afternoon,0,5,2,0.4,6.2,1
-P100287,68,Male,Neurology,12,0,Evening,1,1,0,0.0,16.0,0
-P100288,33,Male,Cardiology,13,3,Afternoon,1,0,0,0.0,11.0,0
-P100289,14,Female,Neurology,18,3,Morning,1,1,0,0.0,6.3,0
+P100287,68,Male,Neurology,12,0,Evening,1,1,0,0,16,0
+P100288,33,Male,Cardiology,13,3,Afternoon,1,0,0,0,11,0
+P100289,14,Female,Neurology,18,3,Morning,1,1,0,0,6.3,0
 P100290,21,Male,Neurology,5,1,Afternoon,1,7,1,0.143,2.5,0
 P100291,48,Male,Dermatology,4,0,Afternoon,0,4,1,0.25,9.1,0
 P100292,20,Male,Neurology,3,5,Morning,0,5,1,0.2,5.1,0
-P100293,8,Female,General Medicine,7,0,Evening,1,2,0,0.0,25.3,0
-P100294,7,Male,General Medicine,4,4,Morning,0,4,0,0.0,1.7,0
+P100293,8,Female,General Medicine,7,0,Evening,1,2,0,0,25.3,0
+P100294,7,Male,General Medicine,4,4,Morning,0,4,0,0,1.7,0
 P100295,67,Male,Cardiology,4,4,Morning,0,4,3,0.75,0.5,0
-P100296,17,Female,Dermatology,22,1,Evening,0,0,0,0.0,0.4,0
-P100297,33,Female,Orthopedics,33,5,Afternoon,1,3,0,0.0,6.1,1
-P100298,48,Male,Dermatology,12,0,Morning,0,3,0,0.0,16.8,0
-P100299,76,Male,General Medicine,11,6,Afternoon,1,5,2,0.4,0.0,0
-P100300,59,Male,General Medicine,9,5,Afternoon,1,3,0,0.0,7.8,0
-P100301,86,Female,General Medicine,1,1,Morning,1,5,0,0.0,6.4,0
-P100302,22,Male,Cardiology,0,4,Evening,0,4,0,0.0,7.9,1
-P100303,30,Female,Dermatology,9,6,Afternoon,1,0,0,0.0,2.6,0
-P100304,38,Female,Neurology,10,4,Afternoon,1,2,0,0.0,10.3,0
-P100305,51,Female,Cardiology,0,3,Afternoon,1,1,0,0.0,0.3,0
+P100296,17,Female,Dermatology,22,1,Evening,0,0,0,0,0.4,0
+P100297,33,Female,Orthopedics,33,5,Afternoon,1,3,0,0,6.1,1
+P100298,48,Male,Dermatology,12,0,Morning,0,3,0,0,16.8,0
+P100299,76,Male,General Medicine,11,6,Afternoon,1,5,2,0.4,0,0
+P100300,59,Male,General Medicine,9,5,Afternoon,1,3,0,0,7.8,0
+P100301,86,Female,General Medicine,1,1,Morning,1,5,0,0,6.4,0
+P100302,22,Male,Cardiology,0,4,Evening,0,4,0,0,7.9,1
+P100303,30,Female,Dermatology,9,6,Afternoon,1,0,0,0,2.6,0
+P100304,38,Female,Neurology,10,4,Afternoon,1,2,0,0,10.3,0
+P100305,51,Female,Cardiology,0,3,Afternoon,1,1,0,0,0.3,0
 P100306,54,Male,Cardiology,21,1,Afternoon,1,3,2,0.667,8.4,0
 P100307,8,Female,Cardiology,0,1,Morning,1,5,1,0.2,1.9,0
 P100308,27,Female,General Medicine,2,0,Morning,0,6,1,0.167,3.9,1
-P100309,27,Female,Orthopedics,8,0,Afternoon,1,2,0,0.0,10.4,0
-P100310,21,Male,Cardiology,1,3,Evening,1,2,0,0.0,1.9,0
-P100311,30,Female,Cardiology,0,6,Morning,0,6,0,0.0,1.2,0
+P100309,27,Female,Orthopedics,8,0,Afternoon,1,2,0,0,10.4,0
+P100310,21,Male,Cardiology,1,3,Evening,1,2,0,0,1.9,0
+P100311,30,Female,Cardiology,0,6,Morning,0,6,0,0,1.2,0
 P100312,28,Male,Dermatology,3,2,Afternoon,1,9,1,0.111,6.9,0
-P100313,64,Male,Neurology,11,5,Evening,1,3,0,0.0,4.6,0
-P100314,69,Male,General Medicine,4,2,Morning,0,0,0,0.0,4.3,0
-P100315,61,Female,General Medicine,8,2,Morning,0,3,0,0.0,1.8,0
-P100316,48,Male,Neurology,6,1,Morning,0,1,0,0.0,0.2,0
-P100317,19,Male,General Medicine,0,5,Afternoon,1,3,0,0.0,3.2,1
+P100313,64,Male,Neurology,11,5,Evening,1,3,0,0,4.6,0
+P100314,69,Male,General Medicine,4,2,Morning,0,0,0,0,4.3,0
+P100315,61,Female,General Medicine,8,2,Morning,0,3,0,0,1.8,0
+P100316,48,Male,Neurology,6,1,Morning,0,1,0,0,0.2,0
+P100317,19,Male,General Medicine,0,5,Afternoon,1,3,0,0,3.2,1
 P100318,4,Male,Orthopedics,35,1,Morning,0,3,2,0.667,0.7,0
-P100319,35,Male,Neurology,0,5,Afternoon,0,2,0,0.0,14.2,1
-P100320,64,Female,Dermatology,27,4,Afternoon,0,0,0,0.0,0.3,0
+P100319,35,Male,Neurology,0,5,Afternoon,0,2,0,0,14.2,1
+P100320,64,Female,Dermatology,27,4,Afternoon,0,0,0,0,0.3,0
 P100321,49,Female,Dermatology,6,1,Afternoon,1,4,1,0.25,3.4,0
-P100322,17,Male,Cardiology,26,1,Morning,1,3,0,0.0,0.3,0
-P100323,44,Male,Dermatology,0,1,Afternoon,1,2,0,0.0,0.6,0
-P100324,30,Female,Orthopedics,5,6,Afternoon,0,1,0,0.0,6.5,0
-P100325,46,Male,General Medicine,1,3,Evening,1,3,0,0.0,6.2,0
-P100326,6,Male,Dermatology,0,1,Evening,1,0,0,0.0,0.2,0
-P100327,37,Female,Neurology,7,0,Afternoon,1,4,0,0.0,0.0,0
-P100328,24,Female,General Medicine,1,0,Afternoon,1,4,0,0.0,0.5,0
-P100329,46,Male,Cardiology,7,5,Morning,1,1,0,0.0,8.6,0
-P100330,53,Female,Dermatology,0,4,Morning,1,3,0,0.0,5.3,0
-P100331,60,Male,General Medicine,3,3,Morning,0,3,0,0.0,0.2,0
-P100332,63,Female,Neurology,12,6,Afternoon,1,3,0,0.0,4.0,0
+P100322,17,Male,Cardiology,26,1,Morning,1,3,0,0,0.3,0
+P100323,44,Male,Dermatology,0,1,Afternoon,1,2,0,0,0.6,0
+P100324,30,Female,Orthopedics,5,6,Afternoon,0,1,0,0,6.5,0
+P100325,46,Male,General Medicine,1,3,Evening,1,3,0,0,6.2,0
+P100326,6,Male,Dermatology,0,1,Evening,1,0,0,0,0.2,0
+P100327,37,Female,Neurology,7,0,Afternoon,1,4,0,0,0,0
+P100328,24,Female,General Medicine,1,0,Afternoon,1,4,0,0,0.5,0
+P100329,46,Male,Cardiology,7,5,Morning,1,1,0,0,8.6,0
+P100330,53,Female,Dermatology,0,4,Morning,1,3,0,0,5.3,0
+P100331,60,Male,General Medicine,3,3,Morning,0,3,0,0,0.2,0
+P100332,63,Female,Neurology,12,6,Afternoon,1,3,0,0,4,0
 P100333,85,Male,Cardiology,4,5,Morning,1,6,1,0.167,7.5,0
 P100334,32,Male,Dermatology,7,0,Morning,1,5,1,0.2,12.2,0
 P100335,87,Male,General Medicine,8,3,Evening,1,5,1,0.2,16.3,0
-P100336,33,Female,Dermatology,14,3,Morning,1,3,0,0.0,2.4,0
-P100337,67,Female,General Medicine,3,4,Morning,0,2,0,0.0,0.9,0
+P100336,33,Female,Dermatology,14,3,Morning,1,3,0,0,2.4,0
+P100337,67,Female,General Medicine,3,4,Morning,0,2,0,0,0.9,0
 P100338,18,Male,General Medicine,9,3,Morning,0,5,1,0.2,1.6,0
-P100339,25,Male,Dermatology,26,1,Afternoon,1,5,0,0.0,9.0,0
+P100339,25,Male,Dermatology,26,1,Afternoon,1,5,0,0,9,0
 P100340,54,Female,Orthopedics,10,3,Afternoon,1,6,2,0.333,21.3,0
-P100341,58,Male,General Medicine,5,4,Morning,0,1,0,0.0,3.8,0
+P100341,58,Male,General Medicine,5,4,Morning,0,1,0,0,3.8,0
 P100342,67,Male,Cardiology,7,5,Afternoon,0,4,1,0.25,2.2,0
-P100343,46,Female,General Medicine,10,4,Afternoon,1,1,1,1.0,3.4,0
-P100344,24,Male,Neurology,7,6,Evening,1,1,0,0.0,2.2,0
-P100345,32,Female,Neurology,0,4,Evening,1,4,0,0.0,1.8,0
+P100343,46,Female,General Medicine,10,4,Afternoon,1,1,1,1,3.4,0
+P100344,24,Male,Neurology,7,6,Evening,1,1,0,0,2.2,0
+P100345,32,Female,Neurology,0,4,Evening,1,4,0,0,1.8,0
 P100346,47,Female,Cardiology,1,0,Evening,1,5,1,0.2,5.4,0
-P100347,86,Male,Orthopedics,13,1,Afternoon,1,2,0,0.0,0.1,0
-P100348,23,Male,General Medicine,2,0,Morning,1,1,0,0.0,1.8,0
-P100349,66,Male,Cardiology,10,5,Morning,1,5,0,0.0,6.5,0
+P100347,86,Male,Orthopedics,13,1,Afternoon,1,2,0,0,0.1,0
+P100348,23,Male,General Medicine,2,0,Morning,1,1,0,0,1.8,0
+P100349,66,Male,Cardiology,10,5,Morning,1,5,0,0,6.5,0
 P100350,27,Female,Cardiology,3,2,Morning,1,5,1,0.2,0.2,0
-P100351,2,Female,Cardiology,5,5,Afternoon,1,1,0,0.0,0.5,0
-P100352,17,Female,Neurology,0,1,Evening,1,3,0,0.0,2.1,0
+P100351,2,Female,Cardiology,5,5,Afternoon,1,1,0,0,0.5,0
+P100352,17,Female,Neurology,0,1,Evening,1,3,0,0,2.1,0
 P100353,33,Male,Cardiology,1,3,Afternoon,1,7,1,0.143,12.6,0
-P100354,9,Female,Cardiology,25,4,Morning,1,3,0,0.0,8.7,0
+P100354,9,Female,Cardiology,25,4,Morning,1,3,0,0,8.7,0
 P100355,43,Female,Orthopedics,17,2,Afternoon,0,2,1,0.5,0.1,1
 P100356,48,Female,Dermatology,8,1,Evening,0,2,1,0.5,4.2,0
 P100357,39,Female,Cardiology,4,0,Afternoon,0,5,2,0.4,1.9,0
-P100358,42,Female,Cardiology,9,4,Evening,0,2,0,0.0,6.3,1
-P100359,26,Female,Cardiology,7,5,Evening,0,2,0,0.0,7.7,1
-P100360,50,Female,Cardiology,6,0,Evening,1,3,0,0.0,11.9,0
-P100361,25,Male,General Medicine,0,1,Afternoon,1,2,0,0.0,3.9,0
-P100362,24,Male,Cardiology,8,1,Afternoon,1,3,0,0.0,31.2,0
-P100363,13,Female,Cardiology,11,5,Morning,0,2,0,0.0,23.5,1
-P100364,60,Male,Neurology,41,2,Morning,1,2,0,0.0,12.8,0
-P100365,7,Female,General Medicine,0,5,Afternoon,1,0,0,0.0,5.1,1
-P100366,57,Female,General Medicine,10,3,Morning,1,7,0,0.0,3.0,0
-P100367,36,Female,General Medicine,6,0,Evening,1,5,0,0.0,2.7,0
-P100368,45,Male,Dermatology,4,2,Morning,0,1,0,0.0,0.1,0
-P100369,20,Male,General Medicine,1,4,Evening,0,1,0,0.0,1.7,0
-P100370,65,Male,General Medicine,4,6,Morning,1,2,0,0.0,7.6,0
-P100371,8,Female,Dermatology,3,3,Morning,0,3,0,0.0,5.6,1
-P100372,16,Female,Orthopedics,2,2,Evening,1,2,0,0.0,14.9,0
+P100358,42,Female,Cardiology,9,4,Evening,0,2,0,0,6.3,1
+P100359,26,Female,Cardiology,7,5,Evening,0,2,0,0,7.7,1
+P100360,50,Female,Cardiology,6,0,Evening,1,3,0,0,11.9,0
+P100361,25,Male,General Medicine,0,1,Afternoon,1,2,0,0,3.9,0
+P100362,24,Male,Cardiology,8,1,Afternoon,1,3,0,0,31.2,0
+P100363,13,Female,Cardiology,11,5,Morning,0,2,0,0,23.5,1
+P100364,60,Male,Neurology,41,2,Morning,1,2,0,0,12.8,0
+P100365,7,Female,General Medicine,0,5,Afternoon,1,0,0,0,5.1,1
+P100366,57,Female,General Medicine,10,3,Morning,1,7,0,0,3,0
+P100367,36,Female,General Medicine,6,0,Evening,1,5,0,0,2.7,0
+P100368,45,Male,Dermatology,4,2,Morning,0,1,0,0,0.1,0
+P100369,20,Male,General Medicine,1,4,Evening,0,1,0,0,1.7,0
+P100370,65,Male,General Medicine,4,6,Morning,1,2,0,0,7.6,0
+P100371,8,Female,Dermatology,3,3,Morning,0,3,0,0,5.6,1
+P100372,16,Female,Orthopedics,2,2,Evening,1,2,0,0,14.9,0
 P100373,14,Female,Cardiology,10,6,Morning,1,3,1,0.333,0.3,0
-P100374,76,Male,Neurology,9,6,Morning,0,4,1,0.25,1.0,0
-P100375,87,Female,Cardiology,7,0,Morning,0,3,0,0.0,9.3,0
+P100374,76,Male,Neurology,9,6,Morning,0,4,1,0.25,1,0
+P100375,87,Female,Cardiology,7,0,Morning,0,3,0,0,9.3,0
 P100376,15,Female,Neurology,22,1,Afternoon,1,9,2,0.222,2.7,1
-P100377,66,Male,General Medicine,3,4,Morning,1,3,0,0.0,0.8,0
-P100378,32,Female,Orthopedics,2,5,Afternoon,1,4,0,0.0,33.8,0
-P100379,87,Male,Cardiology,8,0,Afternoon,0,1,0,0.0,9.3,0
+P100377,66,Male,General Medicine,3,4,Morning,1,3,0,0,0.8,0
+P100378,32,Female,Orthopedics,2,5,Afternoon,1,4,0,0,33.8,0
+P100379,87,Male,Cardiology,8,0,Afternoon,0,1,0,0,9.3,0
 P100380,63,Male,General Medicine,1,3,Afternoon,0,4,1,0.25,3.2,0
-P100381,86,Female,General Medicine,3,6,Afternoon,0,1,0,0.0,10.4,0
+P100381,86,Female,General Medicine,3,6,Afternoon,0,1,0,0,10.4,0
 P100382,51,Male,Neurology,2,3,Afternoon,0,4,1,0.25,6.8,0
-P100383,25,Female,General Medicine,0,6,Morning,1,2,0,0.0,9.4,0
+P100383,25,Female,General Medicine,0,6,Morning,1,2,0,0,9.4,0
 P100384,58,Female,General Medicine,14,1,Evening,0,5,1,0.2,10.1,0
-P100385,63,Female,General Medicine,2,1,Morning,1,3,0,0.0,0.5,0
-P100386,62,Male,Dermatology,5,4,Afternoon,1,4,0,0.0,5.9,0
-P100387,22,Female,General Medicine,0,5,Afternoon,0,1,0,0.0,0.0,0
+P100385,63,Female,General Medicine,2,1,Morning,1,3,0,0,0.5,0
+P100386,62,Male,Dermatology,5,4,Afternoon,1,4,0,0,5.9,0
+P100387,22,Female,General Medicine,0,5,Afternoon,0,1,0,0,0,0
 P100388,58,Female,Cardiology,9,4,Evening,1,2,1,0.5,0.3,0
 P100389,58,Female,Orthopedics,3,1,Afternoon,1,3,1,0.333,14.1,1
 P100390,86,Male,Neurology,10,1,Morning,1,6,1,0.167,4.5,0
-P100391,49,Male,Orthopedics,4,3,Afternoon,1,5,1,0.2,8.0,0
-P100392,52,Female,Dermatology,1,1,Afternoon,1,4,0,0.0,10.9,0
+P100391,49,Male,Orthopedics,4,3,Afternoon,1,5,1,0.2,8,0
+P100392,52,Female,Dermatology,1,1,Afternoon,1,4,0,0,10.9,0
 P100393,42,Male,Orthopedics,5,2,Morning,1,3,1,0.333,17.9,0
 P100394,70,Female,Neurology,1,6,Afternoon,1,5,1,0.2,12.2,0
-P100395,15,Female,General Medicine,4,0,Afternoon,1,3,0,0.0,4.0,0
-P100396,54,Female,General Medicine,3,1,Evening,1,3,0,0.0,2.5,0
-P100397,60,Female,Dermatology,19,4,Afternoon,1,5,0,0.0,1.0,0
-P100398,8,Female,Neurology,0,5,Morning,1,5,0,0.0,3.1,1
-P100399,53,Female,General Medicine,9,6,Morning,1,3,0,0.0,2.7,0
-P100400,60,Female,Cardiology,1,6,Evening,1,4,0,0.0,4.9,0
+P100395,15,Female,General Medicine,4,0,Afternoon,1,3,0,0,4,0
+P100396,54,Female,General Medicine,3,1,Evening,1,3,0,0,2.5,0
+P100397,60,Female,Dermatology,19,4,Afternoon,1,5,0,0,1,0
+P100398,8,Female,Neurology,0,5,Morning,1,5,0,0,3.1,1
+P100399,53,Female,General Medicine,9,6,Morning,1,3,0,0,2.7,0
+P100400,60,Female,Cardiology,1,6,Evening,1,4,0,0,4.9,0
 P100401,5,Female,Dermatology,3,5,Evening,0,2,1,0.5,6.6,1
-P100402,68,Male,Orthopedics,4,5,Morning,1,2,0,0.0,23.0,0
-P100403,6,Male,Orthopedics,19,6,Morning,1,1,0,0.0,7.8,1
+P100402,68,Male,Orthopedics,4,5,Morning,1,2,0,0,23,0
+P100403,6,Male,Orthopedics,19,6,Morning,1,1,0,0,7.8,1
 P100404,47,Female,Orthopedics,2,2,Afternoon,1,3,1,0.333,6.2,0
-P100405,55,Male,General Medicine,0,4,Morning,1,4,0,0.0,2.4,0
-P100406,40,Male,Dermatology,3,2,Morning,1,1,0,0.0,0.2,0
-P100407,52,Male,Cardiology,0,1,Morning,1,3,1,0.333,2.0,0
-P100408,16,Female,Cardiology,1,0,Morning,0,5,0,0.0,8.8,0
-P100409,13,Female,Cardiology,6,5,Afternoon,1,1,0,0.0,1.4,0
-P100410,30,Female,Dermatology,0,4,Afternoon,1,4,0,0.0,7.5,0
-P100411,19,Female,Cardiology,0,5,Morning,1,1,0,0.0,5.2,0
-P100412,17,Female,General Medicine,10,2,Morning,1,9,0,0.0,1.1,1
-P100413,63,Male,Orthopedics,3,3,Morning,1,2,0,0.0,1.8,0
-P100414,19,Female,General Medicine,1,1,Afternoon,0,0,0,0.0,4.1,0
-P100415,58,Male,Orthopedics,2,0,Morning,0,2,0,0.0,3.3,0
-P100416,55,Female,General Medicine,8,1,Afternoon,1,3,0,0.0,9.0,0
-P100417,62,Female,Dermatology,2,3,Afternoon,0,1,0,0.0,8.0,0
+P100405,55,Male,General Medicine,0,4,Morning,1,4,0,0,2.4,0
+P100406,40,Male,Dermatology,3,2,Morning,1,1,0,0,0.2,0
+P100407,52,Male,Cardiology,0,1,Morning,1,3,1,0.333,2,0
+P100408,16,Female,Cardiology,1,0,Morning,0,5,0,0,8.8,0
+P100409,13,Female,Cardiology,6,5,Afternoon,1,1,0,0,1.4,0
+P100410,30,Female,Dermatology,0,4,Afternoon,1,4,0,0,7.5,0
+P100411,19,Female,Cardiology,0,5,Morning,1,1,0,0,5.2,0
+P100412,17,Female,General Medicine,10,2,Morning,1,9,0,0,1.1,1
+P100413,63,Male,Orthopedics,3,3,Morning,1,2,0,0,1.8,0
+P100414,19,Female,General Medicine,1,1,Afternoon,0,0,0,0,4.1,0
+P100415,58,Male,Orthopedics,2,0,Morning,0,2,0,0,3.3,0
+P100416,55,Female,General Medicine,8,1,Afternoon,1,3,0,0,9,0
+P100417,62,Female,Dermatology,2,3,Afternoon,0,1,0,0,8,0
 P100418,23,Male,Dermatology,5,0,Morning,1,2,1,0.5,5.1,0
-P100419,9,Male,Cardiology,1,3,Morning,1,4,0,0.0,10.4,1
-P100420,12,Male,Dermatology,7,1,Morning,1,1,0,0.0,5.0,0
-P100421,1,Male,General Medicine,3,2,Afternoon,0,2,0,0.0,20.0,0
-P100422,58,Male,Cardiology,7,6,Evening,1,2,0,0.0,1.5,0
-P100423,1,Female,Cardiology,13,1,Morning,1,0,0,0.0,7.5,0
-P100424,34,Female,Dermatology,7,1,Evening,1,2,0,0.0,2.8,0
-P100425,48,Female,Orthopedics,2,1,Morning,1,4,1,0.25,2.0,0
-P100426,89,Female,Neurology,2,4,Evening,0,5,0,0.0,1.2,1
-P100427,1,Female,Neurology,3,3,Afternoon,1,3,0,0.0,4.8,0
-P100428,16,Female,Cardiology,1,3,Afternoon,1,6,0,0.0,1.5,0
-P100429,61,Male,Neurology,1,5,Afternoon,1,2,0,0.0,1.3,0
-P100430,64,Female,Neurology,12,3,Afternoon,1,3,0,0.0,28.0,0
-P100431,63,Male,General Medicine,3,5,Evening,1,4,0,0.0,9.7,0
-P100432,69,Female,Orthopedics,4,4,Afternoon,0,5,0,0.0,8.3,0
-P100433,22,Female,Dermatology,7,2,Afternoon,0,1,0,0.0,9.5,0
-P100434,67,Female,Orthopedics,7,5,Morning,1,3,0,0.0,20.8,0
-P100435,76,Male,Orthopedics,0,1,Morning,1,1,1,1.0,5.1,0
-P100436,26,Female,Cardiology,14,2,Evening,0,4,0,0.0,1.5,0
+P100419,9,Male,Cardiology,1,3,Morning,1,4,0,0,10.4,1
+P100420,12,Male,Dermatology,7,1,Morning,1,1,0,0,5,0
+P100421,1,Male,General Medicine,3,2,Afternoon,0,2,0,0,20,0
+P100422,58,Male,Cardiology,7,6,Evening,1,2,0,0,1.5,0
+P100423,1,Female,Cardiology,13,1,Morning,1,0,0,0,7.5,0
+P100424,34,Female,Dermatology,7,1,Evening,1,2,0,0,2.8,0
+P100425,48,Female,Orthopedics,2,1,Morning,1,4,1,0.25,2,0
+P100426,89,Female,Neurology,2,4,Evening,0,5,0,0,1.2,1
+P100427,1,Female,Neurology,3,3,Afternoon,1,3,0,0,4.8,0
+P100428,16,Female,Cardiology,1,3,Afternoon,1,6,0,0,1.5,0
+P100429,61,Male,Neurology,1,5,Afternoon,1,2,0,0,1.3,0
+P100430,64,Female,Neurology,12,3,Afternoon,1,3,0,0,28,0
+P100431,63,Male,General Medicine,3,5,Evening,1,4,0,0,9.7,0
+P100432,69,Female,Orthopedics,4,4,Afternoon,0,5,0,0,8.3,0
+P100433,22,Female,Dermatology,7,2,Afternoon,0,1,0,0,9.5,0
+P100434,67,Female,Orthopedics,7,5,Morning,1,3,0,0,20.8,0
+P100435,76,Male,Orthopedics,0,1,Morning,1,1,1,1,5.1,0
+P100436,26,Female,Cardiology,14,2,Evening,0,4,0,0,1.5,0
 P100437,16,Female,General Medicine,1,6,Afternoon,1,4,1,0.25,11.9,0
-P100438,51,Male,Orthopedics,10,4,Afternoon,1,3,0,0.0,8.1,0
-P100439,86,Male,Cardiology,11,3,Afternoon,1,1,0,0.0,3.2,0
-P100440,57,Female,General Medicine,10,5,Evening,1,3,0,0.0,3.8,0
-P100441,29,Male,Orthopedics,6,1,Afternoon,1,0,0,0.0,3.2,0
-P100442,78,Female,General Medicine,0,0,Afternoon,1,2,0,0.0,16.0,0
+P100438,51,Male,Orthopedics,10,4,Afternoon,1,3,0,0,8.1,0
+P100439,86,Male,Cardiology,11,3,Afternoon,1,1,0,0,3.2,0
+P100440,57,Female,General Medicine,10,5,Evening,1,3,0,0,3.8,0
+P100441,29,Male,Orthopedics,6,1,Afternoon,1,0,0,0,3.2,0
+P100442,78,Female,General Medicine,0,0,Afternoon,1,2,0,0,16,0
 P100443,69,Male,Cardiology,3,6,Afternoon,1,2,1,0.5,2.5,0
 P100444,47,Male,General Medicine,7,0,Morning,1,8,1,0.125,19.9,0
-P100445,62,Female,Cardiology,3,2,Morning,1,0,0,0.0,14.5,0
-P100446,69,Male,General Medicine,15,3,Evening,0,0,0,0.0,6.0,0
+P100445,62,Female,Cardiology,3,2,Morning,1,0,0,0,14.5,0
+P100446,69,Male,General Medicine,15,3,Evening,0,0,0,0,6,0
 P100447,76,Female,Cardiology,2,0,Morning,0,4,1,0.25,5.2,0
-P100448,16,Male,General Medicine,2,2,Evening,1,1,0,0.0,2.8,0
-P100449,48,Male,General Medicine,2,4,Morning,1,0,0,0.0,0.1,0
-P100450,85,Female,Neurology,3,2,Morning,1,4,0,0.0,0.8,0
-P100451,39,Female,General Medicine,6,6,Evening,1,5,0,0.0,8.4,0
+P100448,16,Male,General Medicine,2,2,Evening,1,1,0,0,2.8,0
+P100449,48,Male,General Medicine,2,4,Morning,1,0,0,0,0.1,0
+P100450,85,Female,Neurology,3,2,Morning,1,4,0,0,0.8,0
+P100451,39,Female,General Medicine,6,6,Evening,1,5,0,0,8.4,0
 P100452,33,Female,General Medicine,9,2,Afternoon,1,4,1,0.25,3.8,0
-P100453,23,Female,Neurology,8,6,Morning,1,3,0,0.0,1.0,0
-P100454,10,Female,Cardiology,13,2,Afternoon,1,5,0,0.0,1.8,1
-P100455,69,Male,General Medicine,17,1,Afternoon,1,3,0,0.0,17.7,0
-P100456,34,Male,Cardiology,13,2,Afternoon,0,1,1,1.0,2.7,1
-P100457,52,Female,Orthopedics,0,5,Morning,1,1,0,0.0,14.3,0
-P100458,10,Female,Cardiology,10,2,Evening,1,0,0,0.0,2.2,1
+P100453,23,Female,Neurology,8,6,Morning,1,3,0,0,1,0
+P100454,10,Female,Cardiology,13,2,Afternoon,1,5,0,0,1.8,1
+P100455,69,Male,General Medicine,17,1,Afternoon,1,3,0,0,17.7,0
+P100456,34,Male,Cardiology,13,2,Afternoon,0,1,1,1,2.7,1
+P100457,52,Female,Orthopedics,0,5,Morning,1,1,0,0,14.3,0
+P100458,10,Female,Cardiology,10,2,Evening,1,0,0,0,2.2,1
 P100459,19,Female,General Medicine,1,1,Evening,1,5,1,0.2,4.7,0
-P100460,58,Male,Neurology,1,1,Morning,1,3,0,0.0,0.1,0
-P100461,1,Male,General Medicine,8,4,Evening,1,2,0,0.0,4.4,0
+P100460,58,Male,Neurology,1,1,Morning,1,3,0,0,0.1,0
+P100461,1,Male,General Medicine,8,4,Evening,1,2,0,0,4.4,0
 P100462,69,Female,Cardiology,3,6,Evening,1,2,1,0.5,6.1,0
 P100463,4,Female,General Medicine,0,3,Afternoon,1,4,1,0.25,1.6,0
-P100464,16,Female,General Medicine,1,0,Afternoon,0,3,0,0.0,5.2,0
-P100465,24,Female,Neurology,0,0,Morning,1,2,0,0.0,6.3,0
-P100466,80,Female,Dermatology,18,2,Morning,0,3,0,0.0,7.0,0
-P100467,2,Male,General Medicine,0,4,Afternoon,1,3,1,0.333,9.0,0
-P100468,32,Male,General Medicine,1,2,Evening,0,2,0,0.0,2.2,0
-P100469,84,Male,General Medicine,4,0,Afternoon,1,3,1,0.333,5.0,0
-P100470,24,Male,General Medicine,3,6,Afternoon,0,2,0,0.0,24.0,0
-P100471,12,Female,General Medicine,19,6,Morning,0,2,0,0.0,13.7,0
+P100464,16,Female,General Medicine,1,0,Afternoon,0,3,0,0,5.2,0
+P100465,24,Female,Neurology,0,0,Morning,1,2,0,0,6.3,0
+P100466,80,Female,Dermatology,18,2,Morning,0,3,0,0,7,0
+P100467,2,Male,General Medicine,0,4,Afternoon,1,3,1,0.333,9,0
+P100468,32,Male,General Medicine,1,2,Evening,0,2,0,0,2.2,0
+P100469,84,Male,General Medicine,4,0,Afternoon,1,3,1,0.333,5,0
+P100470,24,Male,General Medicine,3,6,Afternoon,0,2,0,0,24,0
+P100471,12,Female,General Medicine,19,6,Morning,0,2,0,0,13.7,0
 P100472,50,Male,Dermatology,0,6,Morning,1,3,1,0.333,18.3,0
 P100473,35,Female,Cardiology,5,1,Afternoon,1,4,2,0.5,2.9,0
-P100474,33,Male,Cardiology,9,3,Morning,0,5,0,0.0,9.3,0
+P100474,33,Male,Cardiology,9,3,Morning,0,5,0,0,9.3,0
 P100475,33,Male,Cardiology,21,4,Afternoon,1,4,1,0.25,5.8,0
 P100476,61,Male,General Medicine,7,1,Morning,1,3,1,0.333,0.5,0
 P100477,51,Male,General Medicine,13,3,Afternoon,1,5,1,0.2,10.4,0
 P100478,43,Female,Cardiology,0,4,Morning,0,2,1,0.5,6.8,0
-P100479,12,Male,Orthopedics,3,4,Afternoon,1,4,0,0.0,1.3,1
+P100479,12,Male,Orthopedics,3,4,Afternoon,1,4,0,0,1.3,1
 P100480,67,Female,Cardiology,3,0,Afternoon,0,3,1,0.333,0.5,0
 P100481,65,Male,Neurology,17,1,Morning,1,4,1,0.25,10.9,0
-P100482,33,Male,General Medicine,1,4,Morning,0,4,0,0.0,0.5,0
-P100483,40,Male,Dermatology,1,5,Morning,1,1,0,0.0,0.6,0
-P100484,74,Female,Cardiology,3,6,Evening,0,2,0,0.0,3.3,0
+P100482,33,Male,General Medicine,1,4,Morning,0,4,0,0,0.5,0
+P100483,40,Male,Dermatology,1,5,Morning,1,1,0,0,0.6,0
+P100484,74,Female,Cardiology,3,6,Evening,0,2,0,0,3.3,0
 P100485,43,Female,General Medicine,0,4,Morning,1,4,1,0.25,0.9,0
 P100486,44,Male,Dermatology,1,3,Afternoon,1,3,1,0.333,14.7,1
-P100487,29,Male,Orthopedics,26,0,Evening,0,3,0,0.0,3.8,0
+P100487,29,Male,Orthopedics,26,0,Evening,0,3,0,0,3.8,0
 P100488,13,Female,General Medicine,4,2,Afternoon,0,6,1,0.167,5.1,0
-P100489,12,Male,Orthopedics,7,6,Morning,1,4,0,0.0,15.8,0
-P100490,46,Male,Dermatology,10,0,Evening,1,6,0,0.0,4.5,0
+P100489,12,Male,Orthopedics,7,6,Morning,1,4,0,0,15.8,0
+P100490,46,Male,Dermatology,10,0,Evening,1,6,0,0,4.5,0
 P100491,2,Female,Neurology,3,2,Morning,1,4,1,0.25,2.6,0
-P100492,35,Female,General Medicine,1,1,Afternoon,1,1,0,0.0,9.6,0
+P100492,35,Female,General Medicine,1,1,Afternoon,1,1,0,0,9.6,0
 P100493,87,Male,Neurology,1,1,Evening,1,4,1,0.25,3.5,0
-P100494,81,Female,Cardiology,3,4,Afternoon,1,3,0,0.0,2.3,0
+P100494,81,Female,Cardiology,3,4,Afternoon,1,3,0,0,2.3,0
 P100495,8,Female,General Medicine,8,5,Afternoon,0,5,2,0.4,7.7,1
-P100496,26,Male,General Medicine,4,1,Morning,1,3,0,0.0,9.7,0
-P100497,74,Female,Neurology,0,4,Morning,0,2,2,1.0,9.4,0
-P100498,34,Female,Dermatology,5,6,Afternoon,1,1,0,0.0,22.8,0
-P100499,7,Male,Orthopedics,20,0,Morning,1,2,0,0.0,9.3,0
+P100496,26,Male,General Medicine,4,1,Morning,1,3,0,0,9.7,0
+P100497,74,Female,Neurology,0,4,Morning,0,2,2,1,9.4,0
+P100498,34,Female,Dermatology,5,6,Afternoon,1,1,0,0,22.8,0
+P100499,7,Male,Orthopedics,20,0,Morning,1,2,0,0,9.3,0
 P100500,68,Male,Cardiology,13,1,Evening,1,5,1,0.2,8.8,0
-P100501,58,Male,Neurology,13,0,Evening,1,2,0,0.0,11.7,0
-P100502,75,Female,Orthopedics,12,0,Evening,1,5,0,0.0,0.0,0
-P100503,29,Male,Neurology,3,5,Afternoon,1,4,0,0.0,2.7,0
-P100504,36,Female,General Medicine,11,1,Afternoon,0,1,0,0.0,8.0,0
-P100505,89,Female,General Medicine,1,0,Evening,1,2,0,0.0,5.5,0
-P100506,21,Male,Orthopedics,8,5,Evening,1,1,1,1.0,1.2,0
-P100507,36,Female,Dermatology,8,5,Afternoon,1,2,0,0.0,2.2,0
-P100508,10,Male,General Medicine,0,1,Morning,0,2,2,1.0,2.5,1
-P100509,73,Female,General Medicine,12,5,Morning,0,3,0,0.0,5.0,0
-P100510,24,Female,Neurology,18,1,Afternoon,0,3,0,0.0,10.7,0
-P100511,64,Male,Cardiology,2,1,Afternoon,0,6,0,0.0,16.2,0
+P100501,58,Male,Neurology,13,0,Evening,1,2,0,0,11.7,0
+P100502,75,Female,Orthopedics,12,0,Evening,1,5,0,0,0,0
+P100503,29,Male,Neurology,3,5,Afternoon,1,4,0,0,2.7,0
+P100504,36,Female,General Medicine,11,1,Afternoon,0,1,0,0,8,0
+P100505,89,Female,General Medicine,1,0,Evening,1,2,0,0,5.5,0
+P100506,21,Male,Orthopedics,8,5,Evening,1,1,1,1,1.2,0
+P100507,36,Female,Dermatology,8,5,Afternoon,1,2,0,0,2.2,0
+P100508,10,Male,General Medicine,0,1,Morning,0,2,2,1,2.5,1
+P100509,73,Female,General Medicine,12,5,Morning,0,3,0,0,5,0
+P100510,24,Female,Neurology,18,1,Afternoon,0,3,0,0,10.7,0
+P100511,64,Male,Cardiology,2,1,Afternoon,0,6,0,0,16.2,0
 P100512,49,Male,General Medicine,13,2,Evening,1,6,2,0.333,8.3,0
-P100513,36,Male,Neurology,0,0,Morning,1,2,0,0.0,11.1,0
-P100514,82,Male,Cardiology,7,3,Morning,1,4,0,0.0,3.8,0
-P100515,24,Male,Orthopedics,5,1,Morning,1,5,0,0.0,3.0,0
-P100516,23,Male,Cardiology,6,0,Morning,1,3,0,0.0,3.0,0
-P100517,62,Female,Dermatology,20,6,Morning,0,3,0,0.0,5.7,0
-P100518,37,Male,Cardiology,16,5,Afternoon,1,3,0,0.0,0.8,0
+P100513,36,Male,Neurology,0,0,Morning,1,2,0,0,11.1,0
+P100514,82,Male,Cardiology,7,3,Morning,1,4,0,0,3.8,0
+P100515,24,Male,Orthopedics,5,1,Morning,1,5,0,0,3,0
+P100516,23,Male,Cardiology,6,0,Morning,1,3,0,0,3,0
+P100517,62,Female,Dermatology,20,6,Morning,0,3,0,0,5.7,0
+P100518,37,Male,Cardiology,16,5,Afternoon,1,3,0,0,0.8,0
 P100519,12,Male,Cardiology,12,4,Afternoon,1,5,1,0.2,5.2,0
-P100520,55,Female,Orthopedics,2,1,Afternoon,0,2,0,0.0,6.6,0
+P100520,55,Female,Orthopedics,2,1,Afternoon,0,2,0,0,6.6,0
 P100521,13,Male,Dermatology,19,5,Morning,1,3,1,0.333,3.5,0
-P100522,23,Female,General Medicine,0,5,Morning,1,3,0,0.0,18.4,0
-P100523,89,Female,Cardiology,15,5,Afternoon,0,3,0,0.0,5.6,0
-P100524,30,Female,General Medicine,3,5,Evening,0,2,2,1.0,1.5,0
-P100525,17,Male,General Medicine,0,5,Morning,1,3,0,0.0,3.9,0
-P100526,62,Male,Dermatology,8,1,Evening,0,2,0,0.0,6.8,0
+P100522,23,Female,General Medicine,0,5,Morning,1,3,0,0,18.4,0
+P100523,89,Female,Cardiology,15,5,Afternoon,0,3,0,0,5.6,0
+P100524,30,Female,General Medicine,3,5,Evening,0,2,2,1,1.5,0
+P100525,17,Male,General Medicine,0,5,Morning,1,3,0,0,3.9,0
+P100526,62,Male,Dermatology,8,1,Evening,0,2,0,0,6.8,0
 P100527,84,Male,Dermatology,2,6,Morning,1,5,1,0.2,2.3,0
-P100528,89,Female,Orthopedics,2,3,Evening,0,4,0,0.0,0.5,0
-P100529,86,Male,Dermatology,2,2,Evening,1,4,0,0.0,5.3,0
-P100530,13,Male,General Medicine,0,5,Morning,1,2,0,0.0,17.7,0
-P100531,59,Female,Dermatology,1,5,Afternoon,1,3,0,0.0,4.0,0
-P100532,19,Male,Neurology,0,2,Morning,1,5,0,0.0,14.2,0
-P100533,49,Male,Dermatology,4,6,Evening,0,2,0,0.0,10.8,0
-P100534,12,Male,General Medicine,0,6,Afternoon,1,5,0,0.0,1.0,0
-P100535,61,Female,Dermatology,9,1,Afternoon,1,0,0,0.0,7.4,0
+P100528,89,Female,Orthopedics,2,3,Evening,0,4,0,0,0.5,0
+P100529,86,Male,Dermatology,2,2,Evening,1,4,0,0,5.3,0
+P100530,13,Male,General Medicine,0,5,Morning,1,2,0,0,17.7,0
+P100531,59,Female,Dermatology,1,5,Afternoon,1,3,0,0,4,0
+P100532,19,Male,Neurology,0,2,Morning,1,5,0,0,14.2,0
+P100533,49,Male,Dermatology,4,6,Evening,0,2,0,0,10.8,0
+P100534,12,Male,General Medicine,0,6,Afternoon,1,5,0,0,1,0
+P100535,61,Female,Dermatology,9,1,Afternoon,1,0,0,0,7.4,0
 P100536,19,Male,Orthopedics,2,0,Afternoon,0,2,1,0.5,3.4,0
-P100537,76,Female,Dermatology,22,4,Evening,0,0,0,0.0,1.7,0
-P100538,9,Female,Neurology,16,4,Morning,1,1,0,0.0,7.0,0
+P100537,76,Female,Dermatology,22,4,Evening,0,0,0,0,1.7,0
+P100538,9,Female,Neurology,16,4,Morning,1,1,0,0,7,0
 P100539,71,Male,General Medicine,2,0,Afternoon,1,3,1,0.333,8.1,0
-P100540,28,Female,Cardiology,12,1,Morning,1,4,0,0.0,1.2,0
+P100540,28,Female,Cardiology,12,1,Morning,1,4,0,0,1.2,0
 P100541,78,Male,Neurology,13,4,Morning,1,3,1,0.333,14.8,0
 P100542,52,Male,Dermatology,34,6,Afternoon,1,6,2,0.333,8.3,0
 P100543,83,Female,Orthopedics,7,2,Morning,1,3,1,0.333,16.3,0
 P100544,16,Female,Orthopedics,0,0,Morning,1,3,1,0.333,2.3,0
-P100545,69,Female,Orthopedics,8,6,Evening,0,5,0,0.0,16.8,0
+P100545,69,Female,Orthopedics,8,6,Evening,0,5,0,0,16.8,0
 P100546,12,Female,Cardiology,7,3,Morning,1,5,1,0.2,2.8,0
-P100547,25,Male,Neurology,8,1,Afternoon,1,1,0,0.0,0.3,1
-P100548,52,Male,General Medicine,2,0,Morning,1,3,0,0.0,8.6,0
-P100549,85,Male,Orthopedics,15,4,Morning,1,3,0,0.0,7.3,0
-P100550,53,Male,General Medicine,25,1,Morning,1,4,0,0.0,5.5,1
-P100551,23,Male,Neurology,1,2,Afternoon,1,6,0,0.0,4.0,1
+P100547,25,Male,Neurology,8,1,Afternoon,1,1,0,0,0.3,1
+P100548,52,Male,General Medicine,2,0,Morning,1,3,0,0,8.6,0
+P100549,85,Male,Orthopedics,15,4,Morning,1,3,0,0,7.3,0
+P100550,53,Male,General Medicine,25,1,Morning,1,4,0,0,5.5,1
+P100551,23,Male,Neurology,1,2,Afternoon,1,6,0,0,4,1
 P100552,16,Male,General Medicine,0,1,Afternoon,0,4,2,0.5,0.2,0
 P100553,57,Male,General Medicine,1,1,Morning,0,5,1,0.2,5.9,0
-P100554,39,Male,Cardiology,13,2,Morning,1,4,0,0.0,3.2,0
-P100555,53,Female,Neurology,9,5,Evening,1,3,0,0.0,4.9,1
-P100556,42,Female,General Medicine,8,2,Morning,0,2,0,0.0,3.4,0
-P100557,58,Male,General Medicine,4,6,Evening,1,3,0,0.0,20.3,0
-P100558,39,Female,Neurology,6,1,Morning,0,2,0,0.0,5.6,0
-P100559,14,Female,General Medicine,2,2,Afternoon,1,4,0,0.0,8.3,0
-P100560,5,Male,Cardiology,5,5,Morning,1,3,0,0.0,16.5,1
-P100561,35,Female,General Medicine,12,6,Evening,1,2,0,0.0,5.4,0
+P100554,39,Male,Cardiology,13,2,Morning,1,4,0,0,3.2,0
+P100555,53,Female,Neurology,9,5,Evening,1,3,0,0,4.9,1
+P100556,42,Female,General Medicine,8,2,Morning,0,2,0,0,3.4,0
+P100557,58,Male,General Medicine,4,6,Evening,1,3,0,0,20.3,0
+P100558,39,Female,Neurology,6,1,Morning,0,2,0,0,5.6,0
+P100559,14,Female,General Medicine,2,2,Afternoon,1,4,0,0,8.3,0
+P100560,5,Male,Cardiology,5,5,Morning,1,3,0,0,16.5,1
+P100561,35,Female,General Medicine,12,6,Evening,1,2,0,0,5.4,0
 P100562,87,Female,General Medicine,31,0,Afternoon,0,4,1,0.25,0.1,1
-P100563,75,Female,General Medicine,21,2,Afternoon,1,1,0,0.0,0.2,0
-P100564,18,Male,Cardiology,21,2,Morning,1,3,0,0.0,7.3,1
-P100565,76,Female,Cardiology,4,1,Afternoon,1,3,1,0.333,2.0,0
+P100563,75,Female,General Medicine,21,2,Afternoon,1,1,0,0,0.2,0
+P100564,18,Male,Cardiology,21,2,Morning,1,3,0,0,7.3,1
+P100565,76,Female,Cardiology,4,1,Afternoon,1,3,1,0.333,2,0
 P100566,9,Male,Dermatology,5,6,Afternoon,1,3,1,0.333,5.2,0
-P100567,74,Female,Neurology,9,0,Morning,1,4,0,0.0,1.4,1
-P100568,58,Female,Cardiology,20,3,Morning,1,0,0,0.0,1.9,0
+P100567,74,Female,Neurology,9,0,Morning,1,4,0,0,1.4,1
+P100568,58,Female,Cardiology,20,3,Morning,1,0,0,0,1.9,0
 P100569,17,Female,General Medicine,1,3,Evening,0,2,1,0.5,4.2,1
 P100570,7,Female,Orthopedics,2,4,Morning,1,2,1,0.5,22.3,0
 P100571,46,Female,Cardiology,1,2,Afternoon,1,2,1,0.5,5.7,0
 P100572,13,Male,General Medicine,7,2,Afternoon,1,5,1,0.2,16.5,1
-P100573,40,Male,Neurology,2,0,Evening,0,2,0,0.0,19.2,0
-P100574,42,Female,Orthopedics,3,5,Evening,0,2,0,0.0,1.4,0
-P100575,9,Male,Neurology,0,3,Evening,0,2,0,0.0,2.2,0
+P100573,40,Male,Neurology,2,0,Evening,0,2,0,0,19.2,0
+P100574,42,Female,Orthopedics,3,5,Evening,0,2,0,0,1.4,0
+P100575,9,Male,Neurology,0,3,Evening,0,2,0,0,2.2,0
 P100576,50,Male,Neurology,3,4,Morning,1,3,1,0.333,8.8,0
-P100577,27,Male,Neurology,15,0,Evening,1,3,0,0.0,12.1,0
+P100577,27,Male,Neurology,15,0,Evening,1,3,0,0,12.1,0
 P100578,66,Male,General Medicine,2,2,Morning,1,5,1,0.2,4.4,0
-P100579,5,Female,Neurology,9,3,Afternoon,1,3,1,0.333,30.0,0
+P100579,5,Female,Neurology,9,3,Afternoon,1,3,1,0.333,30,0
 P100580,29,Female,Cardiology,7,6,Afternoon,0,2,1,0.5,0.1,0
-P100581,37,Female,Orthopedics,15,4,Morning,1,6,0,0.0,2.1,0
-P100582,38,Female,General Medicine,1,1,Evening,1,5,0,0.0,5.9,0
+P100581,37,Female,Orthopedics,15,4,Morning,1,6,0,0,2.1,0
+P100582,38,Female,General Medicine,1,1,Evening,1,5,0,0,5.9,0
 P100583,83,Male,General Medicine,30,3,Morning,1,4,1,0.25,3.8,0
-P100584,8,Male,Dermatology,6,4,Afternoon,1,3,0,0.0,0.7,0
-P100585,65,Female,Neurology,43,0,Afternoon,1,3,0,0.0,2.8,0
-P100586,86,Male,Cardiology,19,1,Afternoon,1,1,0,0.0,0.2,0
-P100587,17,Female,Orthopedics,2,4,Morning,0,2,0,0.0,6.2,0
+P100584,8,Male,Dermatology,6,4,Afternoon,1,3,0,0,0.7,0
+P100585,65,Female,Neurology,43,0,Afternoon,1,3,0,0,2.8,0
+P100586,86,Male,Cardiology,19,1,Afternoon,1,1,0,0,0.2,0
+P100587,17,Female,Orthopedics,2,4,Morning,0,2,0,0,6.2,0
 P100588,71,Female,Neurology,0,4,Afternoon,1,5,1,0.2,13.4,0
-P100589,89,Male,Cardiology,2,2,Evening,1,2,0,0.0,13.0,0
-P100590,45,Female,Neurology,5,5,Morning,1,5,0,0.0,7.2,0
-P100591,4,Female,Neurology,1,3,Afternoon,0,5,0,0.0,3.8,1
-P100592,36,Female,General Medicine,1,2,Morning,0,2,0,0.0,4.3,0
+P100589,89,Male,Cardiology,2,2,Evening,1,2,0,0,13,0
+P100590,45,Female,Neurology,5,5,Morning,1,5,0,0,7.2,0
+P100591,4,Female,Neurology,1,3,Afternoon,0,5,0,0,3.8,1
+P100592,36,Female,General Medicine,1,2,Morning,0,2,0,0,4.3,0
 P100593,70,Male,Dermatology,4,6,Afternoon,1,5,1,0.2,0.9,0
 P100594,31,Male,Dermatology,0,1,Evening,1,5,1,0.2,2.5,0
-P100595,19,Female,Dermatology,1,5,Afternoon,1,2,0,0.0,1.2,0
-P100596,61,Male,Dermatology,4,4,Afternoon,0,4,0,0.0,10.3,0
-P100597,54,Male,Orthopedics,0,2,Afternoon,0,1,0,0.0,14.8,0
+P100595,19,Female,Dermatology,1,5,Afternoon,1,2,0,0,1.2,0
+P100596,61,Male,Dermatology,4,4,Afternoon,0,4,0,0,10.3,0
+P100597,54,Male,Orthopedics,0,2,Afternoon,0,1,0,0,14.8,0
 P100598,39,Female,Cardiology,4,5,Afternoon,1,3,1,0.333,4.6,0
-P100599,74,Male,Neurology,5,6,Morning,1,6,0,0.0,7.8,0
+P100599,74,Male,Neurology,5,6,Morning,1,6,0,0,7.8,0
 P100600,19,Female,Dermatology,4,3,Morning,1,4,1,0.25,0.8,0
-P100601,39,Female,General Medicine,16,6,Afternoon,1,2,0,0.0,5.6,0
+P100601,39,Female,General Medicine,16,6,Afternoon,1,2,0,0,5.6,0
 P100602,67,Female,Neurology,6,1,Afternoon,1,6,1,0.167,7.3,0
 P100603,45,Male,Orthopedics,5,0,Afternoon,0,5,1,0.2,3.6,1
 P100604,13,Female,Dermatology,4,2,Morning,0,4,1,0.25,1.7,1
 P100605,58,Male,General Medicine,13,1,Morning,1,7,3,0.429,12.6,0
 P100606,20,Male,General Medicine,18,0,Morning,1,5,1,0.2,8.1,1
-P100607,72,Female,Cardiology,15,2,Evening,0,4,0,0.0,13.8,0
+P100607,72,Female,Cardiology,15,2,Evening,0,4,0,0,13.8,0
 P100608,61,Male,Dermatology,8,1,Afternoon,1,3,1,0.333,10.2,0
-P100609,39,Male,General Medicine,1,6,Morning,1,2,0,0.0,27.9,0
+P100609,39,Male,General Medicine,1,6,Morning,1,2,0,0,27.9,0
 P100610,1,Female,General Medicine,2,1,Morning,0,3,1,0.333,1.3,1
 P100611,3,Male,Neurology,0,5,Evening,0,3,1,0.333,0.5,1
 P100612,77,Male,Dermatology,21,6,Morning,0,3,1,0.333,2.5,1
 P100613,62,Female,General Medicine,8,2,Evening,1,3,1,0.333,0.8,0
-P100614,63,Female,General Medicine,10,1,Morning,0,0,0,0.0,4.4,0
-P100615,25,Female,Neurology,2,4,Evening,1,6,0,0.0,6.0,0
-P100616,56,Male,Orthopedics,14,2,Evening,1,3,0,0.0,5.2,0
-P100617,33,Male,General Medicine,2,1,Afternoon,0,4,0,0.0,1.8,0
-P100618,38,Male,Neurology,0,5,Morning,0,0,0,0.0,14.4,0
-P100619,6,Male,Dermatology,3,0,Morning,0,1,0,0.0,0.1,0
-P100620,58,Female,General Medicine,6,0,Afternoon,1,2,0,0.0,2.6,0
-P100621,44,Male,Dermatology,5,4,Afternoon,0,1,0,0.0,7.6,0
+P100614,63,Female,General Medicine,10,1,Morning,0,0,0,0,4.4,0
+P100615,25,Female,Neurology,2,4,Evening,1,6,0,0,6,0
+P100616,56,Male,Orthopedics,14,2,Evening,1,3,0,0,5.2,0
+P100617,33,Male,General Medicine,2,1,Afternoon,0,4,0,0,1.8,0
+P100618,38,Male,Neurology,0,5,Morning,0,0,0,0,14.4,0
+P100619,6,Male,Dermatology,3,0,Morning,0,1,0,0,0.1,0
+P100620,58,Female,General Medicine,6,0,Afternoon,1,2,0,0,2.6,0
+P100621,44,Male,Dermatology,5,4,Afternoon,0,1,0,0,7.6,0
 P100622,45,Male,General Medicine,15,2,Morning,0,4,1,0.25,8.7,1
 P100623,32,Female,Neurology,0,5,Morning,1,2,1,0.5,3.2,0
 P100624,45,Female,Orthopedics,6,1,Afternoon,0,4,1,0.25,0.1,1
-P100625,61,Female,Cardiology,5,1,Afternoon,1,4,0,0.0,5.8,0
+P100625,61,Female,Cardiology,5,1,Afternoon,1,4,0,0,5.8,0
 P100626,47,Male,General Medicine,2,0,Morning,1,2,1,0.5,0.4,0
 P100627,21,Male,General Medicine,13,5,Morning,1,5,2,0.4,0.7,0
 P100628,80,Male,Cardiology,11,6,Evening,1,5,1,0.2,6.3,0
-P100629,85,Male,Cardiology,10,4,Afternoon,0,1,0,0.0,2.2,0
+P100629,85,Male,Cardiology,10,4,Afternoon,0,1,0,0,2.2,0
 P100630,75,Female,Dermatology,16,0,Afternoon,1,5,2,0.4,2.6,0
-P100631,36,Female,Cardiology,10,0,Afternoon,1,2,0,0.0,4.0,0
-P100632,19,Female,Dermatology,2,4,Morning,1,1,1,1.0,23.1,0
+P100631,36,Female,Cardiology,10,0,Afternoon,1,2,0,0,4,0
+P100632,19,Female,Dermatology,2,4,Morning,1,1,1,1,23.1,0
 P100633,20,Female,Dermatology,9,2,Morning,0,5,2,0.4,20.2,0
 P100634,57,Male,Dermatology,2,1,Morning,1,6,2,0.333,3.2,0
-P100635,18,Female,Neurology,2,2,Evening,0,1,0,0.0,1.9,1
+P100635,18,Female,Neurology,2,2,Evening,0,1,0,0,1.9,1
 P100636,47,Male,General Medicine,0,5,Afternoon,1,5,2,0.4,2.2,0
-P100637,49,Female,Orthopedics,10,6,Morning,1,3,0,0.0,1.9,0
-P100638,14,Female,General Medicine,9,3,Evening,0,0,0,0.0,4.6,0
-P100639,15,Male,Neurology,2,3,Morning,1,1,0,0.0,5.6,0
-P100640,31,Male,Orthopedics,11,3,Evening,1,5,2,0.4,4.0,0
-P100641,1,Female,General Medicine,19,4,Evening,1,2,0,0.0,3.1,0
-P100642,54,Male,General Medicine,0,0,Morning,1,3,0,0.0,1.4,0
-P100643,3,Male,Neurology,2,6,Morning,1,3,1,0.333,4.0,0
+P100637,49,Female,Orthopedics,10,6,Morning,1,3,0,0,1.9,0
+P100638,14,Female,General Medicine,9,3,Evening,0,0,0,0,4.6,0
+P100639,15,Male,Neurology,2,3,Morning,1,1,0,0,5.6,0
+P100640,31,Male,Orthopedics,11,3,Evening,1,5,2,0.4,4,0
+P100641,1,Female,General Medicine,19,4,Evening,1,2,0,0,3.1,0
+P100642,54,Male,General Medicine,0,0,Morning,1,3,0,0,1.4,0
+P100643,3,Male,Neurology,2,6,Morning,1,3,1,0.333,4,0
 P100644,16,Male,Cardiology,11,2,Afternoon,1,4,1,0.25,2.5,1
 P100645,87,Female,Dermatology,2,1,Afternoon,0,3,1,0.333,4.7,1
-P100646,57,Female,General Medicine,7,3,Afternoon,1,4,0,0.0,6.7,0
-P100647,75,Female,General Medicine,0,2,Evening,0,3,1,0.333,6.0,1
-P100648,12,Male,Cardiology,4,3,Afternoon,1,7,0,0.0,3.7,0
+P100646,57,Female,General Medicine,7,3,Afternoon,1,4,0,0,6.7,0
+P100647,75,Female,General Medicine,0,2,Evening,0,3,1,0.333,6,1
+P100648,12,Male,Cardiology,4,3,Afternoon,1,7,0,0,3.7,0
 P100649,74,Female,Orthopedics,10,6,Morning,1,3,1,0.333,4.9,0
-P100650,16,Male,Neurology,9,3,Morning,1,3,0,0.0,2.0,0
-P100651,72,Female,General Medicine,13,1,Afternoon,1,1,0,0.0,0.1,0
-P100652,76,Female,Orthopedics,16,5,Morning,1,3,0,0.0,5.9,0
-P100653,24,Male,General Medicine,11,5,Afternoon,1,2,2,1.0,1.7,1
+P100650,16,Male,Neurology,9,3,Morning,1,3,0,0,2,0
+P100651,72,Female,General Medicine,13,1,Afternoon,1,1,0,0,0.1,0
+P100652,76,Female,Orthopedics,16,5,Morning,1,3,0,0,5.9,0
+P100653,24,Male,General Medicine,11,5,Afternoon,1,2,2,1,1.7,1
 P100654,28,Male,Orthopedics,8,6,Morning,1,5,1,0.2,6.6,0
 P100655,8,Male,General Medicine,0,5,Morning,1,6,1,0.167,8.2,1
-P100656,36,Male,Cardiology,6,4,Morning,1,4,0,0.0,14.9,0
-P100657,8,Male,Neurology,0,0,Afternoon,1,4,1,0.25,19.0,0
-P100658,58,Female,General Medicine,13,4,Morning,0,2,0,0.0,0.1,0
-P100659,60,Female,Neurology,3,2,Afternoon,1,3,0,0.0,27.9,0
+P100656,36,Male,Cardiology,6,4,Morning,1,4,0,0,14.9,0
+P100657,8,Male,Neurology,0,0,Afternoon,1,4,1,0.25,19,0
+P100658,58,Female,General Medicine,13,4,Morning,0,2,0,0,0.1,0
+P100659,60,Female,Neurology,3,2,Afternoon,1,3,0,0,27.9,0
 P100660,50,Male,Orthopedics,6,4,Afternoon,1,5,1,0.2,6.9,0
 P100661,28,Male,Neurology,2,2,Afternoon,1,2,1,0.5,6.2,0
-P100662,41,Male,General Medicine,12,2,Afternoon,1,3,0,0.0,0.1,0
-P100663,64,Female,Orthopedics,17,0,Morning,1,3,0,0.0,11.8,0
-P100664,27,Male,General Medicine,4,1,Afternoon,1,3,0,0.0,0.9,0
+P100662,41,Male,General Medicine,12,2,Afternoon,1,3,0,0,0.1,0
+P100663,64,Female,Orthopedics,17,0,Morning,1,3,0,0,11.8,0
+P100664,27,Male,General Medicine,4,1,Afternoon,1,3,0,0,0.9,0
 P100665,63,Female,General Medicine,15,6,Morning,1,4,1,0.25,10.9,0
-P100666,17,Female,Orthopedics,2,0,Afternoon,0,3,0,0.0,0.1,0
-P100667,73,Female,Dermatology,6,6,Morning,1,0,0,0.0,6.2,1
+P100666,17,Female,Orthopedics,2,0,Afternoon,0,3,0,0,0.1,0
+P100667,73,Female,Dermatology,6,6,Morning,1,0,0,0,6.2,1
 P100668,33,Female,Neurology,15,5,Afternoon,1,3,1,0.333,3.4,0
 P100669,84,Male,Orthopedics,3,5,Evening,0,2,1,0.5,1.3,1
-P100670,77,Female,Neurology,24,4,Afternoon,1,6,0,0.0,0.7,1
-P100671,29,Male,Neurology,1,2,Afternoon,1,1,0,0.0,3.5,0
-P100672,13,Male,Neurology,0,3,Afternoon,1,2,0,0.0,0.8,0
-P100673,46,Female,General Medicine,18,3,Morning,1,2,1,0.5,4.0,1
-P100674,35,Female,Orthopedics,0,6,Evening,1,1,0,0.0,5.9,0
-P100675,6,Female,Cardiology,38,2,Morning,1,4,0,0.0,10.5,0
-P100676,82,Male,Cardiology,24,6,Evening,1,5,0,0.0,6.8,1
-P100677,69,Male,Dermatology,1,0,Afternoon,1,2,0,0.0,0.4,0
+P100670,77,Female,Neurology,24,4,Afternoon,1,6,0,0,0.7,1
+P100671,29,Male,Neurology,1,2,Afternoon,1,1,0,0,3.5,0
+P100672,13,Male,Neurology,0,3,Afternoon,1,2,0,0,0.8,0
+P100673,46,Female,General Medicine,18,3,Morning,1,2,1,0.5,4,1
+P100674,35,Female,Orthopedics,0,6,Evening,1,1,0,0,5.9,0
+P100675,6,Female,Cardiology,38,2,Morning,1,4,0,0,10.5,0
+P100676,82,Male,Cardiology,24,6,Evening,1,5,0,0,6.8,1
+P100677,69,Male,Dermatology,1,0,Afternoon,1,2,0,0,0.4,0
 P100678,47,Female,General Medicine,6,1,Afternoon,1,4,1,0.25,2.2,1
-P100679,25,Male,General Medicine,1,0,Afternoon,1,4,0,0.0,2.0,0
-P100680,66,Female,Neurology,4,2,Afternoon,1,3,0,0.0,14.8,0
-P100681,10,Female,General Medicine,0,2,Afternoon,1,4,0,0.0,12.1,0
-P100682,56,Female,General Medicine,2,1,Morning,1,2,0,0.0,2.8,0
-P100683,30,Male,Cardiology,3,6,Afternoon,1,2,0,0.0,0.4,0
-P100684,5,Male,General Medicine,4,4,Afternoon,1,3,0,0.0,13.5,0
+P100679,25,Male,General Medicine,1,0,Afternoon,1,4,0,0,2,0
+P100680,66,Female,Neurology,4,2,Afternoon,1,3,0,0,14.8,0
+P100681,10,Female,General Medicine,0,2,Afternoon,1,4,0,0,12.1,0
+P100682,56,Female,General Medicine,2,1,Morning,1,2,0,0,2.8,0
+P100683,30,Male,Cardiology,3,6,Afternoon,1,2,0,0,0.4,0
+P100684,5,Male,General Medicine,4,4,Afternoon,1,3,0,0,13.5,0
 P100685,33,Male,General Medicine,30,4,Evening,1,3,1,0.333,13.1,0
-P100686,65,Female,Cardiology,13,1,Afternoon,1,2,0,0.0,11.6,0
-P100687,18,Male,Dermatology,10,4,Morning,1,2,0,0.0,11.2,0
-P100688,49,Female,Cardiology,6,3,Morning,1,6,0,0.0,3.9,0
-P100689,11,Male,Cardiology,14,4,Afternoon,1,2,0,0.0,1.2,0
-P100690,85,Female,General Medicine,3,4,Morning,1,4,0,0.0,3.9,0
-P100691,26,Male,Cardiology,9,4,Morning,1,2,0,0.0,4.1,0
-P100692,63,Male,Neurology,40,3,Evening,0,4,0,0.0,4.0,1
+P100686,65,Female,Cardiology,13,1,Afternoon,1,2,0,0,11.6,0
+P100687,18,Male,Dermatology,10,4,Morning,1,2,0,0,11.2,0
+P100688,49,Female,Cardiology,6,3,Morning,1,6,0,0,3.9,0
+P100689,11,Male,Cardiology,14,4,Afternoon,1,2,0,0,1.2,0
+P100690,85,Female,General Medicine,3,4,Morning,1,4,0,0,3.9,0
+P100691,26,Male,Cardiology,9,4,Morning,1,2,0,0,4.1,0
+P100692,63,Male,Neurology,40,3,Evening,0,4,0,0,4,1
 P100693,89,Male,Orthopedics,3,6,Afternoon,1,3,1,0.333,4.6,0
-P100694,86,Female,General Medicine,8,4,Afternoon,1,0,0,0.0,1.8,0
-P100695,59,Female,Orthopedics,14,5,Morning,1,4,0,0.0,2.7,0
-P100696,27,Female,General Medicine,19,3,Afternoon,1,2,0,0.0,3.4,0
+P100694,86,Female,General Medicine,8,4,Afternoon,1,0,0,0,1.8,0
+P100695,59,Female,Orthopedics,14,5,Morning,1,4,0,0,2.7,0
+P100696,27,Female,General Medicine,19,3,Afternoon,1,2,0,0,3.4,0
 P100697,49,Male,General Medicine,10,1,Morning,1,2,1,0.5,0.8,0
-P100698,77,Male,Orthopedics,2,0,Afternoon,1,3,0,0.0,3.6,0
-P100699,33,Female,Dermatology,3,1,Morning,1,6,1,0.167,10.0,0
-P100700,1,Male,Orthopedics,0,0,Evening,0,5,0,0.0,10.6,0
-P100701,21,Male,Cardiology,11,1,Afternoon,1,5,0,0.0,3.2,0
-P100702,55,Female,General Medicine,0,5,Afternoon,1,0,0,0.0,4.4,0
+P100698,77,Male,Orthopedics,2,0,Afternoon,1,3,0,0,3.6,0
+P100699,33,Female,Dermatology,3,1,Morning,1,6,1,0.167,10,0
+P100700,1,Male,Orthopedics,0,0,Evening,0,5,0,0,10.6,0
+P100701,21,Male,Cardiology,11,1,Afternoon,1,5,0,0,3.2,0
+P100702,55,Female,General Medicine,0,5,Afternoon,1,0,0,0,4.4,0
 P100703,6,Female,Cardiology,15,0,Afternoon,1,4,1,0.25,0.2,0
 P100704,81,Female,Neurology,1,0,Afternoon,0,4,3,0.75,6.7,1
-P100705,69,Female,General Medicine,1,2,Morning,0,3,0,0.0,3.1,0
-P100706,5,Male,Neurology,5,0,Afternoon,1,4,0,0.0,3.5,0
-P100707,3,Male,Dermatology,10,0,Morning,0,2,0,0.0,12.4,0
-P100708,53,Female,Dermatology,1,2,Evening,0,2,0,0.0,3.7,0
-P100709,23,Female,Cardiology,4,4,Evening,0,1,1,1.0,0.1,1
-P100710,53,Male,Dermatology,5,4,Morning,1,5,0,0.0,1.5,0
+P100705,69,Female,General Medicine,1,2,Morning,0,3,0,0,3.1,0
+P100706,5,Male,Neurology,5,0,Afternoon,1,4,0,0,3.5,0
+P100707,3,Male,Dermatology,10,0,Morning,0,2,0,0,12.4,0
+P100708,53,Female,Dermatology,1,2,Evening,0,2,0,0,3.7,0
+P100709,23,Female,Cardiology,4,4,Evening,0,1,1,1,0.1,1
+P100710,53,Male,Dermatology,5,4,Morning,1,5,0,0,1.5,0
 P100711,37,Male,Orthopedics,1,2,Evening,1,2,1,0.5,3.9,0
-P100712,74,Male,Dermatology,0,3,Morning,0,0,0,0.0,3.3,0
-P100713,74,Female,Neurology,14,0,Morning,0,3,0,0.0,11.8,0
+P100712,74,Male,Dermatology,0,3,Morning,0,0,0,0,3.3,0
+P100713,74,Female,Neurology,14,0,Morning,0,3,0,0,11.8,0
 P100714,83,Female,Orthopedics,5,0,Evening,1,3,1,0.333,4.7,0
-P100715,17,Female,Dermatology,0,2,Afternoon,1,4,1,0.25,7.0,0
+P100715,17,Female,Dermatology,0,2,Afternoon,1,4,1,0.25,7,0
 P100716,85,Male,General Medicine,12,2,Afternoon,0,2,1,0.5,3.8,0
-P100717,78,Female,Cardiology,31,3,Morning,1,4,0,0.0,3.5,0
+P100717,78,Female,Cardiology,31,3,Morning,1,4,0,0,3.5,0
 P100718,73,Female,Cardiology,7,5,Morning,1,4,1,0.25,3.5,0
-P100719,1,Male,Cardiology,5,4,Evening,1,0,0,0.0,3.2,0
-P100720,51,Male,General Medicine,16,1,Morning,1,1,0,0.0,4.6,0
+P100719,1,Male,Cardiology,5,4,Evening,1,0,0,0,3.2,0
+P100720,51,Male,General Medicine,16,1,Morning,1,1,0,0,4.6,0
 P100721,45,Male,General Medicine,24,5,Morning,1,4,1,0.25,1.7,0
-P100722,77,Male,General Medicine,11,6,Afternoon,1,1,0,0.0,13.3,0
+P100722,77,Male,General Medicine,11,6,Afternoon,1,1,0,0,13.3,0
 P100723,4,Female,General Medicine,4,4,Afternoon,1,3,1,0.333,2.4,0
-P100724,62,Male,Dermatology,7,0,Afternoon,1,2,1,0.5,1.0,0
-P100725,65,Female,General Medicine,9,6,Morning,1,3,0,0.0,0.6,0
-P100726,32,Male,Neurology,1,5,Morning,1,0,0,0.0,0.1,1
-P100727,34,Male,Cardiology,4,2,Morning,1,0,0,0.0,3.3,0
+P100724,62,Male,Dermatology,7,0,Afternoon,1,2,1,0.5,1,0
+P100725,65,Female,General Medicine,9,6,Morning,1,3,0,0,0.6,0
+P100726,32,Male,Neurology,1,5,Morning,1,0,0,0,0.1,1
+P100727,34,Male,Cardiology,4,2,Morning,1,0,0,0,3.3,0
 P100728,72,Male,Cardiology,14,3,Evening,1,4,1,0.25,1.2,0
-P100729,39,Male,Neurology,8,4,Morning,0,1,1,1.0,0.1,1
-P100730,26,Female,Dermatology,4,3,Afternoon,1,2,0,0.0,4.4,1
-P100731,34,Female,General Medicine,8,6,Afternoon,0,1,0,0.0,6.8,0
+P100729,39,Male,Neurology,8,4,Morning,0,1,1,1,0.1,1
+P100730,26,Female,Dermatology,4,3,Afternoon,1,2,0,0,4.4,1
+P100731,34,Female,General Medicine,8,6,Afternoon,0,1,0,0,6.8,0
 P100732,54,Female,Dermatology,1,4,Evening,0,5,2,0.4,0.5,0
-P100733,3,Female,Dermatology,4,5,Evening,0,1,0,0.0,3.7,1
-P100734,50,Male,Cardiology,12,0,Morning,1,3,0,0.0,8.2,0
-P100735,12,Male,Dermatology,1,1,Morning,0,2,0,0.0,25.5,0
+P100733,3,Female,Dermatology,4,5,Evening,0,1,0,0,3.7,1
+P100734,50,Male,Cardiology,12,0,Morning,1,3,0,0,8.2,0
+P100735,12,Male,Dermatology,1,1,Morning,0,2,0,0,25.5,0
 P100736,65,Male,General Medicine,1,3,Afternoon,1,3,1,0.333,6.6,0
-P100737,54,Female,General Medicine,24,3,Morning,1,1,1,1.0,1.7,1
+P100737,54,Female,General Medicine,24,3,Morning,1,1,1,1,1.7,1
 P100738,5,Male,Neurology,1,1,Afternoon,1,5,2,0.4,7.6,1
-P100739,57,Male,Orthopedics,2,3,Afternoon,1,1,0,0.0,5.5,0
-P100740,17,Female,General Medicine,27,3,Evening,1,3,0,0.0,1.4,0
-P100741,47,Male,Neurology,10,4,Morning,1,4,0,0.0,11.4,0
-P100742,23,Male,Dermatology,9,4,Evening,1,4,0,0.0,3.3,0
-P100743,79,Male,General Medicine,15,1,Morning,1,1,0,0.0,19.6,1
-P100744,85,Female,Neurology,0,6,Afternoon,1,4,0,0.0,7.7,0
-P100745,14,Female,Dermatology,9,0,Afternoon,1,1,1,1.0,6.2,1
+P100739,57,Male,Orthopedics,2,3,Afternoon,1,1,0,0,5.5,0
+P100740,17,Female,General Medicine,27,3,Evening,1,3,0,0,1.4,0
+P100741,47,Male,Neurology,10,4,Morning,1,4,0,0,11.4,0
+P100742,23,Male,Dermatology,9,4,Evening,1,4,0,0,3.3,0
+P100743,79,Male,General Medicine,15,1,Morning,1,1,0,0,19.6,1
+P100744,85,Female,Neurology,0,6,Afternoon,1,4,0,0,7.7,0
+P100745,14,Female,Dermatology,9,0,Afternoon,1,1,1,1,6.2,1
 P100746,66,Female,General Medicine,5,5,Afternoon,1,2,1,0.5,7.8,1
-P100747,75,Male,Cardiology,14,5,Afternoon,0,3,0,0.0,3.9,0
+P100747,75,Male,Cardiology,14,5,Afternoon,0,3,0,0,3.9,0
 P100748,51,Female,General Medicine,5,6,Evening,1,5,4,0.8,4.2,1
 P100749,38,Female,Orthopedics,7,3,Evening,1,3,2,0.667,11.4,0
 P100750,64,Male,Orthopedics,5,0,Evening,1,5,1,0.2,6.9,0
-P100751,38,Female,Neurology,5,1,Morning,1,1,0,0.0,13.7,0
-P100752,50,Male,Neurology,11,6,Evening,1,2,0,0.0,13.3,0
-P100753,82,Female,General Medicine,7,1,Afternoon,1,2,0,0.0,22.5,0
-P100754,30,Female,General Medicine,8,4,Morning,0,4,0,0.0,7.2,0
-P100755,79,Male,Cardiology,4,3,Morning,0,1,0,0.0,4.2,0
+P100751,38,Female,Neurology,5,1,Morning,1,1,0,0,13.7,0
+P100752,50,Male,Neurology,11,6,Evening,1,2,0,0,13.3,0
+P100753,82,Female,General Medicine,7,1,Afternoon,1,2,0,0,22.5,0
+P100754,30,Female,General Medicine,8,4,Morning,0,4,0,0,7.2,0
+P100755,79,Male,Cardiology,4,3,Morning,0,1,0,0,4.2,0
 P100756,51,Female,General Medicine,6,2,Morning,0,2,1,0.5,1.1,1
-P100757,63,Female,General Medicine,10,1,Morning,1,1,0,0.0,7.3,0
-P100758,52,Female,Orthopedics,13,6,Afternoon,1,2,0,0.0,2.1,0
-P100759,38,Male,General Medicine,9,3,Evening,1,4,1,0.25,2.0,0
-P100760,88,Male,General Medicine,20,0,Afternoon,1,1,0,0.0,1.6,0
-P100761,79,Male,General Medicine,13,6,Afternoon,1,8,0,0.0,12.5,0
-P100762,30,Female,General Medicine,6,4,Evening,1,6,0,0.0,12.1,0
-P100763,51,Male,Neurology,8,5,Morning,1,4,3,0.75,6.0,1
-P100764,81,Female,Dermatology,20,0,Evening,1,4,0,0.0,3.8,0
+P100757,63,Female,General Medicine,10,1,Morning,1,1,0,0,7.3,0
+P100758,52,Female,Orthopedics,13,6,Afternoon,1,2,0,0,2.1,0
+P100759,38,Male,General Medicine,9,3,Evening,1,4,1,0.25,2,0
+P100760,88,Male,General Medicine,20,0,Afternoon,1,1,0,0,1.6,0
+P100761,79,Male,General Medicine,13,6,Afternoon,1,8,0,0,12.5,0
+P100762,30,Female,General Medicine,6,4,Evening,1,6,0,0,12.1,0
+P100763,51,Male,Neurology,8,5,Morning,1,4,3,0.75,6,1
+P100764,81,Female,Dermatology,20,0,Evening,1,4,0,0,3.8,0
 P100765,5,Female,General Medicine,7,1,Afternoon,1,2,1,0.5,6.7,0
-P100766,29,Male,Neurology,13,1,Afternoon,0,3,0,0.0,5.6,0
-P100767,4,Female,General Medicine,9,0,Morning,1,5,0,0.0,3.2,1
-P100768,10,Male,Dermatology,6,1,Afternoon,1,3,0,0.0,2.9,0
+P100766,29,Male,Neurology,13,1,Afternoon,0,3,0,0,5.6,0
+P100767,4,Female,General Medicine,9,0,Morning,1,5,0,0,3.2,1
+P100768,10,Male,Dermatology,6,1,Afternoon,1,3,0,0,2.9,0
 P100769,56,Female,General Medicine,2,6,Morning,0,3,1,0.333,2.9,0
-P100770,17,Female,Neurology,4,3,Afternoon,1,1,1,1.0,5.3,0
-P100771,74,Male,Cardiology,27,1,Morning,1,3,0,0.0,6.3,0
-P100772,17,Male,Neurology,8,4,Evening,1,3,0,0.0,3.6,1
-P100773,84,Male,Neurology,6,3,Morning,0,3,0,0.0,20.8,0
+P100770,17,Female,Neurology,4,3,Afternoon,1,1,1,1,5.3,0
+P100771,74,Male,Cardiology,27,1,Morning,1,3,0,0,6.3,0
+P100772,17,Male,Neurology,8,4,Evening,1,3,0,0,3.6,1
+P100773,84,Male,Neurology,6,3,Morning,0,3,0,0,20.8,0
 P100774,88,Female,General Medicine,21,6,Morning,1,3,1,0.333,0.5,0
-P100775,69,Female,Orthopedics,7,2,Afternoon,1,2,0,0.0,2.6,0
-P100776,34,Female,Neurology,5,1,Morning,0,3,0,0.0,3.3,0
-P100777,6,Male,Neurology,11,1,Afternoon,1,3,0,0.0,0.1,0
+P100775,69,Female,Orthopedics,7,2,Afternoon,1,2,0,0,2.6,0
+P100776,34,Female,Neurology,5,1,Morning,0,3,0,0,3.3,0
+P100777,6,Male,Neurology,11,1,Afternoon,1,3,0,0,0.1,0
 P100778,53,Male,Neurology,9,4,Evening,0,5,1,0.2,2.7,0
-P100779,66,Male,Cardiology,1,6,Afternoon,0,1,1,1.0,1.9,0
+P100779,66,Male,Cardiology,1,6,Afternoon,0,1,1,1,1.9,0
 P100780,77,Female,Cardiology,5,4,Morning,0,3,1,0.333,4.2,1
-P100781,43,Female,General Medicine,5,5,Afternoon,0,5,0,0.0,2.5,0
-P100782,75,Male,Dermatology,3,6,Afternoon,1,2,0,0.0,7.8,0
-P100783,23,Male,General Medicine,5,0,Evening,0,2,0,0.0,4.3,1
-P100784,55,Female,Orthopedics,4,0,Morning,1,2,0,0.0,0.8,0
+P100781,43,Female,General Medicine,5,5,Afternoon,0,5,0,0,2.5,0
+P100782,75,Male,Dermatology,3,6,Afternoon,1,2,0,0,7.8,0
+P100783,23,Male,General Medicine,5,0,Evening,0,2,0,0,4.3,1
+P100784,55,Female,Orthopedics,4,0,Morning,1,2,0,0,0.8,0
 P100785,80,Female,Neurology,1,0,Afternoon,1,3,1,0.333,8.3,0
-P100786,75,Female,General Medicine,4,4,Afternoon,1,1,0,0.0,0.6,0
-P100787,16,Female,Orthopedics,0,0,Morning,1,2,0,0.0,11.0,1
-P100788,8,Male,Neurology,6,6,Morning,1,1,0,0.0,16.1,0
-P100789,4,Male,General Medicine,15,0,Afternoon,1,2,0,0.0,2.3,0
-P100790,4,Female,Cardiology,10,2,Evening,0,2,0,0.0,15.6,1
+P100786,75,Female,General Medicine,4,4,Afternoon,1,1,0,0,0.6,0
+P100787,16,Female,Orthopedics,0,0,Morning,1,2,0,0,11,1
+P100788,8,Male,Neurology,6,6,Morning,1,1,0,0,16.1,0
+P100789,4,Male,General Medicine,15,0,Afternoon,1,2,0,0,2.3,0
+P100790,4,Female,Cardiology,10,2,Evening,0,2,0,0,15.6,1
 P100791,56,Female,General Medicine,3,0,Evening,1,2,1,0.5,9.5,0
 P100792,25,Male,Neurology,0,1,Afternoon,1,3,1,0.333,15.3,0
 P100793,67,Female,General Medicine,1,5,Morning,1,2,1,0.5,6.6,1
-P100794,67,Female,General Medicine,6,4,Morning,0,1,0,0.0,1.6,0
-P100795,27,Female,Cardiology,1,3,Evening,1,4,0,0.0,13.5,0
-P100796,32,Female,Neurology,6,5,Evening,1,3,0,0.0,1.2,0
+P100794,67,Female,General Medicine,6,4,Morning,0,1,0,0,1.6,0
+P100795,27,Female,Cardiology,1,3,Evening,1,4,0,0,13.5,0
+P100796,32,Female,Neurology,6,5,Evening,1,3,0,0,1.2,0
 P100797,50,Male,Neurology,2,2,Evening,1,3,1,0.333,1.4,0
-P100798,61,Female,Neurology,15,4,Afternoon,1,1,1,1.0,1.9,0
+P100798,61,Female,Neurology,15,4,Afternoon,1,1,1,1,1.9,0
 P100799,51,Female,Orthopedics,4,6,Morning,0,7,2,0.286,2.2,0
 P100800,19,Female,Neurology,2,4,Evening,1,5,1,0.2,4.3,0
-P100801,21,Female,Orthopedics,13,1,Afternoon,0,1,0,0.0,7.5,1
+P100801,21,Female,Orthopedics,13,1,Afternoon,0,1,0,0,7.5,1
 P100802,5,Female,Orthopedics,3,6,Morning,0,5,1,0.2,15.6,0
 P100803,82,Male,Neurology,0,5,Afternoon,1,3,2,0.667,0.6,0
 P100804,42,Female,General Medicine,6,5,Morning,0,7,2,0.286,18.5,0
-P100805,61,Female,Cardiology,6,0,Morning,0,2,0,0.0,15.3,0
-P100806,22,Female,General Medicine,10,6,Afternoon,0,2,0,0.0,0.3,0
-P100807,21,Female,General Medicine,2,1,Afternoon,1,2,0,0.0,2.7,0
-P100808,70,Female,Dermatology,4,0,Evening,1,3,0,0.0,10.1,0
-P100809,1,Male,Dermatology,2,0,Morning,1,3,0,0.0,5.7,0
-P100810,5,Female,Orthopedics,0,4,Morning,1,2,0,0.0,9.1,1
-P100811,12,Male,Orthopedics,16,5,Morning,0,2,0,0.0,7.6,0
-P100812,46,Male,Orthopedics,10,0,Morning,1,1,0,0.0,4.1,0
+P100805,61,Female,Cardiology,6,0,Morning,0,2,0,0,15.3,0
+P100806,22,Female,General Medicine,10,6,Afternoon,0,2,0,0,0.3,0
+P100807,21,Female,General Medicine,2,1,Afternoon,1,2,0,0,2.7,0
+P100808,70,Female,Dermatology,4,0,Evening,1,3,0,0,10.1,0
+P100809,1,Male,Dermatology,2,0,Morning,1,3,0,0,5.7,0
+P100810,5,Female,Orthopedics,0,4,Morning,1,2,0,0,9.1,1
+P100811,12,Male,Orthopedics,16,5,Morning,0,2,0,0,7.6,0
+P100812,46,Male,Orthopedics,10,0,Morning,1,1,0,0,4.1,0
 P100813,34,Female,General Medicine,2,2,Morning,1,4,1,0.25,0.3,0
 P100814,49,Female,Cardiology,7,2,Afternoon,1,8,2,0.25,5.3,0
 P100815,78,Male,Cardiology,1,5,Afternoon,0,5,2,0.4,0.3,1
-P100816,45,Male,Dermatology,17,2,Afternoon,0,3,0,0.0,5.6,0
+P100816,45,Male,Dermatology,17,2,Afternoon,0,3,0,0,5.6,0
 P100817,27,Female,Cardiology,0,4,Evening,1,4,1,0.25,9.7,0
-P100818,73,Male,Cardiology,0,1,Afternoon,1,3,0,0.0,5.3,0
+P100818,73,Male,Cardiology,0,1,Afternoon,1,3,0,0,5.3,0
 P100819,26,Male,Orthopedics,5,3,Morning,1,3,2,0.667,34.9,1
-P100820,47,Male,Neurology,6,0,Morning,1,5,0,0.0,3.7,0
+P100820,47,Male,Neurology,6,0,Morning,1,5,0,0,3.7,0
 P100821,86,Male,Dermatology,6,3,Evening,0,4,2,0.5,8.3,0
-P100822,56,Male,Cardiology,0,1,Afternoon,1,3,0,0.0,6.6,0
-P100823,63,Male,General Medicine,3,1,Evening,1,1,0,0.0,28.6,0
-P100824,48,Male,Cardiology,5,4,Evening,0,3,0,0.0,7.5,0
+P100822,56,Male,Cardiology,0,1,Afternoon,1,3,0,0,6.6,0
+P100823,63,Male,General Medicine,3,1,Evening,1,1,0,0,28.6,0
+P100824,48,Male,Cardiology,5,4,Evening,0,3,0,0,7.5,0
 P100825,61,Female,Orthopedics,1,2,Evening,0,6,1,0.167,1.1,0
-P100826,81,Female,General Medicine,16,2,Evening,0,2,0,0.0,18.7,1
-P100827,26,Female,General Medicine,0,1,Afternoon,0,1,0,0.0,6.6,0
+P100826,81,Female,General Medicine,16,2,Evening,0,2,0,0,18.7,1
+P100827,26,Female,General Medicine,0,1,Afternoon,0,1,0,0,6.6,0
 P100828,36,Male,Dermatology,5,4,Morning,1,3,1,0.333,0.4,0
-P100829,1,Male,Cardiology,9,4,Evening,1,4,0,0.0,6.4,0
-P100830,8,Female,General Medicine,2,5,Afternoon,1,2,0,0.0,12.9,0
-P100831,52,Male,Neurology,7,6,Morning,1,1,0,0.0,5.2,0
-P100832,79,Female,General Medicine,14,0,Afternoon,1,3,0,0.0,2.6,0
-P100833,47,Female,Cardiology,1,6,Afternoon,1,2,0,0.0,10.3,0
+P100829,1,Male,Cardiology,9,4,Evening,1,4,0,0,6.4,0
+P100830,8,Female,General Medicine,2,5,Afternoon,1,2,0,0,12.9,0
+P100831,52,Male,Neurology,7,6,Morning,1,1,0,0,5.2,0
+P100832,79,Female,General Medicine,14,0,Afternoon,1,3,0,0,2.6,0
+P100833,47,Female,Cardiology,1,6,Afternoon,1,2,0,0,10.3,0
 P100834,56,Female,General Medicine,19,2,Evening,0,7,1,0.143,9.2,0
 P100835,86,Male,General Medicine,6,1,Afternoon,1,3,2,0.667,4.7,0
-P100836,14,Male,Orthopedics,2,5,Morning,1,3,0,0.0,1.0,1
+P100836,14,Male,Orthopedics,2,5,Morning,1,3,0,0,1,1
 P100837,28,Female,Dermatology,4,3,Evening,0,6,2,0.333,1.7,0
-P100838,87,Male,Dermatology,2,2,Evening,1,5,1,0.2,8.0,0
+P100838,87,Male,Dermatology,2,2,Evening,1,5,1,0.2,8,0
 P100839,78,Female,General Medicine,10,0,Afternoon,1,5,2,0.4,9.8,0
-P100840,88,Female,General Medicine,12,4,Morning,1,5,0,0.0,2.0,0
-P100841,2,Female,General Medicine,14,1,Morning,0,7,0,0.0,2.8,1
-P100842,26,Male,General Medicine,34,2,Afternoon,1,1,0,0.0,0.5,0
+P100840,88,Female,General Medicine,12,4,Morning,1,5,0,0,2,0
+P100841,2,Female,General Medicine,14,1,Morning,0,7,0,0,2.8,1
+P100842,26,Male,General Medicine,34,2,Afternoon,1,1,0,0,0.5,0
 P100843,14,Female,General Medicine,12,3,Morning,1,4,1,0.25,7.5,0
-P100844,59,Female,Orthopedics,7,0,Morning,0,0,0,0.0,0.0,0
-P100845,56,Male,General Medicine,3,0,Afternoon,0,4,0,0.0,0.3,0
-P100846,7,Male,Orthopedics,6,5,Afternoon,1,6,3,0.5,0.0,0
-P100847,3,Female,General Medicine,0,2,Afternoon,0,2,0,0.0,6.2,0
-P100848,23,Male,Orthopedics,10,3,Morning,1,2,0,0.0,3.2,0
-P100849,18,Male,Neurology,4,0,Afternoon,1,3,0,0.0,2.1,0
-P100850,38,Male,Dermatology,0,1,Afternoon,0,2,0,0.0,14.6,0
+P100844,59,Female,Orthopedics,7,0,Morning,0,0,0,0,0,0
+P100845,56,Male,General Medicine,3,0,Afternoon,0,4,0,0,0.3,0
+P100846,7,Male,Orthopedics,6,5,Afternoon,1,6,3,0.5,0,0
+P100847,3,Female,General Medicine,0,2,Afternoon,0,2,0,0,6.2,0
+P100848,23,Male,Orthopedics,10,3,Morning,1,2,0,0,3.2,0
+P100849,18,Male,Neurology,4,0,Afternoon,1,3,0,0,2.1,0
+P100850,38,Male,Dermatology,0,1,Afternoon,0,2,0,0,14.6,0
 P100851,15,Female,Orthopedics,0,0,Morning,0,7,2,0.286,1.3,0
-P100852,64,Female,Cardiology,3,3,Morning,1,2,0,0.0,3.0,0
+P100852,64,Female,Cardiology,3,3,Morning,1,2,0,0,3,0
 P100853,89,Female,Orthopedics,7,4,Afternoon,0,4,1,0.25,16.9,0
-P100854,28,Male,General Medicine,4,4,Evening,0,3,0,0.0,3.3,0
-P100855,74,Male,Cardiology,7,5,Afternoon,1,2,0,0.0,4.9,0
-P100856,39,Female,General Medicine,5,2,Morning,1,3,0,0.0,0.5,0
-P100857,57,Female,Orthopedics,8,3,Morning,1,2,0,0.0,9.4,0
-P100858,17,Male,Cardiology,1,5,Evening,0,1,0,0.0,3.3,0
-P100859,86,Female,General Medicine,0,6,Morning,1,3,0,0.0,9.7,0
-P100860,44,Female,Neurology,7,0,Afternoon,1,3,0,0.0,1.8,0
-P100861,25,Female,Neurology,5,6,Afternoon,1,0,0,0.0,3.3,0
-P100862,17,Female,General Medicine,0,0,Morning,1,2,0,0.0,9.3,0
+P100854,28,Male,General Medicine,4,4,Evening,0,3,0,0,3.3,0
+P100855,74,Male,Cardiology,7,5,Afternoon,1,2,0,0,4.9,0
+P100856,39,Female,General Medicine,5,2,Morning,1,3,0,0,0.5,0
+P100857,57,Female,Orthopedics,8,3,Morning,1,2,0,0,9.4,0
+P100858,17,Male,Cardiology,1,5,Evening,0,1,0,0,3.3,0
+P100859,86,Female,General Medicine,0,6,Morning,1,3,0,0,9.7,0
+P100860,44,Female,Neurology,7,0,Afternoon,1,3,0,0,1.8,0
+P100861,25,Female,Neurology,5,6,Afternoon,1,0,0,0,3.3,0
+P100862,17,Female,General Medicine,0,0,Morning,1,2,0,0,9.3,0
 P100863,13,Female,Cardiology,3,4,Evening,0,3,1,0.333,21.9,0
-P100864,84,Male,Cardiology,0,5,Afternoon,1,1,0,0.0,0.4,0
-P100865,25,Female,General Medicine,6,4,Afternoon,1,2,1,0.5,10.0,0
+P100864,84,Male,Cardiology,0,5,Afternoon,1,1,0,0,0.4,0
+P100865,25,Female,General Medicine,6,4,Afternoon,1,2,1,0.5,10,0
 P100866,68,Female,General Medicine,4,1,Morning,1,5,1,0.2,2.1,0
 P100867,10,Male,Orthopedics,7,6,Morning,1,4,2,0.5,4.8,0
-P100868,67,Female,Cardiology,13,6,Afternoon,1,2,0,0.0,2.1,0
-P100869,18,Female,Neurology,2,4,Afternoon,0,3,0,0.0,5.7,0
-P100870,86,Female,Cardiology,26,1,Morning,1,2,0,0.0,2.6,0
-P100871,34,Female,Cardiology,6,0,Morning,0,2,0,0.0,2.4,0
+P100868,67,Female,Cardiology,13,6,Afternoon,1,2,0,0,2.1,0
+P100869,18,Female,Neurology,2,4,Afternoon,0,3,0,0,5.7,0
+P100870,86,Female,Cardiology,26,1,Morning,1,2,0,0,2.6,0
+P100871,34,Female,Cardiology,6,0,Morning,0,2,0,0,2.4,0
 P100872,8,Female,General Medicine,7,5,Morning,1,6,1,0.167,0.2,0
-P100873,40,Female,General Medicine,9,1,Evening,1,2,1,0.5,1.0,0
-P100874,83,Male,Neurology,8,5,Afternoon,1,3,0,0.0,14.9,0
-P100875,42,Female,Orthopedics,5,6,Evening,0,2,0,0.0,38.2,0
+P100873,40,Female,General Medicine,9,1,Evening,1,2,1,0.5,1,0
+P100874,83,Male,Neurology,8,5,Afternoon,1,3,0,0,14.9,0
+P100875,42,Female,Orthopedics,5,6,Evening,0,2,0,0,38.2,0
 P100876,41,Male,General Medicine,4,5,Morning,1,3,1,0.333,9.1,0
-P100877,6,Male,Orthopedics,0,6,Evening,1,4,1,0.25,2.0,0
-P100878,52,Male,Orthopedics,0,1,Morning,1,1,0,0.0,3.1,0
+P100877,6,Male,Orthopedics,0,6,Evening,1,4,1,0.25,2,0
+P100878,52,Male,Orthopedics,0,1,Morning,1,1,0,0,3.1,0
 P100879,26,Female,General Medicine,3,6,Afternoon,0,2,1,0.5,8.1,0
-P100880,64,Male,Neurology,3,2,Evening,1,6,0,0.0,20.7,0
-P100881,59,Female,General Medicine,3,6,Morning,0,1,1,1.0,3.6,1
-P100882,56,Female,Cardiology,1,4,Afternoon,0,1,1,1.0,10.6,1
-P100883,59,Female,Neurology,10,1,Morning,0,3,0,0.0,22.1,0
-P100884,70,Male,Cardiology,15,0,Morning,0,3,0,0.0,12.4,1
-P100885,33,Female,General Medicine,22,5,Afternoon,1,1,0,0.0,1.5,0
-P100886,53,Female,Neurology,5,3,Afternoon,1,2,0,0.0,0.0,0
-P100887,22,Female,Cardiology,9,1,Afternoon,1,2,0,0.0,4.1,0
+P100880,64,Male,Neurology,3,2,Evening,1,6,0,0,20.7,0
+P100881,59,Female,General Medicine,3,6,Morning,0,1,1,1,3.6,1
+P100882,56,Female,Cardiology,1,4,Afternoon,0,1,1,1,10.6,1
+P100883,59,Female,Neurology,10,1,Morning,0,3,0,0,22.1,0
+P100884,70,Male,Cardiology,15,0,Morning,0,3,0,0,12.4,1
+P100885,33,Female,General Medicine,22,5,Afternoon,1,1,0,0,1.5,0
+P100886,53,Female,Neurology,5,3,Afternoon,1,2,0,0,0,0
+P100887,22,Female,Cardiology,9,1,Afternoon,1,2,0,0,4.1,0
 P100888,21,Male,Dermatology,15,4,Afternoon,0,3,1,0.333,4.5,1
-P100889,70,Male,Orthopedics,4,6,Afternoon,1,4,0,0.0,1.3,0
-P100890,70,Male,General Medicine,2,5,Morning,1,2,0,0.0,2.0,0
+P100889,70,Male,Orthopedics,4,6,Afternoon,1,4,0,0,1.3,0
+P100890,70,Male,General Medicine,2,5,Morning,1,2,0,0,2,0
 P100891,4,Male,Dermatology,22,2,Morning,0,4,1,0.25,8.7,1
-P100892,75,Male,Neurology,5,0,Evening,1,4,0,0.0,3.8,0
-P100893,62,Female,General Medicine,5,2,Morning,1,4,0,0.0,2.3,0
+P100892,75,Male,Neurology,5,0,Evening,1,4,0,0,3.8,0
+P100893,62,Female,General Medicine,5,2,Morning,1,4,0,0,2.3,0
 P100894,62,Male,General Medicine,1,3,Afternoon,1,5,1,0.2,5.8,0
-P100895,24,Male,Orthopedics,0,1,Morning,1,4,0,0.0,6.3,0
+P100895,24,Male,Orthopedics,0,1,Morning,1,4,0,0,6.3,0
 P100896,55,Male,Neurology,14,5,Afternoon,1,5,1,0.2,8.8,0
-P100897,9,Male,Dermatology,7,1,Afternoon,0,2,2,1.0,1.0,0
+P100897,9,Male,Dermatology,7,1,Afternoon,0,2,2,1,1,0
 P100898,3,Male,Neurology,3,4,Morning,1,2,1,0.5,8.1,1
-P100899,31,Male,Orthopedics,1,1,Morning,0,5,0,0.0,5.5,0
-P100900,40,Male,Cardiology,6,0,Afternoon,1,1,0,0.0,0.4,0
-P100901,36,Female,Cardiology,7,3,Morning,1,1,0,0.0,9.0,0
-P100902,24,Female,Cardiology,1,2,Morning,1,1,0,0.0,2.9,0
+P100899,31,Male,Orthopedics,1,1,Morning,0,5,0,0,5.5,0
+P100900,40,Male,Cardiology,6,0,Afternoon,1,1,0,0,0.4,0
+P100901,36,Female,Cardiology,7,3,Morning,1,1,0,0,9,0
+P100902,24,Female,Cardiology,1,2,Morning,1,1,0,0,2.9,0
 P100903,6,Male,Neurology,15,3,Afternoon,1,3,1,0.333,2.4,0
-P100904,66,Male,General Medicine,0,5,Morning,1,2,0,0.0,3.6,0
-P100905,84,Female,General Medicine,3,1,Evening,0,6,0,0.0,2.5,0
-P100906,75,Male,Orthopedics,9,5,Afternoon,1,1,0,0.0,2.5,0
-P100907,4,Male,Neurology,2,2,Morning,1,1,0,0.0,9.9,0
+P100904,66,Male,General Medicine,0,5,Morning,1,2,0,0,3.6,0
+P100905,84,Female,General Medicine,3,1,Evening,0,6,0,0,2.5,0
+P100906,75,Male,Orthopedics,9,5,Afternoon,1,1,0,0,2.5,0
+P100907,4,Male,Neurology,2,2,Morning,1,1,0,0,9.9,0
 P100908,79,Female,Cardiology,14,5,Afternoon,1,2,1,0.5,0.8,0
-P100909,6,Male,Dermatology,10,4,Afternoon,1,3,0,0.0,21.2,0
-P100910,51,Female,General Medicine,12,3,Morning,0,3,0,0.0,4.9,0
-P100911,62,Female,Dermatology,1,2,Afternoon,0,3,0,0.0,1.2,0
-P100912,57,Male,General Medicine,1,2,Morning,1,0,0,0.0,0.8,0
-P100913,66,Male,Orthopedics,2,6,Morning,1,3,0,0.0,5.4,0
-P100914,79,Female,Dermatology,5,2,Morning,0,3,0,0.0,6.0,1
-P100915,75,Male,General Medicine,11,6,Morning,1,1,1,1.0,0.3,0
-P100916,8,Male,Neurology,14,0,Morning,1,1,0,0.0,1.7,0
+P100909,6,Male,Dermatology,10,4,Afternoon,1,3,0,0,21.2,0
+P100910,51,Female,General Medicine,12,3,Morning,0,3,0,0,4.9,0
+P100911,62,Female,Dermatology,1,2,Afternoon,0,3,0,0,1.2,0
+P100912,57,Male,General Medicine,1,2,Morning,1,0,0,0,0.8,0
+P100913,66,Male,Orthopedics,2,6,Morning,1,3,0,0,5.4,0
+P100914,79,Female,Dermatology,5,2,Morning,0,3,0,0,6,1
+P100915,75,Male,General Medicine,11,6,Morning,1,1,1,1,0.3,0
+P100916,8,Male,Neurology,14,0,Morning,1,1,0,0,1.7,0
 P100917,26,Female,General Medicine,9,6,Afternoon,0,2,1,0.5,9.5,0
 P100918,51,Female,Cardiology,21,3,Afternoon,1,4,3,0.75,0.3,0
-P100919,45,Male,General Medicine,10,5,Afternoon,1,4,0,0.0,11.6,0
+P100919,45,Male,General Medicine,10,5,Afternoon,1,4,0,0,11.6,0
 P100920,44,Female,Cardiology,2,6,Afternoon,1,5,1,0.2,6.4,0
 P100921,5,Male,Orthopedics,2,2,Evening,1,4,1,0.25,3.4,0
-P100922,70,Female,Cardiology,9,3,Afternoon,1,3,0,0.0,2.6,0
-P100923,26,Female,General Medicine,1,6,Afternoon,1,0,0,0.0,0.1,1
+P100922,70,Female,Cardiology,9,3,Afternoon,1,3,0,0,2.6,0
+P100923,26,Female,General Medicine,1,6,Afternoon,1,0,0,0,0.1,1
 P100924,68,Female,General Medicine,0,6,Morning,0,3,1,0.333,10.5,0
-P100925,19,Female,Orthopedics,6,2,Evening,0,4,0,0.0,0.9,0
+P100925,19,Female,Orthopedics,6,2,Evening,0,4,0,0,0.9,0
 P100926,84,Female,Cardiology,13,4,Morning,1,3,1,0.333,2.2,0
-P100927,20,Male,Cardiology,0,4,Morning,1,3,0,0.0,5.1,0
-P100928,12,Female,Cardiology,12,6,Afternoon,0,1,0,0.0,1.7,1
-P100929,47,Male,Cardiology,13,4,Morning,1,3,0,0.0,4.1,0
-P100930,1,Male,Cardiology,5,1,Morning,0,0,0,0.0,9.9,1
-P100931,14,Male,General Medicine,0,2,Afternoon,1,4,0,0.0,3.8,0
-P100932,64,Female,Cardiology,1,1,Afternoon,0,0,0,0.0,17.9,0
-P100933,38,Female,Cardiology,9,3,Afternoon,1,4,0,0.0,11.3,0
-P100934,37,Male,Neurology,9,1,Evening,1,4,0,0.0,2.4,0
-P100935,11,Male,Dermatology,18,3,Morning,0,2,0,0.0,3.1,1
-P100936,77,Female,Dermatology,6,6,Morning,1,3,0,0.0,3.3,0
-P100937,3,Male,Dermatology,1,3,Afternoon,1,3,0,0.0,5.9,0
-P100938,33,Male,Orthopedics,1,3,Morning,1,8,2,0.25,2.0,0
+P100927,20,Male,Cardiology,0,4,Morning,1,3,0,0,5.1,0
+P100928,12,Female,Cardiology,12,6,Afternoon,0,1,0,0,1.7,1
+P100929,47,Male,Cardiology,13,4,Morning,1,3,0,0,4.1,0
+P100930,1,Male,Cardiology,5,1,Morning,0,0,0,0,9.9,1
+P100931,14,Male,General Medicine,0,2,Afternoon,1,4,0,0,3.8,0
+P100932,64,Female,Cardiology,1,1,Afternoon,0,0,0,0,17.9,0
+P100933,38,Female,Cardiology,9,3,Afternoon,1,4,0,0,11.3,0
+P100934,37,Male,Neurology,9,1,Evening,1,4,0,0,2.4,0
+P100935,11,Male,Dermatology,18,3,Morning,0,2,0,0,3.1,1
+P100936,77,Female,Dermatology,6,6,Morning,1,3,0,0,3.3,0
+P100937,3,Male,Dermatology,1,3,Afternoon,1,3,0,0,5.9,0
+P100938,33,Male,Orthopedics,1,3,Morning,1,8,2,0.25,2,0
 P100939,6,Female,Cardiology,10,5,Afternoon,0,5,1,0.2,20.9,0
 P100940,50,Female,Orthopedics,1,1,Morning,1,3,1,0.333,5.6,0
 P100941,10,Female,Neurology,3,5,Afternoon,0,2,1,0.5,3.1,0
-P100942,5,Male,Cardiology,5,6,Afternoon,1,3,0,0.0,6.2,0
-P100943,23,Male,Orthopedics,0,2,Afternoon,1,3,0,0.0,3.0,0
-P100944,10,Female,Dermatology,2,1,Afternoon,1,1,0,0.0,10.2,0
-P100945,44,Female,Cardiology,4,2,Afternoon,1,4,2,0.5,5.0,0
+P100942,5,Male,Cardiology,5,6,Afternoon,1,3,0,0,6.2,0
+P100943,23,Male,Orthopedics,0,2,Afternoon,1,3,0,0,3,0
+P100944,10,Female,Dermatology,2,1,Afternoon,1,1,0,0,10.2,0
+P100945,44,Female,Cardiology,4,2,Afternoon,1,4,2,0.5,5,0
 P100946,2,Female,Neurology,2,2,Morning,0,8,2,0.25,0.3,1
-P100947,13,Female,Neurology,1,3,Morning,0,1,0,0.0,1.2,0
-P100948,40,Male,General Medicine,10,1,Morning,1,5,0,0.0,12.0,0
-P100949,2,Female,Cardiology,13,2,Afternoon,0,5,1,0.2,5.0,1
-P100950,84,Male,General Medicine,2,4,Morning,0,4,0,0.0,18.0,1
+P100947,13,Female,Neurology,1,3,Morning,0,1,0,0,1.2,0
+P100948,40,Male,General Medicine,10,1,Morning,1,5,0,0,12,0
+P100949,2,Female,Cardiology,13,2,Afternoon,0,5,1,0.2,5,1
+P100950,84,Male,General Medicine,2,4,Morning,0,4,0,0,18,1
 P100951,65,Male,Neurology,11,2,Afternoon,1,10,1,0.1,0.5,0
 P100952,63,Female,Dermatology,3,4,Morning,0,5,2,0.4,2.1,0
-P100953,73,Male,Dermatology,5,1,Afternoon,1,3,0,0.0,1.3,0
+P100953,73,Male,Dermatology,5,1,Afternoon,1,3,0,0,1.3,0
 P100954,17,Male,Cardiology,15,6,Evening,0,3,1,0.333,4.8,0
-P100955,9,Female,Cardiology,11,5,Morning,1,2,0,0.0,2.9,1
-P100956,75,Male,Orthopedics,13,1,Morning,1,4,1,0.25,1.0,0
+P100955,9,Female,Cardiology,11,5,Morning,1,2,0,0,2.9,1
+P100956,75,Male,Orthopedics,13,1,Morning,1,4,1,0.25,1,0
 P100957,15,Female,General Medicine,1,5,Morning,1,2,1,0.5,6.2,0
-P100958,24,Male,Orthopedics,0,5,Afternoon,0,2,0,0.0,4.6,0
-P100959,38,Female,Dermatology,17,1,Afternoon,1,2,0,0.0,1.9,0
+P100958,24,Male,Orthopedics,0,5,Afternoon,0,2,0,0,4.6,0
+P100959,38,Female,Dermatology,17,1,Afternoon,1,2,0,0,1.9,0
 P100960,35,Male,Neurology,3,2,Morning,1,3,1,0.333,3.9,0
 P100961,49,Male,Dermatology,2,0,Afternoon,1,5,2,0.4,8.2,1
-P100962,69,Female,Dermatology,10,2,Morning,1,5,0,0.0,1.4,0
-P100963,62,Female,Cardiology,14,2,Afternoon,1,4,0,0.0,2.1,0
+P100962,69,Female,Dermatology,10,2,Morning,1,5,0,0,1.4,0
+P100963,62,Female,Cardiology,14,2,Afternoon,1,4,0,0,2.1,0
 P100964,60,Female,Dermatology,15,6,Afternoon,0,6,1,0.167,2.5,1
 P100965,50,Male,General Medicine,3,3,Afternoon,1,4,2,0.5,8.2,0
-P100966,78,Female,Orthopedics,15,3,Morning,1,1,1,1.0,11.3,1
-P100967,75,Female,General Medicine,0,2,Evening,1,6,0,0.0,2.8,0
-P100968,9,Female,Cardiology,0,4,Afternoon,0,3,0,0.0,2.1,0
-P100969,34,Female,Cardiology,7,6,Morning,1,1,1,1.0,13.2,0
-P100970,76,Male,Cardiology,0,5,Morning,1,3,0,0.0,44.2,0
-P100971,35,Male,General Medicine,3,3,Afternoon,0,2,0,0.0,6.7,0
-P100972,1,Female,Neurology,8,2,Evening,0,2,0,0.0,27.6,1
-P100973,40,Male,Orthopedics,3,6,Evening,0,4,0,0.0,6.5,0
+P100966,78,Female,Orthopedics,15,3,Morning,1,1,1,1,11.3,1
+P100967,75,Female,General Medicine,0,2,Evening,1,6,0,0,2.8,0
+P100968,9,Female,Cardiology,0,4,Afternoon,0,3,0,0,2.1,0
+P100969,34,Female,Cardiology,7,6,Morning,1,1,1,1,13.2,0
+P100970,76,Male,Cardiology,0,5,Morning,1,3,0,0,44.2,0
+P100971,35,Male,General Medicine,3,3,Afternoon,0,2,0,0,6.7,0
+P100972,1,Female,Neurology,8,2,Evening,0,2,0,0,27.6,1
+P100973,40,Male,Orthopedics,3,6,Evening,0,4,0,0,6.5,0
 P100974,64,Male,Cardiology,1,0,Afternoon,1,3,1,0.333,7.9,0
-P100975,22,Female,General Medicine,2,4,Evening,0,2,0,0.0,3.0,0
-P100976,60,Female,General Medicine,4,1,Morning,1,2,0,0.0,3.4,0
+P100975,22,Female,General Medicine,2,4,Evening,0,2,0,0,3,0
+P100976,60,Female,General Medicine,4,1,Morning,1,2,0,0,3.4,0
 P100977,64,Female,General Medicine,5,2,Morning,1,2,1,0.5,0.9,0
-P100978,72,Female,General Medicine,12,6,Evening,1,1,0,0.0,10.4,0
-P100979,11,Female,Neurology,11,2,Afternoon,1,3,0,0.0,16.0,0
+P100978,72,Female,General Medicine,12,6,Evening,1,1,0,0,10.4,0
+P100979,11,Female,Neurology,11,2,Afternoon,1,3,0,0,16,0
 P100980,14,Male,General Medicine,4,5,Afternoon,0,3,1,0.333,5.9,1
 P100981,60,Male,Cardiology,14,4,Afternoon,1,2,1,0.5,2.5,0
-P100982,30,Male,Neurology,0,3,Evening,1,0,0,0.0,1.0,0
-P100983,35,Male,Cardiology,2,3,Afternoon,0,2,0,0.0,1.8,0
-P100984,85,Female,Neurology,14,3,Evening,0,3,0,0.0,1.8,0
-P100985,37,Male,General Medicine,3,1,Afternoon,1,4,0,0.0,5.7,0
+P100982,30,Male,Neurology,0,3,Evening,1,0,0,0,1,0
+P100983,35,Male,Cardiology,2,3,Afternoon,0,2,0,0,1.8,0
+P100984,85,Female,Neurology,14,3,Evening,0,3,0,0,1.8,0
+P100985,37,Male,General Medicine,3,1,Afternoon,1,4,0,0,5.7,0
 P100986,5,Male,General Medicine,31,6,Morning,1,4,1,0.25,17.4,1
-P100987,83,Male,Orthopedics,5,4,Evening,1,1,0,0.0,0.3,0
-P100988,78,Male,Orthopedics,12,4,Morning,0,1,0,0.0,0.0,0
-P100989,26,Male,Neurology,4,3,Evening,1,2,0,0.0,5.5,0
-P100990,62,Male,General Medicine,4,3,Afternoon,0,8,2,0.25,2.0,0
-P100991,4,Male,Neurology,3,5,Afternoon,1,2,0,0.0,12.7,1
+P100987,83,Male,Orthopedics,5,4,Evening,1,1,0,0,0.3,0
+P100988,78,Male,Orthopedics,12,4,Morning,0,1,0,0,0,0
+P100989,26,Male,Neurology,4,3,Evening,1,2,0,0,5.5,0
+P100990,62,Male,General Medicine,4,3,Afternoon,0,8,2,0.25,2,0
+P100991,4,Male,Neurology,3,5,Afternoon,1,2,0,0,12.7,1
 P100992,89,Male,General Medicine,10,0,Afternoon,1,8,1,0.125,2.4,0
-P100993,42,Male,Orthopedics,6,0,Morning,1,0,0,0.0,2.1,0
-P100994,89,Female,General Medicine,23,2,Morning,0,4,0,0.0,1.9,0
-P100995,18,Male,Orthopedics,2,2,Evening,1,3,0,0.0,0.9,0
+P100993,42,Male,Orthopedics,6,0,Morning,1,0,0,0,2.1,0
+P100994,89,Female,General Medicine,23,2,Morning,0,4,0,0,1.9,0
+P100995,18,Male,Orthopedics,2,2,Evening,1,3,0,0,0.9,0
 P100996,40,Male,Orthopedics,0,4,Evening,0,4,1,0.25,5.2,0
 P100997,72,Female,Neurology,3,4,Morning,1,6,1,0.167,1.1,0
 P100998,39,Male,Dermatology,7,1,Evening,1,5,1,0.2,3.3,0
-P100999,14,Female,Cardiology,15,1,Evening,0,1,0,0.0,3.7,0
-P101000,32,Female,Orthopedics,3,0,Afternoon,1,5,0,0.0,0.1,0
+P100999,14,Female,Cardiology,15,1,Evening,0,1,0,0,3.7,0
+P101000,32,Female,Orthopedics,3,0,Afternoon,1,5,0,0,0.1,0
 P101001,51,Male,Cardiology,8,2,Morning,1,4,1,0.25,0.1,0
-P101002,38,Female,Orthopedics,3,0,Evening,1,4,0,0.0,4.4,0
-P101003,23,Male,General Medicine,7,0,Afternoon,1,0,0,0.0,7.1,0
-P101004,63,Female,General Medicine,17,2,Evening,1,2,0,0.0,17.1,0
+P101002,38,Female,Orthopedics,3,0,Evening,1,4,0,0,4.4,0
+P101003,23,Male,General Medicine,7,0,Afternoon,1,0,0,0,7.1,0
+P101004,63,Female,General Medicine,17,2,Evening,1,2,0,0,17.1,0
 P101005,15,Male,Orthopedics,2,6,Evening,1,5,1,0.2,1.2,0
 P101006,25,Female,General Medicine,4,1,Evening,0,6,2,0.333,0.7,0
-P101007,17,Male,General Medicine,40,5,Afternoon,1,1,0,0.0,0.3,1
+P101007,17,Male,General Medicine,40,5,Afternoon,1,1,0,0,0.3,1
 P101008,66,Female,General Medicine,16,5,Morning,1,6,2,0.333,3.4,0
 P101009,78,Female,Dermatology,6,5,Morning,1,3,2,0.667,5.9,0
-P101010,53,Male,Neurology,5,2,Morning,1,2,0,0.0,11.0,0
+P101010,53,Male,Neurology,5,2,Morning,1,2,0,0,11,0
 P101011,51,Male,Dermatology,2,3,Morning,1,6,3,0.5,6.9,0
-P101012,39,Female,Orthopedics,5,3,Afternoon,0,1,0,0.0,1.4,0
+P101012,39,Female,Orthopedics,5,3,Afternoon,0,1,0,0,1.4,0
 P101013,51,Female,Orthopedics,15,3,Afternoon,0,4,1,0.25,3.7,0
-P101014,70,Male,Dermatology,9,4,Evening,1,2,0,0.0,14.5,0
+P101014,70,Male,Dermatology,9,4,Evening,1,2,0,0,14.5,0
 P101015,6,Female,Neurology,2,1,Morning,1,5,1,0.2,2.4,0
-P101016,67,Female,General Medicine,1,1,Afternoon,1,1,0,0.0,4.1,0
-P101017,7,Female,Dermatology,2,6,Morning,1,1,0,0.0,19.1,1
-P101018,51,Male,Orthopedics,1,6,Morning,0,3,1,0.333,8.0,0
-P101019,72,Female,Cardiology,0,4,Morning,1,1,0,0.0,8.3,0
-P101020,42,Male,Dermatology,4,0,Afternoon,1,4,0,0.0,1.7,0
-P101021,64,Female,General Medicine,0,6,Morning,1,3,0,0.0,3.2,0
-P101022,15,Female,General Medicine,1,5,Afternoon,1,2,0,0.0,0.5,0
-P101023,29,Male,General Medicine,6,3,Morning,1,2,0,0.0,5.6,0
-P101024,33,Female,Neurology,1,5,Evening,1,5,0,0.0,0.7,0
-P101025,27,Male,General Medicine,0,3,Evening,1,3,0,0.0,10.8,1
-P101026,36,Female,General Medicine,3,5,Evening,1,4,0,0.0,10.1,0
-P101027,29,Female,Cardiology,1,0,Evening,1,2,0,0.0,4.6,1
-P101028,38,Female,Dermatology,5,5,Evening,1,6,0,0.0,0.9,0
+P101016,67,Female,General Medicine,1,1,Afternoon,1,1,0,0,4.1,0
+P101017,7,Female,Dermatology,2,6,Morning,1,1,0,0,19.1,1
+P101018,51,Male,Orthopedics,1,6,Morning,0,3,1,0.333,8,0
+P101019,72,Female,Cardiology,0,4,Morning,1,1,0,0,8.3,0
+P101020,42,Male,Dermatology,4,0,Afternoon,1,4,0,0,1.7,0
+P101021,64,Female,General Medicine,0,6,Morning,1,3,0,0,3.2,0
+P101022,15,Female,General Medicine,1,5,Afternoon,1,2,0,0,0.5,0
+P101023,29,Male,General Medicine,6,3,Morning,1,2,0,0,5.6,0
+P101024,33,Female,Neurology,1,5,Evening,1,5,0,0,0.7,0
+P101025,27,Male,General Medicine,0,3,Evening,1,3,0,0,10.8,1
+P101026,36,Female,General Medicine,3,5,Evening,1,4,0,0,10.1,0
+P101027,29,Female,Cardiology,1,0,Evening,1,2,0,0,4.6,1
+P101028,38,Female,Dermatology,5,5,Evening,1,6,0,0,0.9,0
 P101029,57,Male,Dermatology,0,5,Evening,1,2,1,0.5,0.2,0
-P101030,27,Female,Dermatology,11,2,Afternoon,1,2,0,0.0,9.6,0
-P101031,55,Male,General Medicine,18,5,Morning,1,2,0,0.0,5.5,0
-P101032,33,Male,Cardiology,10,2,Morning,1,4,0,0.0,7.4,0
-P101033,68,Female,Dermatology,6,1,Morning,0,2,0,0.0,2.2,0
-P101034,86,Male,Dermatology,15,4,Afternoon,1,2,0,0.0,4.3,0
-P101035,66,Male,Orthopedics,9,5,Afternoon,1,2,0,0.0,8.3,0
+P101030,27,Female,Dermatology,11,2,Afternoon,1,2,0,0,9.6,0
+P101031,55,Male,General Medicine,18,5,Morning,1,2,0,0,5.5,0
+P101032,33,Male,Cardiology,10,2,Morning,1,4,0,0,7.4,0
+P101033,68,Female,Dermatology,6,1,Morning,0,2,0,0,2.2,0
+P101034,86,Male,Dermatology,15,4,Afternoon,1,2,0,0,4.3,0
+P101035,66,Male,Orthopedics,9,5,Afternoon,1,2,0,0,8.3,0
 P101036,10,Female,Orthopedics,0,1,Evening,1,5,1,0.2,3.7,0
-P101037,5,Male,General Medicine,4,6,Evening,1,6,0,0.0,5.5,0
+P101037,5,Male,General Medicine,4,6,Evening,1,6,0,0,5.5,0
 P101038,74,Male,Orthopedics,15,6,Afternoon,0,3,1,0.333,9.4,0
 P101039,38,Female,Neurology,3,2,Afternoon,0,3,1,0.333,1.5,1
-P101040,13,Male,General Medicine,0,5,Evening,0,0,0,0.0,0.4,0
-P101041,31,Female,Cardiology,10,5,Morning,1,1,0,0.0,4.6,0
-P101042,47,Female,Neurology,12,0,Afternoon,1,1,0,0.0,0.4,0
-P101043,88,Female,Neurology,1,1,Morning,1,4,0,0.0,8.7,0
+P101040,13,Male,General Medicine,0,5,Evening,0,0,0,0,0.4,0
+P101041,31,Female,Cardiology,10,5,Morning,1,1,0,0,4.6,0
+P101042,47,Female,Neurology,12,0,Afternoon,1,1,0,0,0.4,0
+P101043,88,Female,Neurology,1,1,Morning,1,4,0,0,8.7,0
 P101044,52,Female,General Medicine,6,3,Afternoon,1,4,1,0.25,7.6,0
-P101045,56,Male,Neurology,1,3,Morning,1,2,0,0.0,12.8,0
-P101046,15,Male,General Medicine,10,0,Evening,0,4,0,0.0,6.1,1
-P101047,29,Female,Neurology,2,2,Afternoon,0,6,0,0.0,0.4,0
-P101048,8,Female,Orthopedics,3,3,Morning,1,4,0,0.0,1.8,0
-P101049,5,Female,Dermatology,14,3,Morning,1,2,0,0.0,9.9,0
-P101050,29,Male,Neurology,5,6,Afternoon,1,1,0,0.0,1.1,1
-P101051,47,Male,General Medicine,8,6,Evening,1,3,0,0.0,7.2,0
-P101052,68,Male,General Medicine,4,4,Afternoon,1,2,0,0.0,9.1,0
+P101045,56,Male,Neurology,1,3,Morning,1,2,0,0,12.8,0
+P101046,15,Male,General Medicine,10,0,Evening,0,4,0,0,6.1,1
+P101047,29,Female,Neurology,2,2,Afternoon,0,6,0,0,0.4,0
+P101048,8,Female,Orthopedics,3,3,Morning,1,4,0,0,1.8,0
+P101049,5,Female,Dermatology,14,3,Morning,1,2,0,0,9.9,0
+P101050,29,Male,Neurology,5,6,Afternoon,1,1,0,0,1.1,1
+P101051,47,Male,General Medicine,8,6,Evening,1,3,0,0,7.2,0
+P101052,68,Male,General Medicine,4,4,Afternoon,1,2,0,0,9.1,0
 P101053,76,Female,Neurology,2,1,Afternoon,0,6,1,0.167,2.4,0
-P101054,45,Male,Cardiology,7,2,Morning,1,0,0,0.0,2.3,0
-P101055,2,Female,General Medicine,1,5,Afternoon,1,0,0,0.0,4.9,0
-P101056,27,Female,Dermatology,3,1,Afternoon,1,2,0,0.0,11.9,0
+P101054,45,Male,Cardiology,7,2,Morning,1,0,0,0,2.3,0
+P101055,2,Female,General Medicine,1,5,Afternoon,1,0,0,0,4.9,0
+P101056,27,Female,Dermatology,3,1,Afternoon,1,2,0,0,11.9,0
 P101057,36,Male,General Medicine,1,2,Afternoon,0,4,1,0.25,1.5,0
-P101058,36,Female,General Medicine,9,3,Morning,1,5,1,0.2,17.0,0
-P101059,26,Male,Neurology,23,4,Afternoon,1,2,0,0.0,5.5,0
+P101058,36,Female,General Medicine,9,3,Morning,1,5,1,0.2,17,0
+P101059,26,Male,Neurology,23,4,Afternoon,1,2,0,0,5.5,0
 P101060,43,Female,Cardiology,43,1,Afternoon,0,6,2,0.333,29.1,1
-P101061,27,Female,General Medicine,4,3,Evening,1,1,0,0.0,0.6,0
-P101062,69,Female,Dermatology,2,2,Evening,0,4,0,0.0,0.8,0
+P101061,27,Female,General Medicine,4,3,Evening,1,1,0,0,0.6,0
+P101062,69,Female,Dermatology,2,2,Evening,0,4,0,0,0.8,0
 P101063,20,Female,Orthopedics,4,1,Afternoon,1,12,2,0.167,10.5,0
-P101064,11,Male,Orthopedics,15,5,Afternoon,1,3,0,0.0,12.0,0
-P101065,74,Male,Orthopedics,1,1,Morning,1,3,0,0.0,3.5,0
-P101066,38,Female,Neurology,24,3,Evening,1,5,0,0.0,7.5,0
+P101064,11,Male,Orthopedics,15,5,Afternoon,1,3,0,0,12,0
+P101065,74,Male,Orthopedics,1,1,Morning,1,3,0,0,3.5,0
+P101066,38,Female,Neurology,24,3,Evening,1,5,0,0,7.5,0
 P101067,6,Male,Neurology,3,1,Afternoon,0,5,1,0.2,12.1,0
 P101068,72,Male,Cardiology,34,5,Morning,0,2,1,0.5,0.3,0
-P101069,23,Male,Dermatology,14,4,Morning,0,4,0,0.0,5.1,0
+P101069,23,Male,Dermatology,14,4,Morning,0,4,0,0,5.1,0
 P101070,47,Female,General Medicine,13,4,Evening,0,3,2,0.667,11.5,1
-P101071,46,Male,Neurology,3,3,Morning,1,2,0,0.0,3.0,0
-P101072,12,Female,Orthopedics,0,2,Afternoon,0,3,0,0.0,2.2,1
-P101073,13,Female,Cardiology,3,3,Afternoon,1,4,0,0.0,9.5,0
-P101074,62,Male,Orthopedics,2,4,Morning,1,4,0,0.0,2.5,0
-P101075,82,Male,Neurology,0,0,Morning,1,1,0,0.0,0.0,0
+P101071,46,Male,Neurology,3,3,Morning,1,2,0,0,3,0
+P101072,12,Female,Orthopedics,0,2,Afternoon,0,3,0,0,2.2,1
+P101073,13,Female,Cardiology,3,3,Afternoon,1,4,0,0,9.5,0
+P101074,62,Male,Orthopedics,2,4,Morning,1,4,0,0,2.5,0
+P101075,82,Male,Neurology,0,0,Morning,1,1,0,0,0,0
 P101076,89,Male,General Medicine,5,0,Evening,1,6,1,0.167,19.2,0
-P101077,60,Female,Cardiology,4,1,Evening,1,2,0,0.0,5.4,0
-P101078,43,Male,Cardiology,8,5,Morning,1,2,0,0.0,10.3,0
-P101079,76,Male,General Medicine,7,6,Evening,0,3,0,0.0,10.5,0
-P101080,68,Male,General Medicine,1,6,Afternoon,1,2,0,0.0,0.4,0
+P101077,60,Female,Cardiology,4,1,Evening,1,2,0,0,5.4,0
+P101078,43,Male,Cardiology,8,5,Morning,1,2,0,0,10.3,0
+P101079,76,Male,General Medicine,7,6,Evening,0,3,0,0,10.5,0
+P101080,68,Male,General Medicine,1,6,Afternoon,1,2,0,0,0.4,0
 P101081,5,Female,Cardiology,30,6,Afternoon,1,4,2,0.5,1.1,1
-P101082,37,Male,General Medicine,1,1,Afternoon,1,3,0,0.0,2.2,0
+P101082,37,Male,General Medicine,1,1,Afternoon,1,3,0,0,2.2,0
 P101083,72,Female,Orthopedics,4,0,Evening,1,3,1,0.333,2.3,0
-P101084,31,Female,Neurology,5,4,Afternoon,1,4,0,0.0,6.5,0
-P101085,9,Male,Orthopedics,13,1,Morning,1,1,0,0.0,5.9,1
-P101086,51,Female,Dermatology,0,6,Evening,1,3,0,0.0,4.1,0
-P101087,29,Male,Dermatology,4,6,Afternoon,1,0,0,0.0,1.4,0
-P101088,78,Female,Neurology,7,3,Morning,1,1,0,0.0,2.9,0
-P101089,40,Female,General Medicine,1,6,Afternoon,1,1,1,1.0,4.7,1
+P101084,31,Female,Neurology,5,4,Afternoon,1,4,0,0,6.5,0
+P101085,9,Male,Orthopedics,13,1,Morning,1,1,0,0,5.9,1
+P101086,51,Female,Dermatology,0,6,Evening,1,3,0,0,4.1,0
+P101087,29,Male,Dermatology,4,6,Afternoon,1,0,0,0,1.4,0
+P101088,78,Female,Neurology,7,3,Morning,1,1,0,0,2.9,0
+P101089,40,Female,General Medicine,1,6,Afternoon,1,1,1,1,4.7,1
 P101090,41,Female,Cardiology,7,5,Afternoon,0,3,1,0.333,3.8,1
 P101091,86,Male,Dermatology,20,6,Evening,1,2,1,0.5,0.8,0
 P101092,11,Male,General Medicine,47,3,Afternoon,1,4,1,0.25,6.3,0
@@ -1096,406 +1096,906 @@ P101093,23,Male,Dermatology,0,6,Morning,0,5,1,0.2,0.5,0
 P101094,1,Male,Dermatology,2,5,Afternoon,1,3,1,0.333,2.9,0
 P101095,46,Male,Dermatology,2,4,Afternoon,1,3,1,0.333,7.4,0
 P101096,21,Male,Cardiology,4,1,Morning,1,4,1,0.25,0.1,0
-P101097,36,Male,General Medicine,2,5,Afternoon,0,6,0,0.0,5.1,0
-P101098,54,Male,General Medicine,1,3,Evening,1,3,0,0.0,2.4,0
-P101099,87,Female,General Medicine,24,1,Morning,1,3,0,0.0,0.1,0
-P101100,57,Male,Cardiology,20,1,Afternoon,1,2,0,0.0,1.3,1
-P101101,1,Male,Dermatology,0,3,Morning,1,3,0,0.0,17.0,0
-P101102,63,Male,General Medicine,3,0,Morning,1,1,1,1.0,4.4,0
-P101103,54,Male,General Medicine,4,6,Morning,0,4,0,0.0,35.3,0
-P101104,55,Female,General Medicine,2,5,Morning,1,3,0,0.0,4.5,0
-P101105,40,Male,Dermatology,7,3,Evening,0,1,0,0.0,4.7,0
-P101106,15,Female,Orthopedics,8,4,Morning,1,1,0,0.0,3.0,1
-P101107,21,Female,Dermatology,15,2,Afternoon,1,1,0,0.0,2.2,0
-P101108,47,Female,General Medicine,10,3,Morning,1,0,0,0.0,1.7,1
+P101097,36,Male,General Medicine,2,5,Afternoon,0,6,0,0,5.1,0
+P101098,54,Male,General Medicine,1,3,Evening,1,3,0,0,2.4,0
+P101099,87,Female,General Medicine,24,1,Morning,1,3,0,0,0.1,0
+P101100,57,Male,Cardiology,20,1,Afternoon,1,2,0,0,1.3,1
+P101101,1,Male,Dermatology,0,3,Morning,1,3,0,0,17,0
+P101102,63,Male,General Medicine,3,0,Morning,1,1,1,1,4.4,0
+P101103,54,Male,General Medicine,4,6,Morning,0,4,0,0,35.3,0
+P101104,55,Female,General Medicine,2,5,Morning,1,3,0,0,4.5,0
+P101105,40,Male,Dermatology,7,3,Evening,0,1,0,0,4.7,0
+P101106,15,Female,Orthopedics,8,4,Morning,1,1,0,0,3,1
+P101107,21,Female,Dermatology,15,2,Afternoon,1,1,0,0,2.2,0
+P101108,47,Female,General Medicine,10,3,Morning,1,0,0,0,1.7,1
 P101109,73,Female,General Medicine,6,6,Evening,0,2,1,0.5,2.5,0
 P101110,53,Female,General Medicine,8,6,Afternoon,1,3,2,0.667,3.7,1
 P101111,9,Female,Dermatology,2,1,Afternoon,0,2,1,0.5,1.3,0
-P101112,74,Female,General Medicine,7,1,Morning,1,3,0,0.0,1.5,0
-P101113,52,Female,Neurology,5,3,Afternoon,1,3,0,0.0,1.9,0
+P101112,74,Female,General Medicine,7,1,Morning,1,3,0,0,1.5,0
+P101113,52,Female,Neurology,5,3,Afternoon,1,3,0,0,1.9,0
 P101114,57,Female,Dermatology,1,2,Morning,1,6,2,0.333,3.6,0
 P101115,26,Female,Cardiology,2,3,Evening,1,2,1,0.5,6.3,0
 P101116,41,Female,Dermatology,2,2,Afternoon,0,3,1,0.333,11.6,0
-P101117,35,Male,Orthopedics,20,2,Afternoon,1,4,1,0.25,2.0,0
-P101118,63,Male,Cardiology,2,6,Afternoon,1,2,0,0.0,1.2,0
-P101119,25,Male,Orthopedics,2,6,Morning,1,4,0,0.0,2.9,0
+P101117,35,Male,Orthopedics,20,2,Afternoon,1,4,1,0.25,2,0
+P101118,63,Male,Cardiology,2,6,Afternoon,1,2,0,0,1.2,0
+P101119,25,Male,Orthopedics,2,6,Morning,1,4,0,0,2.9,0
 P101120,75,Male,General Medicine,3,6,Afternoon,1,8,2,0.25,13.5,0
-P101121,38,Male,Orthopedics,8,4,Afternoon,1,1,0,0.0,0.1,0
-P101122,2,Male,Orthopedics,1,6,Afternoon,1,3,0,0.0,6.8,0
-P101123,7,Female,General Medicine,24,5,Afternoon,1,3,0,0.0,3.9,0
-P101124,82,Male,Cardiology,16,1,Morning,1,1,0,0.0,1.1,0
-P101125,34,Female,Cardiology,6,1,Morning,1,1,0,0.0,2.3,0
-P101126,17,Male,Dermatology,8,2,Evening,1,2,0,0.0,1.5,0
-P101127,43,Male,Neurology,0,1,Afternoon,0,6,0,0.0,12.6,0
-P101128,59,Female,Dermatology,3,0,Afternoon,1,2,0,0.0,3.9,0
-P101129,51,Female,Dermatology,12,2,Evening,0,3,0,0.0,5.0,0
+P101121,38,Male,Orthopedics,8,4,Afternoon,1,1,0,0,0.1,0
+P101122,2,Male,Orthopedics,1,6,Afternoon,1,3,0,0,6.8,0
+P101123,7,Female,General Medicine,24,5,Afternoon,1,3,0,0,3.9,0
+P101124,82,Male,Cardiology,16,1,Morning,1,1,0,0,1.1,0
+P101125,34,Female,Cardiology,6,1,Morning,1,1,0,0,2.3,0
+P101126,17,Male,Dermatology,8,2,Evening,1,2,0,0,1.5,0
+P101127,43,Male,Neurology,0,1,Afternoon,0,6,0,0,12.6,0
+P101128,59,Female,Dermatology,3,0,Afternoon,1,2,0,0,3.9,0
+P101129,51,Female,Dermatology,12,2,Evening,0,3,0,0,5,0
 P101130,54,Male,General Medicine,0,1,Morning,0,4,2,0.5,5.4,0
 P101131,24,Female,Orthopedics,2,0,Evening,1,3,1,0.333,6.1,1
 P101132,25,Female,Cardiology,7,4,Evening,1,2,1,0.5,4.1,0
 P101133,71,Male,Cardiology,2,1,Evening,0,4,1,0.25,0.1,0
-P101134,52,Male,Cardiology,21,0,Evening,1,3,0,0.0,2.4,0
+P101134,52,Male,Cardiology,21,0,Evening,1,3,0,0,2.4,0
 P101135,70,Female,Orthopedics,1,3,Morning,1,4,1,0.25,1.2,0
 P101136,88,Female,General Medicine,12,5,Morning,1,6,3,0.5,6.8,0
 P101137,33,Female,Dermatology,5,3,Afternoon,1,4,1,0.25,0.4,0
-P101138,49,Female,Cardiology,11,0,Morning,1,5,0,0.0,5.0,0
+P101138,49,Female,Cardiology,11,0,Morning,1,5,0,0,5,0
 P101139,29,Male,Dermatology,2,2,Morning,1,3,1,0.333,1.4,0
 P101140,63,Male,Cardiology,5,6,Afternoon,0,5,2,0.4,17.8,1
-P101141,22,Male,Orthopedics,15,6,Morning,0,3,0,0.0,2.5,0
-P101142,26,Female,Neurology,5,6,Evening,0,2,0,0.0,2.4,0
+P101141,22,Male,Orthopedics,15,6,Morning,0,3,0,0,2.5,0
+P101142,26,Female,Neurology,5,6,Evening,0,2,0,0,2.4,0
 P101143,28,Female,General Medicine,3,2,Evening,1,3,1,0.333,15.4,0
 P101144,85,Female,Orthopedics,6,1,Evening,1,3,2,0.667,3.2,1
-P101145,49,Male,Dermatology,10,6,Afternoon,1,4,0,0.0,19.8,0
-P101146,71,Male,Neurology,4,3,Evening,1,1,0,0.0,0.1,0
-P101147,81,Female,Orthopedics,22,2,Evening,1,3,0,0.0,2.2,0
+P101145,49,Male,Dermatology,10,6,Afternoon,1,4,0,0,19.8,0
+P101146,71,Male,Neurology,4,3,Evening,1,1,0,0,0.1,0
+P101147,81,Female,Orthopedics,22,2,Evening,1,3,0,0,2.2,0
 P101148,84,Female,Dermatology,2,2,Afternoon,0,5,1,0.2,6.6,1
-P101149,49,Female,Neurology,5,6,Morning,1,0,0,0.0,13.3,0
-P101150,20,Male,Dermatology,11,3,Evening,1,1,1,1.0,1.8,1
-P101151,86,Female,Dermatology,9,4,Evening,0,1,0,0.0,16.0,0
-P101152,63,Male,Cardiology,15,2,Afternoon,0,2,0,0.0,5.4,0
+P101149,49,Female,Neurology,5,6,Morning,1,0,0,0,13.3,0
+P101150,20,Male,Dermatology,11,3,Evening,1,1,1,1,1.8,1
+P101151,86,Female,Dermatology,9,4,Evening,0,1,0,0,16,0
+P101152,63,Male,Cardiology,15,2,Afternoon,0,2,0,0,5.4,0
 P101153,61,Female,General Medicine,45,6,Morning,1,4,2,0.5,9.7,0
-P101154,49,Male,Neurology,4,5,Afternoon,1,1,0,0.0,3.0,0
-P101155,71,Female,Orthopedics,0,0,Morning,1,0,0,0.0,1.4,0
+P101154,49,Male,Neurology,4,5,Afternoon,1,1,0,0,3,0
+P101155,71,Female,Orthopedics,0,0,Morning,1,0,0,0,1.4,0
 P101156,1,Male,General Medicine,0,1,Evening,1,2,1,0.5,14.5,0
 P101157,13,Female,Orthopedics,10,2,Evening,1,8,1,0.125,16.2,0
 P101158,87,Male,Neurology,16,5,Morning,0,3,1,0.333,4.1,0
-P101159,51,Male,Cardiology,1,5,Afternoon,1,4,2,0.5,0.0,0
-P101160,56,Male,General Medicine,1,2,Morning,1,4,0,0.0,0.7,0
+P101159,51,Male,Cardiology,1,5,Afternoon,1,4,2,0.5,0,0
+P101160,56,Male,General Medicine,1,2,Morning,1,4,0,0,0.7,0
 P101161,83,Male,Cardiology,0,4,Afternoon,1,2,1,0.5,5.1,0
-P101162,62,Male,Neurology,13,0,Morning,1,2,2,1.0,0.1,0
-P101163,32,Female,Orthopedics,2,1,Afternoon,1,2,2,1.0,3.0,0
-P101164,30,Male,Cardiology,4,2,Morning,1,3,0,0.0,2.2,0
+P101162,62,Male,Neurology,13,0,Morning,1,2,2,1,0.1,0
+P101163,32,Female,Orthopedics,2,1,Afternoon,1,2,2,1,3,0
+P101164,30,Male,Cardiology,4,2,Morning,1,3,0,0,2.2,0
 P101165,29,Female,Neurology,5,1,Morning,1,5,1,0.2,7.5,1
-P101166,49,Female,General Medicine,14,3,Afternoon,1,1,0,0.0,0.3,0
-P101167,45,Female,General Medicine,8,5,Morning,1,3,0,0.0,4.0,0
-P101168,30,Male,Dermatology,7,5,Afternoon,0,0,0,0.0,5.2,0
-P101169,16,Male,Dermatology,1,2,Morning,1,4,0,0.0,5.8,1
-P101170,40,Female,Cardiology,5,2,Afternoon,1,5,0,0.0,3.1,0
+P101166,49,Female,General Medicine,14,3,Afternoon,1,1,0,0,0.3,0
+P101167,45,Female,General Medicine,8,5,Morning,1,3,0,0,4,0
+P101168,30,Male,Dermatology,7,5,Afternoon,0,0,0,0,5.2,0
+P101169,16,Male,Dermatology,1,2,Morning,1,4,0,0,5.8,1
+P101170,40,Female,Cardiology,5,2,Afternoon,1,5,0,0,3.1,0
 P101171,19,Female,Cardiology,10,3,Evening,1,4,1,0.25,2.2,0
 P101172,18,Male,Cardiology,28,4,Evening,0,4,1,0.25,6.9,0
 P101173,1,Male,General Medicine,1,2,Evening,1,2,1,0.5,11.3,0
 P101174,78,Male,Cardiology,0,5,Evening,1,2,1,0.5,7.1,0
-P101175,47,Female,Orthopedics,0,1,Morning,1,3,0,0.0,16.1,0
-P101176,66,Male,General Medicine,3,0,Morning,1,4,0,0.0,7.6,0
+P101175,47,Female,Orthopedics,0,1,Morning,1,3,0,0,16.1,0
+P101176,66,Male,General Medicine,3,0,Morning,1,4,0,0,7.6,0
 P101177,38,Male,Neurology,13,6,Afternoon,1,4,1,0.25,8.7,1
-P101178,51,Female,General Medicine,0,1,Evening,1,1,0,0.0,1.1,1
-P101179,63,Male,General Medicine,4,4,Evening,1,2,0,0.0,3.3,0
-P101180,4,Male,Orthopedics,3,0,Morning,1,3,1,0.333,4.0,0
-P101181,1,Female,Cardiology,0,1,Morning,0,2,0,0.0,1.8,1
+P101178,51,Female,General Medicine,0,1,Evening,1,1,0,0,1.1,1
+P101179,63,Male,General Medicine,4,4,Evening,1,2,0,0,3.3,0
+P101180,4,Male,Orthopedics,3,0,Morning,1,3,1,0.333,4,0
+P101181,1,Female,Cardiology,0,1,Morning,0,2,0,0,1.8,1
 P101182,8,Female,Dermatology,4,1,Morning,0,2,1,0.5,4.5,1
 P101183,29,Male,Neurology,2,3,Afternoon,1,3,1,0.333,2.1,0
-P101184,55,Male,Cardiology,3,6,Afternoon,1,5,1,0.2,7.0,0
+P101184,55,Male,Cardiology,3,6,Afternoon,1,5,1,0.2,7,0
 P101185,3,Male,Cardiology,9,4,Morning,1,5,1,0.2,3.8,0
-P101186,32,Male,Dermatology,5,5,Afternoon,0,0,0,0.0,3.7,1
-P101187,10,Female,Cardiology,1,3,Afternoon,1,2,0,0.0,24.7,0
-P101188,74,Male,General Medicine,26,0,Afternoon,1,4,1,0.25,3.0,0
+P101186,32,Male,Dermatology,5,5,Afternoon,0,0,0,0,3.7,1
+P101187,10,Female,Cardiology,1,3,Afternoon,1,2,0,0,24.7,0
+P101188,74,Male,General Medicine,26,0,Afternoon,1,4,1,0.25,3,0
 P101189,83,Male,Dermatology,8,6,Morning,0,3,1,0.333,2.7,0
-P101190,34,Male,Orthopedics,11,5,Evening,1,4,0,0.0,2.3,1
-P101191,87,Female,Neurology,0,3,Afternoon,1,3,0,0.0,13.5,0
+P101190,34,Male,Orthopedics,11,5,Evening,1,4,0,0,2.3,1
+P101191,87,Female,Neurology,0,3,Afternoon,1,3,0,0,13.5,0
 P101192,55,Female,Neurology,0,6,Evening,1,4,1,0.25,4.1,0
-P101193,32,Female,General Medicine,0,4,Evening,1,7,0,0.0,5.5,0
+P101193,32,Female,General Medicine,0,4,Evening,1,7,0,0,5.5,0
 P101194,50,Male,Orthopedics,1,2,Morning,1,6,3,0.5,1.2,1
-P101195,7,Female,Dermatology,4,2,Morning,0,1,0,0.0,4.7,0
-P101196,8,Female,Orthopedics,21,0,Afternoon,1,3,0,0.0,1.9,0
-P101197,65,Male,Neurology,4,2,Morning,0,4,0,0.0,7.9,0
+P101195,7,Female,Dermatology,4,2,Morning,0,1,0,0,4.7,0
+P101196,8,Female,Orthopedics,21,0,Afternoon,1,3,0,0,1.9,0
+P101197,65,Male,Neurology,4,2,Morning,0,4,0,0,7.9,0
 P101198,57,Male,Neurology,2,3,Evening,1,4,1,0.25,10.7,0
 P101199,67,Male,General Medicine,6,0,Afternoon,0,4,1,0.25,7.5,0
-P101200,88,Male,Dermatology,0,5,Evening,1,3,0,0.0,7.9,0
+P101200,88,Male,Dermatology,0,5,Evening,1,3,0,0,7.9,0
 P101201,87,Male,General Medicine,7,4,Morning,1,5,1,0.2,4.3,0
 P101202,59,Male,Neurology,6,0,Morning,0,3,1,0.333,7.5,1
-P101203,72,Male,Cardiology,12,5,Afternoon,1,3,0,0.0,3.3,0
+P101203,72,Male,Cardiology,12,5,Afternoon,1,3,0,0,3.3,0
 P101204,54,Female,Neurology,34,0,Morning,0,6,1,0.167,6.3,0
-P101205,67,Male,Dermatology,2,1,Afternoon,1,3,0,0.0,1.8,0
-P101206,51,Female,Cardiology,5,1,Evening,1,3,0,0.0,0.4,0
-P101207,8,Female,Cardiology,19,0,Afternoon,0,5,0,0.0,3.2,1
+P101205,67,Male,Dermatology,2,1,Afternoon,1,3,0,0,1.8,0
+P101206,51,Female,Cardiology,5,1,Evening,1,3,0,0,0.4,0
+P101207,8,Female,Cardiology,19,0,Afternoon,0,5,0,0,3.2,1
 P101208,34,Female,Cardiology,12,6,Afternoon,0,5,2,0.4,3.7,1
 P101209,35,Female,General Medicine,5,2,Morning,1,3,2,0.667,1.8,0
-P101210,88,Male,Cardiology,23,1,Morning,0,3,0,0.0,7.8,0
-P101211,78,Female,Orthopedics,0,6,Evening,1,1,0,0.0,0.5,0
-P101212,32,Male,General Medicine,21,6,Evening,1,0,0,0.0,1.5,0
-P101213,46,Male,Cardiology,0,4,Afternoon,1,3,0,0.0,8.3,0
+P101210,88,Male,Cardiology,23,1,Morning,0,3,0,0,7.8,0
+P101211,78,Female,Orthopedics,0,6,Evening,1,1,0,0,0.5,0
+P101212,32,Male,General Medicine,21,6,Evening,1,0,0,0,1.5,0
+P101213,46,Male,Cardiology,0,4,Afternoon,1,3,0,0,8.3,0
 P101214,16,Female,Neurology,6,5,Evening,1,2,1,0.5,3.4,1
-P101215,68,Male,Orthopedics,17,3,Afternoon,1,1,0,0.0,7.3,0
-P101216,37,Male,Neurology,2,1,Morning,1,4,1,0.25,5.0,0
-P101217,54,Female,Cardiology,5,0,Morning,0,2,0,0.0,18.1,0
+P101215,68,Male,Orthopedics,17,3,Afternoon,1,1,0,0,7.3,0
+P101216,37,Male,Neurology,2,1,Morning,1,4,1,0.25,5,0
+P101217,54,Female,Cardiology,5,0,Morning,0,2,0,0,18.1,0
 P101218,85,Female,Orthopedics,3,2,Evening,0,3,1,0.333,5.5,0
-P101219,14,Female,Neurology,24,3,Morning,0,0,0,0.0,0.1,0
-P101220,55,Male,Cardiology,13,5,Afternoon,0,4,0,0.0,2.6,1
-P101221,48,Female,Cardiology,9,6,Afternoon,0,3,0,0.0,0.9,0
-P101222,82,Male,General Medicine,7,5,Afternoon,1,4,0,0.0,15.5,0
-P101223,7,Female,Cardiology,13,1,Afternoon,1,2,0,0.0,0.7,1
+P101219,14,Female,Neurology,24,3,Morning,0,0,0,0,0.1,0
+P101220,55,Male,Cardiology,13,5,Afternoon,0,4,0,0,2.6,1
+P101221,48,Female,Cardiology,9,6,Afternoon,0,3,0,0,0.9,0
+P101222,82,Male,General Medicine,7,5,Afternoon,1,4,0,0,15.5,0
+P101223,7,Female,Cardiology,13,1,Afternoon,1,2,0,0,0.7,1
 P101224,74,Female,Neurology,3,5,Morning,1,2,1,0.5,2.9,0
-P101225,7,Female,Dermatology,4,5,Morning,0,4,0,0.0,1.5,0
-P101226,33,Female,Orthopedics,10,2,Afternoon,1,2,0,0.0,11.3,1
+P101225,7,Female,Dermatology,4,5,Morning,0,4,0,0,1.5,0
+P101226,33,Female,Orthopedics,10,2,Afternoon,1,2,0,0,11.3,1
 P101227,23,Male,General Medicine,3,6,Afternoon,1,2,1,0.5,2.2,0
-P101228,85,Female,Cardiology,0,2,Afternoon,1,4,0,0.0,28.9,0
-P101229,19,Female,Cardiology,0,2,Afternoon,1,1,0,0.0,0.2,0
+P101228,85,Female,Cardiology,0,2,Afternoon,1,4,0,0,28.9,0
+P101229,19,Female,Cardiology,0,2,Afternoon,1,1,0,0,0.2,0
 P101230,19,Male,General Medicine,0,0,Morning,1,3,1,0.333,0.8,0
-P101231,36,Female,Neurology,16,5,Evening,1,0,0,0.0,1.5,0
-P101232,29,Male,Neurology,5,5,Afternoon,1,3,1,0.333,10.0,0
-P101233,60,Female,Dermatology,9,5,Morning,0,1,0,0.0,12.6,0
+P101231,36,Female,Neurology,16,5,Evening,1,0,0,0,1.5,0
+P101232,29,Male,Neurology,5,5,Afternoon,1,3,1,0.333,10,0
+P101233,60,Female,Dermatology,9,5,Morning,0,1,0,0,12.6,0
 P101234,82,Female,Cardiology,3,4,Afternoon,1,2,1,0.5,0.4,0
 P101235,2,Female,Cardiology,2,2,Evening,1,3,1,0.333,0.2,0
-P101236,1,Male,General Medicine,3,3,Evening,0,2,0,0.0,8.2,1
-P101237,47,Female,Cardiology,12,1,Morning,1,1,0,0.0,0.9,0
-P101238,69,Female,General Medicine,7,6,Afternoon,1,2,0,0.0,0.9,0
-P101239,20,Female,General Medicine,22,3,Morning,1,1,1,1.0,0.1,0
+P101236,1,Male,General Medicine,3,3,Evening,0,2,0,0,8.2,1
+P101237,47,Female,Cardiology,12,1,Morning,1,1,0,0,0.9,0
+P101238,69,Female,General Medicine,7,6,Afternoon,1,2,0,0,0.9,0
+P101239,20,Female,General Medicine,22,3,Morning,1,1,1,1,0.1,0
 P101240,11,Male,Orthopedics,9,6,Morning,0,6,3,0.5,0.3,0
-P101241,2,Male,Dermatology,6,0,Afternoon,1,1,0,0.0,1.8,0
-P101242,67,Female,Dermatology,7,0,Afternoon,1,1,0,0.0,0.4,0
-P101243,87,Male,General Medicine,22,6,Afternoon,1,0,0,0.0,2.8,0
-P101244,12,Female,General Medicine,12,5,Morning,0,2,0,0.0,10.7,1
-P101245,20,Female,Dermatology,0,3,Morning,1,1,0,0.0,2.4,0
-P101246,5,Female,Orthopedics,6,5,Afternoon,1,3,0,0.0,7.8,0
-P101247,37,Female,Orthopedics,9,4,Morning,1,1,0,0.0,0.6,0
+P101241,2,Male,Dermatology,6,0,Afternoon,1,1,0,0,1.8,0
+P101242,67,Female,Dermatology,7,0,Afternoon,1,1,0,0,0.4,0
+P101243,87,Male,General Medicine,22,6,Afternoon,1,0,0,0,2.8,0
+P101244,12,Female,General Medicine,12,5,Morning,0,2,0,0,10.7,1
+P101245,20,Female,Dermatology,0,3,Morning,1,1,0,0,2.4,0
+P101246,5,Female,Orthopedics,6,5,Afternoon,1,3,0,0,7.8,0
+P101247,37,Female,Orthopedics,9,4,Morning,1,1,0,0,0.6,0
 P101248,38,Female,Dermatology,11,0,Morning,0,5,1,0.2,6.5,1
-P101249,9,Male,Dermatology,1,0,Morning,1,3,0,0.0,2.3,0
+P101249,9,Male,Dermatology,1,0,Morning,1,3,0,0,2.3,0
 P101250,53,Male,General Medicine,16,3,Afternoon,1,3,1,0.333,8.3,1
-P101251,44,Male,Neurology,24,0,Morning,0,0,0,0.0,0.9,1
+P101251,44,Male,Neurology,24,0,Morning,0,0,0,0,0.9,1
 P101252,86,Male,Cardiology,2,4,Afternoon,1,3,1,0.333,13.7,0
-P101253,24,Female,Neurology,17,4,Morning,1,1,0,0.0,1.7,0
-P101254,81,Female,General Medicine,0,4,Morning,1,5,0,0.0,2.6,0
-P101255,74,Female,Dermatology,0,1,Afternoon,1,2,1,0.5,18.0,0
+P101253,24,Female,Neurology,17,4,Morning,1,1,0,0,1.7,0
+P101254,81,Female,General Medicine,0,4,Morning,1,5,0,0,2.6,0
+P101255,74,Female,Dermatology,0,1,Afternoon,1,2,1,0.5,18,0
 P101256,30,Female,Neurology,1,4,Morning,0,2,1,0.5,5.2,0
-P101257,59,Female,Orthopedics,0,4,Afternoon,1,3,0,0.0,2.7,0
+P101257,59,Female,Orthopedics,0,4,Afternoon,1,3,0,0,2.7,0
 P101258,87,Female,Cardiology,14,1,Morning,1,7,1,0.143,17.9,0
-P101259,81,Female,Dermatology,0,5,Afternoon,1,2,2,1.0,2.4,1
-P101260,81,Female,General Medicine,2,2,Morning,1,2,0,0.0,0.6,1
-P101261,14,Male,Orthopedics,0,0,Morning,0,4,0,0.0,34.6,0
-P101262,9,Male,Orthopedics,2,4,Afternoon,1,4,0,0.0,1.9,1
-P101263,40,Male,General Medicine,0,0,Evening,1,2,0,0.0,11.4,0
-P101264,66,Female,Neurology,8,3,Morning,1,1,0,0.0,1.1,0
-P101265,25,Female,General Medicine,1,0,Afternoon,1,3,0,0.0,7.9,0
-P101266,73,Male,General Medicine,15,6,Afternoon,1,3,0,0.0,4.5,0
-P101267,22,Male,Dermatology,13,5,Afternoon,0,6,0,0.0,23.8,1
-P101268,4,Female,Cardiology,0,1,Evening,0,0,0,0.0,4.8,0
+P101259,81,Female,Dermatology,0,5,Afternoon,1,2,2,1,2.4,1
+P101260,81,Female,General Medicine,2,2,Morning,1,2,0,0,0.6,1
+P101261,14,Male,Orthopedics,0,0,Morning,0,4,0,0,34.6,0
+P101262,9,Male,Orthopedics,2,4,Afternoon,1,4,0,0,1.9,1
+P101263,40,Male,General Medicine,0,0,Evening,1,2,0,0,11.4,0
+P101264,66,Female,Neurology,8,3,Morning,1,1,0,0,1.1,0
+P101265,25,Female,General Medicine,1,0,Afternoon,1,3,0,0,7.9,0
+P101266,73,Male,General Medicine,15,6,Afternoon,1,3,0,0,4.5,0
+P101267,22,Male,Dermatology,13,5,Afternoon,0,6,0,0,23.8,1
+P101268,4,Female,Cardiology,0,1,Evening,0,0,0,0,4.8,0
 P101269,26,Male,Dermatology,18,0,Morning,0,2,1,0.5,0.2,0
-P101270,58,Male,General Medicine,0,0,Evening,1,1,1,1.0,5.6,0
-P101271,29,Female,Cardiology,2,0,Morning,0,2,0,0.0,0.9,0
+P101270,58,Male,General Medicine,0,0,Evening,1,1,1,1,5.6,0
+P101271,29,Female,Cardiology,2,0,Morning,0,2,0,0,0.9,0
 P101272,87,Male,Orthopedics,0,2,Morning,0,5,1,0.2,9.6,0
-P101273,37,Male,Cardiology,3,2,Evening,1,1,0,0.0,11.7,0
-P101274,75,Female,Dermatology,5,3,Afternoon,0,4,0,0.0,3.9,0
+P101273,37,Male,Cardiology,3,2,Evening,1,1,0,0,11.7,0
+P101274,75,Female,Dermatology,5,3,Afternoon,0,4,0,0,3.9,0
 P101275,70,Female,General Medicine,12,1,Afternoon,1,6,3,0.5,9.2,0
-P101276,18,Female,Neurology,3,0,Afternoon,1,2,0,0.0,0.9,0
-P101277,85,Male,Cardiology,9,0,Afternoon,0,2,0,0.0,4.1,0
-P101278,42,Male,Dermatology,1,0,Morning,1,4,0,0.0,3.0,0
-P101279,41,Male,Orthopedics,11,0,Afternoon,0,1,0,0.0,5.7,1
-P101280,38,Female,Dermatology,2,2,Morning,1,3,0,0.0,0.3,0
-P101281,34,Female,Dermatology,1,5,Evening,1,2,0,0.0,8.4,0
+P101276,18,Female,Neurology,3,0,Afternoon,1,2,0,0,0.9,0
+P101277,85,Male,Cardiology,9,0,Afternoon,0,2,0,0,4.1,0
+P101278,42,Male,Dermatology,1,0,Morning,1,4,0,0,3,0
+P101279,41,Male,Orthopedics,11,0,Afternoon,0,1,0,0,5.7,1
+P101280,38,Female,Dermatology,2,2,Morning,1,3,0,0,0.3,0
+P101281,34,Female,Dermatology,1,5,Evening,1,2,0,0,8.4,0
 P101282,17,Male,Neurology,1,5,Evening,0,7,2,0.286,0.5,1
-P101283,37,Female,Cardiology,1,3,Morning,0,1,0,0.0,6.4,0
-P101284,25,Male,General Medicine,5,6,Afternoon,1,3,0,0.0,0.1,0
-P101285,76,Male,Dermatology,14,4,Morning,0,3,0,0.0,10.7,1
-P101286,87,Male,Dermatology,0,1,Morning,0,5,0,0.0,1.2,0
+P101283,37,Female,Cardiology,1,3,Morning,0,1,0,0,6.4,0
+P101284,25,Male,General Medicine,5,6,Afternoon,1,3,0,0,0.1,0
+P101285,76,Male,Dermatology,14,4,Morning,0,3,0,0,10.7,1
+P101286,87,Male,Dermatology,0,1,Morning,0,5,0,0,1.2,0
 P101287,86,Male,Dermatology,9,5,Evening,1,5,1,0.2,4.3,1
 P101288,85,Female,Cardiology,8,6,Morning,1,3,1,0.333,1.8,1
 P101289,27,Female,Dermatology,16,0,Afternoon,1,4,1,0.25,7.7,1
-P101290,57,Male,Cardiology,2,5,Evening,1,2,0,0.0,2.3,0
-P101291,31,Female,Neurology,4,3,Evening,1,4,0,0.0,7.7,0
-P101292,6,Male,Dermatology,20,4,Afternoon,0,2,0,0.0,2.0,0
-P101293,40,Female,General Medicine,8,5,Afternoon,1,4,0,0.0,8.4,0
-P101294,12,Female,Orthopedics,3,3,Afternoon,1,0,0,0.0,0.2,0
-P101295,53,Male,General Medicine,1,2,Evening,1,3,0,0.0,2.0,0
-P101296,71,Female,Cardiology,2,4,Afternoon,1,3,0,0.0,4.1,0
-P101297,10,Male,Orthopedics,6,3,Afternoon,0,3,0,0.0,0.3,0
-P101298,45,Male,Dermatology,10,6,Morning,0,1,0,0.0,1.2,1
-P101299,17,Male,Cardiology,1,5,Morning,1,4,0,0.0,16.4,0
-P101300,26,Female,Neurology,7,2,Afternoon,1,0,0,0.0,22.6,0
-P101301,85,Female,General Medicine,6,6,Evening,1,4,0,0.0,8.1,0
-P101302,62,Male,General Medicine,5,3,Evening,0,2,0,0.0,1.7,1
-P101303,46,Female,Dermatology,9,3,Evening,1,6,0,0.0,1.8,0
-P101304,64,Female,General Medicine,14,6,Afternoon,1,2,0,0.0,6.2,0
-P101305,2,Female,Dermatology,3,5,Afternoon,1,4,0,0.0,0.8,0
-P101306,54,Female,Orthopedics,17,4,Evening,1,3,0,0.0,17.8,0
-P101307,65,Female,Cardiology,1,2,Afternoon,1,6,0,0.0,1.5,0
-P101308,51,Male,Orthopedics,1,0,Morning,0,3,0,0.0,47.5,0
+P101290,57,Male,Cardiology,2,5,Evening,1,2,0,0,2.3,0
+P101291,31,Female,Neurology,4,3,Evening,1,4,0,0,7.7,0
+P101292,6,Male,Dermatology,20,4,Afternoon,0,2,0,0,2,0
+P101293,40,Female,General Medicine,8,5,Afternoon,1,4,0,0,8.4,0
+P101294,12,Female,Orthopedics,3,3,Afternoon,1,0,0,0,0.2,0
+P101295,53,Male,General Medicine,1,2,Evening,1,3,0,0,2,0
+P101296,71,Female,Cardiology,2,4,Afternoon,1,3,0,0,4.1,0
+P101297,10,Male,Orthopedics,6,3,Afternoon,0,3,0,0,0.3,0
+P101298,45,Male,Dermatology,10,6,Morning,0,1,0,0,1.2,1
+P101299,17,Male,Cardiology,1,5,Morning,1,4,0,0,16.4,0
+P101300,26,Female,Neurology,7,2,Afternoon,1,0,0,0,22.6,0
+P101301,85,Female,General Medicine,6,6,Evening,1,4,0,0,8.1,0
+P101302,62,Male,General Medicine,5,3,Evening,0,2,0,0,1.7,1
+P101303,46,Female,Dermatology,9,3,Evening,1,6,0,0,1.8,0
+P101304,64,Female,General Medicine,14,6,Afternoon,1,2,0,0,6.2,0
+P101305,2,Female,Dermatology,3,5,Afternoon,1,4,0,0,0.8,0
+P101306,54,Female,Orthopedics,17,4,Evening,1,3,0,0,17.8,0
+P101307,65,Female,Cardiology,1,2,Afternoon,1,6,0,0,1.5,0
+P101308,51,Male,Orthopedics,1,0,Morning,0,3,0,0,47.5,0
 P101309,53,Male,General Medicine,2,1,Afternoon,1,2,1,0.5,4.1,0
-P101310,36,Female,Neurology,1,4,Evening,1,2,2,1.0,8.9,0
-P101311,26,Male,Neurology,2,2,Morning,0,3,0,0.0,0.0,1
-P101312,29,Female,Neurology,0,6,Evening,0,2,0,0.0,13.2,0
-P101313,21,Female,Dermatology,13,3,Morning,1,2,0,0.0,1.9,0
-P101314,11,Male,Dermatology,1,6,Afternoon,1,4,0,0.0,6.6,0
-P101315,40,Male,Cardiology,11,2,Afternoon,1,3,0,0.0,9.9,0
+P101310,36,Female,Neurology,1,4,Evening,1,2,2,1,8.9,0
+P101311,26,Male,Neurology,2,2,Morning,0,3,0,0,0,1
+P101312,29,Female,Neurology,0,6,Evening,0,2,0,0,13.2,0
+P101313,21,Female,Dermatology,13,3,Morning,1,2,0,0,1.9,0
+P101314,11,Male,Dermatology,1,6,Afternoon,1,4,0,0,6.6,0
+P101315,40,Male,Cardiology,11,2,Afternoon,1,3,0,0,9.9,0
 P101316,11,Male,Orthopedics,0,6,Afternoon,0,7,2,0.286,1.1,1
-P101317,36,Female,Neurology,23,6,Afternoon,1,6,0,0.0,3.5,0
+P101317,36,Female,Neurology,23,6,Afternoon,1,6,0,0,3.5,0
 P101318,59,Male,General Medicine,9,1,Evening,1,4,3,0.75,4.1,0
-P101319,39,Male,Cardiology,0,5,Afternoon,1,4,0,0.0,2.2,0
-P101320,54,Male,Dermatology,11,1,Morning,1,3,0,0.0,3.9,0
+P101319,39,Male,Cardiology,0,5,Afternoon,1,4,0,0,2.2,0
+P101320,54,Male,Dermatology,11,1,Morning,1,3,0,0,3.9,0
 P101321,55,Male,General Medicine,5,0,Afternoon,1,3,1,0.333,2.3,0
 P101322,24,Female,General Medicine,12,0,Morning,1,5,2,0.4,2.7,1
-P101323,22,Male,Neurology,5,1,Morning,1,1,0,0.0,6.6,0
-P101324,69,Female,Orthopedics,8,4,Morning,1,5,1,0.2,6.0,0
-P101325,56,Male,Cardiology,12,4,Evening,1,2,0,0.0,1.6,0
-P101326,33,Male,General Medicine,4,6,Afternoon,1,8,0,0.0,13.7,0
-P101327,36,Male,General Medicine,0,6,Afternoon,1,5,0,0.0,11.9,0
-P101328,20,Male,Dermatology,15,3,Morning,1,3,0,0.0,4.3,0
+P101323,22,Male,Neurology,5,1,Morning,1,1,0,0,6.6,0
+P101324,69,Female,Orthopedics,8,4,Morning,1,5,1,0.2,6,0
+P101325,56,Male,Cardiology,12,4,Evening,1,2,0,0,1.6,0
+P101326,33,Male,General Medicine,4,6,Afternoon,1,8,0,0,13.7,0
+P101327,36,Male,General Medicine,0,6,Afternoon,1,5,0,0,11.9,0
+P101328,20,Male,Dermatology,15,3,Morning,1,3,0,0,4.3,0
 P101329,83,Female,Cardiology,3,0,Morning,1,3,2,0.667,3.4,0
 P101330,81,Female,Cardiology,5,3,Evening,1,2,1,0.5,2.8,0
 P101331,62,Male,Orthopedics,0,0,Afternoon,1,2,1,0.5,7.4,0
-P101332,73,Female,General Medicine,5,1,Evening,1,2,0,0.0,6.7,0
+P101332,73,Female,General Medicine,5,1,Evening,1,2,0,0,6.7,0
 P101333,26,Male,General Medicine,34,4,Morning,1,6,1,0.167,1.3,0
-P101334,66,Male,Orthopedics,2,6,Morning,1,0,0,0.0,6.7,0
-P101335,73,Female,Neurology,4,4,Evening,0,1,1,1.0,1.7,0
-P101336,73,Female,Cardiology,9,1,Afternoon,1,3,0,0.0,0.1,0
+P101334,66,Male,Orthopedics,2,6,Morning,1,0,0,0,6.7,0
+P101335,73,Female,Neurology,4,4,Evening,0,1,1,1,1.7,0
+P101336,73,Female,Cardiology,9,1,Afternoon,1,3,0,0,0.1,0
 P101337,40,Female,General Medicine,13,3,Morning,0,6,1,0.167,7.2,0
 P101338,17,Male,General Medicine,4,3,Morning,0,3,1,0.333,6.2,0
 P101339,1,Female,Neurology,2,2,Evening,1,4,1,0.25,3.2,0
-P101340,89,Male,Neurology,22,6,Afternoon,0,1,1,1.0,4.5,1
-P101341,61,Male,Neurology,9,6,Afternoon,1,4,0,0.0,17.6,1
-P101342,43,Female,Dermatology,1,6,Morning,0,2,0,0.0,5.4,0
+P101340,89,Male,Neurology,22,6,Afternoon,0,1,1,1,4.5,1
+P101341,61,Male,Neurology,9,6,Afternoon,1,4,0,0,17.6,1
+P101342,43,Female,Dermatology,1,6,Morning,0,2,0,0,5.4,0
 P101343,42,Male,Neurology,0,0,Morning,0,5,1,0.2,6.4,0
-P101344,25,Female,Cardiology,5,3,Evening,1,3,0,0.0,0.4,0
-P101345,39,Female,Cardiology,1,1,Morning,1,2,0,0.0,1.1,0
-P101346,35,Male,Dermatology,2,3,Afternoon,1,5,0,0.0,2.1,0
-P101347,3,Female,Cardiology,16,4,Evening,1,1,1,1.0,4.7,0
-P101348,44,Female,Dermatology,0,0,Morning,0,3,1,0.333,9.0,0
-P101349,51,Male,Neurology,10,6,Afternoon,1,1,0,0.0,2.3,1
-P101350,12,Female,Orthopedics,2,5,Afternoon,1,4,0,0.0,2.6,0
-P101351,19,Female,Dermatology,11,2,Afternoon,1,2,0,0.0,1.8,0
+P101344,25,Female,Cardiology,5,3,Evening,1,3,0,0,0.4,0
+P101345,39,Female,Cardiology,1,1,Morning,1,2,0,0,1.1,0
+P101346,35,Male,Dermatology,2,3,Afternoon,1,5,0,0,2.1,0
+P101347,3,Female,Cardiology,16,4,Evening,1,1,1,1,4.7,0
+P101348,44,Female,Dermatology,0,0,Morning,0,3,1,0.333,9,0
+P101349,51,Male,Neurology,10,6,Afternoon,1,1,0,0,2.3,1
+P101350,12,Female,Orthopedics,2,5,Afternoon,1,4,0,0,2.6,0
+P101351,19,Female,Dermatology,11,2,Afternoon,1,2,0,0,1.8,0
 P101352,44,Male,Dermatology,10,0,Afternoon,1,3,1,0.333,1.8,0
-P101353,59,Female,Dermatology,0,4,Morning,1,3,0,0.0,17.8,0
-P101354,49,Female,Dermatology,5,6,Afternoon,1,2,0,0.0,6.1,0
-P101355,61,Male,Cardiology,1,4,Afternoon,1,4,1,0.25,1.0,0
-P101356,17,Female,Orthopedics,16,4,Afternoon,1,1,0,0.0,7.7,0
-P101357,74,Male,Cardiology,16,6,Morning,1,3,0,0.0,7.7,0
+P101353,59,Female,Dermatology,0,4,Morning,1,3,0,0,17.8,0
+P101354,49,Female,Dermatology,5,6,Afternoon,1,2,0,0,6.1,0
+P101355,61,Male,Cardiology,1,4,Afternoon,1,4,1,0.25,1,0
+P101356,17,Female,Orthopedics,16,4,Afternoon,1,1,0,0,7.7,0
+P101357,74,Male,Cardiology,16,6,Morning,1,3,0,0,7.7,0
 P101358,57,Female,General Medicine,4,4,Afternoon,0,3,1,0.333,6.6,0
 P101359,55,Female,Cardiology,4,1,Evening,1,2,1,0.5,0.9,0
-P101360,47,Male,Orthopedics,2,2,Afternoon,1,5,0,0.0,3.1,0
-P101361,12,Male,Neurology,10,5,Afternoon,1,4,0,0.0,0.7,0
-P101362,62,Female,Orthopedics,3,4,Afternoon,1,2,0,0.0,10.2,0
-P101363,80,Male,Neurology,2,4,Evening,0,6,0,0.0,6.4,0
-P101364,88,Female,Dermatology,4,3,Evening,1,5,0,0.0,4.2,0
-P101365,83,Male,Dermatology,0,2,Morning,1,1,0,0.0,2.5,0
+P101360,47,Male,Orthopedics,2,2,Afternoon,1,5,0,0,3.1,0
+P101361,12,Male,Neurology,10,5,Afternoon,1,4,0,0,0.7,0
+P101362,62,Female,Orthopedics,3,4,Afternoon,1,2,0,0,10.2,0
+P101363,80,Male,Neurology,2,4,Evening,0,6,0,0,6.4,0
+P101364,88,Female,Dermatology,4,3,Evening,1,5,0,0,4.2,0
+P101365,83,Male,Dermatology,0,2,Morning,1,1,0,0,2.5,0
 P101366,8,Female,Neurology,10,0,Afternoon,0,2,1,0.5,1.2,0
-P101367,21,Female,Dermatology,0,2,Morning,1,1,0,0.0,0.7,0
-P101368,81,Female,General Medicine,8,2,Afternoon,1,2,0,0.0,20.9,0
-P101369,87,Male,Cardiology,1,6,Morning,1,4,0,0.0,1.3,0
-P101370,80,Female,Cardiology,2,6,Evening,1,3,0,0.0,0.4,1
-P101371,70,Female,General Medicine,8,6,Morning,1,3,0,0.0,19.6,0
-P101372,72,Male,General Medicine,39,5,Afternoon,0,6,0,0.0,4.8,1
-P101373,25,Male,Neurology,12,2,Afternoon,1,1,0,0.0,9.6,0
+P101367,21,Female,Dermatology,0,2,Morning,1,1,0,0,0.7,0
+P101368,81,Female,General Medicine,8,2,Afternoon,1,2,0,0,20.9,0
+P101369,87,Male,Cardiology,1,6,Morning,1,4,0,0,1.3,0
+P101370,80,Female,Cardiology,2,6,Evening,1,3,0,0,0.4,1
+P101371,70,Female,General Medicine,8,6,Morning,1,3,0,0,19.6,0
+P101372,72,Male,General Medicine,39,5,Afternoon,0,6,0,0,4.8,1
+P101373,25,Male,Neurology,12,2,Afternoon,1,1,0,0,9.6,0
 P101374,82,Male,Cardiology,2,5,Morning,1,2,1,0.5,0.3,0
-P101375,89,Female,General Medicine,1,4,Evening,0,7,0,0.0,5.0,0
-P101376,12,Female,Cardiology,16,6,Evening,1,0,0,0.0,3.0,0
-P101377,15,Male,Cardiology,4,4,Afternoon,1,2,0,0.0,8.9,0
-P101378,59,Female,General Medicine,1,6,Afternoon,1,2,0,0.0,0.2,0
+P101375,89,Female,General Medicine,1,4,Evening,0,7,0,0,5,0
+P101376,12,Female,Cardiology,16,6,Evening,1,0,0,0,3,0
+P101377,15,Male,Cardiology,4,4,Afternoon,1,2,0,0,8.9,0
+P101378,59,Female,General Medicine,1,6,Afternoon,1,2,0,0,0.2,0
 P101379,26,Male,Cardiology,15,1,Morning,1,6,1,0.167,3.1,1
-P101380,26,Male,Dermatology,13,5,Afternoon,1,2,0,0.0,9.6,0
+P101380,26,Male,Dermatology,13,5,Afternoon,1,2,0,0,9.6,0
 P101381,47,Female,Dermatology,33,5,Morning,1,3,1,0.333,4.4,0
 P101382,32,Female,Dermatology,19,0,Afternoon,1,4,1,0.25,4.8,0
-P101383,10,Female,Cardiology,15,3,Evening,0,3,0,0.0,0.6,0
-P101384,16,Male,Cardiology,0,2,Morning,1,3,0,0.0,0.9,0
-P101385,71,Female,Cardiology,0,0,Evening,1,2,0,0.0,6.8,0
-P101386,17,Female,Cardiology,6,5,Morning,1,0,0,0.0,6.7,0
-P101387,23,Male,General Medicine,6,0,Evening,1,2,0,0.0,23.2,0
+P101383,10,Female,Cardiology,15,3,Evening,0,3,0,0,0.6,0
+P101384,16,Male,Cardiology,0,2,Morning,1,3,0,0,0.9,0
+P101385,71,Female,Cardiology,0,0,Evening,1,2,0,0,6.8,0
+P101386,17,Female,Cardiology,6,5,Morning,1,0,0,0,6.7,0
+P101387,23,Male,General Medicine,6,0,Evening,1,2,0,0,23.2,0
 P101388,26,Female,Dermatology,4,1,Morning,1,6,2,0.333,7.5,0
-P101389,85,Female,Dermatology,4,3,Afternoon,1,4,0,0.0,4.1,0
+P101389,85,Female,Dermatology,4,3,Afternoon,1,4,0,0,4.1,0
 P101390,86,Female,Dermatology,4,5,Morning,0,4,1,0.25,11.7,0
-P101391,7,Male,General Medicine,6,5,Evening,1,3,0,0.0,0.7,0
-P101392,14,Female,Orthopedics,0,2,Afternoon,0,4,0,0.0,3.6,0
-P101393,79,Female,Neurology,2,6,Morning,1,1,0,0.0,2.0,0
-P101394,7,Male,Neurology,5,3,Afternoon,1,3,0,0.0,0.7,0
-P101395,9,Female,General Medicine,10,1,Afternoon,1,1,0,0.0,8.7,0
+P101391,7,Male,General Medicine,6,5,Evening,1,3,0,0,0.7,0
+P101392,14,Female,Orthopedics,0,2,Afternoon,0,4,0,0,3.6,0
+P101393,79,Female,Neurology,2,6,Morning,1,1,0,0,2,0
+P101394,7,Male,Neurology,5,3,Afternoon,1,3,0,0,0.7,0
+P101395,9,Female,General Medicine,10,1,Afternoon,1,1,0,0,8.7,0
 P101396,48,Female,Neurology,1,4,Afternoon,0,3,1,0.333,4.3,1
-P101397,72,Male,General Medicine,6,0,Evening,1,0,0,0.0,4.9,0
-P101398,59,Male,Cardiology,10,2,Afternoon,0,3,0,0.0,3.2,0
-P101399,87,Female,Cardiology,4,5,Morning,0,0,0,0.0,3.7,0
+P101397,72,Male,General Medicine,6,0,Evening,1,0,0,0,4.9,0
+P101398,59,Male,Cardiology,10,2,Afternoon,0,3,0,0,3.2,0
+P101399,87,Female,Cardiology,4,5,Morning,0,0,0,0,3.7,0
 P101400,82,Female,Dermatology,0,4,Morning,1,4,1,0.25,0.7,0
-P101401,39,Female,Orthopedics,4,1,Afternoon,1,1,0,0.0,6.7,0
-P101402,18,Male,General Medicine,2,3,Afternoon,0,2,0,0.0,3.4,0
+P101401,39,Female,Orthopedics,4,1,Afternoon,1,1,0,0,6.7,0
+P101402,18,Male,General Medicine,2,3,Afternoon,0,2,0,0,3.4,0
 P101403,59,Female,Neurology,21,0,Morning,0,3,1,0.333,10.2,1
-P101404,17,Male,Dermatology,1,2,Morning,1,2,0,0.0,1.3,0
-P101405,14,Male,General Medicine,8,5,Afternoon,1,7,0,0.0,1.4,0
-P101406,31,Female,Cardiology,0,5,Evening,0,5,0,0.0,6.2,0
-P101407,24,Male,Cardiology,4,4,Morning,1,1,0,0.0,11.2,0
-P101408,60,Male,Neurology,6,4,Afternoon,1,1,0,0.0,3.8,0
+P101404,17,Male,Dermatology,1,2,Morning,1,2,0,0,1.3,0
+P101405,14,Male,General Medicine,8,5,Afternoon,1,7,0,0,1.4,0
+P101406,31,Female,Cardiology,0,5,Evening,0,5,0,0,6.2,0
+P101407,24,Male,Cardiology,4,4,Morning,1,1,0,0,11.2,0
+P101408,60,Male,Neurology,6,4,Afternoon,1,1,0,0,3.8,0
 P101409,45,Male,General Medicine,2,0,Afternoon,1,3,1,0.333,7.8,0
-P101410,3,Male,Dermatology,4,3,Afternoon,1,3,0,0.0,43.8,0
-P101411,37,Male,Neurology,1,1,Morning,0,3,0,0.0,27.8,0
-P101412,43,Female,Dermatology,2,6,Afternoon,1,4,0,0.0,8.2,0
-P101413,40,Male,Orthopedics,7,3,Evening,1,2,0,0.0,8.1,0
-P101414,55,Female,Dermatology,2,3,Morning,1,2,0,0.0,1.7,0
+P101410,3,Male,Dermatology,4,3,Afternoon,1,3,0,0,43.8,0
+P101411,37,Male,Neurology,1,1,Morning,0,3,0,0,27.8,0
+P101412,43,Female,Dermatology,2,6,Afternoon,1,4,0,0,8.2,0
+P101413,40,Male,Orthopedics,7,3,Evening,1,2,0,0,8.1,0
+P101414,55,Female,Dermatology,2,3,Morning,1,2,0,0,1.7,0
 P101415,87,Female,Dermatology,18,3,Afternoon,1,4,1,0.25,10.8,0
-P101416,39,Female,Dermatology,7,6,Morning,1,1,0,0.0,3.1,0
-P101417,15,Male,Cardiology,4,0,Morning,0,3,0,0.0,19.6,0
+P101416,39,Female,Dermatology,7,6,Morning,1,1,0,0,3.1,0
+P101417,15,Male,Cardiology,4,0,Morning,0,3,0,0,19.6,0
 P101418,4,Female,Cardiology,0,6,Afternoon,0,5,4,0.8,0.5,1
-P101419,86,Female,General Medicine,5,0,Afternoon,0,4,0,0.0,3.4,0
+P101419,86,Female,General Medicine,5,0,Afternoon,0,4,0,0,3.4,0
 P101420,25,Female,Orthopedics,11,6,Morning,1,5,3,0.6,4.9,1
-P101421,13,Female,Neurology,2,1,Afternoon,1,3,0,0.0,3.1,0
-P101422,82,Female,Cardiology,13,3,Afternoon,1,1,0,0.0,1.4,0
+P101421,13,Female,Neurology,2,1,Afternoon,1,3,0,0,3.1,0
+P101422,82,Female,Cardiology,13,3,Afternoon,1,1,0,0,1.4,0
 P101423,33,Male,General Medicine,2,0,Afternoon,0,6,1,0.167,5.4,0
 P101424,16,Female,Cardiology,13,6,Afternoon,1,6,1,0.167,8.5,1
 P101425,42,Female,Cardiology,0,1,Morning,1,5,1,0.2,6.2,0
-P101426,66,Female,General Medicine,16,6,Evening,1,3,0,0.0,1.6,0
+P101426,66,Female,General Medicine,16,6,Evening,1,3,0,0,1.6,0
 P101427,55,Female,General Medicine,5,5,Afternoon,1,4,2,0.5,7.9,0
-P101428,42,Male,Cardiology,2,1,Afternoon,0,2,0,0.0,1.8,0
-P101429,34,Female,Cardiology,2,3,Evening,1,2,0,0.0,1.2,0
-P101430,30,Male,Orthopedics,4,2,Morning,1,1,0,0.0,7.0,1
+P101428,42,Male,Cardiology,2,1,Afternoon,0,2,0,0,1.8,0
+P101429,34,Female,Cardiology,2,3,Evening,1,2,0,0,1.2,0
+P101430,30,Male,Orthopedics,4,2,Morning,1,1,0,0,7,1
 P101431,13,Male,Cardiology,55,3,Morning,0,3,1,0.333,11.1,1
 P101432,13,Male,General Medicine,1,2,Afternoon,1,3,1,0.333,3.9,0
-P101433,18,Male,General Medicine,0,1,Afternoon,0,4,0,0.0,4.5,0
-P101434,32,Female,Cardiology,7,5,Evening,1,6,0,0.0,2.2,0
-P101435,39,Male,Cardiology,5,5,Evening,1,4,0,0.0,4.1,1
-P101436,46,Male,Dermatology,5,0,Morning,0,4,0,0.0,0.8,0
+P101433,18,Male,General Medicine,0,1,Afternoon,0,4,0,0,4.5,0
+P101434,32,Female,Cardiology,7,5,Evening,1,6,0,0,2.2,0
+P101435,39,Male,Cardiology,5,5,Evening,1,4,0,0,4.1,1
+P101436,46,Male,Dermatology,5,0,Morning,0,4,0,0,0.8,0
 P101437,29,Female,Neurology,8,5,Afternoon,1,5,1,0.2,18.7,0
-P101438,62,Female,General Medicine,2,4,Afternoon,1,2,0,0.0,9.7,0
+P101438,62,Female,General Medicine,2,4,Afternoon,1,2,0,0,9.7,0
 P101439,62,Female,General Medicine,19,1,Morning,0,5,1,0.2,6.6,0
-P101440,57,Female,Orthopedics,4,0,Afternoon,1,1,1,1.0,4.6,0
-P101441,16,Female,Neurology,1,5,Afternoon,0,2,0,0.0,9.4,0
-P101442,56,Male,General Medicine,10,1,Afternoon,1,5,0,0.0,4.1,0
-P101443,10,Male,General Medicine,8,3,Morning,0,2,0,0.0,2.1,0
-P101444,30,Female,General Medicine,3,5,Morning,0,4,1,0.25,1.0,0
-P101445,25,Male,General Medicine,7,6,Morning,0,4,0,0.0,6.3,0
+P101440,57,Female,Orthopedics,4,0,Afternoon,1,1,1,1,4.6,0
+P101441,16,Female,Neurology,1,5,Afternoon,0,2,0,0,9.4,0
+P101442,56,Male,General Medicine,10,1,Afternoon,1,5,0,0,4.1,0
+P101443,10,Male,General Medicine,8,3,Morning,0,2,0,0,2.1,0
+P101444,30,Female,General Medicine,3,5,Morning,0,4,1,0.25,1,0
+P101445,25,Male,General Medicine,7,6,Morning,0,4,0,0,6.3,0
 P101446,84,Female,General Medicine,1,2,Evening,0,4,2,0.5,15.9,0
-P101447,5,Male,General Medicine,4,1,Morning,1,4,1,0.25,1.0,0
-P101448,65,Male,Cardiology,18,0,Evening,0,1,0,0.0,1.2,1
-P101449,49,Female,General Medicine,1,3,Afternoon,1,4,0,0.0,3.4,0
+P101447,5,Male,General Medicine,4,1,Morning,1,4,1,0.25,1,0
+P101448,65,Male,Cardiology,18,0,Evening,0,1,0,0,1.2,1
+P101449,49,Female,General Medicine,1,3,Afternoon,1,4,0,0,3.4,0
 P101450,3,Female,Dermatology,3,4,Afternoon,0,3,1,0.333,9.9,0
 P101451,45,Female,Cardiology,13,3,Afternoon,0,4,1,0.25,2.1,0
-P101452,14,Female,Cardiology,27,5,Afternoon,1,1,0,0.0,1.8,0
-P101453,30,Male,General Medicine,4,2,Afternoon,1,2,0,0.0,5.8,0
-P101454,68,Male,General Medicine,5,3,Afternoon,1,1,0,0.0,4.6,0
-P101455,18,Female,Dermatology,6,4,Afternoon,1,2,0,0.0,0.4,0
-P101456,62,Female,General Medicine,21,6,Afternoon,0,4,0,0.0,0.5,1
-P101457,37,Male,General Medicine,15,0,Afternoon,1,3,0,0.0,6.2,0
-P101458,25,Female,Cardiology,1,1,Morning,0,5,0,0.0,3.8,0
+P101452,14,Female,Cardiology,27,5,Afternoon,1,1,0,0,1.8,0
+P101453,30,Male,General Medicine,4,2,Afternoon,1,2,0,0,5.8,0
+P101454,68,Male,General Medicine,5,3,Afternoon,1,1,0,0,4.6,0
+P101455,18,Female,Dermatology,6,4,Afternoon,1,2,0,0,0.4,0
+P101456,62,Female,General Medicine,21,6,Afternoon,0,4,0,0,0.5,1
+P101457,37,Male,General Medicine,15,0,Afternoon,1,3,0,0,6.2,0
+P101458,25,Female,Cardiology,1,1,Morning,0,5,0,0,3.8,0
 P101459,48,Male,General Medicine,4,2,Afternoon,0,3,1,0.333,21.2,0
-P101460,65,Male,Neurology,4,4,Evening,1,4,0,0.0,6.8,0
+P101460,65,Male,Neurology,4,4,Evening,1,4,0,0,6.8,0
 P101461,53,Male,Neurology,12,5,Morning,1,2,1,0.5,0.1,0
 P101462,79,Female,General Medicine,7,5,Morning,1,5,1,0.2,3.9,1
-P101463,73,Female,General Medicine,8,5,Morning,0,2,0,0.0,3.2,0
-P101464,15,Male,Cardiology,50,2,Afternoon,1,2,0,0.0,0.7,0
-P101465,49,Female,Dermatology,0,3,Morning,1,2,0,0.0,15.4,0
-P101466,88,Male,Cardiology,2,2,Afternoon,1,2,0,0.0,9.8,0
+P101463,73,Female,General Medicine,8,5,Morning,0,2,0,0,3.2,0
+P101464,15,Male,Cardiology,50,2,Afternoon,1,2,0,0,0.7,0
+P101465,49,Female,Dermatology,0,3,Morning,1,2,0,0,15.4,0
+P101466,88,Male,Cardiology,2,2,Afternoon,1,2,0,0,9.8,0
 P101467,68,Male,Orthopedics,4,5,Morning,0,5,1,0.2,1.6,1
-P101468,12,Male,Cardiology,3,6,Morning,0,3,0,0.0,1.8,0
-P101469,59,Male,Cardiology,0,4,Afternoon,1,2,0,0.0,0.2,0
+P101468,12,Male,Cardiology,3,6,Morning,0,3,0,0,1.8,0
+P101469,59,Male,Cardiology,0,4,Afternoon,1,2,0,0,0.2,0
 P101470,37,Male,Orthopedics,0,1,Morning,1,6,1,0.167,2.1,0
-P101471,61,Female,Orthopedics,9,1,Evening,1,0,0,0.0,5.3,0
-P101472,43,Female,Neurology,16,2,Morning,1,1,0,0.0,3.3,0
+P101471,61,Female,Orthopedics,9,1,Evening,1,0,0,0,5.3,0
+P101472,43,Female,Neurology,16,2,Morning,1,1,0,0,3.3,0
 P101473,70,Female,Cardiology,5,5,Afternoon,0,6,1,0.167,20.9,0
-P101474,39,Male,Cardiology,6,0,Morning,1,7,0,0.0,0.3,1
+P101474,39,Male,Cardiology,6,0,Morning,1,7,0,0,0.3,1
 P101475,56,Male,Dermatology,2,6,Morning,1,5,2,0.4,5.4,0
 P101476,63,Male,Cardiology,11,2,Evening,0,5,1,0.2,11.7,0
 P101477,46,Male,Cardiology,11,5,Evening,0,3,1,0.333,3.9,0
-P101478,88,Female,General Medicine,7,3,Morning,1,3,0,0.0,0.0,0
-P101479,11,Male,Orthopedics,1,1,Afternoon,1,2,0,0.0,1.7,0
-P101480,62,Female,Dermatology,0,1,Afternoon,1,2,0,0.0,2.3,0
-P101481,77,Female,General Medicine,0,6,Morning,0,1,0,0.0,20.3,0
-P101482,25,Male,General Medicine,7,1,Morning,1,1,0,0.0,14.6,0
-P101483,71,Female,Dermatology,13,0,Evening,0,2,0,0.0,17.9,0
-P101484,52,Female,General Medicine,15,5,Evening,1,4,0,0.0,10.5,0
+P101478,88,Female,General Medicine,7,3,Morning,1,3,0,0,0,0
+P101479,11,Male,Orthopedics,1,1,Afternoon,1,2,0,0,1.7,0
+P101480,62,Female,Dermatology,0,1,Afternoon,1,2,0,0,2.3,0
+P101481,77,Female,General Medicine,0,6,Morning,0,1,0,0,20.3,0
+P101482,25,Male,General Medicine,7,1,Morning,1,1,0,0,14.6,0
+P101483,71,Female,Dermatology,13,0,Evening,0,2,0,0,17.9,0
+P101484,52,Female,General Medicine,15,5,Evening,1,4,0,0,10.5,0
 P101485,4,Female,Cardiology,4,5,Evening,1,5,1,0.2,2.6,0
-P101486,59,Female,Cardiology,12,6,Afternoon,0,2,0,0.0,14.2,0
-P101487,72,Male,Neurology,23,5,Afternoon,0,3,0,0.0,24.0,1
+P101486,59,Female,Cardiology,12,6,Afternoon,0,2,0,0,14.2,0
+P101487,72,Male,Neurology,23,5,Afternoon,0,3,0,0,24,1
 P101488,20,Male,Cardiology,2,6,Morning,1,3,1,0.333,2.6,0
 P101489,63,Male,Orthopedics,4,5,Morning,1,4,1,0.25,1.8,0
 P101490,54,Male,Cardiology,21,0,Morning,0,8,1,0.125,4.8,0
-P101491,74,Female,General Medicine,3,4,Afternoon,1,4,0,0.0,1.2,0
-P101492,57,Male,General Medicine,19,2,Afternoon,1,4,0,0.0,0.2,0
-P101493,41,Female,Cardiology,31,2,Evening,0,2,0,0.0,17.5,1
+P101491,74,Female,General Medicine,3,4,Afternoon,1,4,0,0,1.2,0
+P101492,57,Male,General Medicine,19,2,Afternoon,1,4,0,0,0.2,0
+P101493,41,Female,Cardiology,31,2,Evening,0,2,0,0,17.5,1
 P101494,3,Female,Cardiology,8,5,Evening,1,3,1,0.333,15.6,0
-P101495,6,Male,General Medicine,13,3,Evening,1,2,0,0.0,1.1,0
-P101496,5,Male,Neurology,11,1,Evening,1,0,0,0.0,3.1,0
-P101497,5,Female,Orthopedics,9,0,Morning,1,3,0,0.0,10.7,1
+P101495,6,Male,General Medicine,13,3,Evening,1,2,0,0,1.1,0
+P101496,5,Male,Neurology,11,1,Evening,1,0,0,0,3.1,0
+P101497,5,Female,Orthopedics,9,0,Morning,1,3,0,0,10.7,1
 P101498,54,Female,General Medicine,2,3,Afternoon,0,2,1,0.5,6.5,0
-P101499,47,Female,Neurology,0,3,Afternoon,1,3,0,0.0,3.0,0
+P101499,47,Female,Neurology,0,3,Afternoon,1,3,0,0,3,0
+P101500,44,Female,Dermatology,54,1,Afternoon,1,10,3,0.3,2.2,1
+P101501,11,Female,Cardiology,52,3,Morning,1,2,2,1,9.2,1
+P101502,29,Male,Cardiology,42,1,Afternoon,1,4,1,0.25,0.4,0
+P101503,3,Female,Dermatology,0,3,Evening,1,4,1,0.25,3.7,0
+P101504,75,Female,Neurology,26,3,Evening,0,9,1,0.111,12.7,0
+P101505,47,Male,Orthopedics,51,4,Afternoon,1,5,2,0.4,6.5,1
+P101506,90,Male,Neurology,8,4,Morning,1,2,2,1,12.9,1
+P101507,14,Male,Orthopedics,45,5,Evening,1,2,2,1,8,1
+P101508,7,Female,Neurology,29,3,Afternoon,1,9,1,0.111,8.6,0
+P101509,58,Male,Orthopedics,4,3,Evening,0,10,3,0.3,0.3,0
+P101510,36,Female,General Medicine,43,5,Evening,1,3,0,0,1,0
+P101511,28,Female,Orthopedics,45,4,Evening,0,8,3,0.375,14.8,1
+P101512,70,Female,General Medicine,14,4,Morning,1,5,2,0.4,2.2,0
+P101513,68,Female,Cardiology,49,5,Morning,0,6,0,0,9.2,1
+P101514,64,Male,Orthopedics,53,0,Morning,0,4,1,0.25,0.4,1
+P101515,61,Male,Orthopedics,51,1,Morning,1,7,3,0.429,5.7,1
+P101516,64,Male,Cardiology,11,2,Afternoon,1,5,2,0.4,13.2,0
+P101517,13,Female,General Medicine,22,4,Morning,0,4,1,0.25,5.1,0
+P101518,1,Male,General Medicine,43,2,Afternoon,1,9,0,0,1.4,0
+P101519,23,Male,Neurology,51,3,Morning,1,5,0,0,12.9,1
+P101520,20,Female,Neurology,22,1,Afternoon,0,9,1,0.111,13.1,0
+P101521,5,Male,Orthopedics,52,2,Morning,1,3,1,0.333,0.5,1
+P101522,64,Male,Neurology,37,1,Evening,0,6,1,0.167,13.5,1
+P101523,15,Male,Orthopedics,59,1,Afternoon,1,6,3,0.5,11.8,1
+P101524,52,Male,Orthopedics,52,0,Afternoon,1,3,1,0.333,2.8,1
+P101525,42,Female,Neurology,54,5,Morning,0,10,0,0,10,1
+P101526,38,Female,Dermatology,8,3,Afternoon,1,5,2,0.4,11.5,0
+P101527,72,Female,Neurology,1,3,Afternoon,1,2,1,0.5,1.6,0
+P101528,6,Male,General Medicine,49,2,Evening,0,8,2,0.25,7.9,1
+P101529,69,Male,General Medicine,41,2,Afternoon,1,10,1,0.1,11.1,0
+P101530,88,Female,Neurology,34,4,Morning,0,4,2,0.5,12.4,1
+P101531,13,Female,Cardiology,43,1,Evening,0,9,2,0.222,13.7,1
+P101532,74,Male,General Medicine,45,3,Morning,0,6,0,0,7.4,1
+P101533,43,Male,Dermatology,0,6,Morning,0,2,1,0.5,9.9,0
+P101534,32,Female,Dermatology,2,5,Evening,0,6,3,0.5,2.1,0
+P101535,2,Female,Dermatology,60,3,Afternoon,1,5,1,0.2,6.1,1
+P101536,51,Male,Dermatology,16,1,Evening,0,4,3,0.75,9.4,1
+P101537,63,Male,Cardiology,40,4,Afternoon,0,4,0,0,1.7,0
+P101538,37,Female,Neurology,43,2,Morning,1,3,2,0.667,4.3,1
+P101539,72,Female,Cardiology,52,1,Evening,0,2,1,0.5,14.3,1
+P101540,5,Female,Cardiology,30,0,Evening,0,1,1,1,1.7,1
+P101541,19,Female,Neurology,27,6,Morning,1,2,0,0,6.6,0
+P101542,6,Male,Cardiology,49,2,Afternoon,0,9,1,0.111,10.9,1
+P101543,8,Female,Dermatology,29,1,Afternoon,0,3,2,0.667,13.5,1
+P101544,43,Female,General Medicine,14,6,Afternoon,0,9,0,0,9.4,0
+P101545,19,Female,General Medicine,38,0,Evening,1,2,0,0,8.4,0
+P101546,22,Female,Orthopedics,33,0,Morning,0,2,1,0.5,9.3,1
+P101547,73,Male,Dermatology,14,6,Evening,0,2,2,1,5.7,1
+P101548,10,Male,Dermatology,48,4,Evening,0,2,0,0,8.5,1
+P101549,31,Female,Neurology,43,2,Afternoon,1,7,2,0.286,6.7,1
+P101550,47,Male,Cardiology,58,2,Evening,0,8,3,0.375,6.8,1
+P101551,3,Female,Orthopedics,16,1,Morning,0,3,3,1,5.5,1
+P101552,17,Female,Cardiology,45,3,Afternoon,0,8,3,0.375,14.8,1
+P101553,50,Female,Orthopedics,46,2,Afternoon,1,7,3,0.429,6.7,1
+P101554,25,Male,Neurology,46,2,Afternoon,0,7,1,0.143,3.7,1
+P101555,19,Female,General Medicine,23,4,Evening,1,9,3,0.333,3.2,0
+P101556,28,Female,Neurology,57,1,Evening,1,8,2,0.25,0.8,1
+P101557,27,Female,Neurology,11,5,Morning,1,7,3,0.429,0.4,0
+P101558,26,Male,Dermatology,41,2,Afternoon,1,5,1,0.2,8.6,1
+P101559,79,Male,General Medicine,48,6,Morning,1,4,1,0.25,4.7,1
+P101560,12,Female,Orthopedics,0,1,Evening,0,2,0,0,5,0
+P101561,41,Female,Dermatology,19,2,Evening,0,3,1,0.333,5.4,0
+P101562,21,Male,Cardiology,19,3,Morning,0,3,2,0.667,12,1
+P101563,36,Male,General Medicine,10,5,Morning,1,9,3,0.333,10.5,0
+P101564,49,Female,Dermatology,48,3,Morning,0,8,0,0,2,1
+P101565,24,Female,General Medicine,59,3,Evening,1,1,1,1,8.8,1
+P101566,48,Male,Cardiology,56,1,Evening,1,10,2,0.2,14.8,1
+P101567,86,Male,Orthopedics,58,2,Evening,0,5,3,0.6,1.7,1
+P101568,76,Female,Cardiology,38,2,Afternoon,1,2,1,0.5,0.2,1
+P101569,22,Male,Cardiology,33,5,Afternoon,0,4,2,0.5,7.3,1
+P101570,85,Female,General Medicine,27,2,Evening,1,5,3,0.6,0.6,1
+P101571,3,Female,Dermatology,55,1,Afternoon,0,1,0,0,11,1
+P101572,43,Female,Neurology,2,6,Afternoon,1,7,3,0.429,10.5,0
+P101573,71,Male,Dermatology,8,2,Afternoon,1,7,2,0.286,10.8,0
+P101574,41,Male,General Medicine,58,6,Morning,0,2,1,0.5,12.1,1
+P101575,20,Male,General Medicine,4,6,Morning,0,2,0,0,5.6,0
+P101576,80,Male,Cardiology,47,4,Evening,1,1,0,0,13.1,0
+P101577,8,Male,Cardiology,50,5,Morning,0,8,2,0.25,9.2,1
+P101578,88,Male,Cardiology,45,0,Evening,0,3,0,0,0.1,1
+P101579,26,Female,Neurology,20,5,Morning,0,2,1,0.5,7.1,1
+P101580,65,Male,General Medicine,46,1,Morning,0,8,2,0.25,6.6,1
+P101581,90,Male,Cardiology,56,1,Afternoon,0,5,1,0.2,10.5,1
+P101582,65,Female,Cardiology,25,3,Afternoon,1,4,1,0.25,9,0
+P101583,88,Female,Orthopedics,33,6,Morning,0,6,1,0.167,9.8,1
+P101584,8,Female,General Medicine,4,5,Evening,1,2,0,0,5.2,0
+P101585,47,Male,Neurology,47,2,Evening,0,8,0,0,4.8,1
+P101586,39,Female,Orthopedics,22,4,Evening,1,6,3,0.5,5.6,0
+P101587,46,Female,Dermatology,37,3,Afternoon,0,4,1,0.25,0.6,1
+P101588,19,Female,Dermatology,55,0,Morning,1,7,3,0.429,6.8,1
+P101589,2,Female,Cardiology,55,1,Evening,0,6,3,0.5,6,1
+P101590,20,Female,Orthopedics,6,1,Morning,0,3,1,0.333,5.9,0
+P101591,71,Female,Cardiology,10,1,Afternoon,1,8,3,0.375,12.4,0
+P101592,21,Female,General Medicine,27,2,Morning,1,10,3,0.3,14.2,0
+P101593,19,Male,Neurology,45,3,Morning,1,2,1,0.5,9.1,1
+P101594,44,Female,Neurology,0,3,Evening,1,7,3,0.429,9.5,0
+P101595,48,Male,Orthopedics,8,4,Afternoon,1,2,2,1,5.1,1
+P101596,27,Female,Cardiology,28,6,Afternoon,1,2,0,0,6.3,0
+P101597,43,Male,Cardiology,35,2,Evening,1,8,2,0.25,8.7,0
+P101598,32,Female,Neurology,45,3,Morning,0,10,1,0.1,12.2,1
+P101599,11,Female,Dermatology,24,4,Evening,0,6,0,0,9.4,0
+P101600,36,Male,Orthopedics,28,6,Morning,1,5,0,0,11.7,0
+P101601,80,Female,Neurology,14,1,Afternoon,0,8,1,0.125,4.9,0
+P101602,83,Male,Neurology,20,4,Morning,0,6,3,0.5,12.4,1
+P101603,65,Female,Cardiology,47,6,Afternoon,0,5,0,0,7.9,1
+P101604,38,Male,General Medicine,19,5,Evening,1,7,0,0,3.1,0
+P101605,19,Female,Dermatology,23,4,Morning,1,7,0,0,11.6,0
+P101606,36,Female,Orthopedics,48,1,Evening,1,10,3,0.3,1.6,1
+P101607,42,Male,General Medicine,18,0,Afternoon,0,10,3,0.3,8.8,0
+P101608,49,Male,Dermatology,23,5,Afternoon,0,9,3,0.333,4.7,0
+P101609,42,Male,Neurology,20,0,Evening,0,7,1,0.143,9.7,0
+P101610,14,Male,Cardiology,4,0,Afternoon,0,3,3,1,2.1,1
+P101611,9,Female,Dermatology,5,4,Morning,1,6,2,0.333,5.2,0
+P101612,71,Male,Cardiology,41,3,Morning,1,9,3,0.333,10.4,1
+P101613,88,Male,General Medicine,14,5,Evening,0,2,1,0.5,0.8,0
+P101614,30,Male,Cardiology,2,4,Afternoon,0,4,3,0.75,3.3,0
+P101615,38,Female,General Medicine,48,5,Evening,1,6,3,0.5,0.3,1
+P101616,27,Male,Neurology,2,3,Morning,0,7,0,0,8.8,0
+P101617,22,Female,Cardiology,37,1,Evening,1,6,0,0,7.6,0
+P101618,21,Male,Neurology,17,2,Afternoon,1,1,1,1,7.7,1
+P101619,84,Female,Dermatology,57,0,Afternoon,1,4,2,0.5,5.9,1
+P101620,50,Male,Cardiology,13,1,Evening,0,10,3,0.3,1.7,0
+P101621,7,Male,Neurology,56,6,Afternoon,1,5,1,0.2,5.4,1
+P101622,24,Female,Cardiology,19,3,Evening,0,4,0,0,3.2,0
+P101623,22,Female,Dermatology,29,4,Evening,1,7,2,0.286,9,0
+P101624,4,Male,General Medicine,4,2,Morning,0,5,1,0.2,13.3,0
+P101625,48,Male,Cardiology,24,3,Evening,0,5,3,0.6,1.5,1
+P101626,39,Male,General Medicine,17,2,Morning,1,6,0,0,9.8,0
+P101627,82,Male,Dermatology,59,1,Morning,0,5,3,0.6,1.8,1
+P101628,75,Female,Orthopedics,46,0,Evening,0,2,0,0,6.8,1
+P101629,51,Female,General Medicine,4,0,Afternoon,0,10,3,0.3,3.2,0
+P101630,74,Male,General Medicine,26,6,Afternoon,0,7,3,0.429,14.6,1
+P101631,35,Male,Cardiology,12,5,Afternoon,1,5,3,0.6,0.4,0
+P101632,90,Female,Cardiology,55,5,Evening,1,1,0,0,8.4,1
+P101633,59,Female,Neurology,23,1,Afternoon,0,1,1,1,9,1
+P101634,75,Female,Orthopedics,20,3,Afternoon,1,6,1,0.167,6.1,0
+P101635,53,Female,Dermatology,52,0,Evening,1,5,1,0.2,10.1,1
+P101636,58,Male,General Medicine,21,2,Evening,1,5,1,0.2,9.7,0
+P101637,74,Male,Cardiology,34,6,Evening,0,3,2,0.667,12.8,1
+P101638,65,Male,Neurology,52,0,Evening,1,7,0,0,13.2,1
+P101639,88,Female,Dermatology,59,0,Afternoon,0,1,1,1,11.1,1
+P101640,45,Female,General Medicine,33,1,Evening,1,6,3,0.5,3.3,1
+P101641,65,Male,Dermatology,53,1,Morning,0,8,1,0.125,10.7,1
+P101642,27,Male,Cardiology,48,0,Morning,1,5,1,0.2,4.5,1
+P101643,88,Male,General Medicine,7,2,Afternoon,0,1,1,1,2.8,1
+P101644,2,Female,Orthopedics,60,3,Afternoon,1,2,1,0.5,9.9,1
+P101645,76,Male,Dermatology,27,0,Afternoon,1,4,2,0.5,9.5,1
+P101646,50,Male,Dermatology,1,5,Evening,1,6,2,0.333,10.5,0
+P101647,49,Male,Dermatology,60,6,Morning,1,10,2,0.2,14.9,1
+P101648,81,Male,Dermatology,34,3,Evening,0,8,2,0.25,1.2,1
+P101649,40,Female,Cardiology,38,4,Afternoon,1,6,1,0.167,0.5,0
+P101650,87,Male,Neurology,43,3,Morning,0,2,0,0,8.9,1
+P101651,50,Male,Orthopedics,29,4,Morning,1,9,1,0.111,10.5,0
+P101652,21,Male,Orthopedics,11,4,Afternoon,1,9,3,0.333,4.4,0
+P101653,10,Male,Dermatology,43,3,Morning,0,7,0,0,14.5,1
+P101654,6,Female,Cardiology,49,1,Afternoon,0,1,1,1,11.6,1
+P101655,15,Male,Cardiology,14,1,Morning,1,10,3,0.3,12.1,0
+P101656,90,Female,General Medicine,28,5,Evening,1,10,0,0,5.5,0
+P101657,56,Female,General Medicine,26,0,Morning,1,6,0,0,0.5,0
+P101658,32,Male,General Medicine,30,0,Morning,1,5,2,0.4,7.6,0
+P101659,70,Female,Neurology,11,2,Afternoon,0,2,2,1,6.7,1
+P101660,6,Male,Cardiology,11,1,Afternoon,1,2,2,1,1.7,1
+P101661,2,Male,Neurology,0,5,Afternoon,1,3,3,1,0.9,0
+P101662,32,Female,Cardiology,19,1,Evening,0,10,0,0,4.8,0
+P101663,50,Male,Cardiology,30,5,Morning,0,8,3,0.375,1.5,1
+P101664,10,Male,Cardiology,55,5,Afternoon,0,9,1,0.111,7.2,1
+P101665,56,Male,Orthopedics,52,6,Afternoon,1,6,1,0.167,6.1,1
+P101666,78,Male,Cardiology,42,3,Evening,1,1,0,0,5.9,0
+P101667,67,Female,Dermatology,41,6,Morning,0,9,3,0.333,3.6,1
+P101668,19,Male,Orthopedics,26,2,Afternoon,0,7,0,0,8.4,0
+P101669,69,Female,Orthopedics,41,6,Afternoon,1,5,3,0.6,4.6,1
+P101670,12,Female,Orthopedics,24,4,Evening,0,9,3,0.333,7,0
+P101671,37,Male,Orthopedics,16,2,Morning,1,10,0,0,14,0
+P101672,43,Female,Orthopedics,22,2,Evening,1,10,1,0.1,2.9,0
+P101673,89,Female,Cardiology,49,5,Evening,0,7,1,0.143,12,1
+P101674,23,Male,Orthopedics,13,5,Morning,1,6,2,0.333,8.7,0
+P101675,51,Female,Orthopedics,11,4,Afternoon,1,4,2,0.5,5.6,0
+P101676,33,Male,Dermatology,9,6,Evening,1,9,2,0.222,9.1,0
+P101677,33,Female,Dermatology,4,4,Evening,0,7,0,0,12.2,0
+P101678,55,Female,Neurology,12,0,Afternoon,1,5,3,0.6,0.8,0
+P101679,16,Female,General Medicine,20,0,Morning,0,7,3,0.429,2.1,0
+P101680,13,Female,Cardiology,35,0,Evening,1,5,0,0,1.9,0
+P101681,80,Female,Orthopedics,0,3,Morning,0,10,0,0,5.1,0
+P101682,46,Male,Cardiology,39,0,Evening,1,4,1,0.25,13.9,1
+P101683,50,Male,Neurology,48,4,Morning,0,10,2,0.2,2.6,1
+P101684,16,Male,Cardiology,36,6,Afternoon,1,3,0,0,12.1,0
+P101685,29,Female,General Medicine,29,0,Morning,0,4,1,0.25,13.4,1
+P101686,30,Male,General Medicine,37,3,Evening,1,5,3,0.6,6.7,1
+P101687,49,Male,Neurology,9,6,Afternoon,1,8,3,0.375,12.8,0
+P101688,64,Female,Dermatology,27,4,Morning,1,4,3,0.75,4.8,1
+P101689,90,Female,Cardiology,45,6,Afternoon,0,6,1,0.167,9,1
+P101690,32,Female,Cardiology,20,3,Evening,1,4,1,0.25,6.1,0
+P101691,9,Female,General Medicine,43,3,Evening,0,8,0,0,9.7,1
+P101692,58,Female,General Medicine,24,3,Afternoon,0,6,2,0.333,7.4,0
+P101693,34,Female,Cardiology,17,1,Morning,1,6,1,0.167,13.7,0
+P101694,47,Male,Cardiology,54,0,Evening,0,10,1,0.1,14.7,1
+P101695,68,Female,Dermatology,39,1,Afternoon,0,3,0,0,3.8,0
+P101696,40,Male,Neurology,17,0,Morning,0,3,3,1,3.4,1
+P101697,61,Female,Cardiology,3,1,Morning,0,2,2,1,4.3,1
+P101698,23,Male,Dermatology,4,4,Afternoon,0,4,0,0,4,0
+P101699,2,Female,Cardiology,34,6,Afternoon,0,3,1,0.333,3.7,1
+P101700,22,Male,Dermatology,32,1,Morning,0,9,0,0,5.9,0
+P101701,59,Male,General Medicine,36,5,Morning,1,4,2,0.5,6.9,1
+P101702,37,Female,Neurology,4,6,Afternoon,1,3,0,0,2,0
+P101703,67,Female,Neurology,56,4,Evening,1,7,3,0.429,14.4,1
+P101704,64,Male,General Medicine,33,1,Morning,1,7,2,0.286,2.5,0
+P101705,53,Female,Dermatology,53,2,Afternoon,1,10,2,0.2,1.7,1
+P101706,28,Female,Cardiology,31,3,Evening,0,1,1,1,11.3,1
+P101707,30,Female,Orthopedics,25,3,Afternoon,0,3,2,0.667,2.1,1
+P101708,54,Male,Cardiology,23,1,Evening,0,8,3,0.375,6.9,0
+P101709,50,Female,General Medicine,23,4,Afternoon,0,2,1,0.5,5.3,1
+P101710,43,Male,Orthopedics,2,4,Morning,1,6,3,0.5,1,0
+P101711,66,Male,Neurology,9,2,Morning,1,1,0,0,0.9,0
+P101712,42,Female,Orthopedics,21,0,Evening,1,8,3,0.375,5.2,0
+P101713,56,Male,Neurology,56,5,Evening,1,10,0,0,11.4,1
+P101714,57,Female,Cardiology,9,1,Morning,1,10,0,0,5,0
+P101715,6,Male,Orthopedics,24,0,Morning,1,2,2,1,5.9,1
+P101716,20,Female,Neurology,36,4,Afternoon,0,4,3,0.75,6.3,1
+P101717,34,Female,General Medicine,4,1,Afternoon,0,4,0,0,12.9,0
+P101718,44,Female,Dermatology,7,2,Evening,0,3,3,1,10,1
+P101719,86,Female,Neurology,40,6,Morning,1,9,2,0.222,7.9,0
+P101720,66,Female,Dermatology,27,5,Afternoon,1,4,0,0,4.1,0
+P101721,19,Male,Cardiology,51,1,Afternoon,1,1,1,1,1.6,1
+P101722,52,Female,Neurology,44,2,Afternoon,1,3,0,0,6.2,0
+P101723,85,Male,Orthopedics,10,0,Afternoon,1,2,0,0,14.2,0
+P101724,4,Female,Orthopedics,9,0,Afternoon,1,7,3,0.429,7.1,0
+P101725,51,Male,Dermatology,56,3,Morning,1,4,3,0.75,13.9,1
+P101726,77,Female,Neurology,39,3,Morning,0,5,1,0.2,5,1
+P101727,55,Female,General Medicine,5,6,Evening,0,2,0,0,2.3,0
+P101728,18,Female,Orthopedics,0,5,Evening,1,3,0,0,2.7,0
+P101729,43,Male,General Medicine,2,4,Morning,0,6,0,0,13.4,0
+P101730,51,Female,General Medicine,52,2,Evening,0,1,0,0,11.8,1
+P101731,60,Female,Cardiology,53,5,Evening,1,5,0,0,2.1,0
+P101732,5,Female,Orthopedics,31,5,Morning,0,9,0,0,10.3,0
+P101733,52,Female,Cardiology,22,6,Afternoon,1,8,3,0.375,4.4,0
+P101734,20,Male,General Medicine,15,0,Evening,1,6,1,0.167,2.2,0
+P101735,10,Female,Orthopedics,6,5,Afternoon,1,2,0,0,1.9,0
+P101736,16,Female,Cardiology,45,3,Evening,1,10,1,0.1,6.5,0
+P101737,9,Male,General Medicine,10,6,Afternoon,1,1,1,1,2.9,1
+P101738,51,Female,Dermatology,52,1,Afternoon,1,7,1,0.143,7,1
+P101739,22,Female,Dermatology,58,0,Afternoon,0,7,2,0.286,0.1,1
+P101740,78,Female,Orthopedics,2,1,Evening,0,6,1,0.167,3.6,0
+P101741,44,Female,Orthopedics,2,0,Morning,0,3,3,1,9.5,1
+P101742,85,Female,Neurology,13,3,Evening,0,8,1,0.125,5,0
+P101743,76,Female,Neurology,27,6,Afternoon,0,10,1,0.1,6.8,0
+P101744,81,Male,Dermatology,21,6,Afternoon,0,1,1,1,6.1,1
+P101745,29,Female,Orthopedics,59,2,Evening,1,8,1,0.125,12.5,1
+P101746,1,Male,General Medicine,42,1,Afternoon,1,1,0,0,5.9,0
+P101747,10,Female,Neurology,0,6,Evening,1,4,3,0.75,0.7,0
+P101748,85,Male,Dermatology,32,4,Morning,1,7,0,0,11.5,0
+P101749,50,Female,Cardiology,49,4,Evening,0,9,2,0.222,12.8,1
+P101750,83,Male,Dermatology,43,0,Morning,1,4,0,0,1.2,0
+P101751,54,Male,Dermatology,10,1,Evening,1,3,2,0.667,10.1,0
+P101752,70,Male,General Medicine,6,1,Morning,1,3,2,0.667,4.6,0
+P101753,15,Female,Orthopedics,4,0,Evening,1,1,0,0,14.5,0
+P101754,79,Female,General Medicine,32,2,Morning,0,9,3,0.333,7.2,1
+P101755,33,Male,Neurology,24,6,Morning,0,6,1,0.167,8.2,0
+P101756,89,Male,Dermatology,9,6,Evening,1,2,0,0,2.4,0
+P101757,56,Male,Neurology,21,6,Afternoon,1,6,0,0,11.9,0
+P101758,90,Male,Cardiology,12,6,Evening,1,4,1,0.25,11.6,0
+P101759,26,Male,General Medicine,24,3,Morning,1,8,3,0.375,9.6,0
+P101760,54,Male,Orthopedics,1,6,Afternoon,1,1,1,1,9.7,1
+P101761,72,Male,Neurology,53,1,Afternoon,0,2,0,0,8.9,1
+P101762,82,Female,Cardiology,7,2,Evening,0,8,2,0.25,11.8,0
+P101763,39,Male,Orthopedics,2,6,Afternoon,0,7,2,0.286,0.8,0
+P101764,68,Female,General Medicine,21,3,Afternoon,1,3,2,0.667,14.7,1
+P101765,42,Male,General Medicine,1,6,Morning,0,5,3,0.6,14.7,0
+P101766,34,Female,Orthopedics,23,0,Morning,0,9,0,0,1.4,0
+P101767,36,Female,Neurology,37,6,Evening,0,10,1,0.1,3.5,0
+P101768,85,Female,General Medicine,35,3,Morning,1,2,2,1,13.6,1
+P101769,7,Male,General Medicine,5,0,Evening,1,5,3,0.6,4,0
+P101770,47,Female,Neurology,57,0,Afternoon,1,1,0,0,0.6,1
+P101771,84,Male,General Medicine,5,3,Morning,1,3,1,0.333,2.5,0
+P101772,1,Female,Neurology,47,6,Evening,0,3,1,0.333,14.8,1
+P101773,28,Female,Cardiology,35,6,Evening,0,4,3,0.75,0.9,1
+P101774,53,Female,Orthopedics,8,1,Evening,1,5,2,0.4,14.6,0
+P101775,64,Male,General Medicine,26,3,Evening,1,2,2,1,9.7,1
+P101776,83,Male,Cardiology,44,1,Evening,0,4,2,0.5,8.6,1
+P101777,88,Female,Cardiology,15,1,Afternoon,0,1,0,0,11,0
+P101778,90,Male,Dermatology,0,0,Afternoon,0,2,2,1,10.8,1
+P101779,16,Female,Orthopedics,9,3,Afternoon,0,4,3,0.75,10.9,1
+P101780,19,Male,Dermatology,28,2,Morning,0,9,2,0.222,12.9,1
+P101781,33,Male,Dermatology,31,3,Morning,1,4,3,0.75,6.6,1
+P101782,27,Female,General Medicine,47,2,Morning,1,1,0,0,7.9,0
+P101783,61,Male,Neurology,11,3,Afternoon,1,5,2,0.4,11.5,0
+P101784,36,Female,Dermatology,28,2,Morning,0,5,1,0.2,10.3,1
+P101785,31,Female,Dermatology,28,1,Evening,0,8,1,0.125,0.3,0
+P101786,67,Female,General Medicine,7,2,Evening,1,9,1,0.111,10.8,0
+P101787,73,Male,Cardiology,47,2,Afternoon,1,9,2,0.222,0.3,1
+P101788,1,Male,General Medicine,40,2,Evening,1,4,1,0.25,14.7,1
+P101789,25,Male,General Medicine,36,5,Afternoon,1,9,3,0.333,0,0
+P101790,81,Female,Neurology,44,4,Evening,1,7,2,0.286,8.8,1
+P101791,32,Female,General Medicine,24,6,Afternoon,1,6,0,0,9.4,0
+P101792,64,Male,Dermatology,48,4,Morning,0,6,3,0.5,8,1
+P101793,6,Male,Dermatology,36,3,Evening,0,2,0,0,3.5,0
+P101794,29,Male,Cardiology,43,2,Morning,1,2,0,0,10.8,0
+P101795,36,Female,Cardiology,0,0,Afternoon,1,1,1,1,1.8,0
+P101796,69,Male,General Medicine,5,3,Evening,1,4,0,0,11.9,0
+P101797,63,Male,Dermatology,42,2,Morning,0,5,1,0.2,13.9,1
+P101798,36,Male,Dermatology,37,5,Afternoon,0,2,2,1,13.9,1
+P101799,13,Male,Orthopedics,35,1,Morning,0,6,3,0.5,0.4,1
+P101800,26,Male,Cardiology,47,1,Afternoon,0,3,1,0.333,11,1
+P101801,18,Male,General Medicine,42,5,Evening,1,8,0,0,3.4,0
+P101802,56,Male,General Medicine,40,6,Morning,1,4,2,0.5,12.5,1
+P101803,69,Male,Dermatology,0,0,Morning,0,8,3,0.375,5.6,0
+P101804,56,Male,Cardiology,4,2,Evening,0,3,1,0.333,6.2,0
+P101805,77,Male,Dermatology,56,3,Morning,1,9,2,0.222,2.4,1
+P101806,28,Male,Cardiology,17,3,Afternoon,1,10,3,0.3,3.9,0
+P101807,15,Male,General Medicine,59,1,Evening,0,7,3,0.429,13.1,1
+P101808,84,Male,General Medicine,35,4,Morning,1,9,0,0,5.9,0
+P101809,7,Male,Cardiology,51,4,Evening,0,9,1,0.111,3.6,1
+P101810,43,Male,Cardiology,33,0,Afternoon,0,2,1,0.5,3.9,1
+P101811,12,Male,Neurology,8,3,Morning,0,8,1,0.125,10.5,0
+P101812,88,Female,Orthopedics,47,0,Morning,1,7,0,0,6.9,0
+P101813,4,Male,Orthopedics,49,1,Evening,0,1,0,0,12.9,1
+P101814,13,Female,Neurology,5,5,Afternoon,0,10,0,0,7.2,0
+P101815,41,Female,General Medicine,46,6,Evening,0,1,0,0,14.8,1
+P101816,19,Female,Orthopedics,16,3,Evening,0,5,2,0.4,1.3,0
+P101817,6,Female,Dermatology,11,3,Morning,1,2,0,0,7.5,0
+P101818,7,Male,Orthopedics,29,1,Afternoon,0,9,3,0.333,0.7,1
+P101819,36,Male,Dermatology,5,3,Evening,1,6,2,0.333,10.9,0
+P101820,66,Male,Orthopedics,26,2,Evening,0,2,0,0,12,0
+P101821,49,Male,Neurology,19,5,Morning,0,1,1,1,11.8,1
+P101822,78,Female,Neurology,26,2,Morning,0,8,0,0,3.6,0
+P101823,7,Male,Dermatology,8,2,Evening,0,10,1,0.1,0.9,0
+P101824,34,Male,Neurology,58,3,Afternoon,0,2,2,1,3.9,1
+P101825,9,Female,Orthopedics,24,1,Morning,0,4,1,0.25,7.9,0
+P101826,38,Male,Neurology,44,4,Evening,1,2,0,0,9.3,0
+P101827,54,Male,Orthopedics,19,5,Evening,0,5,3,0.6,0.3,1
+P101828,33,Male,Dermatology,13,6,Morning,0,9,3,0.333,4.6,0
+P101829,48,Female,General Medicine,60,1,Afternoon,1,7,2,0.286,2.4,1
+P101830,3,Male,Dermatology,21,3,Afternoon,0,4,2,0.5,4.4,1
+P101831,68,Male,Cardiology,55,5,Morning,1,7,2,0.286,7.7,1
+P101832,36,Female,Cardiology,35,3,Evening,0,6,1,0.167,12.5,1
+P101833,8,Female,Cardiology,2,1,Morning,1,1,1,1,10.3,1
+P101834,16,Female,Cardiology,12,6,Morning,1,4,2,0.5,8.8,0
+P101835,16,Male,Neurology,6,1,Morning,1,2,0,0,7.9,0
+P101836,18,Female,Orthopedics,40,1,Morning,0,10,0,0,7.4,0
+P101837,79,Female,Orthopedics,46,3,Morning,0,7,0,0,14.3,1
+P101838,24,Male,General Medicine,49,6,Morning,0,8,3,0.375,0.2,1
+P101839,17,Male,Cardiology,21,5,Afternoon,1,10,0,0,1.7,0
+P101840,37,Male,Dermatology,40,0,Evening,1,6,3,0.5,4,1
+P101841,8,Male,Orthopedics,23,4,Morning,1,4,3,0.75,2,1
+P101842,38,Male,Cardiology,40,3,Evening,1,2,2,1,1.6,1
+P101843,53,Male,Cardiology,53,6,Evening,0,8,2,0.25,8.8,1
+P101844,58,Female,Orthopedics,38,2,Afternoon,0,3,1,0.333,1.1,1
+P101845,38,Male,Neurology,16,4,Afternoon,0,2,0,0,10.4,0
+P101846,44,Male,Dermatology,40,3,Afternoon,0,1,1,1,11.7,1
+P101847,17,Female,General Medicine,33,0,Morning,0,7,0,0,1.7,0
+P101848,78,Male,General Medicine,23,3,Morning,1,1,0,0,6,0
+P101849,23,Male,Orthopedics,20,2,Afternoon,0,8,0,0,1.5,0
+P101850,14,Female,Dermatology,32,3,Evening,0,1,1,1,6.5,1
+P101851,6,Male,Cardiology,33,2,Evening,1,3,1,0.333,4.4,0
+P101852,31,Female,Neurology,49,5,Evening,0,1,1,1,5.1,1
+P101853,48,Male,General Medicine,2,0,Evening,0,3,3,1,3.5,1
+P101854,7,Female,Neurology,44,4,Evening,0,6,3,0.5,9.1,1
+P101855,58,Female,Neurology,18,6,Morning,0,2,1,0.5,14,1
+P101856,85,Female,Neurology,49,5,Evening,1,7,3,0.429,13,1
+P101857,47,Female,Neurology,5,1,Morning,1,10,3,0.3,2.2,0
+P101858,40,Male,Cardiology,18,1,Morning,0,6,0,0,11.6,0
+P101859,56,Female,Neurology,18,4,Morning,0,3,1,0.333,11.6,0
+P101860,82,Male,Dermatology,35,6,Afternoon,1,7,0,0,2.3,0
+P101861,30,Male,Orthopedics,11,5,Evening,0,1,1,1,4.6,1
+P101862,67,Male,Neurology,41,6,Morning,0,10,2,0.2,13.5,1
+P101863,85,Male,Cardiology,57,5,Evening,1,5,0,0,14.4,1
+P101864,19,Female,Neurology,21,6,Afternoon,0,10,3,0.3,8.2,0
+P101865,71,Female,Neurology,27,3,Afternoon,1,9,1,0.111,1.4,0
+P101866,62,Female,General Medicine,59,5,Evening,0,7,0,0,0.2,1
+P101867,16,Female,Cardiology,51,6,Afternoon,1,3,1,0.333,8.6,1
+P101868,35,Male,General Medicine,15,6,Morning,1,7,1,0.143,12.7,0
+P101869,66,Female,Neurology,0,3,Afternoon,0,8,1,0.125,10,0
+P101870,10,Male,Cardiology,7,6,Evening,1,2,0,0,7.6,0
+P101871,8,Female,General Medicine,3,2,Evening,0,6,0,0,5.6,0
+P101872,53,Male,Neurology,54,1,Evening,1,10,0,0,0.8,0
+P101873,48,Male,Orthopedics,40,2,Morning,0,8,3,0.375,0.8,1
+P101874,8,Female,Cardiology,28,5,Afternoon,1,8,3,0.375,5.9,0
+P101875,72,Male,Dermatology,38,5,Evening,0,7,1,0.143,5.2,1
+P101876,73,Male,Orthopedics,59,0,Afternoon,0,8,3,0.375,14.7,1
+P101877,59,Male,General Medicine,4,1,Afternoon,0,9,2,0.222,3,0
+P101878,52,Male,Dermatology,12,4,Morning,1,6,1,0.167,13.7,0
+P101879,11,Male,General Medicine,13,3,Morning,0,8,0,0,10.2,0
+P101880,64,Female,Dermatology,15,0,Morning,1,4,3,0.75,2,0
+P101881,76,Male,Cardiology,4,6,Evening,1,4,3,0.75,4.6,0
+P101882,6,Male,Dermatology,9,2,Afternoon,1,6,0,0,4.4,0
+P101883,14,Female,Dermatology,28,4,Morning,0,1,0,0,10.2,0
+P101884,22,Male,General Medicine,47,0,Morning,1,3,3,1,10,1
+P101885,25,Female,Neurology,57,3,Morning,0,2,1,0.5,1.5,1
+P101886,88,Female,Cardiology,47,6,Afternoon,1,10,2,0.2,11.8,1
+P101887,23,Female,Dermatology,56,0,Afternoon,0,4,1,0.25,12.7,1
+P101888,90,Female,Dermatology,47,5,Morning,0,4,3,0.75,7.4,1
+P101889,64,Male,Dermatology,44,4,Morning,0,8,3,0.375,6,1
+P101890,19,Male,Cardiology,48,1,Morning,0,1,1,1,5.6,1
+P101891,51,Female,General Medicine,43,6,Afternoon,0,6,2,0.333,1.3,1
+P101892,52,Male,General Medicine,59,4,Evening,0,9,3,0.333,10.3,1
+P101893,51,Female,Neurology,36,0,Evening,0,3,0,0,4.9,0
+P101894,70,Female,Neurology,15,6,Morning,1,10,2,0.2,9.4,0
+P101895,5,Male,Neurology,57,3,Evening,0,3,1,0.333,12.8,1
+P101896,39,Female,Neurology,32,4,Evening,1,10,2,0.2,9.7,0
+P101897,81,Female,General Medicine,5,5,Evening,1,2,2,1,5.2,0
+P101898,70,Female,Dermatology,22,3,Afternoon,0,8,0,0,3.5,0
+P101899,10,Male,Dermatology,1,3,Evening,1,4,1,0.25,4.1,0
+P101900,74,Female,Neurology,24,3,Evening,0,9,3,0.333,12.9,1
+P101901,5,Female,Neurology,20,0,Afternoon,0,3,1,0.333,7.4,0
+P101902,4,Female,Dermatology,23,3,Evening,0,3,1,0.333,10.4,1
+P101903,4,Male,Cardiology,43,2,Evening,1,10,2,0.2,8.5,1
+P101904,24,Female,Dermatology,54,4,Afternoon,1,3,2,0.667,4,1
+P101905,32,Male,Neurology,22,5,Evening,1,4,1,0.25,2.8,0
+P101906,25,Male,Orthopedics,53,3,Morning,0,5,3,0.6,13,1
+P101907,44,Female,Cardiology,43,2,Afternoon,1,5,0,0,2.8,0
+P101908,29,Female,Neurology,25,4,Evening,0,3,1,0.333,13,1
+P101909,51,Female,Orthopedics,14,0,Evening,0,6,0,0,8.4,0
+P101910,42,Female,Orthopedics,24,6,Afternoon,1,8,2,0.25,0.2,0
+P101911,16,Male,General Medicine,12,3,Evening,1,4,0,0,9.4,0
+P101912,43,Male,Orthopedics,3,6,Morning,0,8,1,0.125,7.8,0
+P101913,42,Female,Dermatology,13,0,Afternoon,1,2,1,0.5,4.6,0
+P101914,47,Male,Dermatology,6,3,Evening,0,6,1,0.167,10.9,0
+P101915,41,Male,General Medicine,15,4,Afternoon,1,9,0,0,6.7,0
+P101916,46,Male,Dermatology,18,3,Evening,0,3,0,0,0.5,0
+P101917,78,Male,Dermatology,44,0,Afternoon,1,9,0,0,8.4,0
+P101918,18,Female,Neurology,15,6,Afternoon,1,6,1,0.167,6,0
+P101919,58,Female,Orthopedics,20,2,Morning,1,7,0,0,11.9,0
+P101920,86,Female,Neurology,45,5,Afternoon,1,3,3,1,7.7,1
+P101921,79,Female,Cardiology,23,4,Morning,1,10,3,0.3,11.8,0
+P101922,4,Male,General Medicine,5,0,Morning,1,5,0,0,14.8,0
+P101923,30,Male,Cardiology,23,1,Evening,0,3,2,0.667,8.8,1
+P101924,1,Female,Orthopedics,55,3,Morning,1,2,1,0.5,1,1
+P101925,24,Male,Orthopedics,40,2,Afternoon,1,9,1,0.111,8.3,0
+P101926,89,Male,Dermatology,24,3,Evening,1,9,3,0.333,2.2,0
+P101927,1,Male,Orthopedics,41,6,Evening,1,8,2,0.25,2.2,0
+P101928,9,Male,Cardiology,18,5,Evening,0,3,2,0.667,14.2,1
+P101929,17,Male,Neurology,8,1,Evening,0,2,2,1,12.5,1
+P101930,2,Male,Neurology,39,1,Afternoon,0,1,1,1,0.9,1
+P101931,60,Female,General Medicine,10,4,Morning,0,5,3,0.6,10.8,1
+P101932,23,Male,Orthopedics,33,3,Afternoon,0,8,3,0.375,10,1
+P101933,35,Female,Cardiology,47,3,Morning,1,6,2,0.333,8.4,1
+P101934,66,Female,Dermatology,20,5,Evening,0,10,0,0,9.3,0
+P101935,24,Female,General Medicine,25,5,Afternoon,0,4,0,0,8.2,0
+P101936,28,Male,General Medicine,29,2,Morning,0,3,0,0,3,0
+P101937,22,Male,Dermatology,36,6,Afternoon,0,3,1,0.333,11.1,1
+P101938,71,Male,Cardiology,40,1,Afternoon,1,10,0,0,3.5,0
+P101939,40,Female,Dermatology,50,0,Afternoon,0,6,1,0.167,4.8,1
+P101940,38,Male,General Medicine,14,4,Afternoon,0,8,3,0.375,12.1,0
+P101941,15,Male,Dermatology,36,4,Evening,1,5,2,0.4,9.2,1
+P101942,21,Male,Orthopedics,11,1,Evening,0,8,0,0,6.6,0
+P101943,28,Female,Orthopedics,48,1,Evening,1,10,3,0.3,10.8,1
+P101944,87,Male,Cardiology,8,6,Afternoon,0,9,1,0.111,0.4,0
+P101945,6,Female,Neurology,35,3,Evening,0,7,0,0,2.6,0
+P101946,48,Female,Cardiology,22,1,Evening,0,8,3,0.375,10.4,1
+P101947,6,Male,General Medicine,59,2,Afternoon,0,9,3,0.333,12,1
+P101948,74,Female,General Medicine,41,3,Morning,0,4,3,0.75,12.2,1
+P101949,20,Male,Neurology,13,5,Afternoon,0,6,1,0.167,0.3,0
+P101950,84,Male,General Medicine,19,4,Morning,0,1,0,0,7.2,0
+P101951,76,Female,General Medicine,30,4,Morning,0,1,1,1,3.2,1
+P101952,15,Male,Cardiology,3,0,Evening,0,3,3,1,11,1
+P101953,78,Male,General Medicine,29,0,Afternoon,0,8,3,0.375,0.8,1
+P101954,80,Male,Dermatology,8,1,Evening,0,7,0,0,0.6,0
+P101955,80,Male,General Medicine,59,2,Evening,0,6,3,0.5,3,1
+P101956,2,Male,Dermatology,24,5,Evening,1,4,3,0.75,3.1,1
+P101957,12,Female,General Medicine,9,6,Evening,1,5,0,0,2.6,0
+P101958,74,Female,Cardiology,59,1,Evening,1,7,1,0.143,12.9,1
+P101959,76,Male,Orthopedics,8,2,Evening,0,5,3,0.6,12.6,1
+P101960,28,Female,Cardiology,51,6,Evening,0,7,0,0,12.1,1
+P101961,30,Female,General Medicine,52,1,Afternoon,0,10,3,0.3,11.6,1
+P101962,70,Female,Dermatology,59,2,Morning,1,4,3,0.75,8.2,1
+P101963,20,Male,Cardiology,16,3,Morning,0,4,0,0,13.3,0
+P101964,72,Female,Orthopedics,23,0,Morning,0,7,0,0,7.2,0
+P101965,76,Male,Dermatology,28,1,Morning,0,10,0,0,6.5,0
+P101966,34,Male,General Medicine,33,1,Evening,0,3,2,0.667,5.1,1
+P101967,79,Female,Dermatology,15,3,Evening,0,5,0,0,1.9,0
+P101968,48,Female,Neurology,27,5,Afternoon,1,8,2,0.25,9.3,0
+P101969,33,Female,General Medicine,27,1,Afternoon,0,6,2,0.333,14.2,1
+P101970,8,Male,Neurology,0,0,Morning,0,8,3,0.375,0.7,0
+P101971,13,Female,Dermatology,51,2,Morning,1,4,0,0,8.3,1
+P101972,67,Male,Orthopedics,27,3,Morning,0,8,1,0.125,8.2,0
+P101973,8,Female,General Medicine,55,1,Evening,0,3,0,0,14.6,1
+P101974,60,Male,Orthopedics,28,0,Morning,0,1,1,1,3.7,1
+P101975,26,Female,Cardiology,33,0,Evening,1,5,2,0.4,7.4,0
+P101976,69,Female,Dermatology,1,3,Evening,1,4,0,0,2.7,0
+P101977,72,Male,Orthopedics,31,1,Evening,0,7,2,0.286,3.1,1
+P101978,56,Female,Dermatology,10,6,Morning,1,4,3,0.75,13.8,0
+P101979,18,Female,General Medicine,37,0,Morning,0,2,1,0.5,7.9,1
+P101980,43,Male,General Medicine,26,6,Morning,1,5,3,0.6,1.5,1
+P101981,16,Female,General Medicine,37,0,Evening,1,1,1,1,10,1
+P101982,73,Female,Neurology,34,0,Afternoon,0,5,1,0.2,12.3,1
+P101983,79,Male,Neurology,20,2,Evening,0,4,0,0,0.6,0
+P101984,68,Female,Cardiology,59,5,Morning,1,10,3,0.3,11.7,1
+P101985,54,Female,Neurology,37,4,Evening,1,4,3,0.75,10.3,1
+P101986,20,Male,Dermatology,26,2,Morning,1,5,0,0,14.3,0
+P101987,23,Female,Dermatology,36,1,Morning,1,8,3,0.375,3.7,0
+P101988,58,Male,General Medicine,37,5,Afternoon,0,9,2,0.222,14.9,1
+P101989,60,Male,Neurology,54,3,Evening,0,3,3,1,0.4,1
+P101990,21,Male,Orthopedics,5,0,Evening,1,3,0,0,0.8,0
+P101991,15,Male,Dermatology,23,0,Evening,1,2,0,0,13.5,0
+P101992,10,Female,Orthopedics,59,2,Evening,0,9,2,0.222,12.2,1
+P101993,46,Male,Neurology,48,3,Evening,0,3,1,0.333,6.8,1
+P101994,8,Male,Orthopedics,59,4,Morning,0,6,3,0.5,8.1,1
+P101995,24,Male,Dermatology,20,4,Morning,1,7,3,0.429,10,0
+P101996,66,Female,Neurology,5,2,Morning,0,5,3,0.6,14,0
+P101997,51,Female,General Medicine,35,2,Morning,0,10,3,0.3,7,1
+P101998,12,Female,General Medicine,14,2,Afternoon,0,10,2,0.2,3.9,0
+P101999,37,Male,Orthopedics,57,5,Afternoon,0,1,1,1,2.7,1

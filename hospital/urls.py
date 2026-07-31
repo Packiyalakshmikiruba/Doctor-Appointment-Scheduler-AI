@@ -49,9 +49,12 @@ path(
 path("doctor/checkin/", views.doctor_checkin, name="doctor_checkin"),
 path("doctor/checkout/", views.doctor_checkout, name="doctor_checkout"),
 path("doctor/status/", views.update_doctor_status, name="update_doctor_status"),
-path("doctor/leave/add/", views.doctor_leave_create, name="doctor_leave_create"),
+path("my-leaves/", views.manage_leave, name="manage_leave"),
+path("doctor-status/", views.doctor_status_list, name="status_list"),
     # Doctor Availability URLs
     path("availability/", views.availability_list, name="availability_list"),
     path("availability/add/", views.availability_create, name="availability_create"),
+
+    path("project-overview/", views.project_overview, name="project_overview"),
 
 ]

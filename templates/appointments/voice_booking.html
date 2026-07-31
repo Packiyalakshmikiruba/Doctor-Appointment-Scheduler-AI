@@ -1,37 +1,55 @@
 {% extends "base.html" %}
+
 {% block title %}Voice Appointment Assistant{% endblock %}
+
 {% block content %}
-
-<div class="row justify-content-center">
-    <div class="col-md-6">
-
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white text-center">
-                <h4 class="mb-0"><i class="bi bi-mic-fill"></i> Voice Assistant</h4>
-                <small>Book appointments, check doctors, or ask questions -- by voice</small>
-            </div>
-
-            <div class="card-body text-center p-4">
-
-                <p class="text-muted">Tap the mic and say something like:</p>
-                <p class="fst-italic text-secondary">"I have fever, book an appointment"</p>
-
-                <button id="mic-btn" class="btn btn-lg btn-primary rounded-circle p-4 mb-3">
-                    <i class="bi bi-mic-fill fs-2"></i>
-                </button>
-
-                <div id="status-text" class="text-muted mb-3">Tap to speak</div>
-
-                <div id="transcript-box" class="alert alert-light border d-none text-start">
-                    <strong>You said:</strong> <span id="transcript-text"></span>
+<!-- Double Color Gradient Background Wrapper -->
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+    
+    <div class="row justify-content-center py-4">
+        <div class="col-md-7 col-lg-5">
+            
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-white">
+                
+                <!-- Card Header -->
+                <div class="card-header bg-gradient bg-primary text-white text-center py-4 px-4 border-0">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle p-3 mb-2">
+                        <i class="bi bi-mic-fill fs-2 text-white"></i>
+                    </div>
+                    <h3 class="mb-1 fw-bold">Voice Assistant</h3>
+                    <p class="mb-0 text-white-50 small">Book appointments, check doctors, or ask questions — simply by voice</p>
                 </div>
 
-                <div id="response-box" class="alert d-none text-start"></div>
+                <!-- Card Body -->
+                <div class="card-body text-center p-4 p-md-5">
 
+                    <p class="text-muted small mb-1">Tap the microphone and say something like:</p>
+                    <p class="fst-italic text-primary fw-semibold mb-4">"I have fever, book an appointment"</p>
+
+                    <!-- Mic Button with Interactive Animation Style -->
+                    <div class="my-4">
+                        <button id="mic-btn" class="btn btn-primary btn-lg rounded-circle p-4 shadow-lg position-relative" style="width: 90px; height: 90px; transition: all 0.3s ease;">
+                            <i class="bi bi-mic-fill fs-2"></i>
+                        </button>
+                    </div>
+
+                    <div id="status-text" class="fw-semibold text-secondary mb-4">Tap to speak</div>
+
+                    <!-- Transcript Box -->
+                    <div id="transcript-box" class="alert alert-light border rounded-3 d-none text-start shadow-sm mb-3">
+                        <small class="text-muted d-block fw-bold mb-1"><i class="bi bi-chat-left-text me-1"></i> You said:</small>
+                        <span id="transcript-text" class="text-dark fw-medium"></span>
+                    </div>
+
+                    <!-- Response Box -->
+                    <div id="response-box" class="alert d-none text-start rounded-3 shadow-sm"></div>
+
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
+
 </div>
 
 <script>
@@ -52,6 +70,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 if (!SpeechRecognition) {
     statusText.textContent = "Voice recognition isn't supported in this browser. Try Chrome.";
     micBtn.disabled = true;
+    micBtn.classList.add("opacity-50");
 } else {
     const recognition = new SpeechRecognition();
     recognition.lang = "en-IN";
@@ -60,8 +79,9 @@ if (!SpeechRecognition) {
     micBtn.addEventListener("click", () => {
         responseBox.classList.add("d-none");
         transcriptBox.classList.add("d-none");
-        statusText.textContent = "Listening...";
+        statusText.textContent = "Listening... Speak now";
         micBtn.disabled = true;
+        micBtn.classList.add("pulse-animation");
         recognition.start();
     });
 
@@ -72,8 +92,6 @@ if (!SpeechRecognition) {
         statusText.textContent = "Thinking...";
 
         try {
-            // Uses the SAME chat endpoint as the text chat widget --
-            // one booking brain, two input methods (typing or speaking).
             const resp = await fetch("{% url 'chat_api' %}", {
                 method: "POST",
                 headers: {
@@ -91,10 +109,9 @@ if (!SpeechRecognition) {
             const replyText = data.response || data.error || "Sorry, something went wrong.";
 
             responseBox.classList.remove("d-none");
-            responseBox.className = data.error ? "alert alert-danger text-start" : "alert alert-success text-start";
+            responseBox.className = data.error ? "alert alert-danger text-start rounded-3" : "alert alert-success text-start rounded-3";
             responseBox.textContent = replyText;
 
-            // Speak the response back (Text-to-Speech)
             const utterance = new SpeechSynthesisUtterance(replyText);
             utterance.lang = "en-IN";
             speechSynthesis.speak(utterance);
@@ -102,23 +119,25 @@ if (!SpeechRecognition) {
         } catch (err) {
             console.error("Voice booking error:", err);
             responseBox.classList.remove("d-none");
-            responseBox.className = "alert alert-danger text-start";
+            responseBox.className = "alert alert-danger text-start rounded-3";
             responseBox.textContent = "Sorry, connection error. Please try again.";
         } finally {
             statusText.textContent = "Tap to speak";
             micBtn.disabled = false;
+            micBtn.classList.remove("pulse-animation");
         }
     };
 
     recognition.onerror = () => {
         statusText.textContent = "Didn't catch that. Tap to try again.";
         micBtn.disabled = false;
+        micBtn.classList.remove("pulse-animation");
     };
 
     recognition.onend = () => {
         micBtn.disabled = false;
+        micBtn.classList.remove("pulse-animation");
     };
 }
 </script>
-
 {% endblock %}

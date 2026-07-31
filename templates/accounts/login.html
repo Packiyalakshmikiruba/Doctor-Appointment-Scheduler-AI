@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Secure Login - Hospital Portal{% endblock %}
+{% block title %}Patient Portal - Secure Login{% endblock %}
 
 {% block content %}
 <div class="container-fluid d-flex justify-content-center align-items-center vh-100 cyber-bg">
     <div class="row w-100 justify-content-center">
         <div class="col-md-5 col-lg-4">
             
-            <!-- Cyber Neon Card -->
+            <!-- Patient Portal Card -->
             <div class="card cyber-card border-0 rounded-4 overflow-hidden">
                 
-                <!-- Glowing Neon Header -->
-                <div class="card-header cyber-header text-white text-center py-5 border-0 position-relative">
+                <!-- Header -->
+                <div class="card-header cyber-header text-white text-center py-4 border-0 position-relative">
                     <div class="neon-badge mx-auto mb-3 shadow-lg">
-                        <i class="bi bi-cpu-fill fs-1 text-cyan"></i>
+                        <i class="bi bi-person-heart fs-1 text-cyan"></i>
                     </div>
-                    <h2 class="mb-1 fw-bold text-glow">SYSTEM ACCESS</h2>
-                    <p class="mb-0 text-cyan-50 small tracking-widest">SECURE CREDENTIAL VERIFICATION</p>
+                    <h2 class="mb-1 fw-bold text-glow">PATIENT PORTAL</h2>
+                    <p class="mb-0 text-cyan-50 small tracking-widest">SECURE HEALTH RECORD ACCESS</p>
                 </div>
 
                 <!-- Card Body -->
@@ -34,11 +34,11 @@
                             </div>
                         {% endif %}
 
-                        <!-- Username Field -->
+                        <!-- Patient ID / Username Field -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold text-cyan small tracking-wider">USERNAME ID</label>
+                            <label class="form-label fw-bold text-cyan small tracking-wider">USERNAME</label>
                             <div class="input-group cyber-input-group">
-                                <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-person-badge"></i></span>
+                                <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-person-fill"></i></span>
                                 {{ form.username }}
                             </div>
                             {% for error in form.username.errors %}
@@ -48,7 +48,7 @@
 
                         <!-- Password Field -->
                         <div class="mb-4">
-                            <label class="form-label fw-bold text-cyan small tracking-wider">SECURITY PASSWORD</label>
+                            <label class="form-label fw-bold text-cyan small tracking-wider">PASSWORD</label>
                             <div class="input-group cyber-input-group">
                                 <span class="input-group-text border-end-0 rounded-start-3 text-cyan bg-dark-glass"><i class="bi bi-key-fill"></i></span>
                                 {{ form.password }}
@@ -58,21 +58,21 @@
                             {% endfor %}
                         </div>
 
-                        <!-- Neon Glow Action Button -->
+                        <!-- Action Button -->
                         <button class="btn btn-neon-glow w-100 py-3 rounded-pill fw-bold text-dark text-uppercase tracking-wider shadow-lg mb-3" type="submit">
-                            <i class="bi bi-unlock-fill me-2"></i> Initialize Login
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Login to Dashboard
                         </button>
 
                     </form>
 
                     <div class="text-center my-3">
-                        <span class="text-muted small">OR ACCESS</span>
+                        <span class="text-muted small">OR</span>
                     </div>
 
                     <!-- Register Link -->
                     <p class="text-center text-secondary mb-0">
-                        New entity? 
-                        <a href="{% url 'register' %}" class="text-neon-link fw-bold text-decoration-none">Register Profile</a>
+                        New patient? 
+                        <a href="{% url 'register' %}" class="text-neon-link fw-bold text-decoration-none">Create Account</a>
                     </p>
 
                 </div>
@@ -82,9 +82,8 @@
     </div>
 </div>
 
-<!-- Cyberpunk Neon 3D CSS Styles -->
+<!-- Custom Styles -->
 <style>
-    /* Dark Futuristic Background */
     .cyber-bg {
         background: #050508;
         background-image: 
@@ -93,7 +92,6 @@
         min-height: 100vh;
     }
 
-    /* Cyber Card Glassmorphism with Neon Border */
     .cyber-card {
         background: rgba(13, 17, 23, 0.85);
         backdrop-filter: blur(16px);
@@ -108,7 +106,6 @@
         transform: translateY(-5px);
     }
 
-    /* Header Styling */
     .cyber-header {
         background: linear-gradient(135deg, #090d16, #111b2b);
         border-bottom: 1px solid rgba(0, 242, 254, 0.2);
@@ -135,12 +132,10 @@
         text-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
     }
 
-    /* Form Body */
     .cyber-body {
         background: transparent;
     }
 
-    /* Cyber Inputs */
     .cyber-input-group input {
         display: block;
         width: 100%;
@@ -172,7 +167,6 @@
         border-right: none;
     }
 
-    /* Neon Button */
     .btn-neon-glow {
         background: #00f2fe;
         color: #050508;
@@ -188,7 +182,6 @@
         box-shadow: 0 0 30px rgba(0, 242, 254, 0.8);
     }
 
-    /* Link Style */
     .text-neon-link {
         color: #00f2fe;
         text-shadow: 0 0 5px rgba(0, 242, 254, 0.4);

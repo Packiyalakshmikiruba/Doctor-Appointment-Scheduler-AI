@@ -345,3 +345,78 @@
     max-height: 150px !important;
     width: 100% !important;
 }
+
+const paymentCtx = document.getElementById('paymentChart');
+
+new Chart(paymentCtx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+
+            'Paid',
+
+            'Pending'
+
+        ],
+
+        datasets: [{
+
+            data: [
+
+                {{ total_paid }},
+
+                {{ total_due }}
+
+            ],
+
+            backgroundColor: [
+
+                '#198754',
+
+                '#dc3545'
+
+            ],
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        cutout: '65%',
+
+        plugins: {
+
+            legend: {
+
+                position: 'bottom'
+
+            }
+
+        }
+
+    }
+
+});
+
+/* Smooth hover lift effect for cards */
+.transition-hover {
+    transition: all 0.3s ease-in-out;
+}
+.transition-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.08) !important;
+}
+
+/* Custom soft background utility classes if Bootstrap version doesn't support them fully */
+.bg-primary-subtle { background-color: rgba(13, 110, 253, 0.1) !important; }
+.bg-success-subtle { background-color: rgba(25, 135, 84, 0.1) !important; }
+.bg-warning-subtle { background-color: rgba(255, 193, 7, 0.1) !important; }
+.bg-danger-subtle { background-color: rgba(220, 53, 69, 0.1) !important; }

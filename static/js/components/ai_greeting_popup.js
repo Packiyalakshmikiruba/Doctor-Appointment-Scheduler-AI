@@ -2,56 +2,78 @@
 // AI GREETING POPUP
 // ======================================
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
 
-const popup=document.getElementById("aiGreetingPopup");
+    const popup = document.getElementById("aiGreetingPopup");
+    const close = document.getElementById("closeGreeting");
+    const start = document.getElementById("startChatBtn");
 
-const close=document.getElementById("closeGreeting");
+    if (!popup) return;
 
-const start=document.getElementById("startChatBtn");
+    // ======================================
+    // Show only once per browser tab
+    // ======================================
 
-// Show after 2 seconds
+    if (!sessionStorage.getItem("aiGreetingShown")) {
 
-setTimeout(()=>{
+        setTimeout(() => {
 
-popup.style.display="block";
+            popup.style.display = "block";
 
-},2000);
+            sessionStorage.setItem("aiGreetingShown", "true");
 
-// Close
+        }, 2000);
 
-close.addEventListener("click",()=>{
+    }
 
-popup.style.display="none";
+    // ======================================
+    // Close Popup
+    // ======================================
 
-});
+    if (close) {
 
-// Open Chat
+        close.addEventListener("click", () => {
 
-start.addEventListener("click",()=>{
+            popup.style.display = "none";
 
-popup.style.display="none";
+        });
 
-const modal=document.getElementById("chatModal")
+    }
 
-|| document.getElementById("liveChatModal");
+    // ======================================
+    // Open Chat
+    // ======================================
 
-if(modal){
+    if (start) {
 
-const bsModal=new bootstrap.Modal(modal);
+        start.addEventListener("click", () => {
 
-bsModal.show();
+            popup.style.display = "none";
 
-}
+            const modal =
+                document.getElementById("chatModal") ||
+                document.getElementById("liveChatModal");
 
-});
+            if (modal) {
 
-// Auto Hide
+                const bsModal = new bootstrap.Modal(modal);
 
-setTimeout(()=>{
+                bsModal.show();
 
-popup.style.display="none";
+            }
 
-},15000);
+        });
+
+    }
+
+    // ======================================
+    // Auto Hide after 15 sec
+    // ======================================
+
+    setTimeout(() => {
+
+        popup.style.display = "none";
+
+    }, 15000);
 
 });

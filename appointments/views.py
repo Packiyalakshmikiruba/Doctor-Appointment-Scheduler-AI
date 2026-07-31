@@ -9,7 +9,7 @@ from hospital.models import Department, Doctor
 from .forms import AppointmentForm
 from .models import Appointment
 from patients.models import Patient
-
+from notifications.models import Notification
 from appointments.booking_service import book_appointment_full, handle_cancellation, BookingError
 
 
@@ -213,6 +213,7 @@ def patient_history_view(request, patient_id):
     })
 @login_required
 def appointment_create(request):
+
     if request.user.role not in ("ADMIN", "PATIENT"):
         messages.error(request, "Access denied.")
         return redirect("dashboard")
@@ -220,6 +221,7 @@ def appointment_create(request):
     is_self_booking = request.user.role == "PATIENT"
 
     if request.method == "POST":
+
         form = AppointmentForm(request.POST)
 
         if is_self_booking:
@@ -227,6 +229,7 @@ def appointment_create(request):
             form.data["patient"] = request.user.patient_profile.id
 
         if form.is_valid():
+
             try:
                 appointment = book_appointment_full(
                     patient=form.cleaned_data["patient"],
@@ -236,21 +239,78 @@ def appointment_create(request):
                     reason=form.cleaned_data["reason"],
                 )
 
+                print("SUCCESS")
+                print(appointment.id)
+
+            except BookingError as e:
+                print("BOOKING ERROR :", e.message)
+                messages.error(request, e.message)
+
+            except Exception as e:
+                print("SYSTEM ERROR :", str(e))
+                raise
+
+                # -----------------------------------
+                # Notification for Patient
+                # -----------------------------------
+
+                Notification.objects.create(
+
+                    user=appointment.patient.user,
+
+                    title="Appointment Booked",
+
+                    message=(
+                        f"Your appointment with "
+                        f"Dr. {appointment.doctor.user.get_full_name()} "
+                        f"has been booked successfully.\n\n"
+                        f"Date : {appointment.appointment_date}\n"
+                        f"Time : {appointment.appointment_time}"
+                    )
+
+                )
+
+                # -----------------------------------
+                # Notification for Doctor
+                # -----------------------------------
+
+                Notification.objects.create(
+
+                    user=appointment.doctor.user,
+
+                    title="New Appointment",
+
+                    message=(
+                        f"You have a new appointment.\n\n"
+                        f"Patient : {appointment.patient.user.get_full_name()}\n"
+                        f"Date : {appointment.appointment_date}\n"
+                        f"Time : {appointment.appointment_time}"
+                    )
+
+                )
+
                 messages.success(
+
                     request,
+
                     "Appointment booked successfully. Confirmation email has been sent."
+
                 )
 
                 return redirect("dashboard")
 
             except BookingError as e:
+
                 messages.error(request, e.message)
 
     else:
+
         form = AppointmentForm()
 
         if is_self_booking:
+
             form.fields["patient"].widget = forms.HiddenInput()
+
             form.fields["patient"].initial = request.user.patient_profile.id
 
     is_modal = request.GET.get("modal") == "true"
@@ -262,10 +322,17 @@ def appointment_create(request):
     )
 
     return render(
+
         request,
+
         template_name,
+
         {
+
             "form": form,
+
             "is_self_booking": is_self_booking,
+
         },
+
     )

@@ -6,52 +6,124 @@ from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 import uuid
-
+from django.contrib import messages
+from django.utils import timezone
 from .models import Payment
 from .forms import PaymentForm
 from billing.models import Bill
-
+from django.db.models import Sum, Q
 
 @login_required
 def payment_list(request):
 
-    if request.user.role=="ADMIN":
+    if request.user.role == "ADMIN":
 
-        payments=Payment.objects.select_related(
+        payments = Payment.objects.select_related(
             "bill",
             "bill__appointment",
             "bill__appointment__patient__user",
             "bill__appointment__doctor__user",
             "bill__appointment__doctor__department",
-        ).order_by("-payment_date")
+        )
 
-    elif request.user.role=="PATIENT":
+    elif request.user.role == "PATIENT":
 
-        payments=Payment.objects.select_related(
+        payments = Payment.objects.select_related(
             "bill",
             "bill__appointment",
             "bill__appointment__doctor__user",
             "bill__appointment__doctor__department",
         ).filter(
             bill__appointment__patient=request.user.patient_profile
-        ).order_by("-payment_date")
+        )
 
     else:
 
         return redirect("dashboard")
 
-    total_amount=payments.filter(
+    # -----------------------------
+    # Search
+    # -----------------------------
+
+    search = request.GET.get("search")
+
+    if search:
+
+        payments = payments.filter(
+            Q(transaction_id__icontains=search)
+            |
+            Q(receipt_number__icontains=search)
+        )
+
+    # -----------------------------
+    # Method Filter
+    # -----------------------------
+
+    method = request.GET.get("method")
+
+    if method:
+
+        payments = payments.filter(
+            payment_method=method
+        )
+
+    # -----------------------------
+    # Status Filter
+    # -----------------------------
+
+    status = request.GET.get("status")
+
+    if status:
+
+        payments = payments.filter(
+            payment_status=status
+        )
+
+    payments = payments.order_by("-payment_date")
+
+    # -----------------------------
+    # Dashboard Cards
+    # -----------------------------
+
+    total_payments = payments.count()
+
+    successful_payments = payments.filter(
         payment_status="Success"
-    ).aggregate(
-        total=Sum("amount")
-    )["total"] or 0
+    ).count()
+
+    total_amount = (
+        payments.filter(
+            payment_status="Success"
+        ).aggregate(
+            total=Sum("amount")
+        )["total"] or 0
+    )
+
+    today = timezone.localdate()
+
+    today_payments = payments.filter(
+        payment_date__date=today
+    ).count()
 
     return render(
         request,
         "payments/payment_list.html",
         {
-            "payments":payments,
-            "total_amount":total_amount,
+            "payments": payments,
+
+            "total_payments": total_payments,
+
+            "successful_payments": successful_payments,
+
+            "total_amount": total_amount,
+
+            "today_payments": today_payments,
+
+            "search": search,
+
+            "method": method,
+
+            "status": status,
         }
     )
 @login_required
@@ -106,11 +178,11 @@ def payment_detail(request,pk):
 @login_required
 def payment_create(request, bill_id):
 
-    if request.user.role != "ADMIN":
+    if request.user.role not in ["ADMIN", "PATIENT"]:
 
         messages.error(
             request,
-            "Only Admin can create payment."
+            "Access Denied."
         )
 
         return redirect("dashboard")
@@ -125,13 +197,28 @@ def payment_create(request, bill_id):
         pk=bill_id
     )
 
-    # OneToOneField check
+    # Patient can pay only his own bill
+    if request.user.role == "PATIENT":
+
+        if bill.appointment.patient != request.user.patient_profile:
+
+            messages.error(
+                request,
+                "Access Denied."
+            )
+
+            return redirect("bill_list")
+
+    # One Bill -> One Payment
     if hasattr(bill, "payment"):
 
         messages.warning(
             request,
-            "Payment already exists for this bill."
+            "Payment already exists."
         )
+
+        if request.user.role == "PATIENT":
+            return redirect("my_payments")
 
         return redirect(
             "payment_detail",
@@ -147,35 +234,85 @@ def payment_create(request, bill_id):
             payment = form.save(commit=False)
 
             payment.bill = bill
-
             payment.amount = bill.total_amount
-
             payment.transaction_id = uuid.uuid4().hex[:12].upper()
-
             payment.receipt_number = f"RCPT-{bill.id:05d}"
 
             payment.received_by = (
                 request.user.get_full_name()
-                or
-                request.user.username
+                or request.user.username
             )
 
             payment.save()
 
+            # Update Bill Status
             if payment.payment_status == "Success":
-
                 bill.payment_status = "Paid"
-
             else:
-
                 bill.payment_status = "Pending"
 
-            bill.save()
+            bill.save(update_fields=["payment_status"])
+
+            # Send Email
+            try:
+
+                from django.core.mail import send_mail
+
+                send_mail(
+
+                    subject="Payment Successful",
+
+                    message=f"""
+Dear {bill.appointment.patient.user.get_full_name()},
+
+Your payment has been completed successfully.
+
+---------------------------------------
+
+Receipt No :
+{payment.receipt_number}
+
+Transaction ID :
+{payment.transaction_id}
+
+Amount :
+₹ {payment.amount}
+
+Payment Method :
+{payment.payment_method}
+
+Status :
+{payment.payment_status}
+
+---------------------------------------
+
+Thank you.
+
+AI Hospital
+Doctor Appointment Scheduler
+""",
+
+                    from_email=None,
+
+                    recipient_list=[
+                        bill.appointment.patient.user.email
+                    ],
+
+                    fail_silently=True,
+
+                )
+
+            except Exception:
+                pass
 
             messages.success(
                 request,
-                f"Payment of ₹{payment.amount} received successfully."
+                "Payment Created Successfully."
             )
+
+            # Redirect
+            if request.user.role == "PATIENT":
+                return redirect("my_payments")
 
             return redirect(
                 "payment_detail",
@@ -186,7 +323,6 @@ def payment_create(request, bill_id):
 
         form = PaymentForm(
             initial={
-                "amount": bill.total_amount,
                 "payment_status": "Success",
             }
         )
@@ -304,8 +440,13 @@ def payment_delete(request,pk):
 
         payment.delete()
 
-        bill.payment_status="Pending"
-        bill.save()
+        bill.payment_status = "Pending"
+
+        bill.save(
+            update_fields=[
+                "payment_status"
+            ]
+        )
 
         messages.success(
             request,

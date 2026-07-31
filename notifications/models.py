@@ -3,22 +3,44 @@ from django.conf import settings
 
 
 class Notification(models.Model):
+
+    TYPE_CHOICES = [
+        ("Appointment", "Appointment"),
+        ("Prescription", "Prescription"),
+        ("Billing", "Billing"),
+        ("Payment", "Payment"),
+        ("Reminder", "Reminder"),
+        ("System", "System"),
+    ]
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="notifications"
     )
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(
+        max_length=200
+    )
 
     message = models.TextField()
 
-    is_read = models.BooleanField(default=False)
+    notification_type = models.CharField(
+        max_length=30,
+        choices=TYPE_CHOICES,
+        default="System"
+    )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.title
+        return f"{self.user.username} - {self.title}"

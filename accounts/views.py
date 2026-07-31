@@ -2,19 +2,23 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.utils import timezone
-from medical_records.models import MedicalRecord
 from .forms import RegisterForm, LoginForm
-from appointments.models import Appointment
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from chatbot.views import _SESSION_HISTORY
-from .forms import RegisterForm, LoginForm
-from django.db.models import Count
-from hospital.models import DoctorAvailability
+from django.shortcuts import render, redirect
+from prescriptions.models import Prescription
+from messaging.models import Message
+from notifications.models import Notification
+from hospital.models import (
+    Doctor,
+    DoctorAvailability,
+    DoctorAttendance,
+    DoctorStatus,
+    DoctorLeave,
+)
 import json
 from datetime import timedelta
 from django.db.models import Count, Sum
@@ -22,7 +26,8 @@ from appointments.models import Appointment
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from medical_records.models import MedicalRecord
-from billing.models import Bill, Payment
+from billing.models import Bill
+from payment.models import Payment
 
 
 def register_view(request):
@@ -111,18 +116,6 @@ def dashboard_redirect(request):
 
 # ---------------- Patient Dashboard ----------------
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.utils import timezone
-from django.db.models import Sum
-
-from appointments.models import Appointment
-from hospital.models import Doctor
-from medical_records.models import MedicalRecord
-from prescriptions.models import Prescription
-from billing.models import Bill, Payment
-from messaging.models import Message
 
 
 @login_required
@@ -215,14 +208,18 @@ def patient_dashboard_view(request):
     # ----------------------------------------
     # Payments
     # ----------------------------------------
-
-    payments = Payment.objects.filter(
-        bill__appointment__patient=patient
-    ).order_by("-paid_at")
+    payments = (
+        Payment.objects
+        .filter(
+            bill__appointment__patient=patient
+        )
+        .order_by("-payment_date")
+    )
 
     total_paid = payments.aggregate(
-        total=Sum("amount_paid")
+        total=Sum("amount")
     )["total"] or 0
+     
 
     # ----------------------------------------
     # Messages
@@ -292,12 +289,18 @@ def patient_dashboard_view(request):
         })
 
     for payment in payments[:3]:
+
         activities.append({
-            "type": "Payment",
-            "title": f"₹ {payment.amount_paid}",
-            "date": payment.paid_at.date(),
-            "status": payment.payment_mode,
-        })
+
+        "type": "Payment",
+
+        "title": f"₹ {payment.amount}",
+
+        "date": payment.payment_date.date(),
+
+        "status": payment.payment_method,
+
+    })
 
     activities = sorted(
         activities,
@@ -341,7 +344,7 @@ def patient_dashboard_view(request):
             "all_bills": all_bills,
             "bills": all_bills,
             "pending_bills": pending_bills,
-
+             
             "payments": payments,
 
             "total_due": total_due,
@@ -356,11 +359,12 @@ def patient_dashboard_view(request):
         },
     )
 # ---------------- Doctor Dashboard ----------------
-
-@login_required
 def doctor_dashboard_view(request):
 
-    # Role check
+    # ==========================================
+    # Role Check
+    # ==========================================
+
     if request.user.role != "DOCTOR":
         messages.error(
             request,
@@ -368,13 +372,15 @@ def doctor_dashboard_view(request):
         )
         return redirect("dashboard")
 
+    # ==========================================
+    # Doctor Profile Check
+    # ==========================================
 
-    # Doctor profile check
     if not hasattr(request.user, "doctor_profile"):
 
         messages.info(
             request,
-            "Doctor profile not set up yet. Contact admin."
+            "Doctor profile not configured."
         )
 
         return render(
@@ -382,63 +388,193 @@ def doctor_dashboard_view(request):
             "accounts/dashboard.html"
         )
 
-
     doctor = request.user.doctor_profile
-
 
     today = timezone.now().date()
 
-
     week_end = today + timezone.timedelta(days=7)
 
+    # ==========================================
+    # Attendance
+    # ==========================================
 
+    today_attendance = (
+        DoctorAttendance.objects.filter(
+            doctor=doctor,
+            attendance_date=today
+        ).first()
+    )
 
-    # ===============================
-    # TODAY APPOINTMENTS
-    # ===============================
+    doctor_status = (
+        DoctorStatus.objects.filter(
+            doctor=doctor
+        ).first()
+    )
 
+    is_checked_in = (
+        today_attendance
+        and
+        today_attendance.check_in_time
+        and
+        not today_attendance.check_out_time
+    )
+
+    is_checked_out = (
+        today_attendance
+        and
+        today_attendance.check_out_time
+    )
+
+    # ==========================================
+    # Leave
+    # ==========================================
+
+    today_leave = (
+        DoctorLeave.objects.filter(
+            doctor=doctor,
+            leave_date=today
+        ).first()
+    )
+
+    # ==========================================
+    # Today's Appointments
+    # ==========================================
 
     todays_appointments = (
+
         Appointment.objects
+
         .filter(
             doctor=doctor,
             appointment_date=today,
-            status__in=[
-                "Pending",
-                "Confirmed"
-            ]
         )
+
         .select_related(
-            "patient__user"
+            "patient__user",
+            "doctor__user"
         )
+
         .order_by(
             "appointment_time"
         )
+
     )
 
+    # ==========================================
+    # Waiting Patients
+    # ==========================================
 
+    waiting_patients = (
 
-    # ===============================
-    # AI HIGH RISK PATIENTS
-    # ===============================
+        todays_appointments.filter(
+            status="Pending"
+        ).count()
 
+    )
+
+    # ==========================================
+    # Next Patient
+    # ==========================================
+
+    next_patient = (
+
+        todays_appointments.filter(
+
+            appointment_time__gte=
+            timezone.now().time()
+
+        ).first()
+
+    )
+
+    # ==========================================
+    # Total Patients
+    # ==========================================
+
+    total_patients = (
+
+        Appointment.objects
+
+        .filter(
+            doctor=doctor
+        )
+
+        .values(
+            "patient"
+        )
+
+        .distinct()
+
+        .count()
+
+    )
+
+    # ==========================================
+    # Completed
+    # ==========================================
+
+    total_completed = (
+
+        Appointment.objects.filter(
+            doctor=doctor,
+            status="Completed"
+        ).count()
+
+    )
+
+    # ==========================================
+    # No Show
+    # ==========================================
+
+    total_noshows = (
+
+        Appointment.objects.filter(
+            doctor=doctor,
+            status="No Show"
+        ).count()
+
+    )
+
+    total_visits = (
+
+        total_completed +
+        total_noshows
+
+    )
+
+    if total_visits > 0:
+
+        noshow_rate = round(
+
+            (total_noshows / total_visits) * 100,
+
+            1
+
+        )
+
+    else:
+
+        noshow_rate = 0
+        # ==========================================
+    # AI High Risk Patients Today
+    # ==========================================
 
     high_risk_today = (
-        todays_appointments
-        .filter(
+
+        todays_appointments.filter(
             risk_level="HIGH"
         )
+
     )
 
-
-
-    # ===============================
-    # UPCOMING APPOINTMENTS
-    # ===============================
-
+    # ==========================================
+    # Upcoming Week Appointments
+    # ==========================================
 
     week_appointments = (
+
         Appointment.objects
+
         .filter(
             doctor=doctor,
             appointment_date__gt=today,
@@ -448,257 +584,331 @@ def doctor_dashboard_view(request):
                 "Confirmed"
             ]
         )
+
         .select_related(
             "patient__user"
         )
+
         .order_by(
             "appointment_date",
             "appointment_time"
         )[:5]
-    )
-
-
-
-    # ===============================
-    # PATIENT STATISTICS
-    # ===============================
-
-
-    total_patients = (
-        Appointment.objects
-        .filter(
-            doctor=doctor
-        )
-        .values(
-            "patient"
-        )
-        .distinct()
-        .count()
-    )
-
-
-
-    total_completed = (
-        Appointment.objects
-        .filter(
-            doctor=doctor,
-            status="Completed"
-        )
-        .count()
-    )
-
-
-
-    total_noshows = (
-        Appointment.objects
-        .filter(
-            doctor=doctor,
-            status="No Show"
-        )
-        .count()
-    )
-
-
-
-    total_seen = (
-        total_completed +
-        total_noshows
-    )
-
-
-
-    noshow_rate = (
-
-        round(
-            (total_noshows / total_seen) * 100,
-            1
-        )
-
-        if total_seen > 0
-
-        else 0
 
     )
 
-
-
-    # ===============================
-    # WAITING PATIENTS
-    # ===============================
-
-
-    waiting_patients = (
-        todays_appointments
-        .filter(
-            status="Pending"
-        )
-        .count()
-    )
-
-
-
-    # ===============================
-    # NEXT PATIENT
-    # ===============================
-
-
-    next_patient = (
-        todays_appointments
-        .filter(
-            appointment_time__gte=
-            timezone.now().time()
-        )
-        .first()
-    )
-
-
-
-    # ===============================
-    # MEDICAL RECORDS
-    # ===============================
-
+    # ==========================================
+    # Recent Medical Records
+    # ==========================================
 
     recent_records = (
+
         MedicalRecord.objects
+
         .filter(
             appointment__doctor=doctor
         )
+
         .select_related(
             "appointment__patient__user"
         )
+
+        .prefetch_related(
+            "prescriptions"
+        )
+
         .order_by(
             "-created_at"
         )[:5]
+
     )
 
-
-
-    # ===============================
-    # AVAILABILITY
-    # ===============================
-
+    # ==========================================
+    # Doctor Availability
+    # ==========================================
 
     availability = (
+
         DoctorAvailability.objects
+
         .filter(
             doctor=doctor,
             is_available=True
         )
+
         .order_by(
-            "day_of_week"
+            "day_of_week",
+            "start_time"
         )
+
     )
 
-
-
-    # ===============================
-    # MONTHLY PERFORMANCE
-    # ===============================
-
+    # ==========================================
+    # Monthly Performance
+    # ==========================================
 
     monthly_completed = (
+
         Appointment.objects
+
         .filter(
             doctor=doctor,
             status="Completed",
             appointment_date__month=today.month,
             appointment_date__year=today.year
         )
+
         .count()
+
     )
 
+    monthly_pending = (
 
-
-    # ===============================
-    # CHART DATA
-    # ===============================
-
-
-    appointment_chart = (
         Appointment.objects
+
+        .filter(
+            doctor=doctor,
+            status="Pending",
+            appointment_date__month=today.month,
+            appointment_date__year=today.year
+        )
+
+        .count()
+
+    )
+
+    monthly_confirmed = (
+
+        Appointment.objects
+
+        .filter(
+            doctor=doctor,
+            status="Confirmed",
+            appointment_date__month=today.month,
+            appointment_date__year=today.year
+        )
+
+        .count()
+
+    )
+
+    monthly_noshow = (
+
+        Appointment.objects
+
+        .filter(
+            doctor=doctor,
+            status="No Show",
+            appointment_date__month=today.month,
+            appointment_date__year=today.year
+        )
+
+        .count()
+
+    )
+
+    # ==========================================
+    # AI Risk Patients
+    # ==========================================
+
+    ai_risk_patients = (
+
+        Appointment.objects
+
+        .filter(
+            doctor=doctor,
+            risk_level__in=[
+                "HIGH",
+                "MEDIUM"
+            ]
+        )
+
+        .select_related(
+            "patient__user"
+        )
+
+        .order_by(
+            "-risk_score"
+        )[:10]
+
+    )
+
+    # ==========================================
+    # Appointment Chart
+    # ==========================================
+
+    appointment_chart = {
+
+        "completed": total_completed,
+
+        "pending": Appointment.objects.filter(
+            doctor=doctor,
+            status="Pending"
+        ).count(),
+
+        "confirmed": Appointment.objects.filter(
+            doctor=doctor,
+            status="Confirmed"
+        ).count(),
+
+        "noshow": total_noshows,
+
+    }
+        # ==========================================
+    # Doctor Status
+    # ==========================================
+
+    doctor_status = (
+
+        DoctorStatus.objects
+
         .filter(
             doctor=doctor
         )
-        .values(
-            "status"
-        )
-        .annotate(
-            count=Count("id")
-        )
+
+        .first()
+
     )
 
+    # ==========================================
+    # Today Attendance
+    # ==========================================
 
+    today_attendance = (
+
+        DoctorAttendance.objects
+
+        .filter(
+            doctor=doctor,
+            attendance_date=today
+        )
+
+        .first()
+
+    )
+
+    # ==========================================
+    # Today's Leave
+    # ==========================================
+
+    today_leave = (
+
+        DoctorLeave.objects
+
+        .filter(
+            doctor=doctor,
+            leave_date=today
+        )
+
+        .first()
+
+    )
+
+    # ==========================================
+    # Notification Count
+    # ==========================================
+
+    unread_notifications = (
+
+        Notification.objects
+
+        .filter(
+            user=request.user,
+            is_read=False
+        )
+
+        .count()
+
+    )
+
+    # ==========================================
+    # Today's Revenue
+    # ==========================================
+
+    today_revenue = (
+
+        Appointment.objects
+
+        .filter(
+            doctor=doctor,
+            appointment_date=today,
+            status="Completed"
+        )
+
+        .select_related("doctor")
+
+    )
+
+    revenue = 0
+
+    for appointment in today_revenue:
+
+        revenue += appointment.doctor.consultation_fee
+
+    # ==========================================
+    # Context
+    # ==========================================
 
     context = {
 
+        "doctor": doctor,
 
-        "doctor":
-            doctor,
+        "today": today,
 
+        "todays_appointments": todays_appointments,
 
-        "todays_appointments":
-            todays_appointments,
+        "week_appointments": week_appointments,
 
+        "high_risk_today": high_risk_today,
 
-        "high_risk_today":
-            high_risk_today,
+        "ai_risk_patients": ai_risk_patients,
 
+        "recent_records": recent_records,
 
-        "week_appointments":
-            week_appointments,
+        "availability": availability,
 
+        "total_patients": total_patients,
 
-        "total_patients":
-            total_patients,
+        "total_completed": total_completed,
 
+        "total_noshows": total_noshows,
 
-        "total_completed":
-            total_completed,
+        "noshow_rate": noshow_rate,
 
+        "waiting_patients": waiting_patients,
 
-        "total_noshows":
-            total_noshows,
+        "next_patient": next_patient,
 
+        "monthly_completed": monthly_completed,
 
-        "noshow_rate":
-            noshow_rate,
+        "monthly_pending": monthly_pending,
 
+        "monthly_confirmed": monthly_confirmed,
 
-        "recent_records":
-            recent_records,
+        "monthly_noshow": monthly_noshow,
 
+        "appointment_chart": json.dumps(appointment_chart),
 
-        "availability":
-            availability,
+        "doctor_status": doctor_status,
 
+        "today_attendance": today_attendance,
 
-        "waiting_patients":
-            waiting_patients,
+        "today_leave": today_leave,
 
+        "unread_notifications": unread_notifications,
 
-        "next_patient":
-            next_patient,
-
-
-        "monthly_completed":
-            monthly_completed,
-
-
-        "appointment_chart":
-            appointment_chart,
-
-
-        "today":
-            today,
+        "today_revenue": revenue,
+        
 
     }
 
-
-
     return render(
+
         request,
-        "accounts/doctor_dashboard.html",
-        context
+
+        "hospital/doctor_dashboard.html",
+
+        context,
+
     )
 # ---------------- Admin Dashboard ----------------
 
@@ -727,8 +937,26 @@ def admin_dashboard_view(request):
     total_patients = Patient.objects.count()
     total_departments = Department.objects.count()
 
-    total_revenue = sum(b.total_paid for b in Bill.objects.all())
-    pending_revenue = sum(b.balance_due for b in Bill.objects.filter(payment_status="Pending"))
+    total_revenue = Payment.objects.filter(
+
+    payment_status="Success"
+
+    ).aggregate(
+
+        total=Sum("amount")
+
+    )["total"] or 0
+    pending_revenue = sum(
+
+    b.balance_due
+
+    for b in Bill.objects.filter(
+
+        payment_status="Pending"
+
+    )
+
+)
 
     todays_appointments = Appointment.objects.filter(
         appointment_date=today
@@ -781,17 +1009,34 @@ def admin_dashboard_view(request):
     # by summing related Payment rows in Python), not an actual database
     # column -- Sum() can only aggregate real fields, so Sum("total_paid")
     # raises FieldError. Aggregate through the real "payments" relation
-    # instead (Payment.amount_paid IS a real column), filtered to payments
+    # instead (Payment.amount IS a real column), filtered to payments
     # actually made ON that day.
     revenue_labels = []
     revenue_data = []
+
     for i in range(6, -1, -1):
+
         day = today - timedelta(days=i)
+
         day_revenue = Payment.objects.filter(
-            paid_at__date=day,
-        ).aggregate(total=Sum("amount_paid"))["total"] or 0
-        revenue_labels.append(day.strftime("%d %b"))
-        revenue_data.append(float(day_revenue))
+
+            payment_date__date=day,
+
+            payment_status="Success"
+
+        ).aggregate(
+
+            total=Sum("amount")
+
+        )["total"] or 0
+
+        revenue_labels.append(
+            day.strftime("%d %b")
+        )
+
+        revenue_data.append(
+            float(day_revenue)
+        )
 
     return render(request, "accounts/admin_dashboard.html", {
         "total_appointments": total_appointments,
@@ -806,7 +1051,7 @@ def admin_dashboard_view(request):
         "total_revenue": total_revenue,
         "pending_revenue": pending_revenue,
         "todays_appointments": todays_appointments,
-
+         
         # Chart data -- serialized as JSON for Chart.js
         "status_labels": json.dumps(status_labels),
         "status_data": json.dumps(status_data),

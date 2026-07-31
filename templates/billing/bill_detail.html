@@ -6,7 +6,7 @@ Bill Details
 
 {% block content %}
 
-<div class="container-fluid mt-4">
+<div class="container mt-4">
 
     <div class="card shadow-lg border-0">
 
@@ -16,7 +16,8 @@ Bill Details
 
                 <div>
 
-                    <h3 class="mb-0">
+                    <h3 class="mb-1">
+                        <i class="fas fa-file-invoice-dollar"></i>
                         Hospital Invoice
                     </h3>
 
@@ -30,13 +31,13 @@ Bill Details
 
                     {% if bill.payment_status == "Paid" %}
 
-                        <span class="badge bg-light text-success fs-6">
+                        <span class="badge bg-light text-success fs-6 px-3 py-2">
                             Paid
                         </span>
 
                     {% else %}
 
-                        <span class="badge bg-danger fs-6">
+                        <span class="badge bg-danger fs-6 px-3 py-2">
                             Pending
                         </span>
 
@@ -52,9 +53,11 @@ Bill Details
 
             <div class="row">
 
+                <!-- Patient Information -->
+
                 <div class="col-md-6">
 
-                    <h5 class="text-primary">
+                    <h5 class="text-primary mb-3">
                         Patient Information
                     </h5>
 
@@ -62,14 +65,12 @@ Bill Details
 
                         <tr>
 
-                            <th width="170">
+                            <th width="180">
                                 Patient
                             </th>
 
                             <td>
-
                                 {{ patient.user.get_full_name }}
-
                             </td>
 
                         </tr>
@@ -77,15 +78,11 @@ Bill Details
                         <tr>
 
                             <th>
-
                                 Appointment Date
-
                             </th>
 
                             <td>
-
                                 {{ appointment.appointment_date }}
-
                             </td>
 
                         </tr>
@@ -93,15 +90,11 @@ Bill Details
                         <tr>
 
                             <th>
-
                                 Appointment Time
-
                             </th>
 
                             <td>
-
                                 {{ appointment.appointment_time }}
-
                             </td>
 
                         </tr>
@@ -110,9 +103,11 @@ Bill Details
 
                 </div>
 
+                <!-- Doctor Information -->
+
                 <div class="col-md-6">
 
-                    <h5 class="text-primary">
+                    <h5 class="text-primary mb-3">
                         Doctor Information
                     </h5>
 
@@ -120,17 +115,12 @@ Bill Details
 
                         <tr>
 
-                            <th width="170">
-
+                            <th width="180">
                                 Doctor
-
                             </th>
 
                             <td>
-
-                                Dr.
-                                {{ doctor.user.get_full_name }}
-
+                                Dr. {{ doctor.user.get_full_name }}
                             </td>
 
                         </tr>
@@ -138,15 +128,11 @@ Bill Details
                         <tr>
 
                             <th>
-
                                 Department
-
                             </th>
 
                             <td>
-
                                 {{ doctor.department.department_name }}
-
                             </td>
 
                         </tr>
@@ -154,15 +140,11 @@ Bill Details
                         <tr>
 
                             <th>
-
                                 Bill Date
-
                             </th>
 
                             <td>
-
-                                {{ bill.created_at|date:"d M Y" }}
-
+                                {{ bill.created_at|date:"d M Y h:i A" }}
                             </td>
 
                         </tr>
@@ -175,23 +157,17 @@ Bill Details
 
             <hr>
 
-            <table class="table table-striped">
+            <!-- Bill Table -->
+
+            <table class="table table-bordered table-striped">
 
                 <thead class="table-dark">
 
                     <tr>
 
-                        <th>
+                        <th>Description</th>
 
-                            Description
-
-                        </th>
-
-                        <th class="text-end">
-
-                            Amount
-
-                        </th>
+                        <th class="text-end">Amount</th>
 
                     </tr>
 
@@ -201,80 +177,50 @@ Bill Details
 
                     <tr>
 
-                        <td>
-
-                            Consultation Fee
-
-                        </td>
+                        <td>Consultation Fee</td>
 
                         <td class="text-end">
-
                             ₹ {{ bill.consultation_fee }}
-
                         </td>
 
                     </tr>
 
                     <tr>
 
-                        <td>
-
-                            Medicine Cost
-
-                        </td>
+                        <td>Medicine Cost</td>
 
                         <td class="text-end">
-
                             ₹ {{ bill.medicine_cost }}
-
                         </td>
 
                     </tr>
 
                     <tr>
 
-                        <td>
-
-                            Lab Test Cost
-
-                        </td>
+                        <td>Lab Test Cost</td>
 
                         <td class="text-end">
-
                             ₹ {{ bill.lab_test_cost }}
-
                         </td>
 
                     </tr>
 
                     <tr>
 
-                        <td>
-
-                            GST
-
-                        </td>
+                        <td>GST</td>
 
                         <td class="text-end">
-
                             ₹ {{ bill.gst }}
-
                         </td>
 
                     </tr>
 
                     <tr>
 
-                        <td>
-
-                            Discount
-
-                        </td>
+                        <td>Discount</td>
 
                         <td class="text-end text-danger">
-
                             - ₹ {{ bill.discount }}
-
                         </td>
 
                     </tr>
@@ -286,15 +232,35 @@ Bill Details
                     <tr class="table-success">
 
                         <th>
-
                             Total Amount
-
                         </th>
 
                         <th class="text-end">
-
                             ₹ {{ bill.total_amount }}
+                        </th>
 
+                    </tr>
+
+                    <tr>
+
+                        <th>
+                            Total Paid
+                        </th>
+
+                        <th class="text-end text-success">
+                            ₹ {{ bill.total_paid }}
+                        </th>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+                            Balance Due
+                        </th>
+
+                        <th class="text-end text-danger">
+                            ₹ {{ bill.balance_due }}
                         </th>
 
                     </tr>
@@ -304,16 +270,18 @@ Bill Details
             </table>
 
         </div>
+                <div class="card-footer bg-light">
 
-        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
 
-            <div class="d-flex justify-content-between">
+                <!-- Left Side -->
 
                 <div>
 
                     <a href="{% url 'bill_list' %}"
-
                        class="btn btn-secondary">
+
+                        <i class="fas fa-arrow-left"></i>
 
                         Back
 
@@ -321,35 +289,108 @@ Bill Details
 
                 </div>
 
-                <div>
+                <!-- Right Side -->
 
-                    <a href="{% url 'bill_download' bill.id %}"
+                <div class="d-flex flex-wrap gap-2">
 
+                    <!-- Download Bill -->
+
+                    <a href="{% url 'download_bill_pdf' bill.id %}"
                        class="btn btn-success">
 
                         <i class="fas fa-download"></i>
 
-                        Download PDF
+                        Download Bill
 
                     </a>
 
-                    {% if request.user.role != "PATIENT" %}
 
-                    <a href="{% url 'bill_update' bill.id %}"
+                    <!-- ================= PATIENT ================= -->
 
-                       class="btn btn-warning">
+                    {% if request.user.role == "PATIENT" %}
 
-                        Edit
+                        {% if payment %}
 
-                    </a>
+                            <a href="{% url 'payment_detail' payment.id %}"
+                               class="btn btn-info">
 
-                    <a href="{% url 'bill_delete' bill.id %}"
+                                <i class="fas fa-receipt"></i>
 
-                       class="btn btn-danger">
+                                View Receipt
 
-                        Delete
+                            </a>
 
-                    </a>
+                            <a href="{% url 'download_receipt' payment.id %}"
+                               class="btn btn-primary">
+
+                                <i class="fas fa-file-pdf"></i>
+
+                                Download Receipt
+
+                            </a>
+
+                        {% else %}
+
+                            <button
+                                class="btn btn-warning"
+                                disabled>
+
+                                <i class="fas fa-clock"></i>
+
+                                Waiting For Payment
+
+                            </button>
+
+                        {% endif %}
+
+                    {% endif %}
+
+
+                    <!-- ================= ADMIN ================= -->
+
+                    {% if request.user.role == "ADMIN" %}
+
+                        {% if payment %}
+
+                            <a href="{% url 'payment_detail' payment.id %}"
+                               class="btn btn-info">
+
+                                <i class="fas fa-receipt"></i>
+
+                                Payment Details
+
+                            </a>
+
+                        {% else %}
+
+                            <a href="{% url 'payment_create' bill.id %}"
+                               class="btn btn-primary">
+
+                                <i class="fas fa-credit-card"></i>
+
+                                Create Payment
+
+                            </a>
+
+                        {% endif %}
+
+                        <a href="{% url 'bill_update' bill.id %}"
+                           class="btn btn-warning">
+
+                            <i class="fas fa-edit"></i>
+
+                            Edit
+
+                        </a>
+
+                        <a href="{% url 'bill_delete' bill.id %}"
+                           class="btn btn-danger">
+
+                            <i class="fas fa-trash"></i>
+
+                            Delete
+
+                        </a>
 
                     {% endif %}
 
@@ -362,5 +403,142 @@ Bill Details
     </div>
 
 </div>
+    <div class="card-footer bg-light">
 
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+
+            <!-- Back Button -->
+
+            <a href="{% url 'bill_list' %}"
+               class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+            <div class="d-flex flex-wrap gap-2">
+
+                <!-- Download Bill PDF -->
+
+                <a href="{% url 'download_bill_pdf' bill.id %}"
+                   class="btn btn-success">
+
+                    <i class="fas fa-download"></i>
+
+                    Download Bill
+
+                </a>
+
+
+                <!-- ================= PATIENT ================= -->
+
+                {% if request.user.role == "PATIENT" %}
+
+    {% if payment %}
+
+        {% if payment.payment_status == "Success" %}
+
+            <a href="{% url 'payment_detail' payment.id %}"
+               class="btn btn-success">
+
+                <i class="fas fa-credit-card"></i>
+
+                Payment Details
+
+            </a>
+
+            <a href="{% url 'download_receipt' payment.id %}"
+               class="btn btn-primary">
+
+                <i class="fas fa-download"></i>
+
+                Download Receipt
+
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'payment_create' bill.id %}"
+               class="btn btn-warning">
+
+                <i class="fas fa-credit-card"></i>
+
+                Complete Payment
+
+            </a>
+
+        {% endif %}
+
+    {% else %}
+
+        <a href="{% url 'payment_create' bill.id %}"
+           class="btn btn-success">
+
+            <i class="fas fa-credit-card"></i>
+
+            Pay Now
+
+        </a>
+
+    {% endif %}
+
+{% endif %}
+
+                <!-- ================= ADMIN ================= -->
+
+                {% if request.user.role == "ADMIN" %}
+
+                    {% if payment %}
+
+                        <a href="{% url 'payment_detail' payment.id %}"
+                           class="btn btn-info">
+
+                            <i class="fas fa-receipt"></i>
+
+                            Payment Details
+
+                        </a>
+
+                    {% else %}
+
+                        <a href="{% url 'payment_create' bill.id %}"
+                           class="btn btn-primary">
+
+                            <i class="fas fa-credit-card"></i>
+
+                            Create Payment
+
+                        </a>
+
+                    {% endif %}
+
+                    <a href="{% url 'bill_update' bill.id %}"
+                       class="btn btn-warning">
+
+                        <i class="fas fa-edit"></i>
+
+                        Edit
+
+                    </a>
+
+                    <a href="{% url 'bill_delete' bill.id %}"
+                       class="btn btn-danger">
+
+                        <i class="fas fa-trash"></i>
+
+                        Delete
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 {% endblock %}

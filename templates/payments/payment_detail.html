@@ -1,450 +1,364 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-
 Payment Details
-
 {% endblock %}
 
 {% block content %}
 
 <div class="container mt-4">
 
-    <div class="row justify-content-center">
+<div class="row justify-content-center">
 
-        <div class="col-lg-10">
+<div class="col-lg-10">
 
-            <div class="card shadow-lg border-0">
+<div class="card shadow-lg border-0">
 
-                <div class="card-header bg-success text-white">
+<div class="card-header bg-success text-white">
 
-                    <div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center">
 
-                        <div>
+<div>
 
-                            <h3 class="mb-0">
+<h3 class="mb-0">
 
-                                <i class="fas fa-credit-card"></i>
+<i class="fas fa-credit-card"></i>
 
-                                Payment Details
+Payment Details
 
-                            </h3>
+</h3>
 
-                            <small>
+<small>
 
-                                Transaction Information
+Receipt :
+{{ payment.receipt_number }}
 
-                            </small>
+</small>
 
-                        </div>
+</div>
 
-                        <div>
+<div>
 
-                            <a href="{% url 'payment_list' %}"
+{% if payment.payment_status == "Success" %}
 
-                               class="btn btn-light btn-sm">
+<span class="badge bg-light text-success fs-6">
 
-                                <i class="fas fa-arrow-left"></i>
+PAID
 
-                                Back
+</span>
 
-                            </a>
+{% elif payment.payment_status == "Pending" %}
 
-                        </div>
+<span class="badge bg-warning text-dark fs-6">
 
-                    </div>
+PENDING
 
-                </div>
+</span>
 
-                <div class="card-body">
+{% elif payment.payment_status == "Failed" %}
 
-                    <div class="row">
+<span class="badge bg-danger fs-6">
 
-                        <div class="col-md-6">
+FAILED
 
-                            <table class="table table-bordered">
+</span>
 
-                                <tr>
+{% else %}
 
-                                    <th width="40%">
+<span class="badge bg-secondary fs-6">
 
-                                        Receipt No
+REFUNDED
 
-                                    </th>
+</span>
 
-                                    <td>
+{% endif %}
 
-                                        {{ payment.receipt_number }}
+</div>
 
-                                    </td>
+</div>
 
-                                </tr>
+</div>
 
-                                <tr>
+<div class="card-body">
 
-                                    <th>
+<div class="row">
 
-                                        Transaction ID
+<div class="col-md-6">
 
-                                    </th>
+<h5 class="text-primary">
 
-                                    <td>
+Patient Information
 
-                                        {{ payment.transaction_id }}
+</h5>
 
-                                    </td>
+<hr>
 
-                                </tr>
+<p>
 
-                                <tr>
+<b>Name :</b>
 
-                                    <th>
+{{ patient.user.get_full_name }}
 
-                                        Payment Date
+</p>
 
-                                    </th>
+<p>
 
-                                    <td>
+<b>Email :</b>
 
-                                        {{ payment.payment_date|date:"d M Y h:i A" }}
+{{ patient.user.email }}
 
-                                    </td>
+</p>
 
-                                </tr>
+<p>
 
-                                <tr>
+<b>Appointment Date :</b>
 
-                                    <th>
+{{ appointment.appointment_date }}
 
-                                        Payment Method
+</p>
 
-                                    </th>
+</div>
 
-                                    <td>
-                                                                                {% if payment.payment_method == "Cash" %}
+<div class="col-md-6">
 
-                                            <span class="badge bg-secondary">
+<h5 class="text-primary">
 
-                                                Cash
+Doctor Information
 
-                                            </span>
+</h5>
 
-                                        {% elif payment.payment_method == "UPI" %}
+<hr>
 
-                                            <span class="badge bg-primary">
+<p>
 
-                                                UPI
+<b>Doctor :</b>
 
-                                            </span>
+Dr. {{ doctor.user.get_full_name }}
 
-                                        {% elif payment.payment_method == "Card" %}
+</p>
 
-                                            <span class="badge bg-info text-dark">
+<p>
 
-                                                Card
+<b>Department :</b>
 
-                                            </span>
+{{ doctor.department.department_name }}
 
-                                        {% else %}
+</p>
 
-                                            <span class="badge bg-dark">
+<p>
 
-                                                Net Banking
+<b>Hospital :</b>
 
-                                            </span>
+AI Hospital
 
-                                        {% endif %}
+</p>
 
-                                    </td>
+</div>
 
-                                </tr>
+</div>
 
-                                <tr>
+<hr>
 
-                                    <th>
+<div class="row">
 
-                                        Payment Status
+<div class="col-md-6">
 
-                                    </th>
+<h5 class="text-primary">
 
-                                    <td>
+Payment Information
 
-                                        {% if payment.payment_status == "Success" %}
+</h5>
 
-                                            <span class="badge bg-success">
+<hr>
 
-                                                Success
+<p>
 
-                                            </span>
+<b>Transaction ID :</b>
 
-                                        {% elif payment.payment_status == "Pending" %}
+{{ payment.transaction_id }}
 
-                                            <span class="badge bg-warning text-dark">
+</p>
 
-                                                Pending
+<p>
 
-                                            </span>
+<b>Receipt No :</b>
 
-                                        {% elif payment.payment_status == "Failed" %}
+{{ payment.receipt_number }}
 
-                                            <span class="badge bg-danger">
+</p>
 
-                                                Failed
+<p>
 
-                                            </span>
+<b>Method :</b>
 
-                                        {% else %}
+{{ payment.payment_method }}
 
-                                            <span class="badge bg-secondary">
+</p>
 
-                                                Refunded
+<p>
 
-                                            </span>
+<b>Status :</b>
 
-                                        {% endif %}
+{{ payment.payment_status }}
 
-                                    </td>
+</p>
 
-                                </tr>
+<p>
 
-                                <tr>
+<b>Received By :</b>
 
-                                    <th>
+{{ payment.received_by }}
 
-                                        Amount Paid
+</p>
 
-                                    </th>
+</div>
 
-                                    <td>
+<div class="col-md-6">
 
-                                        <strong class="text-success fs-5">
+<h5 class="text-primary">
 
-                                            ₹ {{ payment.amount }}
+Payment Summary
 
-                                        </strong>
+</h5>
 
-                                    </td>
+<hr>
 
-                                </tr>
+<div class="alert alert-success">
 
-                                <tr>
+<h2 class="mb-0">
 
-                                    <th>
+₹ {{ payment.amount }}
 
-                                        Received By
+</h2>
 
-                                    </th>
+<small>Total Paid Amount</small>
 
-                                    <td>
+</div>
 
-                                        {{ payment.received_by }}
+<p>
 
-                                    </td>
+<b>Bill Amount :</b>
 
-                                </tr>
+₹ {{ bill.total_amount }}
 
-                                <tr>
+</p>
 
-                                    <th>
+<p>
 
-                                        Remarks
+<b>Payment Date :</b>
 
-                                    </th>
+{{ payment.payment_date|date:"d M Y" }}
 
-                                    <td>
+</p>
 
-                                        {{ payment.remarks|default:"-" }}
+<p>
 
-                                    </td>
+<b>Payment Time :</b>
 
-                                </tr>
+{{ payment.payment_date|time:"h:i A" }}
 
-                            </table>
+</p>
 
-                        </div>
+</div>
 
-                        <div class="col-md-6">
+</div>
 
-                            <table class="table table-bordered">
+<hr>
 
-                                <tr>
+<h5 class="text-primary">
 
-                                    <th width="40%">
+Remarks
 
-                                        Patient
+</h5>
 
-                                    </th>
+<div class="alert alert-light border">
 
-                                    <td>
+{{ payment.remarks|default:"No Remarks Available." }}
 
-                                        {{ payment.bill.appointment.patient.user.get_full_name }}
+</div>
 
-                                    </td>
+<hr>
 
-                                </tr>
+<h5 class="text-primary">
 
-                                <tr>
+Payment Timeline
 
-                                    <th>
+</h5>
 
-                                        Doctor
+<ul class="list-group mb-4">
 
-                                    </th>
+<li class="list-group-item">
 
-                                    <td>
+Bill Generated
 
-                                        Dr. {{ payment.bill.appointment.doctor.user.get_full_name }}
+</li>
 
-                                    </td>
+<li class="list-group-item">
 
-                                </tr>
+Payment Created
 
-                                <tr>
+</li>
 
-                                    <th>
+<li class="list-group-item">
 
-                                        Department
+Receipt Generated
 
-                                    </th>
+</li>
 
-                                    <td>
+</ul>
 
-                                        {{ payment.bill.appointment.doctor.department.department_name }}
+<div class="d-flex justify-content-between flex-wrap gap-2">
 
-                                    </td>
+<a href="{% url 'payment_list' %}"
 
-                                </tr>
-                                                                <tr>
+class="btn btn-secondary">
 
-                                    <th>
+<i class="fas fa-arrow-left"></i>
 
-                                        Appointment Date
+Back
 
-                                    </th>
+</a>
 
-                                    <td>
+<a href="{% url 'bill_detail' bill.id %}"
 
-                                        {{ payment.bill.appointment.appointment_date }}
+class="btn btn-primary">
 
-                                    </td>
+<i class="fas fa-file-invoice-dollar"></i>
 
-                                </tr>
+View Bill
 
-                                <tr>
+</a>
 
-                                    <th>
+<a href="{% url 'download_bill_pdf' bill.id %}"
 
-                                        Bill Amount
+class="btn btn-info text-white">
 
-                                    </th>
+<i class="fas fa-download"></i>
 
-                                    <td>
+Download Bill
 
-                                        <strong>
+</a>
 
-                                            ₹ {{ payment.bill.total_amount }}
+<a href="{% url 'download_receipt' payment.id %}"
 
-                                        </strong>
+class="btn btn-success">
 
-                                    </td>
+<i class="fas fa-file-pdf"></i>
 
-                                </tr>
+Download Receipt
 
-                                <tr>
+</a>
 
-                                    <th>
+</div>
 
-                                        Bill Status
+</div>
 
-                                    </th>
+</div>
 
-                                    <td>
+</div>
 
-                                        {% if payment.bill.payment_status == "Paid" %}
-
-                                            <span class="badge bg-success">
-
-                                                Paid
-
-                                            </span>
-
-                                        {% else %}
-
-                                            <span class="badge bg-warning text-dark">
-
-                                                Pending
-
-                                            </span>
-
-                                        {% endif %}
-
-                                    </td>
-
-                                </tr>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-                    <div class="d-flex justify-content-center flex-wrap gap-2">
-
-                        <a href="{% url 'download_receipt' payment.id %}"
-
-                           class="btn btn-success">
-
-                            <i class="fas fa-file-pdf"></i>
-
-                            Download Receipt
-
-                        </a>
-
-                        {% if request.user.role == "ADMIN" %}
-
-                        <a href="{% url 'payment_update' payment.id %}"
-
-                           class="btn btn-warning">
-
-                            <i class="fas fa-edit"></i>
-
-                            Edit
-
-                        </a>
-
-                        <a href="{% url 'payment_delete' payment.id %}"
-
-                           class="btn btn-danger">
-
-                            <i class="fas fa-trash"></i>
-
-                            Delete
-
-                        </a>
-
-                        {% endif %}
-
-                        <a href="{% url 'payment_list' %}"
-
-                           class="btn btn-secondary">
-
-                            <i class="fas fa-arrow-left"></i>
-
-                            Back
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 

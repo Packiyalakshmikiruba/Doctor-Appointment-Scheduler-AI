@@ -3,23 +3,36 @@
 <link rel="stylesheet" href="{% static 'css/components/theme_switcher.css' %}">
 
 <!-- ======================================
-        THEME SWITCHER
+        THEME SWITCHER (Modern Sleek UI)
 ====================================== -->
 
-<div class="theme-switcher">
-
+<div class="theme-switcher position-fixed bottom-0 end-0 p-4" style="z-index: 1080;">
     <button
         id="themeToggle"
-        class="theme-btn"
-        title="Change Theme">
-
-        <i
-            id="themeIcon"
-            class="fas fa-moon">
-        </i>
-
+        class="theme-btn btn bg-white text-dark border shadow-lg rounded-circle d-flex align-items-center justify-content-center p-0 transition-all theme-toggle-btn"
+        style="width: 48px; height: 48px;"
+        title="Toggle Dark/Light Mode">
+        <i id="themeIcon" class="fas fa-moon fs-5 transition-transform"></i>
     </button>
-
 </div>
+
+<!-- Extra Styling & Smooth Hover Animations -->
+<style>
+    .transition-all {
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .transition-transform {
+        transition: transform 0.4s ease-in-out;
+    }
+    .theme-toggle-btn:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+        border-color: #0d6efd !important;
+        color: #0d6efd !important;
+    }
+    .theme-toggle-btn:hover #themeIcon {
+        transform: rotate(20deg);
+    }
+</style>
 
 <script src="{% static 'js/components/theme_switcher.js' %}"></script>

@@ -2,372 +2,167 @@
 {% load static %}
 
 {% block title %}
-
-{% if is_update %}
-
-Update Medical Record
-
-{% else %}
-
-Create Medical Record
-
-{% endif %}
-
+{% if is_update %}Update Medical Record{% else %}Create Medical Record{% endif %}
 {% endblock %}
 
 {% block content %}
-
 <div class="container mt-4">
-
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
-
             <h2 class="fw-bold text-primary">
-
-                <i class="fas fa-notes-medical"></i>
-
-                {% if is_update %}
-
-                Update Medical Record
-
-                {% else %}
-
-                Create Medical Record
-
-                {% endif %}
-
+                <i class="fas fa-notes-medical"></i> 
+                {% if is_update %}Update Medical Record{% else %}Create Medical Record{% endif %}
             </h2>
-
-            <p class="text-muted">
-
-                Enter patient's diagnosis, symptoms and treatment details
-
-            </p>
-
+            <p class="text-muted">Enter patient's diagnosis, symptoms and treatment details</p>
         </div>
-
-        <a href="{% url 'medical_record_list' %}"
-
-           class="btn btn-secondary">
-
-            <i class="fas fa-arrow-left"></i>
-
-            Back
-
+        <a href="{% url 'medical_record_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back
         </a>
-
     </div>
 
     <div class="card shadow border-0">
-
         <div class="card-header bg-primary text-white">
-
-            <h5 class="mb-0">
-
-                Medical Record Information
-
-            </h5>
-
+            <h5 class="mb-0">Medical Record Information</h5>
         </div>
-
         <div class="card-body">
-
             <form method="POST">
-
                 {% csrf_token %}
-
+                
                 <div class="row">
-
                     <div class="col-md-6 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Appointment
-
-                        </label>
-
+                        <label class="form-label fw-bold">Appointment</label>
                         {{ form.appointment }}
-
                         {% if form.appointment.errors %}
-
-                        <div class="text-danger small">
-
-                            {{ form.appointment.errors }}
-
-                        </div>
-
+                        <div class="text-danger small">{{ form.appointment.errors }}</div>
                         {% endif %}
-
                     </div>
-
                     <div class="col-md-6 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Diagnosis
-
-                        </label>
-
+                        <label class="form-label fw-bold">Diagnosis</label>
                         {{ form.diagnosis }}
-
                         {% if form.diagnosis.errors %}
-
-                        <div class="text-danger small">
-
-                            {{ form.diagnosis.errors }}
-
-                        </div>
-
+                        <div class="text-danger small">{{ form.diagnosis.errors }}</div>
                         {% endif %}
-
                     </div>
-
                 </div>
 
                 <div class="row">
-
                     <div class="col-md-12 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Symptoms
-
-                        </label>
-
+                        <label class="form-label fw-bold">Symptoms</label>
                         {{ form.symptoms }}
-
-                    </div>
-
-                </div>
-                                <div class="row">
-
-                    <div class="col-md-12 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Treatment
-
-                        </label>
-
-                        {{ form.treatment }}
-
-                        {% if form.treatment.errors %}
-
-                        <div class="text-danger small">
-
-                            {{ form.treatment.errors }}
-
-                        </div>
-
+                        {% if form.symptoms.errors %}
+                        <div class="text-danger small">{{ form.symptoms.errors }}</div>
                         {% endif %}
-
                     </div>
-
                 </div>
 
                 <div class="row">
-
                     <div class="col-md-12 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Doctor Notes
-
-                        </label>
-
-                        {{ form.notes }}
-
-                        {% if form.notes.errors %}
-
-                        <div class="text-danger small">
-
-                            {{ form.notes.errors }}
-
-                        </div>
-
+                        <label class="form-label fw-bold">Treatment</label>
+                        {{ form.treatment }}
+                        {% if form.treatment.errors %}
+                        <div class="text-danger small">{{ form.treatment.errors }}</div>
                         {% endif %}
-
                     </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">Doctor Notes</label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}
+                        <div class="text-danger small">{{ form.notes.errors }}</div>
+                        {% endif %}
+                    </div>
                 </div>
 
                 {% if form.height %}
-
                 <div class="row">
-
                     <div class="col-md-3 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Height (cm)
-
-                        </label>
-
+                        <label class="form-label fw-bold">Height (cm)</label>
                         {{ form.height }}
-
                     </div>
-
                     <div class="col-md-3 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Weight (kg)
-
-                        </label>
-
+                        <label class="form-label fw-bold">Weight (kg)</label>
                         {{ form.weight }}
-
                     </div>
-
                     <div class="col-md-3 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Blood Pressure
-
-                        </label>
-
+                        <label class="form-label fw-bold">Blood Pressure</label>
                         {{ form.blood_pressure }}
-
                     </div>
-
                     <div class="col-md-3 mb-3">
-
-                        <label class="form-label fw-bold">
-
-                            Temperature (°C)
-
-                        </label>
-
+                        <label class="form-label fw-bold">Temperature (°C)</label>
                         {{ form.temperature }}
-
                     </div>
-
                 </div>
-
                 {% endif %}
 
-                <hr>
+                <hr class="my-4">
 
                 <div class="d-flex justify-content-center gap-2">
-
-                    <button
-                        type="submit"
-                        class="btn btn-success">
-
-                        <i class="fas fa-save"></i>
-
-                        {% if is_update %}
-
-                        Update Medical Record
-
-                        {% else %}
-
-                        Save Medical Record
-
-                        {% endif %}
-
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> 
+                        {% if is_update %}Update Medical Record{% else %}Save Medical Record{% endif %}
                     </button>
-
-                    <a href="{% url 'medical_record_list' %}"
-                       class="btn btn-secondary">
-
-                        <i class="fas fa-times"></i>
-
-                        Cancel
-
+                    <a href="{% url 'medical_record_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
                     </a>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
-    </div>
+</div>
 
 <style>
-
-.card{
-
-    border-radius:15px;
-
+.card {
+    border-radius: 15px;
 }
-
-.card-header{
-
-    border-radius:15px 15px 0 0 !important;
-
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
 }
-
-.form-label{
-
-    font-weight:600;
-
-    color:#495057;
-
+.form-label {
+    font-weight: 600;
+    color: #495057;
 }
-
-.form-control,
-.form-select{
-
-    border-radius:8px;
-
-    padding:10px;
-
+/* Django form fields styling helper */
+.form-control, .form-select, input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    display: block;
+    width: 100%;
+    padding: 0.575rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 8px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
-.form-control:focus,
-.form-select:focus{
-
-    border-color:#0d6efd;
-
-    box-shadow:0 0 0 .2rem rgba(13,110,253,.15);
-
+.form-control:focus, .form-select:focus, input:focus, select:focus, textarea:focus {
+    border-color: #0d6efd;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
 }
-
-textarea.form-control{
-
-    min-height:120px;
-
-    resize:vertical;
-
+textarea.form-control, textarea {
+    min-height: 120px;
+    resize: vertical;
 }
-
-.btn{
-
-    border-radius:8px;
-
-    min-width:170px;
-
+.btn {
+    border-radius: 8px;
+    min-width: 170px;
 }
-
-.btn i{
-
-    margin-right:6px;
-
+.btn i {
+    margin-right: 6px;
 }
-
-.text-danger{
-
-    font-size:14px;
-
+.text-danger {
+    font-size: 14px;
 }
-
-@media(max-width:768px){
-
-    .btn{
-
-        width:100%;
-
-        margin-bottom:10px;
-
+@media(max-width: 768px) {
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
     }
-
 }
-
 </style>
-
 {% endblock %}

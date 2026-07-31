@@ -1,6 +1,7 @@
 from django import forms
 from .models import Bill
-
+from .models import Bill
+from payment.models import Payment
 
 class BillForm(forms.ModelForm):
 
@@ -49,16 +50,37 @@ class BillForm(forms.ModelForm):
             }),
 
         }
-from .models import Bill, Payment
-
 
 class PaymentForm(forms.ModelForm):
 
     class Meta:
+
         model = Payment
-        fields = ["amount_paid", "payment_mode", "transaction_reference"]
+
+        fields = [
+            "payment_method",
+            "payment_status",
+            "remarks",
+        ]
+
         widgets = {
-            "amount_paid": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Amount"}),
-            "payment_mode": forms.Select(attrs={"class": "form-select"}),
-            "transaction_reference": forms.TextInput(attrs={"class": "form-control", "placeholder": "Optional reference"}),
+
+            "payment_method": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+
+            "payment_status": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+
+            "remarks": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3
+                }
+            ),
         }

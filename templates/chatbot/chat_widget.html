@@ -3,71 +3,75 @@
 {% block title %}AI Clinic Assistant{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-3">
-    <div class="col-lg-8 col-xl-7">
+<!-- Double Color Gradient Background Wrapper -->
+<div class="container-fluid py-4 px-lg-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
 
-        <!-- Main Chat Console Card -->
-        <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white">
-            
-            <!-- Professional Header -->
-            <div class="card-header bg-primary bg-gradient text-white p-3 border-0 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-white bg-opacity-20 p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                        <i class="bi bi-robot fs-4"></i>
+    <div class="row justify-content-center py-2">
+        <div class="col-lg-8 col-xl-7">
+
+            <!-- Main Chat Console Card -->
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+                
+                <!-- Professional Header -->
+                <div class="card-header bg-gradient bg-primary text-white p-3 px-4 border-0 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-white bg-opacity-25 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 45px; height: 45px;">
+                            <i class="bi bi-robot fs-4 text-white"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">Clinic AI Assistant</h5>
+                            <small class="text-white-50 d-flex align-items-center gap-1">
+                                <span class="online-indicator"></span> Active & Online
+                            </small>
+                        </div>
                     </div>
-                    <div>
-                        <h5 class="fw-bold mb-0">Clinic AI Assistant</h5>
-                        <small class="text-white-50 d-flex align-items-center gap-1">
-                            <span class="online-indicator"></span> Active & Online
-                        </small>
+                    <button class="btn btn-sm btn-light text-primary rounded-pill border-0 px-3 shadow-sm fw-semibold" id="clear-chat-btn" title="Clear Chat Log">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                    </button>
+                </div>
+
+                <!-- Chat Scroll Area -->
+                <div class="card-body p-4 bg-light bg-opacity-25">
+                    <div id="chat-log" class="d-flex flex-column gap-3 mb-3" style="height: 420px; overflow-y: auto; padding-right: 8px;">
+                        <!-- Bubbles dynamically inject here -->
+                    </div>
+
+                    <!-- Subtle Status / Typing Indicator -->
+                    <div id="status-text" class="text-muted small px-2 mb-2 fw-semibold d-none">
+                        <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status"></span>
+                        <span id="status-message">Assistant is thinking...</span>
+                    </div>
+
+                    <!-- Interactive Input Dock -->
+                    <div class="input-group bg-white p-2 rounded-pill shadow-sm border border-secondary border-opacity-10 align-items-center">
+                        <button class="btn btn-light rounded-circle text-primary me-1 border-0" id="mic-btn" type="button" title="Voice Input" style="width: 40px; height: 40px;">
+                            <i class="bi bi-mic-fill fs-5" id="mic-icon"></i>
+                        </button>
+
+                        <button class="btn btn-light rounded-circle text-primary me-1 border-0" id="upload-btn" type="button" title="Upload an old medical report/file" style="width: 40px; height: 40px;">
+                            <i class="bi bi-paperclip fs-5"></i>
+                        </button>
+                        <input type="file" id="file-input" accept="image/*" class="d-none">
+
+                        <input type="text" id="chat-input" class="form-control border-0 bg-transparent shadow-none px-3" placeholder="Ask about doctors, appointments, or clinic info..." style="font-size: 14.5px;">
+
+                        <button class="btn btn-primary rounded-pill px-4 fw-bold d-flex align-items-center gap-1 shadow-sm py-2" id="send-btn">
+                            <span>Send</span>
+                            <i class="bi bi-send-fill small"></i>
+                        </button>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-outline-light rounded-pill border-0 px-2" id="clear-chat-btn" title="Clear Chat Log">
-                    <i class="bi bi-arrow-counterclockwise fs-5"></i>
-                </button>
-            </div>
-
-            <!-- Chat Scroll Area -->
-            <div class="card-body p-4 bg-light bg-opacity-50">
-                <div id="chat-log" class="d-flex flex-column gap-3 mb-2" style="height: 420px; overflow-y: auto; padding-right: 5px;">
-                    <!-- Bubbles dynamically inject here -->
+                
+                <!-- Contextual Quick Action Chips -->
+                <div class="card-footer bg-white border-0 py-3 px-4 d-flex gap-2 overflow-x-auto border-top">
+                    <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('Book an appointment')">📅 Book Appointment</span>
+                    <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('Show available doctors')">👨‍⚕️ Available Doctors</span>
+                    <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('What are the clinic timings?')">⏰ Clinic Timings</span>
                 </div>
 
-                <!-- Subtle Status / Typing Indicator -->
-                <div id="status-text" class="text-muted small px-2 mb-2 fw-semibold d-none">
-                    <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status"></span>
-                    <span id="status-message">Assistant is thinking...</span>
-                </div>
-
-                <!-- Interactive Input Dock -->
-                <div class="input-group bg-white p-1 rounded-4 shadow-sm border border-secondary border-opacity-10">
-                    <button class="btn btn-light rounded-circle text-primary me-1 border-0" id="mic-btn" type="button" title="Voice Input">
-                        <i class="bi bi-mic-fill fs-5" id="mic-icon"></i>
-                    </button>
-
-                    <button class="btn btn-light rounded-circle text-primary me-1 border-0" id="upload-btn" type="button" title="Upload an old medical report/file">
-                        <i class="bi bi-paperclip fs-5"></i>
-                    </button>
-                    <input type="file" id="file-input" accept="image/*" class="d-none">
-
-                    <input type="text" id="chat-input" class="form-control border-0 bg-transparent shadow-none" placeholder="Ask about doctors, appointments, or clinic info..." style="font-size: 15px;">
-
-                    <button class="btn btn-primary rounded-pill px-3 fw-bold d-flex align-items-center gap-1 shadow-sm" id="send-btn">
-                        <span>Send</span>
-                        <i class="bi bi-send-fill small"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Contextual Quick Action Chips -->
-            <div class="card-footer bg-white border-0 py-2 px-4 d-flex gap-2 overflow-x-auto">
-                <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('Book an appointment')">📅 Book Appointment</span>
-                <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('Show available doctors')">👨‍⚕️ Available Doctors</span>
-                <span class="badge bg-light text-secondary border rounded-pill py-2 px-3 hover-chip" onclick="quickQuery('What are the clinic timings?')">⏰ Clinic Timings</span>
             </div>
 
         </div>
-
     </div>
 </div>
 
@@ -79,11 +83,12 @@
         background-color: #20c997;
         border-radius: 50%;
         display: inline-block;
+        box-shadow: 0 0 5px #20c997;
     }
 
     /* Custom Chat Scrollbar */
     #chat-log::-webkit-scrollbar {
-        width: 5px;
+        width: 6px;
     }
     #chat-log::-webkit-scrollbar-thumb {
         background: #cbd5e1;
@@ -108,20 +113,20 @@
     .chat-bubble-user {
         background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
         color: #fff;
-        padding: 10px 16px;
+        padding: 12px 16px;
         border-radius: 18px 18px 2px 18px;
         font-size: 14.5px;
-        box-shadow: 0 2px 5px rgba(13, 110, 253, 0.15);
+        box-shadow: 0 3px 6px rgba(13, 110, 253, 0.2);
     }
 
     .chat-bubble-bot {
         background: #ffffff;
         color: #212529;
-        padding: 10px 16px;
+        padding: 12px 16px;
         border-radius: 18px 18px 18px 2px;
         font-size: 14.5px;
         border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
     }
 
     .chat-bubble-escalated {
@@ -133,7 +138,8 @@
     .timestamp {
         font-size: 10px;
         color: #94a3b8;
-        margin-top: 3px;
+        margin-top: 4px;
+        padding: 0 4px;
     }
 
     /* Pulse Mic Recording State */
@@ -154,11 +160,14 @@
         cursor: pointer;
         transition: all 0.2s ease;
         white-space: nowrap;
+        font-weight: 500;
     }
     .hover-chip:hover {
         background-color: #0d6efd !important;
         color: white !important;
         border-color: #0d6efd !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(13, 110, 253, 0.2);
     }
 </style>
 
@@ -199,7 +208,6 @@ async function sendMessage(text) {
     const message = text.trim();
     if (!message) return;
 
-    // Stop ongoing voice synthesis if active
     if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
     }
@@ -227,7 +235,6 @@ async function sendMessage(text) {
         appendBubble(replyText, 'bot', !!data.error);
         statusContainer.classList.add('d-none');
 
-        // Text-to-Speech Output
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(replyText);
             utterance.lang = 'en-IN';
@@ -240,7 +247,6 @@ async function sendMessage(text) {
     }
 }
 
-// Event Listeners for Input
 document.getElementById('send-btn').addEventListener('click', () => {
     sendMessage(document.getElementById('chat-input').value);
 });
@@ -252,7 +258,6 @@ document.getElementById('chat-input').addEventListener('keydown', (e) => {
     }
 });
 
-// Upload an old medical report/file photo
 const uploadBtn = document.getElementById('upload-btn');
 const fileInput = document.getElementById('file-input');
 
@@ -290,19 +295,11 @@ fileInput.addEventListener('change', async () => {
 });
 
 document.getElementById("clear-chat-btn").addEventListener("click", async () => {
-
     const log = document.getElementById("chat-log");
-
     log.innerHTML = "";
-
-    appendBubble(
-        "Chat cleared. How else can I assist you today?",
-        "bot"
-    );
-
+    appendBubble("Chat cleared. How else can I assist you today?", "bot");
 });
 
-// Speech Recognition Engine
 const micBtn = document.getElementById('mic-btn');
 const micIcon = document.getElementById('mic-icon');
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -333,13 +330,8 @@ if (!SpeechRecognition) {
         sendMessage(spokenText);
     };
 
-    recognition.onerror = () => {
-        resetMic();
-    };
-
-    recognition.onend = () => {
-        resetMic();
-    };
+    recognition.onerror = () => { resetMic(); };
+    recognition.onend = () => { resetMic(); };
 
     function resetMic() {
         micBtn.classList.remove('listening');
@@ -348,18 +340,10 @@ if (!SpeechRecognition) {
     }
 }
 
-// Initial Bot Greeting
 window.addEventListener("load", function () {
-
     const log = document.getElementById("chat-log");
-
     log.innerHTML = "";
-
-    appendBubble(
-        "Hello! 👋 I'm your AI Clinic Assistant. How can I help you today?",
-        "bot"
-    );
-
+    appendBubble("Hello! 👋 I'm your AI Clinic Assistant. How can I help you today?", "bot");
 });
 </script>
 {% endblock %}

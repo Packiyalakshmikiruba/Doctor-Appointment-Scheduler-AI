@@ -1,271 +1,196 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Prescription Details
 {% endblock %}
 
 {% block content %}
+<div class="container-fluid py-4">
 
-<div class="container">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-
-            <h2 class="fw-bold text-primary">
-
-                <i class="bi bi-capsule"></i>
-
-                Prescription Details
-
+            <h2 class="fw-bold text-primary mb-1">
+                <i class="fas fa-file-medical-alt me-2"></i> Prescription Details
             </h2>
-
-            <p class="text-muted">
-                Complete prescription issued by your doctor
+            <p class="text-muted mb-0">
+                Complete prescription issued by your doctor.
             </p>
-
         </div>
-
         <div>
-
-            <button
-                onclick="window.print()"
-                class="btn btn-secondary"
-            >
-                <i class="bi bi-printer"></i>
-                Print
+            <button onclick="window.print()" class="btn btn-secondary shadow-sm px-3">
+                <i class="fas fa-print me-1"></i> Print
             </button>
-
         </div>
-
     </div>
 
-
-    <!-- Patient Details -->
-
-    <div class="card shadow-sm mb-4">
-
-        <div class="card-header bg-primary text-white">
-
-            <h5 class="mb-0">
-
-                Patient Information
-
+    <!-- Patient & Doctor Information Card -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-header bg-primary text-white py-3 px-4">
+            <h5 class="mb-0 fw-semibold">
+                <i class="fas fa-user-circle me-2"></i> Patient & Doctor Information
             </h5>
-
         </div>
-
-        <div class="card-body">
-
-            <div class="row">
-
+        <div class="card-body p-4">
+            <div class="row g-4">
                 <div class="col-md-6">
-
-                    <p>
-
-                        <strong>Patient :</strong>
-
-                        {{ record.appointment.patient.user.get_full_name }}
-
-                    </p>
-
-                    <p>
-
-                        <strong>Appointment Date :</strong>
-
-                        {{ record.appointment.appointment_date }}
-
-                    </p>
-
+                    <div class="p-3 bg-light rounded-3 h-100 border">
+                        <p class="mb-2">
+                            <span class="text-muted fw-semibold small text-uppercase d-block mb-1">Patient Name</span>
+                            <span class="fw-bold text-dark fs-6">{{ record.appointment.patient.user.get_full_name }}</span>
+                        </p>
+                        <p class="mb-0">
+                            <span class="text-muted fw-semibold small text-uppercase d-block mb-1">Appointment Date</span>
+                            <span class="fw-semibold text-secondary">{{ record.appointment.appointment_date }}</span>
+                        </p>
+                    </div>
                 </div>
-
                 <div class="col-md-6">
-
-                    <p>
-
-                        <strong>Doctor :</strong>
-
-                        Dr. {{ record.appointment.doctor.user.get_full_name }}
-
-                    </p>
-
-                    <p>
-
-                        <strong>Department :</strong>
-
-                        {{ record.appointment.doctor.department.department_name }}
-
-                    </p>
-
+                    <div class="p-3 bg-light rounded-3 h-100 border">
+                        <p class="mb-2">
+                            <span class="text-muted fw-semibold small text-uppercase d-block mb-1">Consulting Doctor</span>
+                            <span class="fw-bold text-dark fs-6">Dr. {{ record.appointment.doctor.user.get_full_name }}</span>
+                        </p>
+                        <p class="mb-0">
+                            <span class="text-muted fw-semibold small text-uppercase d-block mb-1">Department</span>
+                            <span class="fw-semibold text-secondary">{{ record.appointment.doctor.department.department_name }}</span>
+                        </p>
+                    </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-
-    <!-- Diagnosis -->
-
-    <div class="card shadow-sm mb-4">
-
-        <div class="card-header bg-success text-white">
-
-            <h5 class="mb-0">
-
-                Diagnosis
-
+    <!-- Diagnosis Card -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-header bg-success text-white py-3 px-4">
+            <h5 class="mb-0 fw-semibold">
+                <i class="fas fa-stethoscope me-2"></i> Diagnosis
             </h5>
-
         </div>
-
-        <div class="card-body">
-
-            {{ record.diagnosis }}
-
+        <div class="card-body p-4">
+            <p class="mb-0 text-dark fs-6 fw-medium">
+                {{ record.diagnosis }}
+            </p>
         </div>
-
     </div>
 
-
-    <!-- Medicine Table -->
-
-    <div class="card shadow">
-
-        <div class="card-header bg-dark text-white">
-
-            <h5 class="mb-0">
-
-                Medicines
-
+    <!-- Medicine Table Card -->
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden mb-4">
+        <div class="card-header bg-dark text-white py-3 px-4">
+            <h5 class="mb-0 fw-semibold">
+                <i class="fas fa-pills me-2"></i> Prescribed Medicines
             </h5>
-
         </div>
-
-        <div class="card-body p-0">
-
-            <table class="table table-bordered table-hover mb-0">
-
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
-
                     <tr>
-
-                        <th>#</th>
-
+                        <th width="60">#</th>
                         <th>Medicine</th>
-
                         <th>Dosage</th>
-
                         <th>Frequency</th>
-
                         <th>Duration</th>
-
-                        <th>Before / After Food</th>
-
+                        <th>Food Status</th>
                         <th>Instructions</th>
-
-                        <th>PDF</th>
-
+                        <th class="text-center" width="120">Action</th>
                     </tr>
-
                 </thead>
-
                 <tbody>
-
                 {% for medicine in prescriptions %}
-
                     <tr>
-
                         <td>
-
-                            {{ forloop.counter }}
-
+                            <span class="badge bg-secondary bg-opacity-20 text-dark fw-semibold">
+                                {{ forloop.counter }}
+                            </span>
                         </td>
-
                         <td>
-
-                            {{ medicine.medicine_name }}
-
+                            <strong class="text-primary">{{ medicine.medicine_name }}</strong>
                         </td>
-
                         <td>
-
-                            {{ medicine.dosage }}
-
+                            <span class="badge bg-light text-secondary border">{{ medicine.dosage }}</span>
                         </td>
-
+                        <td class="text-muted">{{ medicine.frequency }}</td>
+                        <td class="fw-semibold text-dark">{{ medicine.duration }} Days</td>
                         <td>
-
-                            {{ medicine.frequency }}
-
+                            <span class="badge bg-info bg-opacity-15 text-dark">
+                                {{ medicine.before_after_food }}
+                            </span>
                         </td>
-
-                        <td>
-
-                            {{ medicine.duration }} Days
-
-                        </td>
-
-                        <td>
-
-                            {{ medicine.before_after_food }}
-
-                        </td>
-
-                        <td>
-
-                            {{ medicine.instructions }}
-
-                        </td>
-
-                        <td>
-
-                            <a
-
-                                href="{% url 'download_prescription_pdf' medicine.id %}"
-
-                                class="btn btn-danger btn-sm"
-
-                            >
-
-                                <i class="bi bi-download"></i>
-
-                                PDF
-
+                        <td class="text-muted small">{{ medicine.instructions }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'download_prescription_pdf' medicine.id %}" class="btn btn-sm btn-danger shadow-sm" title="Download PDF">
+                                <i class="fas fa-download me-1"></i> PDF
                             </a>
-
                         </td>
-
                     </tr>
-
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">
+                            No medicines found in this prescription.
+                        </td>
+                    </tr>
                 {% endfor %}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 
-
-    <div class="text-end mt-5">
-
-        <h5>
-
-            _______________________
-
-        </h5>
-
-        <h6>
-
-            Doctor Signature
-
-        </h6>
-
+    <!-- Doctor Signature Section -->
+    <div class="row mt-5">
+        <div class="col-12 text-end pe-4">
+            <div class="d-inline-block text-center">
+                <p class="mb-1 text-muted fw-semibold">___________________________</p>
+                <h6 class="fw-bold text-dark mb-0">Doctor Signature</h6>
+            </div>
+        </div>
     </div>
 
 </div>
 
+<style>
+    body {
+        background-color: #f4f7fb;
+    }
+    .card {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .table th {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #495057;
+        white-space: nowrap;
+    }
+    .table td {
+        padding: 14px 12px;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    @media print {
+        body {
+            background-color: white;
+        }
+        .btn, nav, footer {
+            display: none !important;
+        }
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+    }
+</style>
 {% endblock %}

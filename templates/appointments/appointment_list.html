@@ -1,75 +1,141 @@
 {% extends "base.html" %}
 
+{% block title %}Appointments Management{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Appointments</h3>
-    <a href="{% url 'appointment_create' %}" class="btn btn-primary btn-sm">+ Book New</a>
-  </div>
+<!-- Double Color Gradient Background Wrapper -->
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+    
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 bg-white p-4 rounded-4 shadow-sm border-0">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="bi bi-calendar-check text-primary me-2"></i> Appointments Management
+            </h2>
+            <p class="text-muted mb-0 small">Monitor patient schedules, status, and real-time no-show risk levels effortlessly.</p>
+        </div>
+        <a href="{% url 'appointment_create' %}" class="btn btn-primary shadow-sm rounded-pill px-4 py-2 fw-semibold bg-gradient">
+            <i class="bi bi-plus-lg me-1"></i> Book New Appointment
+        </a>
+    </div>
 
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
+    <!-- Alert Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
 
-  <table class="table table-bordered table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>Patient</th>
-        <th>Doctor</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Status</th>
-        <th>Risk</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for appt in appointments %}
-      <tr>
-        <td>{{ appt.patient }}</td>
-        <td>Dr. {{ appt.doctor.user.get_full_name|default:appt.doctor.user.username }}</td>
-        <td>{{ appt.appointment_date }}</td>
-        <td>{{ appt.appointment_time }}</td>
-        <td>
-          <span class="badge
-            {% if appt.status == 'Confirmed' %}bg-success
-            {% elif appt.status == 'Cancelled' %}bg-secondary
-            {% elif appt.status == 'No Show' %}bg-danger
-            {% elif appt.status == 'Completed' %}bg-info
-            {% else %}bg-warning{% endif %}">
-            {{ appt.status }}
-          </span>
-        </td>
-        <td>
-          {% if appt.risk_level %}
-            <span class="badge
-              {% if appt.risk_level == 'HIGH' %}bg-danger
-              {% elif appt.risk_level == 'MEDIUM' %}bg-warning
-              {% else %}bg-success{% endif %}">
-              {{ appt.risk_level }} ({{ appt.risk_score|floatformat:2 }})
-            </span>
-          {% else %}
-            -
-          {% endif %}
-        </td>
-        <td>
-          <a href="{% url 'appointment_update' appt.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
-          {% if appt.status == 'Pending' %}
-            <a href="{% url 'mark_confirmed' appt.pk %}" class="btn btn-sm btn-outline-success">Confirm</a>
-          {% endif %}
-          {% if appt.status != 'Cancelled' and appt.status != 'Completed' %}
-            <a href="{% url 'mark_cancelled' appt.pk %}" class="btn btn-sm btn-outline-warning">Cancel</a>
-          {% endif %}
-          <a href="{% url 'mark_noshow' appt.pk %}" class="btn btn-sm btn-outline-danger">No Show</a>
-          <a href="{% url 'appointment_delete' appt.pk %}" class="btn btn-sm btn-outline-dark">Delete</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="7" class="text-center">No appointments found.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <!-- Appointments Table Card -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-nowrap">
+                    <thead class="bg-light text-uppercase text-secondary fs-7 border-bottom">
+                        <tr>
+                            <th class="py-3 px-4">Patient</th>
+                            <th class="py-3">Doctor</th>
+                            <th class="py-3">Date & Time</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3">No-Show Risk</th>
+                            <th class="py-3 text-end px-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appt in appointments %}
+                        <tr class="border-bottom">
+                            <!-- Patient Name -->
+                            <td class="px-4 py-3">
+                                <div class="fw-bold text-dark">{{ appt.patient }}</div>
+                            </td>
+
+                            <!-- Doctor Name -->
+                            <td class="py-3">
+                                <div class="text-secondary small fw-semibold">
+                                    <i class="bi bi-person-badge me-1 text-primary"></i>
+                                    Dr. {{ appt.doctor.user.get_full_name|default:appt.doctor.user.username }}
+                                </div>
+                            </td>
+
+                            <!-- Date & Time -->
+                            <td class="py-3">
+                                <div class="small fw-semibold text-dark">{{ appt.appointment_date }}</div>
+                                <div class="text-muted small" style="font-size: 0.8rem;"><i class="bi bi-clock me-1 text-primary"></i>{{ appt.appointment_time }}</div>
+                            </td>
+
+                            <!-- Status Badge -->
+                            <td class="py-3">
+                                <span class="badge rounded-pill px-3 py-2 fw-normal
+                                    {% if appt.status == 'Confirmed' %} bg-success bg-opacity-10 text-success border border-success border-opacity-25
+                                    {% elif appt.status == 'Cancelled' %} bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25
+                                    {% elif appt.status == 'No Show' %} bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25
+                                    {% elif appt.status == 'Completed' %} bg-info bg-opacity-10 text-info border border-info border-opacity-25
+                                    {% else %} bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 {% endif %}">
+                                    {{ appt.status }}
+                                </span>
+                            </td>
+
+                            <!-- Risk Level Badge -->
+                            <td class="py-3">
+                                {% if appt.risk_level %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-medium
+                                        {% if appt.risk_level == 'HIGH' %} bg-danger text-white shadow-sm
+                                        {% elif appt.risk_level == 'MEDIUM' %} bg-warning text-dark
+                                        {% else %} bg-success text-white {% endif %}">
+                                        {{ appt.risk_level }} <small class="opacity-75">({{ appt.risk_score|floatformat:2 }})</small>
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted small">-</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Action Buttons -->
+                            <td class="text-end px-4 py-3">
+                                <div class="btn-group gap-1" role="group">
+                                    <a href="{% url 'appointment_update' appt.pk %}" class="btn btn-sm btn-light text-primary border rounded-2" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    {% if appt.status == 'Pending' %}
+                                        <a href="{% url 'mark_confirmed' appt.pk %}" class="btn btn-sm btn-light text-success border rounded-2" title="Confirm">
+                                            <i class="bi bi-check-lg"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if appt.status != 'Cancelled' and appt.status != 'Completed' %}
+                                        <a href="{% url 'mark_cancelled' appt.pk %}" class="btn btn-sm btn-light text-warning border rounded-2" title="Cancel">
+                                            <i class="bi bi-x-lg"></i>
+                                        </a>
+                                    {% endif %}
+                                    <a href="{% url 'mark_noshow' appt.pk %}" class="btn btn-sm btn-light text-danger border rounded-2" title="Mark No Show">
+                                        <i class="bi bi-person-dash"></i>
+                                    </a>
+                                    <a href="{% url 'appointment_delete' appt.pk %}" class="btn btn-sm btn-light text-dark border rounded-2" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="my-3">
+                                    <i class="bi bi-calendar-x fs-1 text-secondary opacity-50"></i>
+                                </div>
+                                <h5 class="fw-semibold text-secondary">No appointments found</h5>
+                                <p class="small text-muted mb-3">Get started by booking a new appointment for patients.</p>
+                                <a href="{% url 'appointment_create' %}" class="btn btn-sm btn-primary rounded-pill px-4 py-2">
+                                    Book New Appointment
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

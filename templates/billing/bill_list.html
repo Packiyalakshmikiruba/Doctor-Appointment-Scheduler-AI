@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-
 Bills
-
 {% endblock %}
 
 {% block content %}
@@ -15,17 +13,12 @@ Bills
         <div>
 
             <h2 class="fw-bold text-primary">
-
                 <i class="fas fa-file-invoice-dollar"></i>
-
                 Billing Management
-
             </h2>
 
             <small class="text-muted">
-
                 Hospital Bills & Payment Details
-
             </small>
 
         </div>
@@ -33,7 +26,6 @@ Bills
         {% if request.user.role == "ADMIN" %}
 
         <a href="{% url 'bill_create' %}"
-
            class="btn btn-primary">
 
             <i class="fas fa-plus"></i>
@@ -56,8 +48,8 @@ Bills
             {{ message }}
 
             <button class="btn-close"
-
-                    data-bs-dismiss="alert"></button>
+                    data-bs-dismiss="alert">
+            </button>
 
         </div>
 
@@ -84,38 +76,35 @@ Bills
 
                 <thead class="table-dark">
 
-                    <tr>
+                <tr>
 
-                        <th>Bill No</th>
+                    <th>Bill No</th>
 
-                        <th>Patient</th>
+                    <th>Patient</th>
 
-                        <th>Doctor</th>
+                    <th>Doctor</th>
 
-                        <th>Total</th>
+                    <th>Total</th>
 
-                        <th>Status</th>
+                    <th>Status</th>
 
-                        <th>Created</th>
+                    <th>Created</th>
 
-                        <th width="220">Actions</th>
+                    <th width="320">Actions</th>
 
-                    </tr>
+                </tr>
 
                 </thead>
 
                 <tbody>
-                                    {% for bill in bills %}
+
+                {% for bill in bills %}
 
                 <tr>
 
                     <td>
 
-                        <strong>
-
-                            #{{ bill.id }}
-
-                        </strong>
+                        <strong>#{{ bill.id }}</strong>
 
                     </td>
 
@@ -128,7 +117,6 @@ Bills
                     <td>
 
                         Dr.
-
                         {{ bill.appointment.doctor.user.get_full_name }}
 
                     </td>
@@ -181,53 +169,81 @@ Bills
 
                     <td>
 
+                        <!-- View Bill -->
+
                         <a href="{% url 'bill_detail' bill.id %}"
-
                            class="btn btn-sm btn-primary"
-
-                           title="View">
+                           title="View Bill">
 
                             <i class="fas fa-eye"></i>
 
                         </a>
 
-                        <a href="{% url 'bill_download' bill.id %}"
 
+                        {% if bill.payment_status == "Paid" %}
+
+                        <!-- Download Bill -->
+
+                        <a href="{% url 'download_bill_pdf' bill.id %}"
                            class="btn btn-sm btn-success"
-
-                           title="Download">
+                           title="Download Bill">
 
                             <i class="fas fa-download"></i>
 
                         </a>
 
-                        {% if request.user.role == "ADMIN" %}
+                        <!-- View Payment -->
 
-                        <a href="{% url 'bill_update' bill.id %}"
+                        <a href="{% url 'payment_detail' bill.payment.id %}"
+                           class="btn btn-sm btn-info"
+                           title="View Payment">
 
-                           class="btn btn-sm btn-warning"
-
-                           title="Edit">
-
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-money-check-alt"></i>
 
                         </a>
 
+                        <!-- Receipt -->
+
+                        <a href="{% url 'download_receipt' bill.payment.id %}"
+                           class="btn btn-sm btn-secondary"
+                           title="Receipt">
+
+                            <i class="fas fa-receipt"></i>
+
+                        </a>
+
+                        {% else %}
+
+                        <!-- Payment -->
+
                         <a href="{% url 'payment_create' bill.id %}"
-
-                           class="btn btn-sm btn-info"
-
-                           title="Payment">
+                           class="btn btn-sm btn-warning"
+                           title="Pay Now">
 
                             <i class="fas fa-credit-card"></i>
 
                         </a>
 
+                        {% endif %}
+
+
+                        {% if request.user.role == "ADMIN" %}
+
+                        <!-- Edit -->
+
+                        <a href="{% url 'bill_update' bill.id %}"
+                           class="btn btn-sm btn-warning"
+                           title="Edit Bill">
+
+                            <i class="fas fa-edit"></i>
+
+                        </a>
+
+                        <!-- Delete -->
+
                         <a href="{% url 'bill_delete' bill.id %}"
-
                            class="btn btn-sm btn-danger"
-
-                           title="Delete">
+                           title="Delete Bill">
 
                             <i class="fas fa-trash"></i>
 
@@ -238,17 +254,15 @@ Bills
                     </td>
 
                 </tr>
-                                {% empty %}
+
+                {% empty %}
 
                 <tr>
 
-                    <td colspan="7" class="text-center py-5">
+                    <td colspan="7"
+                        class="text-center py-5">
 
-                        <i class="fas fa-file-invoice-dollar
-                                  fa-4x
-                                  text-muted
-                                  mb-3">
-                        </i>
+                        <i class="fas fa-file-invoice-dollar fa-4x text-muted mb-3"></i>
 
                         <h5 class="text-muted">
 
@@ -258,15 +272,14 @@ Bills
 
                         <p class="text-secondary">
 
-                            No billing records are available.
+                            No billing records available.
 
                         </p>
 
                         {% if request.user.role == "ADMIN" %}
 
                         <a href="{% url 'bill_create' %}"
-
-                           class="btn btn-primary mt-2">
+                           class="btn btn-primary">
 
                             <i class="fas fa-plus-circle"></i>
 
@@ -294,15 +307,27 @@ Bills
 
 <style>
 
+.card{
+
+    border-radius:15px;
+
+}
+
+.card-header{
+
+    border-radius:15px 15px 0 0 !important;
+
+}
+
 .table th{
 
-    white-space: nowrap;
+    white-space:nowrap;
 
 }
 
 .table td{
 
-    vertical-align: middle;
+    vertical-align:middle;
 
 }
 
@@ -312,23 +337,11 @@ Bills
 
 }
 
-.card{
-
-    border-radius:12px;
-
-}
-
-.card-header{
-
-    border-radius:12px 12px 0 0 !important;
-
-}
-
 .badge{
 
-    font-size:13px;
+    padding:7px 12px;
 
-    padding:7px 10px;
+    font-size:13px;
 
 }
 

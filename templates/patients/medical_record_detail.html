@@ -1,127 +1,614 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Medical Report{% endblock %}
+{% block title %}
+
+Medical Record Details
+
+{% endblock %}
 
 {% block content %}
 
 <div class="container mt-4">
 
-<div class="card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<div class="card-header">
+        <div>
 
-<h3>
+            <h2 class="fw-bold text-primary">
 
-Medical Report
+                <i class="fas fa-notes-medical"></i>
 
-</h3>
+                Medical Record Details
+
+            </h2>
+
+            <p class="text-muted">
+
+                Complete Patient Consultation Record
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <a href="{% url 'medical_record_list' %}"
+
+               class="btn btn-secondary">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <div class="d-flex justify-content-between">
+
+                <h4 class="mb-0">
+
+                    Medical Record #{{ record.id }}
+
+                </h4>
+
+                <span class="badge bg-success">
+
+                    {{ appointment.status }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-lg-6">
+
+                    <h5 class="text-primary mb-3">
+
+                        Patient Information
+
+                    </h5>
+
+                    <table class="table table-bordered">
+
+                        <tr>
+
+                            <th width="220">
+
+                                Patient Name
+
+                            </th>
+
+                            <td>
+
+                                {{ patient.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Doctor
+
+                            </th>
+
+                            <td>
+
+                                Dr. {{ doctor.user.get_full_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Department
+
+                            </th>
+
+                            <td>
+
+                                {{ doctor.department.department_name }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Date
+
+                            </th>
+
+                            <td>
+
+                                {{ appointment.appointment_date }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Appointment Time
+
+                            </th>
+
+                            <td>
+
+                                {{ appointment.appointment_time }}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Record Created
+
+                            </th>
+
+                            <td>
+
+                                {{ record.created_at }}
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="card border-success">
+
+                        <div class="card-header bg-success text-white">
+
+                            <h5 class="mb-0">
+
+                                Consultation Summary
+
+                            </h5>
+
+                        </div>
+
+                        <div class="card-body">
+                                                        <table class="table table-bordered align-middle">
+
+                                <tr>
+
+                                    <th width="220">
+
+                                        Diagnosis
+
+                                    </th>
+
+                                    <td>
+
+                                        {{ record.diagnosis }}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Symptoms
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if record.symptoms %}
+
+                                            {{ record.symptoms|linebreaks }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                No Symptoms Recorded
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Treatment
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if record.treatment %}
+
+                                            {{ record.treatment|linebreaks }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                No Treatment Added
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Doctor Notes
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if record.notes %}
+
+                                            {{ record.notes|linebreaks }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+
+                                                No Notes Available
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Prescription Count
+
+                                    </th>
+
+                                    <td>
+
+                                        <span class="badge bg-info">
+
+                                            {{ prescription_count }}
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+
+                                        Consultation Status
+
+                                    </th>
+
+                                    <td>
+
+                                        {% if appointment.status == "Completed" %}
+
+                                            <span class="badge bg-success">
+
+                                                Consultation Completed
+
+                                            </span>
+
+                                        {% elif appointment.status == "Confirmed" %}
+
+                                            <span class="badge bg-primary">
+
+                                                Confirmed
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-warning text-dark">
+
+                                                {{ appointment.status }}
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+                        <h4 class="text-primary mb-3">
+
+                <i class="fas fa-prescription-bottle-alt"></i>
+
+                Prescriptions
+
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Medicine</th>
+
+                            <th>Dosage</th>
+
+                            <th>Frequency</th>
+
+                            <th>Duration</th>
+
+                            <th>Instructions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for prescription in prescriptions %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ forloop.counter }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.medicine_name }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.dosage }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.frequency }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.duration }}
+
+                            </td>
+
+                            <td>
+
+                                {{ prescription.instructions|default:"-" }}
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="6" class="text-center text-muted py-4">
+
+                                No Prescriptions Available
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <hr>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+
+                {% if request.user.role == "DOCTOR" %}
+
+                <a href="{% url 'medical_record_update' record.id %}"
+
+                   class="btn btn-warning">
+
+                    <i class="fas fa-edit"></i>
+
+                    Edit Record
+
+                </a>
+
+                <a href="{% url 'medical_record_delete' record.id %}"
+
+                   class="btn btn-danger">
+
+                    <i class="fas fa-trash"></i>
+
+                    Delete Record
+
+                </a>
+
+                <a href="{% url 'prescription_create' record.id %}"
+
+                   class="btn btn-success">
+
+                    <i class="fas fa-plus-circle"></i>
+
+                    Add Prescription
+
+                </a>
+
+                {% endif %}
+
+                {% if prescriptions %}
+
+                <a href="{% url 'prescription_list' %}"
+
+                   class="btn btn-info text-white">
+
+                    <i class="fas fa-pills"></i>
+
+                    View All Prescriptions
+
+                </a>
+
+                {% endif %}
+
+                <button
+                    onclick="window.print();"
+                    class="btn btn-primary">
+
+                    <i class="fas fa-print"></i>
+
+                    Print Record
+
+                </button>
+
+                <a href="{% url 'medical_record_list' %}"
+
+                   class="btn btn-secondary">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-<div class="card-body">
+<style>
 
-<p>
+.card{
 
-<b>Doctor :</b>
+    border-radius:15px;
 
-Dr.
-{{ record.appointment.doctor.user.get_full_name }}
+}
 
-</p>
+.card-header{
 
-<p>
+    border-radius:15px 15px 0 0 !important;
 
-<b>Department :</b>
+}
 
-{{ record.appointment.doctor.department.department_name }}
+.table th{
 
-</p>
+    width:220px;
 
-<p>
+    font-weight:600;
 
-<b>Date :</b>
+    background:#f8f9fa;
 
-{{ record.appointment.appointment_date }}
+}
 
-</p>
+.table td{
 
-<hr>
+    vertical-align:middle;
 
-<p>
+}
 
-<b>Symptoms</b>
+.badge{
 
-</p>
+    font-size:13px;
 
-<p>
+    padding:8px 12px;
 
-{{ record.symptoms }}
+}
 
-</p>
+.btn{
 
-<hr>
+    border-radius:8px;
 
-<p>
+}
 
-<b>Diagnosis</b>
+.btn i{
 
-</p>
+    margin-right:5px;
 
-<p>
+}
 
-{{ record.diagnosis }}
+@media print{
 
-</p>
+    .btn,
 
-<hr>
+    .card-header{
 
-<p>
+        display:none;
 
-<b>Notes</b>
+    }
 
-</p>
+}
 
-<p>
-
-{{ record.notes }}
-
-</p>
-
-<hr>
-
-<p>
-
-<b>Follow Up</b>
-
-</p>
-
-<p>
-
-{{ record.follow_up_date }}
-
-</p>
-
-<br>
-
-<a
-href="{% url 'download_medical_report' record.id %}"
-class="btn btn-success">
-
-Download Medical Report
-
-</a>
-
-<a href="{% url 'download_prescription' p.id %}"
-class="btn btn-success">
-
-Download Prescription PDF
-
-</a>
-
-</div>
-
-</div>
-
-</div>
+</style>
 
 {% endblock %}

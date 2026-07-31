@@ -449,45 +449,6 @@ def prescription_delete(request,pk):
         }
     )
 @login_required
-def my_prescriptions(request):
-
-    patient=getattr(request.user,"patient_profile",None)
-
-    if not patient:
-        messages.error(
-            request,
-            "Only patients can access this page."
-        )
-        return redirect("dashboard")
-
-    prescriptions=Prescription.objects.select_related(
-        "medical_record",
-        "medical_record__appointment",
-        "medical_record__appointment__doctor__user",
-        "medical_record__appointment__doctor__department"
-    ).filter(
-        medical_record__appointment__patient=patient
-    ).order_by(
-        "-created_at"
-    )
-
-    search=request.GET.get("search")
-
-    if search:
-
-        prescriptions=prescriptions.filter(
-            medicine_name__icontains=search
-        )
-
-    return render(
-        request,
-        "prescriptions/my_prescriptions.html",
-        {
-            "prescriptions":prescriptions,
-            "search":search,
-        }
-    )
-@login_required
 def prescription_detail(request, record_id):
 
     patient = getattr(request.user, "patient_profile", None)
@@ -535,5 +496,76 @@ def prescription_detail(request, record_id):
     )
 from django.shortcuts import render
 
+@login_required
 def prescription_list(request):
-    return render(request, "prescriptions/prescription_list.html")
+
+    prescriptions = (
+        Prescription.objects
+        .select_related(
+            "medical_record",
+            "medical_record__appointment",
+            "medical_record__appointment__patient__user",
+            "medical_record__appointment__doctor__user",
+            "medical_record__appointment__doctor__department",
+        )
+        .order_by("-created_at")
+    )
+
+    search = request.GET.get("search")
+
+    if search:
+
+        prescriptions = prescriptions.filter(
+
+            Q(medicine_name__icontains=search)
+
+            |
+
+            Q(
+                medical_record__appointment__patient__user__first_name__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__appointment__patient__user__last_name__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__appointment__doctor__user__first_name__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__appointment__doctor__user__last_name__icontains=search
+            )
+
+            |
+
+            Q(
+                medical_record__diagnosis__icontains=search
+            )
+        )
+
+    context = {
+
+        "prescriptions": prescriptions,
+
+        "search": search,
+
+        "total_prescriptions": prescriptions.count(),
+
+    }
+
+    return render(
+
+        request,
+
+        "prescriptions/prescription_list.html",
+
+        context,
+
+    )

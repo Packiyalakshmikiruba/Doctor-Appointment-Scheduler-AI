@@ -128,14 +128,14 @@ class DoctorLeave(models.Model):
     def __str__(self):
         return f"Dr. {self.doctor} - Leave on {self.leave_date}"
 from django.utils import timezone
-
 class DoctorAttendance(models.Model):
 
     STATUS_CHOICES = [
         ("AVAILABLE", "Available"),
         ("BUSY", "Busy"),
         ("EMERGENCY", "Emergency"),
-        ("LEAVE", "Leave"),
+        ("ON_LEAVE", "On Leave"),
+        ("NOT_AVAILABLE", "Not Available"),
     ]
 
     doctor = models.ForeignKey(
@@ -151,7 +151,7 @@ class DoctorAttendance(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default="ABSENT"
+        default="NOT_AVAILABLE"
     )
 
     check_in_time = models.TimeField(
@@ -166,6 +166,65 @@ class DoctorAttendance(models.Model):
 
     class Meta:
         unique_together = ("doctor", "attendance_date")
+
+    def __str__(self):
+        return f"{self.doctor} - {self.attendance_date}"
+    
+class DoctorNote(models.Model):
+
+    appointment = models.OneToOneField(
+        "appointments.Appointment",
+        on_delete=models.CASCADE,
+        related_name="doctor_note"
+)
+
+    doctor = models.ForeignKey(
+        Doctor,
+        on_delete=models.CASCADE
+    )
+
+    chief_complaint = models.TextField()
+
+    symptoms = models.TextField(blank=True)
+
+    bp = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
+    sugar = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
+    pulse = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
+    temperature = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
+    clinical_notes = models.TextField(blank=True)
+
+    follow_up_date = models.DateField(
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return f"{self.appointment.patient}"
+    
 class DoctorStatus(models.Model):
 
     STATUS_CHOICES = [

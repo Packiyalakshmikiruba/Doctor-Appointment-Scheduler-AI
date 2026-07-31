@@ -10,235 +10,199 @@ Delete Payment
 
 <div class="container mt-5">
 
-    <div class="row justify-content-center">
+<div class="row justify-content-center">
 
-        <div class="col-lg-6">
+<div class="col-lg-6">
 
-            <div class="card shadow border-danger">
+<div class="card shadow-lg border-0">
 
-                <div class="card-header bg-danger text-white">
+<div class="card-header bg-danger text-white">
 
-                    <h3 class="mb-0">
+<h3 class="mb-0">
 
-                        <i class="fas fa-trash"></i>
+<i class="fas fa-trash-alt"></i>
 
-                        Delete Payment
+Delete Payment
 
-                    </h3>
+</h3>
 
-                </div>
+</div>
 
-                <div class="card-body text-center">
+<div class="card-body text-center">
 
-                    <i class="fas fa-credit-card
-                              fa-5x
-                              text-danger
-                              mb-4">
-                    </i>
+<div class="mb-4">
 
-                    <h4>
+<i class="fas fa-exclamation-triangle fa-5x text-warning"></i>
 
-                        Are you sure?
+</div>
 
-                    </h4>
+<h4 class="mb-3">
 
-                    <p class="text-muted">
+Are you sure?
 
-                        You are about to delete this payment.
+</h4>
 
-                        <br>
+<p class="text-muted">
 
-                        This action cannot be undone.
+You are about to permanently delete this payment record.
 
-                    </p>
+</p>
 
-                    <hr>
+<hr>
 
-                    <table class="table table-bordered">
+<div class="row text-start">
 
-                        <tr>
+<div class="col-md-6">
 
-                            <th width="180">
+<p>
 
-                                Receipt No
+<strong>Receipt No</strong>
 
-                            </th>
+<br>
 
-                            <td>
+{{ payment.receipt_number }}
 
-                                {{ payment.receipt_number }}
+</p>
 
-                            </td>
+<p>
 
-                        </tr>
+<strong>Transaction ID</strong>
 
-                        <tr>
+<br>
 
-                            <th>
+{{ payment.transaction_id }}
 
-                                Transaction ID
+</p>
 
-                            </th>
+<p>
 
-                            <td>
+<strong>Patient</strong>
 
-                                {{ payment.transaction_id }}
+<br>
 
-                            </td>
+{{ bill.appointment.patient.user.get_full_name }}
 
-                        </tr>
+</p>
 
-                        <tr>
+</div>
 
-                            <th>
+<div class="col-md-6">
 
-                                Patient
+<p>
 
-                            </th>
+<strong>Doctor</strong>
 
-                            <td>
+<br>
 
-                                {{ payment.bill.appointment.patient.user.get_full_name }}
+Dr. {{ bill.appointment.doctor.user.get_full_name }}
 
-                            </td>
+</p>
 
-                        </tr>
+<p>
 
-                        <tr>
+<strong>Amount</strong>
 
-                            <th>
+<br>
 
-                                Doctor
+<span class="fw-bold text-success">
 
-                            </th>
+₹ {{ payment.amount }}
 
-                            <td>
+</span>
 
-                                Dr. {{ payment.bill.appointment.doctor.user.get_full_name }}
+</p>
 
-                            </td>
+<p>
 
-                        </tr>
+<strong>Status</strong>
 
-                        <tr>
+<br>
 
-                            <th>
+{% if payment.payment_status == "Success" %}
 
-                                Amount
+<span class="badge bg-success">
 
-                            </th>
+Success
 
-                            <td class="text-success fw-bold">
+</span>
 
-                                ₹ {{ payment.amount }}
+{% elif payment.payment_status == "Pending" %}
 
-                            </td>
+<span class="badge bg-warning text-dark">
 
-                        </tr>
+Pending
 
-                        <tr>
+</span>
 
-                            <th>
+{% elif payment.payment_status == "Failed" %}
 
-                                Payment Method
+<span class="badge bg-danger">
 
-                            </th>
+Failed
 
-                            <td>
+</span>
 
-                                {{ payment.payment_method }}
+{% else %}
 
-                            </td>
+<span class="badge bg-secondary">
 
-                        </tr>
+Refunded
 
-                        <tr>
+</span>
 
-                            <th>
+{% endif %}
 
-                                Status
+</p>
 
-                            </th>
+</div>
 
-                            <td>
+</div>
 
-                                {% if payment.payment_status == "Success" %}
+<div class="alert alert-danger mt-4">
 
-                                <span class="badge bg-success">
+<i class="fas fa-info-circle"></i>
 
-                                    Success
+Deleting this payment will also change the related bill status back to <strong>Pending</strong>.
 
-                                </span>
+</div>
 
-                                {% elif payment.payment_status == "Pending" %}
+<form method="POST">
 
-                                <span class="badge bg-warning text-dark">
+{% csrf_token %}
 
-                                    Pending
+<div class="d-flex justify-content-between mt-4">
 
-                                </span>
+<a
+href="{% url 'payment_detail' payment.id %}"
+class="btn btn-secondary">
 
-                                {% elif payment.payment_status == "Failed" %}
+<i class="fas fa-arrow-left"></i>
 
-                                <span class="badge bg-danger">
+Cancel
 
-                                    Failed
+</a>
 
-                                </span>
+<button
+type="submit"
+class="btn btn-danger">
 
-                                {% else %}
+<i class="fas fa-trash"></i>
 
-                                <span class="badge bg-secondary">
+Delete Payment
 
-                                    Refunded
+</button>
 
-                                </span>
+</div>
 
-                                {% endif %}
+</form>
 
-                            </td>
+</div>
 
-                        </tr>
+</div>
 
-                    </table>
+</div>
 
-                    <form method="POST">
-
-                        {% csrf_token %}
-
-                        <div class="d-flex justify-content-center gap-3 mt-4">
-
-                            <a href="{% url 'payment_detail' payment.id %}"
-
-                               class="btn btn-secondary">
-
-                                <i class="fas fa-arrow-left"></i>
-
-                                Cancel
-
-                            </a>
-
-                            <button
-                                type="submit"
-                                class="btn btn-danger">
-
-                                <i class="fas fa-trash"></i>
-
-                                Delete Payment
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 

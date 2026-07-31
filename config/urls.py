@@ -8,6 +8,7 @@ urlpatterns = [
     "notifications/",
     include("notifications.urls"),
 ),
+
     path("", include("accounts.urls")),
     path("", include("hospital.urls")),
     path("", include("patients.urls")),
@@ -19,6 +20,7 @@ urlpatterns = [
     path("", include("chatbot.urls")),
     path("", include("ai_prediction.urls")),
     path('messaging/', include('messaging.urls'))
+    
 
 ]
 if settings.DEBUG:
@@ -31,3 +33,11 @@ if settings.DEBUG:
         settings.STATIC_URL,
         document_root=settings.STATIC_ROOT
     )
+    urlpatterns += [
+
+    path(
+        "i18n/",
+        include("django.conf.urls.i18n"),
+    ),
+
+]

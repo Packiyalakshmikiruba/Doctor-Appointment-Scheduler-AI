@@ -1,5 +1,5 @@
 from decimal import Decimal
-
+from payment.models import Payment
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -146,6 +146,7 @@ def bill_list(request):
             "search": search,
         }
     )
+@login_required
 def bill_detail(request, pk):
 
     bill = get_object_or_404(
@@ -155,8 +156,33 @@ def bill_detail(request, pk):
             "appointment__doctor__user",
             "appointment__doctor__department",
         ),
-        pk=pk,
+        pk=pk
     )
+
+    # Patient Access
+    if request.user.role == "PATIENT":
+
+        if bill.appointment.patient != request.user.patient_profile:
+
+            messages.error(
+                request,
+                "Access Denied."
+            )
+
+            return redirect("bill_list")
+
+    # Admin Only
+    elif request.user.role != "ADMIN":
+
+        messages.error(
+            request,
+            "Access Denied."
+        )
+
+        return redirect("dashboard")
+
+    # Payment Object
+    payment = Payment.objects.filter(bill=bill).first()
 
     return render(
         request,
@@ -166,7 +192,8 @@ def bill_detail(request, pk):
             "appointment": bill.appointment,
             "doctor": bill.appointment.doctor,
             "patient": bill.appointment.patient,
-        },
+            "payment": payment,
+        }
     )
 def bill_update(request, pk):
 
@@ -570,63 +597,3 @@ def my_bills(request):
 
     )
 
-@login_required
-def bill_detail(request, pk):
-
-    bill = get_object_or_404(
-
-        Bill.objects.select_related(
-
-            "appointment",
-
-            "appointment__patient__user",
-
-            "appointment__doctor__user",
-
-            "appointment__doctor__department",
-
-        ),
-
-        pk=pk,
-
-    )
-
-    if (
-
-        request.user.role == "PATIENT"
-
-        and
-
-        bill.appointment.patient != request.user.patient_profile
-
-    ):
-
-        messages.error(
-
-            request,
-
-            "Access Denied."
-
-        )
-
-        return redirect("my_bills")
-
-    return render(
-
-        request,
-
-        "billing/bill_detail.html",
-
-        {
-
-            "bill": bill,
-
-            "appointment": bill.appointment,
-
-            "doctor": bill.appointment.doctor,
-
-            "patient": bill.appointment.patient,
-
-        },
-
-    )

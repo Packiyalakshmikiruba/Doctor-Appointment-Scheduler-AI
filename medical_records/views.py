@@ -408,9 +408,9 @@ def medical_record_detail(request,pk):
         }
     )
 @login_required
-def get_appointment_details(request,pk):
+def get_appointment_details(request, pk):
 
-    appointment=get_object_or_404(
+    appointment = get_object_or_404(
         Appointment.objects.select_related(
             "doctor__user",
             "doctor__department",
@@ -419,28 +419,33 @@ def get_appointment_details(request,pk):
         pk=pk
     )
 
-    if hasattr(request.user,"doctor_profile"):
-        if appointment.doctor!=request.user.doctor_profile:
-            return JsonResponse(
-                {"error":"Access Denied"},
-                status=403
-            )
-        elif request.user.role == "ADMIN":
-          pass
+    # Access Control
+    if request.user.role == "ADMIN":
+        pass
 
-    elif hasattr(request.user,"patient_profile"):
-        if appointment.patient!=request.user.patient_profile:
+    elif hasattr(request.user, "doctor_profile"):
+        if appointment.doctor != request.user.doctor_profile:
             return JsonResponse(
-                {"error":"Access Denied"},
+                {"error": "Access Denied"},
                 status=403
             )
 
-    data={
+    elif hasattr(request.user, "patient_profile"):
+        if appointment.patient != request.user.patient_profile:
+            return JsonResponse(
+                {"error": "Access Denied"},
+                status=403
+            )
 
-        "appointment_id":appointment.id,
+    data = {
+
+        "appointment_id": appointment.id,
 
         "doctor_name":
         f"Dr. {appointment.doctor.user.get_full_name() or appointment.doctor.user.username}",
+
+        "doctor_specialization":
+        appointment.doctor.specialization,
 
         "department":
         appointment.doctor.department.department_name,
@@ -462,15 +467,9 @@ def get_appointment_details(request,pk):
 
         "risk_level":
         appointment.risk_level,
-        "doctor_specialization":
-
-appointment.doctor.specialization,
 
         "risk_score":
         appointment.risk_score,
-        "doctor_specialization":
-
-appointment.doctor.specialization,
 
         "checked_in":
         appointment.patient_checked_in,

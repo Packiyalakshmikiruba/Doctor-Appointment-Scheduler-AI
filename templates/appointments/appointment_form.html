@@ -5,150 +5,155 @@ Book Appointment
 {% endblock %}
 
 {% block content %}
+<!-- Double Color Gradient Background Wrapper -->
+<div class="container-fluid py-5 px-lg-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
 
-<div class="container mt-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
 
-    <div class="row justify-content-center">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-white">
 
-        <div class="col-lg-7">
+                    <!-- Card Header -->
+                    <div class="card-header bg-gradient bg-primary text-white py-4 px-4 border-0">
+                        <h4 class="mb-0 fw-bold">
+                            <i class="fas fa-calendar-plus me-2"></i> Book Appointment
+                        </h4>
+                        <p class="mb-0 text-white-50 small mt-1">Schedule your medical consultation easily by filling out the form below.</p>
+                    </div>
 
-            <div class="card shadow">
+                    <!-- Card Body -->
+                    <div class="card-body p-4 p-md-5">
 
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        Book Appointment
-                    </h4>
-                </div>
+                        <form method="post" novalidate>
 
-                <div class="card-body">
+                            {% csrf_token %}
 
-                    <form method="post" novalidate>
+                            {% if not is_self_booking %}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">
+                                    {{ form.patient.label }}
+                                </label>
 
-                        {% csrf_token %}
+                                <div class="input-group">
+                                    {{ form.patient }}
+                                </div>
 
-                        {% if not is_self_booking %}
-                        <div class="mb-3">
-                            <label class="form-label">
-                                {{ form.patient.label }}
-                            </label>
-
-                            {{ form.patient }}
-
-                            {% if form.patient.errors %}
-                            <div class="text-danger small">
-                                {{ form.patient.errors|striptags }}
+                                {% if form.patient.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.patient.errors|striptags }}
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                        </div>
-                        {% else %}
-                            {{ form.patient }}
-                        {% endif %}
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                {{ form.doctor.label }}
-                            </label>
-
-                            {{ form.doctor }}
-
-                            {% if form.doctor.errors %}
-                            <div class="text-danger small">
-                                {{ form.doctor.errors|striptags }}
-                            </div>
-                            {% endif %}
-
-                            <div id="doctor-availability-hint"
-                                 class="form-text text-primary">
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Appointment Date
-                            </label>
-
-                            {{ form.appointment_date }}
-
-                            {% if form.appointment_date.errors %}
-                            <div class="text-danger small">
-                                {{ form.appointment_date.errors|striptags }}
-                            </div>
-                            {% endif %}
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Appointment Time
-                            </label>
-
-                            {{ form.appointment_time }}
-
-                            <div class="form-text">
-                                Example:
-                                3:00 PM = <strong>15:00</strong>
-                            </div>
-
-                            {% if form.appointment_time.errors %}
-                            <div class="text-danger small">
-                                {{ form.appointment_time.errors|striptags }}
-                            </div>
-                            {% endif %}
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Reason
-                            </label>
-
-                            {{ form.reason }}
-
-                            {% if form.reason.errors %}
-                            <div class="text-danger small">
-                                {{ form.reason.errors|striptags }}
-                            </div>
-                            {% endif %}
-
-                        </div>
-
-                        {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {{ form.non_field_errors }}
-                        </div>
-                        {% endif %}
-
-                        <button class="btn btn-primary">
-
-                            {% if is_self_booking %}
-                                Book Appointment
                             {% else %}
-                                Save
+                                {{ form.patient }}
                             {% endif %}
 
-                        </button>
+                            <!-- Doctor Field -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">
+                                    {{ form.doctor.label }}
+                                </label>
 
-                        <a href="{% url 'dashboard' %}"
-                           class="btn btn-secondary">
+                                <div class="input-group">
+                                    {{ form.doctor }}
+                                </div>
 
-                            Cancel
+                                {% if form.doctor.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.doctor.errors|striptags }}
+                                </div>
+                                {% endif %}
 
-                        </a>
+                                <div id="doctor-availability-hint" class="form-text text-primary mt-1 small">
+                                </div>
+                            </div>
 
-                    </form>
+                            <!-- Appointment Date -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">
+                                    Appointment Date
+                                </label>
+
+                                <div class="input-group">
+                                    {{ form.appointment_date }}
+                                </div>
+
+                                {% if form.appointment_date.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.appointment_date.errors|striptags }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Appointment Time -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">
+                                    Appointment Time
+                                </label>
+
+                                <div class="input-group">
+                                    {{ form.appointment_time }}
+                                </div>
+
+                                <div class="form-text text-muted small">
+                                    Example: 3:00 PM = <strong>15:00</strong>
+                                </div>
+
+                                {% if form.appointment_time.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.appointment_time.errors|striptags }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Reason -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-dark">
+                                    Reason
+                                </label>
+
+                                <div class="input-group">
+                                    {{ form.reason }}
+                                </div>
+
+                                {% if form.reason.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.reason.errors|striptags }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            {% if form.non_field_errors %}
+                            <div class="alert alert-danger rounded-3 shadow-sm">
+                                {{ form.non_field_errors }}
+                            </div>
+                            {% endif %}
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-3 mt-4 pt-2">
+                                <button type="submit" class="btn btn-primary flex-grow-1 py-2 fw-semibold rounded-pill shadow-sm">
+                                    {% if is_self_booking %}
+                                        Book Appointment
+                                    {% else %}
+                                        Save
+                                    {% endif %}
+                                </button>
+
+                                <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary py-2 px-4 rounded-pill fw-semibold">
+                                    Cancel
+                                </a>
+                            </div>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
 </div>
-
 {% endblock %}

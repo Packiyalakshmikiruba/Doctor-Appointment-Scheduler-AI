@@ -1,402 +1,822 @@
 {% extends "base.html" %}
-
-{% block title %}
-Doctor Dashboard
-{% endblock %}
-
+{% block title %}Doctor Dashboard{% endblock %}
 {% block content %}
 <div class="container-fluid py-4">
 
-<!-- ================= HEADER ================= -->
-<div class="card shadow-sm mb-4">
-    <div class="card-body d-flex justify-content-between align-items-center">
-        <div>
-            <h3>
-                👨‍⚕️ Dr. {{ doctor.user.get_full_name }}
-            </h3>
-            <p class="text-muted mb-0">
-                Department : {{ doctor.department.department_name }}
-            </p>
-            <p class="text-muted">
-                Specialization : {{ doctor.specialization }}
-            </p>
+<!-- ================= DOCTOR PROFILE HEADER ================= -->
+<div class="card shadow-sm border border-light rounded-4 mb-4 bg-white position-relative overflow-hidden">
+  <!-- Subtle top accent line -->
+  <div class="position-absolute top-0 start-0 w-100 bg-primary" style="height: 3px;"></div>
+  
+  <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-4">
+    <!-- Left: Doctor Info with Avatar Box -->
+    <div class="d-flex align-items-center">
+      <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-3 me-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 55px; height: 55px;">
+        <i class="fas fa-user-md fa-lg"></i>
+      </div>
+      <div>
+        <h4 class="fw-bold text-dark mb-1">Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h4>
+        <div class="d-flex flex-wrap align-items-center gap-2 text-secondary small mb-2">
+          <span class="badge bg-light text-dark border px-2.5 py-1 rounded-pill fw-medium">
+            <i class="fas fa-hospital text-primary me-1"></i> {{ doctor.department.department_name }}
+          </span>
+          <span class="text-muted">&bull;</span>
+          <span class="text-dark fw-medium">{{ doctor.specialization }}</span>
         </div>
-        <div class="text-end">
-            <span class="badge bg-success fs-6">
-                🟢 Available
-            </span>
-            <p class="mt-2 mb-0">
-                {{ today }}
-            </p>
+        <div class="d-flex flex-wrap gap-3 text-muted small">
+          <span><i class="fas fa-wallet text-success me-1"></i>Fee: <b class="text-dark">₹{{ doctor.consultation_fee }}</b></span>
+          <span><i class="fas fa-phone-alt text-primary me-1"></i>Phone: <b class="text-dark">{{ doctor.phone_number }}</b></span>
         </div>
+      </div>
     </div>
+
+    <!-- Right: Status & Action Buttons -->
+    <div class="d-flex flex-column align-items-lg-end gap-2 ms-lg-auto">
+      <div>
+        <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-3 py-1.5 rounded-pill fw-semibold small">
+          <i class="fas fa-circle fa-xs me-1 text-info"></i> {{ doctor_status.get_status_display|default:"Status Not Set" }}
+        </span>
+      </div>
+      
+      <div class="d-flex flex-wrap gap-2 mt-1">
+        <a href="{% url 'doctor_checkin' %}" class="btn btn-success btn-sm fw-semibold px-3 py-1.5 rounded-pill shadow-sm transition-hover">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Check In
+        </a>
+        <a href="{% url 'doctor_checkout' %}" class="btn btn-outline-danger btn-sm fw-semibold px-3 py-1.5 rounded-pill">
+          <i class="bi bi-box-arrow-right me-1"></i> Check Out
+        </a>
+        <a href="{% url 'update_doctor_status' %}" class="btn btn-outline-primary btn-sm fw-semibold px-3 py-1.5 rounded-pill">
+          <i class="bi bi-broadcast me-1"></i> Status
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ================= STAT CARDS ================= -->
-<div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center">
-                <h6 class="text-muted">Today's Appointments</h6>
-                <h2>{{ todays_appointments|length }}</h2>
-                <i class="bi bi-calendar-check fs-3"></i>
-            </div>
-        </div>
-    </div>
+{% if today_leave %}
+<div class="alert alert-warning border-0 rounded-4 shadow-sm d-flex align-items-center p-3 mb-4 bg-warning bg-opacity-10 text-warning-emphasis">
+  <div class="bg-warning text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+    <i class="bi bi-calendar-x fs-6"></i>
+  </div>
+  <div>
+    <h6 class="fw-bold mb-0 text-dark">Leave Notice</h6>
+    <p class="mb-0 small text-secondary">You are marked on leave for today. Appointments will adjust accordingly.</p>
+  </div>
+</div>
+{% endif %}
 
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center">
-                <h6 class="text-muted">Total Patients</h6>
-                <h2>{{ total_patients }}</h2>
-                <i class="bi bi-people fs-3"></i>
-            </div>
-        </div>
+<!-- ================= NOTIFICATIONS ================= -->
+{% if notifications %}
+<div class="mb-4 d-flex flex-column gap-2">
+  {% for n in notifications %}
+  <div class="alert alert-{{ n.type }} border-0 rounded-4 shadow-sm d-flex align-items-center py-3 px-4 mb-0 transition-hover">
+    <div class="bg-{{ n.type }} bg-opacity-25 text-{{ n.type }} rounded-circle p-2 me-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;">
+      <i class="bi bi-bell-fill fs-6"></i>
     </div>
+    <div class="flex-grow-1 text-dark small fw-medium">
+      {{ n.text }}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center">
-                <h6 class="text-muted">Completed Visits</h6>
-                <h2>{{ total_completed }}</h2>
-                <i class="bi bi-check-circle fs-3"></i>
-            </div>
-        </div>
-    </div>
+<!-- ================= STATISTICS WITH 3D HOVER EFFECT ================= -->
+<style>
+  .stat-card-3d {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04) !important;
+  }
+  .stat-card-3d:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    border-color: rgba(13, 110, 253, 0.2) !important;
+  }
+</style>
 
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center">
-                <h6 class="text-muted">No Show Rate</h6>
-                <h2>{{ noshow_rate }} %</h2>
-                <i class="bi bi-exclamation-triangle fs-3"></i>
-            </div>
+<div class="row g-3 mb-4">
+  <!-- Card 1: Today's Appointments -->
+  <div class="col-xl-3 col-md-6 col-6">
+    <div class="card stat-card-3d rounded-4 bg-white p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted small fw-semibold">Today's Appointments</span>
+        <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px;">
+          <i class="bi bi-calendar-check fs-6"></i>
         </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-0">{{ todays_appointments|length }}</h3>
     </div>
+  </div>
+
+  <!-- Card 2: Total Patients -->
+  <div class="col-xl-3 col-md-6 col-6">
+    <div class="card stat-card-3d rounded-4 bg-white p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted small fw-semibold">Total Patients</span>
+        <div class="bg-info bg-opacity-10 text-info rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px;">
+          <i class="bi bi-people fs-6"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-0">{{ total_patients }}</h3>
+    </div>
+  </div>
+
+  <!-- Card 3: Completed Visits -->
+  <div class="col-xl-3 col-md-6 col-6">
+    <div class="card stat-card-3d rounded-4 bg-white p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted small fw-semibold">Completed Visits</span>
+        <div class="bg-success bg-opacity-10 text-success rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px;">
+          <i class="bi bi-check-circle fs-6"><span></span></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-0">{{ total_completed }}</h3>
+    </div>
+  </div>
+
+  <!-- Card 4: No-Show Rate -->
+  <div class="col-xl-3 col-md-6 col-6">
+    <div class="card stat-card-3d rounded-4 bg-white p-3 h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted small fw-semibold">No-Show Rate</span>
+        <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 38px; height: 38px;">
+          <i class="bi bi-exclamation-triangle fs-6"></i>
+        </div>
+      </div>
+      <h3 class="fw-bold text-dark mb-0">{{ noshow_rate }}%</h3>
+    </div>
+  </div>
 </div>
 
-<!-- ================= MAIN CONTENT ================= -->
 <div class="row g-4">
-    <!-- Appointment Queue -->
-    <div class="col-lg-8">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">📅 Today's Patient Queue</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Patient</th>
-                                <th>Status</th>
-                                <th>AI Risk</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for appointment in todays_appointments %}
-                            <tr>
-                                <td>{{ appointment.appointment_time }}</td>
-                                <td>{{ appointment.patient.user.get_full_name }}</td>
-                                <td>
-                                    {% if appointment.status == "Confirmed" %}
-                                    <span class="badge bg-success">Confirmed</span>
-                                    {% elif appointment.status == "Pending" %}
-                                    <span class="badge bg-warning">Pending</span>
-                                    {% else %}
-                                    <span class="badge bg-secondary">{{ appointment.status }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if appointment.risk_level == "HIGH" %}
-                                    <span class="badge bg-danger">⚠ HIGH</span>
-                                    {% elif appointment.risk_level == "MEDIUM" %}
-                                    <span class="badge bg-warning">MEDIUM</span>
-                                    {% else %}
-                                    <span class="badge bg-success">LOW</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-primary">View</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center">No appointments today</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  <!-- ================= TODAY'S PATIENT QUEUE ================= -->
+<div class="col-lg-8">
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-3 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-calendar-check fs-6"></i>
         </div>
-    </div>
-
-    <!-- AI Risk Panel -->
-    <div class="col-lg-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-danger text-white">
-                <h5>🤖 AI Risk Alerts</h5>
-            </div>
-            <div class="card-body">
-                {% for appointment in high_risk_today %}
-                <div class="border rounded p-3 mb-3">
-                    <h6>{{ appointment.patient.user.get_full_name }}</h6>
-                    <p class="mb-1">
-                        Risk Level: <span class="badge bg-danger">HIGH</span>
-                    </p>
-                    <p class="small text-muted">AI Prediction: Possible No Show</p>
-                    <button class="btn btn-sm btn-outline-danger">Send Reminder</button>
-                </div>
-                {% empty %}
-                <p class="text-success">✅ No high risk patients today</p>
-                {% endfor %}
-            </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Today's Patient Queue</h5>
+          <p class="text-muted small mb-0">Manage scheduled consultations for today</p>
         </div>
+      </div>
     </div>
-</div>
+    
+    <div class="card-body px-4 pb-4 pt-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light text-uppercase fs-7 text-muted">
+            <tr>
+              <th class="py-3 rounded-start-3 ps-3">Time</th>
+              <th class="py-3">Patient</th>
+              <th class="py-3">Status</th>
+              <th class="py-3">AI Risk</th>
+              <th class="py-3 text-end rounded-end-3 pe-3">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appointment in todays_appointments %}
+            <tr>
+              <td class="ps-3 fw-semibold text-dark">{{ appointment.appointment_time }}</td>
+              <td class="fw-semibold text-dark">{{ appointment.patient.user.get_full_name }}</td>
+              <td>
+                {% if appointment.status == "Confirmed" %}<span class="badge bg-success bg-opacity-10 text-success px-2.5 py-1.5 rounded-pill fw-semibold">Confirmed</span>
+                {% elif appointment.status == "Pending" %}<span class="badge bg-warning bg-opacity-10 text-warning px-2.5 py-1.5 rounded-pill fw-semibold">Pending</span>
+                {% else %}<span class="badge bg-secondary bg-opacity-10 text-secondary px-2.5 py-1.5 rounded-pill fw-semibold">{{ appointment.status }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if appointment.risk_level == "HIGH" %}<span class="badge bg-danger bg-opacity-10 text-danger px-2.5 py-1.5 rounded-pill fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i> HIGH</span>
+                {% elif appointment.risk_level == "MEDIUM" %}<span class="badge bg-warning bg-opacity-10 text-warning px-2.5 py-1.5 rounded-pill fw-semibold">MEDIUM</span>
+                {% else %}<span class="badge bg-success bg-opacity-10 text-success px-2.5 py-1.5 rounded-pill fw-semibold">LOW</span>
+                {% endif %}
+              </td>
+              <td class="text-end pe-3">
+                <a href="{% url 'patient_history' appointment.patient.id %}" class="btn btn-sm btn-light text-primary fw-semibold px-3 py-1 rounded-pill border shadow-sm">View</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center py-4 text-muted small">No appointments scheduled for today.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-<!-- ================= LOWER SECTION ================= -->
-<div class="row g-4 mt-4">
-    <!-- WEEK SCHEDULE -->
-    <div class="col-lg-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white">
-                <h5 class="mb-0">🗓 Upcoming Schedule</h5>
-            </div>
-            <div class="card-body">
-                {% for appointment in week_appointments %}
-                <div class="d-flex justify-content-between align-items-center border-bottom py-3">
-                    <div>
-                        <h6 class="mb-1">{{ appointment.patient.user.get_full_name }}</h6>
-                        <small class="text-muted">
-                            {{ appointment.appointment_date }} | {{ appointment.appointment_time }}
-                        </small>
-                    </div>
-                    <div>
-                        <span class="badge bg-info">{{ appointment.status }}</span>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="text-muted text-center">No upcoming appointments</p>
-                {% endfor %}
-            </div>
+  <!-- ================= UPCOMING PATIENTS ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-3 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-dark bg-opacity-15 text-dark rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-calendar-week fs-6"></i>
         </div>
-    </div>
-
-    <!-- AVAILABILITY -->
-    <div class="col-lg-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">⏰ My Availability</h5>
-            </div>
-            <div class="card-body">
-                {% for slot in availability %}
-                <div class="border rounded p-3 mb-2">
-                    <div class="d-flex justify-content-between">
-                        <strong>{{ slot.day_of_week }}</strong>
-                        <span class="badge bg-success">Available</span>
-                    </div>
-                    <p class="mb-0 mt-2">
-                        {{ slot.start_time }} - {{ slot.end_time }}
-                    </p>
-                </div>
-                {% empty %}
-                <p class="text-muted">Availability not configured</p>
-                {% endfor %}
-                <a href="{% url 'availability_create' %}" class="btn btn-outline-success btn-sm mt-2">
-                    + Update Availability
-                </a>
-            </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Upcoming Patients</h5>
+          <p class="text-muted small mb-0">Schedule for the next 7 days</p>
         </div>
+      </div>
     </div>
-</div>
-
-<!-- ================= MEDICAL RECORDS ================= -->
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">📋 Recent Patient Medical Records</h5>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Patient</th>
-                        <th>Date</th>
-                        <th>Diagnosis</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for record in recent_records %}
-                    <tr>
-                        <td>{{ record.appointment.patient.user.get_full_name }}</td>
-                        <td>{{ record.created_at|date:"d M Y" }}</td>
-                        <td>{{ record.diagnosis|truncatechars:40 }}</td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-outline-primary">View</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="text-center">No medical records</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- ================= DOCTOR ACTION PANEL ================= -->
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5>Doctor Actions</h5>
-                        <p class="text-muted mb-0">Manage your daily activities</p>
-                    </div>
-                    <div>
-                        <form method="POST" action="{% url 'doctor_checkin' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button class="btn btn-success">🟢 Check In</button>
-                        </form>
-                        <form method="POST" action="{% url 'doctor_checkout' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button class="btn btn-danger">🔴 Check Out</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ================= AI PREDICTION PANEL ================= -->
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-danger text-white">
-        <h5 class="mb-0">🤖 AI No-Show Prediction</h5>
-    </div>
-    <div class="card-body">
-        {% for appointment in ai_risk_patients %}
-        <div class="border rounded p-3 mb-3">
-            <div class="d-flex justify-content-between">
-                <h6>{{ appointment.patient.user.get_full_name }}</h6>
-                <span class="badge bg-danger">{{ appointment.risk_level }}</span>
-            </div>
-            <hr>
-            <p><b>Prediction Probability:</b></p>
-            
-            <!-- 👈 திருத்தப்பட்ட சரியான ப்ராகரஸ் பார் கோடு -->
-            <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-danger risk-bar" data-risk="{{ appointment.risk_score }}" role="progressbar" style="width: 0%;">
-                    {{ appointment.risk_score }}%
-                </div>
-            </div>
-
-            <p class="text-muted mb-1"><b>AI Reason:</b></p>
-            <ul>
-                <li>Previous appointment history</li>
-                <li>Previous no-show pattern</li>
-                <li>Appointment lead time</li>
-                <li>Reminder response</li>
-            </ul>
-            <button class="btn btn-outline-danger btn-sm">Send Reminder</button>
+    
+    <div class="card-body px-4 pb-4 pt-0">
+      <div class="d-flex flex-column gap-2">
+        {% for appointment in upcoming_patients %}
+        <div class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light bg-opacity-50 border border-light">
+          <div>
+            <h6 class="fw-bold text-dark mb-1">{{ appointment.patient.user.get_full_name }}</h6>
+            <span class="text-muted small"><i class="bi bi-clock me-1 text-primary"></i>{{ appointment.appointment_date }} &bull; {{ appointment.appointment_time }}</span>
+          </div>
+          <span class="badge bg-info bg-opacity-10 text-info px-3 py-1.5 rounded-pill fw-semibold">{{ appointment.status }}</span>
         </div>
         {% empty %}
-        <div class="alert alert-success">
-            ✅ AI detected no high risk appointments
+        <p class="text-muted text-center py-3 mb-0 small">No upcoming appointments in the next 7 days.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MEDICAL RECORDS ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-3 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-clipboard2-pulse fs-6"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Recent Medical Records</h5>
+          <p class="text-muted small mb-0">Latest consultation notes and diagnoses</p>
+        </div>
+      </div>
+      <a href="{% url 'medical_record_list' %}" class="btn btn-sm btn-light border px-3 rounded-pill fw-semibold text-primary shadow-sm">View All</a>
+    </div>
+    
+    <div class="card-body px-4 pb-4 pt-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light text-uppercase fs-7 text-muted">
+            <tr>
+              <th class="py-3 rounded-start-3 ps-3">Patient</th>
+              <th class="py-3">Date</th>
+              <th class="py-3">Diagnosis</th>
+              <th class="py-3 text-end rounded-end-3 pe-3">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in recent_records %}
+            <tr>
+              <td class="ps-3 fw-semibold text-dark">{{ record.appointment.patient.user.get_full_name }}</td>
+              <td class="text-muted small">{{ record.created_at|date:"d M Y" }}</td>
+              <td class="text-secondary small">{{ record.diagnosis|truncatechars:40 }}</td>
+              <td class="text-end pe-3">
+                <a href="{% url 'medical_record_detail' record.pk %}" class="btn btn-sm btn-light border text-primary fw-semibold px-3 py-1 rounded-pill shadow-sm">View</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center py-4 text-muted small">No medical records available.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRESCRIPTIONS ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-3 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-success bg-opacity-10 text-success rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-capsule fs-6"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Recent Prescriptions</h5>
+          <p class="text-muted small mb-0">Recently prescribed medicines and dosages</p>
+        </div>
+      </div>
+      <a href="{% url 'prescription_list' %}" class="btn btn-sm btn-light border px-3 rounded-pill fw-semibold text-success shadow-sm">View All</a>
+    </div>
+    
+    <div class="card-body px-4 pb-4 pt-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light text-uppercase fs-7 text-muted">
+            <tr>
+              <th class="py-3 rounded-start-3 ps-3">Patient</th>
+              <th class="py-3">Medicine</th>
+              <th class="py-3 text-end rounded-end-3 pe-3">Dosage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in recent_prescriptions %}
+            <tr>
+              <td class="ps-3 fw-semibold text-dark">{{ p.medical_record.appointment.patient.user.get_full_name }}</td>
+              <td class="text-dark fw-medium">{{ p.medicine_name }}</td>
+              <td class="text-end pe-3 text-muted small">{{ p.dosage }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center py-4 text-muted small">No prescriptions recorded yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- ================= ANALYTICS ================= -->
+    <!-- ========================================= -->
+<!-- PRACTICE ANALYTICS -->
+<!-- ========================================= -->
+
+<!-- ================= ANALYTICS & INSIGHTS ================= -->
+<div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+  <div class="card-header bg-white border-0 pt-4 px-4 pb-2">
+    <h5 class="fw-bold text-dark mb-0">📊 Practice Analytics & Insights</h5>
+    <p class="text-muted small mb-0">Overview of clinic metrics and patient trends</p>
+  </div>
+  
+  <div class="card-body px-4 pb-4">
+    <div class="row g-3">
+      
+      <!-- 1. Weekly Trend (Line Chart) -->
+      <div class="col-xl-8 col-lg-7">
+        <div class="p-3 bg-light bg-opacity-50 rounded-4 border border-light h-100">
+          <h6 class="fw-bold text-dark mb-3"><i class="bi bi-graph-up text-primary me-2"></i>Weekly Appointment Trends</h6>
+          <!-- Fixed Height Wrapper -->
+          <div style="height: 250px; position: relative;">
+            <canvas id="weeklyChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Appointment Status (Doughnut Chart) -->
+      <div class="col-xl-4 col-lg-5">
+        <div class="p-3 bg-light bg-opacity-50 rounded-4 border border-light h-100">
+          <h6 class="fw-bold text-dark mb-3"><i class="bi bi-pie-chart text-success me-2"></i>Status Breakdown</h6>
+          <!-- Fixed Height Wrapper -->
+          <div style="height: 250px; position: relative;">
+            <canvas id="appointmentStatusChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Gender Chart -->
+      <div class="col-md-4">
+        <div class="p-3 bg-light bg-opacity-50 rounded-4 border border-light h-100">
+          <h6 class="fw-bold text-dark mb-3"><i class="bi bi-gender-ambiguous text-info me-2"></i>Demographics</h6>
+          <div style="height: 200px; position: relative;">
+            <canvas id="genderChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Peak Hour Chart -->
+      <div class="col-md-4">
+        <div class="p-3 bg-light bg-opacity-50 rounded-4 border border-light h-100">
+          <h6 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history text-success me-2"></i>Peak Hour</h6>
+          <div style="height: 200px; position: relative;">
+            <canvas id="hourChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Risk Chart -->
+      <div class="col-md-4">
+        <div class="p-3 bg-light bg-opacity-50 rounded-4 border border-light h-100">
+          <h6 class="fw-bold text-dark mb-3"><i class="bi bi-exclamation-triangle text-danger me-2"></i>High Risk Today</h6>
+          <div style="height: 200px; position: relative;">
+            <canvas id="riskChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+  <!-- ================= SIDEBAR ================= -->
+ <div class="col-lg-4">
+
+  <!-- ================= AI NO-SHOW PREDICTION ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-robot fs-6"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">AI No-Show Risk</h5>
+          <p class="text-muted small mb-0">Emergency & High-risk patients</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-body px-4 pb-4 pt-2">
+      <div class="d-flex flex-column gap-3">
+        {% for appointment in emergency_patients %}
+        <div class="p-3 rounded-4 bg-light bg-opacity-50 border border-danger border-opacity-25 transition-hover">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h6 class="fw-bold text-dark mb-0">{{ appointment.patient.user.get_full_name }}</h6>
+            <span class="badge bg-danger bg-opacity-10 text-danger px-2.5 py-1 rounded-pill fw-semibold small">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ appointment.risk_level }}
+            </span>
+          </div>
+          <p class="text-muted small mb-3"><i class="bi bi-clock me-1 text-primary"></i>{{ appointment.appointment_date }} at {{ appointment.appointment_time }}</p>
+          <button class="btn btn-sm btn-outline-danger fw-semibold w-100 rounded-pill py-1.5 shadow-sm">
+            <i class="bi bi-bell me-1"></i> Send Reminder
+          </button>
+        </div>
+        {% empty %}
+        <div class="text-center py-3 bg-success bg-opacity-10 rounded-4 border border-success border-opacity-25">
+          <p class="text-success fw-semibold small mb-0"><i class="bi bi-check-circle-fill me-1"></i> No high-risk patients upcoming</p>
         </div>
         {% endfor %}
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- ================= PATIENT TIMELINE ================= -->
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-info text-white">
-        <h5>🩺 Patient Timeline</h5>
-    </div>
-    <div class="card-body">
-        <div class="timeline">
-            <div class="border-start ps-3">
-                <h6>Previous Visit</h6>
-                <p>Diabetes Follow-up</p>
-                <small>12 June 2026</small>
-            </div>
-            <div class="border-start ps-3 mt-3">
-                <h6>Prescription</h6>
-                <p>Metformin 500mg</p>
-                <small>12 June 2026</small>
-            </div>
+  <!-- ================= MY AVAILABILITY ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-success bg-opacity-10 text-success rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-clock-history fs-6"></i>
         </div>
-    </div>
-</div>
-
-<!-- ================= AI CLINICAL ASSISTANT ================= -->
-<div class="card shadow-sm mt-4">
-    <div class="card-header bg-dark text-white">
-        <h5>🧠 AI Clinical Assistant</h5>
-    </div>
-    <div class="card-body">
-        <p>Patient history based suggestion:</p>
-        <div class="alert alert-light">
-            Possible follow-up:
-            <br>✓ Check blood pressure
-            <br>✓ Review previous medication
-            <br>✓ Ask lifestyle changes
+        <div>
+          <h5 class="fw-bold text-dark mb-0">My Availability</h5>
+          <p class="text-muted small mb-0">Weekly consultation schedules</p>
         </div>
-        <button class="btn btn-primary">Ask AI Assistant</button>
+      </div>
+      <a href="{% url 'availability_create' %}" class="btn btn-sm btn-light border px-3 rounded-pill fw-semibold text-success shadow-sm">
+        <i class="bi bi-plus-lg me-1"></i> Add
+      </a>
     </div>
-</div>
+    
+    <div class="card-body px-4 pb-4 pt-2">
+      <div class="d-flex flex-column gap-2">
+        {% for slot in availability %}
+        <div class="d-flex justify-content-between align-items-center p-2.5 rounded-3 bg-light bg-opacity-50 border border-light">
+          <span class="fw-semibold text-dark small"><i class="bi bi-calendar-day text-primary me-2"></i>{{ slot.day_of_week }}</span>
+          <span class="badge bg-white text-dark border px-2.5 py-1 rounded-pill small fw-medium">{{ slot.start_time }} &mdash; {{ slot.end_time }}</span>
+        </div>
+        {% empty %}
+        <p class="text-muted text-center py-3 mb-0 small">Availability not configured yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-<!-- ================= APPOINTMENT ANALYTICS CHART ================= -->
-<div class="card shadow-sm mt-4">
-    <div class="card-header">
-        <h5>📊 Appointment Analytics</h5>
+  <!-- ================= MESSAGES ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-chat-dots fs-6"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Messages</h5>
+          <p class="text-muted small mb-0">Recent patient interactions</p>
+        </div>
+      </div>
+      <a href="{% url 'contacts_list' %}" class="btn btn-sm btn-light border px-3 rounded-pill fw-semibold text-primary shadow-sm">Inbox</a>
     </div>
-    <div class="card-body">
-        <canvas id="appointmentChart"></canvas>
+    
+    <div class="card-body px-4 pb-4 pt-2">
+      <div class="d-flex flex-column gap-2">
+        {% for m in recent_messages %}
+        <div class="p-2.5 rounded-3 bg-light bg-opacity-50 border border-light small">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong class="text-dark">{% if m.sender_id == request.user.id %}You{% else %}Patient{% endif %}</strong>
+            <span class="text-muted" style="font-size: 11px;">{{ m.time }}</span>
+          </div>
+          <p class="text-secondary mb-0 text-truncate">{{ m.body|truncatechars:50 }}</p>
+        </div>
+        {% empty %}
+        <p class="text-muted text-center py-3 mb-0 small">No messages yet.</p>
+        {% endfor %}
+      </div>
     </div>
-</div>
+  </div>
 
+  <!-- ================= QUICK ACTIONS ================= -->
+  <div class="card shadow-sm border border-light rounded-4 mb-4 bg-white overflow-hidden">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-2">
+      <div class="d-flex align-items-center">
+        <div class="bg-dark bg-opacity-10 text-dark rounded-3 p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-lightning-charge fs-6"></i>
+        </div>
+        <div>
+          <h5 class="fw-bold text-dark mb-0">Quick Actions</h5>
+          <p class="text-muted small mb-0">Frequently used shortcuts</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-body px-4 pb-4 pt-2">
+      <div class="d-grid gap-2">
+        <a href="{% url 'medical_record_list' %}" class="btn btn-light border text-start py-2.5 px-3 rounded-pill text-dark fw-semibold d-flex align-items-center shadow-sm transition-hover">
+          <i class="bi bi-notes-medical text-primary fs-5 me-3"></i> Medical Records
+        </a>
+        <a href="{% url 'prescription_list' %}" class="btn btn-light border text-start py-2.5 px-3 rounded-pill text-dark fw-semibold d-flex align-items-center shadow-sm transition-hover">
+          <i class="bi bi-capsule text-success fs-5 me-3"></i> Prescriptions
+        </a>
+        <a href="{% url 'appointment_list' %}" class="btn btn-light border text-start py-2.5 px-3 rounded-pill text-dark fw-semibold d-flex align-items-center shadow-sm transition-hover">
+          <i class="bi bi-calendar2-check text-info fs-5 me-3"></i> All Appointments & Reports
+        </a>
+        <a href="{% url 'manage_leave' %}" class="btn btn-light border text-start py-2.5 px-3 rounded-pill text-dark fw-semibold d-flex align-items-center shadow-sm transition-hover">
+          <i class="bi bi-calendar-x text-warning fs-5 me-3"></i> Apply Leave
+        </a>
+        <a href="{% url 'chat_widget' %}" class="btn btn-light border text-start py-2.5 px-3 rounded-pill text-dark fw-semibold d-flex align-items-center shadow-sm transition-hover">
+          <i class="bi bi-robot text-secondary fs-5 me-3"></i> AI Assistant
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const chartData = JSON.parse('{{ appointment_chart|escapejs }}');
-    const ctx = document.getElementById("appointmentChart");
 
-    new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ["Completed", "No Show", "Pending", "Confirmed"],
-            datasets: [{
-                data: [
-                    chartData.completed,
-                    chartData.noshow,
-                    chartData.pending,
-                    chartData.confirmed
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    function createChart(id, config) {
+        const canvas = document.getElementById(id);
+
+        if (!canvas) {
+            console.log(id + " canvas not found");
+            return;
+        }
+
+        const ctx = canvas.getContext("2d");
+
+        if (!ctx) {
+            console.log(id + " context not found");
+            return;
+        }
+
+        new Chart(ctx, config);
+    }
+
+    // ===============================
+    // Appointment Status
+    // ===============================
+
+    let appointmentData = [];
+
+    try {
+        const obj = JSON.parse('{{ appointment_chart|default:"{}"|escapejs }}');
+
+        appointmentData = [
+            obj.completed || 0,
+            obj.confirmed || 0,
+            obj.pending || 0,
+            obj.noshow || 0
+        ];
+
+    } catch (e) {
+
+        appointmentData = [0,0,0,0];
+
+    }
+
+    createChart("appointmentStatusChart",{
+
+        type:"doughnut",
+
+        data:{
+            labels:[
+                "Completed",
+                "Confirmed",
+                "Pending",
+                "No Show"
+            ],
+
+            datasets:[{
+                data:appointmentData,
+
+                backgroundColor:[
+                    "#198754",
+                    "#0d6efd",
+                    "#ffc107",
+                    "#dc3545"
                 ]
             }]
         },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "bottom"
-                }
-            }
+
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
         }
+
     });
 
-    document.querySelectorAll(".risk-bar").forEach(function(bar){
-        let risk = bar.dataset.risk;
-        bar.style.width = risk + "%";
+    // ===============================
+    // Weekly Trend
+    // ===============================
+
+    let labels=[];
+    let values=[];
+
+    try{
+
+        labels=JSON.parse('{{ trend_labels|default:"[]"|escapejs }}');
+
+        values=JSON.parse('{{ trend_data|default:"[]"|escapejs }}');
+
+    }
+
+    catch(e){
+
+        labels=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+        values=[0,0,0,0,0,0,0];
+
+    }
+
+    createChart("weeklyChart",{
+
+        type:"line",
+
+        data:{
+
+            labels:labels,
+
+            datasets:[{
+
+                label:"Appointments",
+
+                data:values,
+
+                borderColor:"#0d6efd",
+
+                backgroundColor:"rgba(13,110,253,.20)",
+
+                fill:true,
+
+                tension:.4
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false
+
+        }
+
     });
+
+    // ===============================
+    // Gender Chart
+    // ===============================
+
+    createChart("genderChart",{
+
+        type:"pie",
+
+        data:{
+
+            labels:[
+                "Male",
+                "Female"
+            ],
+
+            datasets:[{
+
+                data:[
+
+                    Number("{{ male_percentage|default:'0' }}"),
+
+                    Number("{{ female_percentage|default:'0' }}")
+
+                ],
+
+                backgroundColor:[
+
+                    "#0d6efd",
+
+                    "#e91e63"
+
+                ]
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false
+
+        }
+
+    });
+
+    // ===============================
+    // Peak Hour
+    // ===============================
+
+    createChart("hourChart",{
+
+        type:"bar",
+
+        data:{
+
+            labels:[
+                "{{ peak_hour|default:'N/A' }}"
+            ],
+
+            datasets:[{
+
+                label:"Patients",
+
+                data:[100],
+
+                backgroundColor:"#20c997"
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            scales:{
+
+                y:{
+                    beginAtZero:true,
+                    max:100
+                }
+
+            }
+
+        }
+
+    });
+
+    // ===============================
+    // Risk Chart
+    // ===============================
+
+    createChart("riskChart",{
+
+        type:"bar",
+
+        data:{
+
+            labels:["High Risk"],
+
+            datasets:[{
+
+                data:[
+
+                    Number("{{ high_risk_today.count|default:'0' }}")
+
+                ],
+
+                backgroundColor:"#dc3545"
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+                legend:{
+                    display:false
+                }
+            },
+
+            scales:{
+
+                y:{
+                    beginAtZero:true
+                }
+
+            }
+
+        }
+
+    });
+
+});
 </script>
 {% endblock %}

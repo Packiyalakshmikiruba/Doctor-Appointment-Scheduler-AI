@@ -1,80 +1,172 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Prescriptions{% endblock %}
+{% block title %}
+My Prescriptions
+{% endblock %}
 
 {% block content %}
+<div class="container-fluid py-4">
 
-<div class="container mt-4">
-
-    <h2 class="mb-4">
-        My Prescriptions
-    </h2>
-
-    {% if prescriptions %}
-
-    <table class="table table-bordered table-hover">
-
-        <thead>
-
-            <tr>
-                <th>Date</th>
-                <th>Doctor</th>
-                <th>Medicine</th>
-                <th>Dosage</th>
-                <th>Duration</th>
-                <th>Download</th>
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-        {% for prescription in prescriptions %}
-
-        <tr>
-
-            <td>{{ prescription.created_at|date:"d M Y" }}</td>
-
-            <td>
-                Dr.
-                {{ prescription.medical_record.appointment.doctor.user.get_full_name }}
-            </td>
-
-            <td>{{ prescription.medicine_name }}</td>
-
-            <td>{{ prescription.dosage }}</td>
-
-            <td>{{ prescription.duration }}</td>
-
-            <td>
-
-                <a href="{% url 'download_prescription_pdf' prescription.id %}"
-                   class="btn btn-success btn-sm">
-
-                    Download PDF
-
-                </a>
-
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-        </tbody>
-
-    </table>
-
-    {% else %}
-
-        <div class="alert alert-info">
-
-            No prescriptions available.
-
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                <i class="fas fa-notes-medical me-2"></i> My Prescriptions
+            </h2>
+            <p class="text-muted mb-0">
+                View and download all your medical prescriptions.
+            </p>
         </div>
+    </div>
 
-    {% endif %}
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-primary">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Total Prescriptions</span>
+                            <h2 class="fw-bold text-dark mb-0">{{ prescriptions|length }}</h2>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                            <i class="fas fa-file-medical fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-success">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Doctors Consulted</span>
+                            <h2 class="fw-bold text-success mb-0">{{ prescriptions|length }}</h2>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+                            <i class="fas fa-user-md fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
+            <div class="card border-0 shadow-sm rounded-4 h-100 border-start border-4 border-danger">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">PDF Available</span>
+                            <h2 class="fw-bold text-danger mb-0">{{ prescriptions|length }}</h2>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+                            <i class="fas fa-file-pdf fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white py-3 px-4">
+            <h5 class="mb-0 fw-semibold">
+                <i class="fas fa-history me-2"></i> Prescription History
+            </h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th width="70">#</th>
+                        <th width="140">Date</th>
+                        <th>Doctor</th>
+                        <th>Medicine</th>
+                        <th>Dosage</th>
+                        <th width="120">Duration</th>
+                        <th class="text-center" width="150">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for prescription in prescriptions %}
+                    <tr>
+                        <td>
+                            <span class="badge bg-secondary bg-opacity-20 text-dark fw-semibold">
+                                {{ forloop.counter }}
+                            </span>
+                        </td>
+                        <td class="text-muted small fw-medium">
+                            {{ prescription.created_at|date:"d M Y" }}
+                        </td>
+                        <td>
+                            <span class="fw-semibold text-dark">
+                                Dr. {{ prescription.medical_record.appointment.doctor.user.get_full_name }}
+                            </span>
+                        </td>
+                        <td>
+                            <strong class="text-primary">
+                                {{ prescription.medicine_name }}
+                            </strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-secondary border">
+                                {{ prescription.dosage }}
+                            </span>
+                        </td>
+                        <td class="fw-semibold text-dark">
+                            {{ prescription.duration }}
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'download_prescription_pdf' prescription.id %}" class="btn btn-sm btn-success shadow-sm" title="Download PDF">
+                                <i class="fas fa-download me-1"></i> PDF
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <i class="fas fa-file-medical fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted fw-semibold">No Prescriptions Found</h4>
+                            <p class="text-secondary mb-0">No prescriptions are available at the moment.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 </div>
 
+<style>
+    body {
+        background-color: #f4f7fb;
+    }
+    .card {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .table th {
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+    }
+    .table td {
+        padding: 14px 12px;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+    }
+</style>
 {% endblock %}

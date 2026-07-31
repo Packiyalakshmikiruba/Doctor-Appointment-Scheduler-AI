@@ -1,123 +1,161 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Add Prescription{% endblock %}
+{% block title %}
+Add Prescription
+{% endblock %}
 
 {% block content %}
+<div class="container-fluid py-4">
 
-<div class="container mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                <i class="fas fa-prescription me-2"></i> Add Prescription
+            </h2>
+            <p class="text-muted mb-0">
+                Create or update prescription details for the patient.
+            </p>
+        </div>
+    </div>
 
-    <div class="card shadow-sm">
-
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
-                <i class="bi bi-capsule"></i> Prescription
-            </h4>
-
-            <small>
-                {{ record.appointment.patient.user.get_full_name }}
-                —
-                Dr. {{ record.appointment.doctor.user.get_full_name }}
-                —
-                {{ record.diagnosis }}
-            </small>
+    <!-- Main Card -->
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden mb-4">
+        <div class="card-header bg-primary text-white py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h5 class="mb-0 fw-semibold">
+                <i class="fas fa-capsules me-2"></i> Prescription Details
+            </h5>
+            <span class="badge bg-white text-primary fw-semibold px-3 py-2 rounded-pill shadow-sm">
+                <i class="fas fa-user-injured me-1"></i> {{ record.appointment.patient.user.get_full_name }} 
+                &nbsp;|&nbsp; 
+                <i class="fas fa-user-md me-1"></i> Dr. {{ record.appointment.doctor.user.get_full_name }}
+                &nbsp;|&nbsp; 
+                <i class="fas fa-stethoscope me-1"></i> {{ record.diagnosis }}
+            </span>
         </div>
 
-        <div class="card-body">
-
+        <div class="card-body p-4">
             <form method="POST">
-
                 {% csrf_token %}
                 {{ formset.management_form }}
 
-                {% for form in formset %}
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="20%">Medicine</th>
+                                <th width="12%">Dosage</th>
+                                <th width="15%">Frequency</th>
+                                <th width="10%">Days</th>
+                                <th width="15%">Food</th>
+                                <th width="20%">Instructions</th>
+                                <th class="text-center" width="8%">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for form in formset %}
+                            <tr class="border-bottom">
+                                <td>
+                                    {{ form.medicine_name }}
+                                </td>
+                                <td>
+                                    {{ form.dosage }}
+                                </td>
+                                <td>
+                                    {{ form.frequency }}
+                                </td>
+                                <td>
+                                    {{ form.duration }}
+                                </td>
+                                <td>
+                                    {{ form.before_after_food }}
+                                </td>
+                                <td>
+                                    {{ form.instructions }}
+                                </td>
+                                <td class="text-center">
+                                    {% if form.instance.pk %}
+                                        {{ form.DELETE }}
+                                    {% endif %}
+                                    {{ form.id }}
+                                </td>
+                            </tr>
 
-                    <div class="row align-items-end mb-3 border-bottom pb-3">
-
-                        <div class="col-md-2">
-                            {% if forloop.first %}
-                                <label class="form-label small">Medicine</label>
-                            {% endif %}
-                            {{ form.medicine_name }}
-                        </div>
-
-                        <div class="col-md-2">
-                            {% if forloop.first %}
-                                <label class="form-label small">Dosage</label>
-                            {% endif %}
-                            {{ form.dosage }}
-                        </div>
-
-                        <div class="col-md-2">
-                            {% if forloop.first %}
-                                <label class="form-label small">Frequency</label>
-                            {% endif %}
-                            {{ form.frequency }}
-                        </div>
-
-                        <div class="col-md-1">
-                            {% if forloop.first %}
-                                <label class="form-label small">Days</label>
-                            {% endif %}
-                            {{ form.duration }}
-                        </div>
-
-                        <div class="col-md-2">
-                            {% if forloop.first %}
-                                <label class="form-label small">Food</label>
-                            {% endif %}
-                            {{ form.before_after_food }}
-                        </div>
-
-                        <div class="col-md-2">
-                            {% if forloop.first %}
-                                <label class="form-label small">Instructions</label>
-                            {% endif %}
-                            {{ form.instructions }}
-                        </div>
-
-                        <div class="col-md-1 text-center">
-                            {% if form.instance.pk %}
-                                <label class="form-label small">Delete</label><br>
-                                {{ form.DELETE }}
-                            {% endif %}
-                        </div>
-
-                        {{ form.id }}
-
-                        {% if form.errors %}
-                            <div class="col-12 mt-2">
-                                <div class="alert alert-danger py-2">
-
-                                    {{ form.non_field_errors }}
-
-                                    {% for field in form %}
-                                        {% for error in field.errors %}
-                                            <div>
-                                                <strong>{{ field.label }}:</strong>
-                                                {{ error }}
-                                            </div>
+                            {% if form.errors %}
+                            <tr>
+                                <td colspan="7" class="bg-light py-2">
+                                    <div class="alert alert-danger mb-0 py-2 small shadow-sm">
+                                        {{ form.non_field_errors }}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <div><strong>{{ field.label }}:</strong> {{ error }}</div>
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                                </div>
-                            </div>
-                        {% endif %}
-
-                    </div>
-
-                {% endfor %}
-
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-check-circle"></i>
-                    Save Prescription
-                </button>
-
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-success px-4 py-2 shadow-sm fw-semibold">
+                        <i class="fas fa-check-circle me-1"></i> Save Prescription
+                    </button>
+                </div>
             </form>
-
         </div>
-
     </div>
 
 </div>
 
+<style>
+    body {
+        background-color: #f4f7fb;
+    }
+    .card {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    /* Form controls styling inside table */
+    .table input, .table select, .table textarea {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        box-shadow: none;
+        transition: border-color 0.2s;
+    }
+    .table input:focus, .table select:focus, .table textarea:focus {
+        border-color: #0d6efd;
+        outline: none;
+    }
+    .table textarea {
+        height: 38px;
+        resize: none;
+    }
+    .table th {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #495057;
+    }
+    .table td {
+        padding: 12px 8px;
+    }
+</style>
 {% endblock %}

@@ -15,10 +15,10 @@ class Migration(migrations.Migration):
             name='Payment',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount_paid', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('payment_mode', models.CharField(choices=[('Cash', 'Cash'), ('Card', 'Card'), ('UPI', 'UPI'), ('Insurance', 'Insurance')], max_length=20)),
                 ('transaction_reference', models.CharField(blank=True, help_text='UPI ref no. / card last 4 digits / cheque no. etc.', max_length=100)),
-                ('paid_at', models.DateTimeField(auto_now_add=True)),
+                ('paid_date', models.DateTimeField(auto_now_add=True)),
                 ('bill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments', to='billing.bill')),
             ],
         ),

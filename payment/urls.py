@@ -1,9 +1,7 @@
 from django.urls import path
-
 from . import views
 
-
-urlpatterns=[
+urlpatterns = [
 
     path(
         "",
@@ -12,7 +10,7 @@ urlpatterns=[
     ),
 
     path(
-        "<int:pk>/",
+        "detail/<int:pk>/",
         views.payment_detail,
         name="payment_detail"
     ),

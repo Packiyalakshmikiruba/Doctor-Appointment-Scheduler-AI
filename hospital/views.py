@@ -17,7 +17,6 @@ from .models import (
     DoctorAttendance,
     DoctorStatus,
 )
-
 def department_create(request):
 
     if request.method == "POST":
@@ -175,16 +174,28 @@ def availability_create(request):
 
 def availability_list(request):
 
+    DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
     availabilities = DoctorAvailability.objects.select_related(
         "doctor",
         "doctor__user"
     ).all()
 
+    # Build one row per doctor, with a slot (or None) for each day column
+    grid = {}
+    for a in availabilities:
+        if a.doctor_id not in grid:
+            grid[a.doctor_id] = {"doctor": a.doctor, "days": {d: None for d in DAY_ORDER}}
+        grid[a.doctor_id]["days"][a.day_of_week] = a
+
+    doctor_rows = list(grid.values())
+
     return render(
         request,
         "hospital/availability_list.html",
         {
-            "availabilities": availabilities
+            "doctor_rows": doctor_rows,
+            "day_order": DAY_ORDER,
         }
     )
 
@@ -289,6 +300,163 @@ def doctor_dashboard(request):
         is_available=True
     ).order_by("day_of_week", "start_time")
 
+    # ---------------- Upcoming patients (next 7 days, excluding today) ----------------
+    from datetime import timedelta
+    week_end = today + timedelta(days=7)
+    upcoming_patients = Appointment.objects.filter(
+        doctor=doctor,
+        appointment_date__gt=today,
+        appointment_date__lte=week_end,
+        status__in=["Pending", "Confirmed"],
+    ).select_related("patient__user").order_by("appointment_date", "appointment_time")[:10]
+
+    # ---------------- Emergency / high-risk patients (all upcoming, not just today) ----------------
+    emergency_patients = Appointment.objects.filter(
+        doctor=doctor,
+        appointment_date__gte=today,
+        risk_level="HIGH",
+        status__in=["Pending", "Confirmed"],
+    ).select_related("patient__user").order_by("appointment_date", "appointment_time")
+
+    # ---------------- Recent medical records & prescriptions ----------------
+    from medical_records.models import MedicalRecord
+    from prescriptions.models import Prescription
+    recent_records = MedicalRecord.objects.filter(
+        appointment__doctor=doctor
+    ).select_related("appointment__patient__user").order_by("-created_at")[:5]
+
+    recent_prescriptions = Prescription.objects.filter(
+        medical_record__appointment__doctor=doctor
+    ).select_related("medical_record__appointment__patient__user").order_by("-id")[:5]
+
+    # ---------------- Analytics (last 7 days appointment outcome breakdown) ----------------
+    # ========================= ANALYTICS =========================
+
+    import json
+    from datetime import timedelta
+    from django.db.models import Count
+
+    week_start = today - timedelta(days=6)
+
+    appointments_week = Appointment.objects.filter(
+        doctor=doctor,
+        appointment_date__gte=week_start,
+        appointment_date__lte=today
+    )
+
+    # ---------------- Appointment Status Chart ----------------
+
+    appointment_chart = {
+        "completed": appointments_week.filter(status="Completed").count(),
+        "confirmed": appointments_week.filter(status="Confirmed").count(),
+        "pending": appointments_week.filter(status="Pending").count(),
+        "noshow": appointments_week.filter(status="No Show").count(),
+    }
+
+    appointment_chart = json.dumps(appointment_chart)
+
+    # ---------------- Last 7 Days Trend ----------------
+
+    trend_labels = []
+    trend_data = []
+
+    for i in range(6, -1, -1):
+
+        day = today - timedelta(days=i)
+
+        trend_labels.append(day.strftime("%d %b"))
+
+        trend_data.append(
+            Appointment.objects.filter(
+                doctor=doctor,
+                appointment_date=day
+            ).count()
+        )
+
+    # ---------------- Male vs Female ----------------
+
+    gender_stats = (
+        Appointment.objects.filter(doctor=doctor)
+        .values("patient__gender")
+        .annotate(total=Count("id"))
+    )
+
+    male = 0
+    female = 0
+
+    for g in gender_stats:
+
+        gender = (g["patient__gender"] or "").upper()
+
+        if gender == "MALE":
+            male = g["total"]
+
+        elif gender == "FEMALE":
+            female = g["total"]
+
+    total_gender = male + female
+
+    if total_gender:
+
+        male_percentage = round((male / total_gender) * 100)
+
+        female_percentage = round((female / total_gender) * 100)
+
+    else:
+
+        male_percentage = 0
+
+        female_percentage = 0
+
+    # ---------------- Peak Hour ----------------
+
+    peak = (
+        Appointment.objects.filter(doctor=doctor)
+        .values("appointment_time")
+        .annotate(total=Count("id"))
+        .order_by("-total")
+        .first()
+    )
+
+    if peak:
+
+        peak_hour = peak["appointment_time"].strftime("%I:%M %p")
+
+    else:
+
+        peak_hour = "No Data"
+
+    # ---------------- Weekly Revenue ----------------
+
+    weekly_revenue = 0
+
+    for appt in appointments_week.select_related("doctor"):
+
+        if appt.status == "Completed":
+
+            weekly_revenue += appt.doctor.consultation_fee
+
+    # ---------------- Notifications (leave reminders, no-show alerts) ----------------
+    notifications = []
+    if today_leave:
+        notifications.append({"type": "info", "text": "You are on leave today."})
+    if emergency_patients:
+        notifications.append({"type": "danger", "text": f"{emergency_patients.count()} high-risk patient(s) upcoming."})
+    upcoming_leave = DoctorLeave.objects.filter(doctor=doctor, leave_date__gt=today, leave_date__lte=week_end).order_by("leave_date")
+    for lv in upcoming_leave:
+        notifications.append({"type": "warning", "text": f"Leave scheduled on {lv.leave_date}."})
+
+    # ---------------- Recent messages ----------------
+    try:
+        from messaging.views import MESSAGES as _MESSAGES
+        recent_messages = [
+            m for m in _MESSAGES if m.get("receiver_id") == request.user.id or m.get("sender_id") == request.user.id
+        ][-5:]
+    except ImportError:
+        # Messaging app doesn't expose MESSAGES this way in this project --
+        # don't let that break the whole dashboard, just skip this widget.
+        recent_messages = []
+
     context = {
 
     "doctor": doctor,
@@ -312,6 +480,26 @@ def doctor_dashboard(request):
     "availability": availability,
 
     "admin_messages": [],
+     "appointment_chart": appointment_chart,
+
+    "trend_labels": json.dumps(trend_labels),
+
+    "trend_data": json.dumps(trend_data),
+
+    "male_percentage": male_percentage,
+
+    "female_percentage": female_percentage,
+
+    "peak_hour": peak_hour,
+
+    "weekly_revenue": weekly_revenue,
+    "upcoming_patients": upcoming_patients,
+    "emergency_patients": emergency_patients,
+    "recent_records": recent_records,
+    "recent_prescriptions": recent_prescriptions,
+    "appointment_chart": appointment_chart,
+    "notifications": notifications,
+    "recent_messages": recent_messages,
 
 }
 
@@ -611,3 +799,26 @@ def doctor_leave_delete(request, pk):
 @login_required
 def contact_admin(request):
     return redirect("chat_widget")
+
+
+@login_required
+def project_overview(request):
+    from patients.models import Patient
+    from hospital.models import Doctor, Department
+    from appointments.models import Appointment
+    from medical_records.models import MedicalRecord
+    from prescriptions.models import Prescription
+    from billing.models import Bill
+
+    stats = {
+        "patients": Patient.objects.count(),
+        "doctors": Doctor.objects.filter(is_active=True).count(),
+        "departments": Department.objects.count(),
+        "appointments": Appointment.objects.count(),
+        "high_risk": Appointment.objects.filter(risk_level="HIGH").count(),
+        "medical_records": MedicalRecord.objects.count(),
+        "prescriptions": Prescription.objects.count(),
+        "bills": Bill.objects.count(),
+    }
+
+    return render(request, "hospital/project_overview.html", {"stats": stats})

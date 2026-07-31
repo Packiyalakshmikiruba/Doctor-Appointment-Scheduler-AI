@@ -1,6 +1,31 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
+
+{% if is_update %}
+Update Payment
+{% else %}
+Create Payment
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-10">
+
+<div class="card shadow-lg border-0">
+
+<div class="card-header bg-success text-white">
+
+<h3 class="mb-0">
+
+<i class="fas fa-credit-card"></i>
 
 {% if is_update %}
 
@@ -12,368 +37,278 @@ Create Payment
 
 {% endif %}
 
-{% endblock %}
-
-{% block content %}
-
-<div class="container mt-4">
-
-    <div class="row justify-content-center">
-
-        <div class="col-lg-8">
-
-            <div class="card shadow-lg border-0">
-
-                <div class="card-header bg-success text-white">
-
-                    <h3 class="mb-0">
-
-                        <i class="fas fa-credit-card"></i>
-
-                        {% if is_update %}
-
-                        Update Payment
-
-                        {% else %}
-
-                        Create Payment
-
-                        {% endif %}
-
-                    </h3>
-
-                </div>
-
-                <div class="card-body">
-
-                    <form method="POST">
-
-                        {% csrf_token %}
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Bill Amount
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="₹ {{ bill.total_amount }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Amount
-
-                                </label>
-
-                                {{ form.amount }}
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Payment Method
-
-                                </label>
-
-                                {{ form.payment_method }}
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Payment Status
-
-                                </label>
-
-                                {{ form.payment_status }}
-
-                            </div>
-                                                        <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Transaction ID
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ payment.transaction_id|default:'Will be generated automatically' }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Receipt Number
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ payment.receipt_number|default:'Will be generated automatically' }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Received By
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ payment.received_by|default:request.user.get_full_name }}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label class="form-label">
-
-                                    Payment Date
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{% if payment %}{{ payment.payment_date|date:'d M Y h:i A' }}{% else %}Current Time{% endif %}"
-                                    readonly>
-
-                            </div>
-
-                            <div class="col-md-12 mb-3">
-
-                                <label class="form-label">
-
-                                    Remarks
-
-                                </label>
-
-                                {{ form.remarks }}
-
-                            </div>
-
-                        </div>
-
-                        <hr>
-
-                        <div class="card bg-light border-success">
-
-                            <div class="card-body">
-
-                                <h5 class="text-success mb-3">
-
-                                    <i class="fas fa-file-invoice-dollar"></i>
-
-                                    Payment Summary
-
-                                </h5>
-
-                                <table class="table table-borderless mb-0">
-
-                                    <tr>
-
-                                        <th width="40%">
-
-                                            Patient
-
-                                        </th>
-
-                                        <td>
-
-                                            {{ bill.appointment.patient.user.get_full_name }}
-
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-
-                                        <th>
-
-                                            Doctor
-
-                                        </th>
-
-                                        <td>
-
-                                            Dr. {{ bill.appointment.doctor.user.get_full_name }}
-
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-
-                                        <th>
-
-                                            Department
-
-                                        </th>
-
-                                        <td>
-
-                                            {{ bill.appointment.doctor.department.department_name }}
-
-                                        </td>
-
-                                    </tr>
-
-                                    <tr>
-
-                                        <th>
-
-                                            Bill Amount
-
-                                        </th>
-
-                                        <td class="fw-bold text-success">
-
-                                            ₹ {{ bill.total_amount }}
-
-                                        </td>
-
-                                    </tr>
-
-                                </table>
-
-                            </div>
-
-                        </div>
-
-                        <hr>
-                                                <div class="d-flex justify-content-between mt-4">
-
-                            <a href="{% url 'payment_list' %}"
-                               class="btn btn-secondary">
-
-                                <i class="fas fa-arrow-left"></i>
-
-                                Back
-
-                            </a>
-
-                            <button
-                                type="submit"
-                                class="btn btn-success">
-
-                                <i class="fas fa-save"></i>
-
-                                {% if is_update %}
-
-                                    Update Payment
-
-                                {% else %}
-
-                                    Complete Payment
-
-                                {% endif %}
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</h3>
 
 </div>
 
-<script>
+<div class="card-body">
 
-document.addEventListener("DOMContentLoaded", function () {
+<form method="POST">
 
-    let amountField = document.getElementById("id_amount");
+{% csrf_token %}
 
-    if (amountField) {
+<div class="row">
 
-        amountField.addEventListener("input", function () {
+<div class="col-md-6">
 
-            if (parseFloat(this.value) < 0) {
+<h5 class="text-success mb-3">
 
-                alert("Amount cannot be negative.");
+Patient Information
 
-                this.value = "";
+</h5>
 
-            }
+<hr>
 
-        });
+<p>
 
-    }
+<strong>Patient :</strong>
 
-});
+{{ bill.appointment.patient.user.get_full_name }}
 
-</script>
+</p>
 
-<style>
+<p>
 
-.card{
+<strong>Doctor :</strong>
 
-    border-radius:15px;
+Dr. {{ bill.appointment.doctor.user.get_full_name }}
 
-}
+</p>
 
-.card-header{
+<p>
 
-    border-radius:15px 15px 0 0 !important;
+<strong>Department :</strong>
 
-}
+{{ bill.appointment.doctor.department.department_name }}
 
-.form-control,
-.form-select{
+</p>
 
-    border-radius:8px;
+<p>
 
-}
+<strong>Appointment Date :</strong>
 
-.btn{
+{{ bill.appointment.appointment_date }}
 
-    border-radius:8px;
+</p>
 
-    min-width:140px;
+</div>
 
-}
+<div class="col-md-6">
 
-.table th{
+<h5 class="text-success mb-3">
 
-    width:220px;
+Bill Information
 
-    font-weight:600;
+</h5>
 
-}
+<hr>
 
-</style>
+<p>
+
+<strong>Bill ID :</strong>
+
+#{{ bill.id }}
+
+</p>
+
+<p>
+
+<strong>Total Bill :</strong>
+
+<span class="fw-bold text-primary">
+
+₹ {{ bill.total_amount }}
+
+</span>
+
+</p>
+
+<p>
+
+<strong>Bill Status :</strong>
+
+{{ bill.payment_status }}
+
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<h5 class="text-success mb-3">
+
+Payment Details
+
+</h5>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Amount
+
+</label>
+
+{{ form.amount }}
+
+{% if form.amount.errors %}
+
+<div class="text-danger">
+
+{{ form.amount.errors }}
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Payment Method
+
+</label>
+
+{{ form.payment_method }}
+
+{% if form.payment_method.errors %}
+
+<div class="text-danger">
+
+{{ form.payment_method.errors }}
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Payment Status
+
+</label>
+
+{{ form.payment_status }}
+
+{% if form.payment_status.errors %}
+
+<div class="text-danger">
+
+{{ form.payment_status.errors }}
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Received By
+
+</label>
+
+{{ form.received_by }}
+
+{% if form.received_by.errors %}
+
+<div class="text-danger">
+
+{{ form.received_by.errors }}
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="col-12">
+
+<label class="form-label">
+
+Remarks
+
+</label>
+
+{{ form.remarks }}
+
+{% if form.remarks.errors %}
+
+<div class="text-danger">
+
+{{ form.remarks.errors }}
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="alert alert-info">
+
+<i class="fas fa-info-circle"></i>
+
+Transaction ID and Receipt Number will be generated automatically after payment submission.
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<a
+href="{% url 'payment_list' %}"
+class="btn btn-secondary">
+
+<i class="fas fa-arrow-left"></i>
+
+Back
+
+</a>
+
+<button
+type="submit"
+class="btn btn-success">
+
+<i class="fas fa-save"></i>
+
+{% if is_update %}
+
+Update Payment
+
+{% else %}
+
+Create Payment
+
+{% endif %}
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 {% endblock %}

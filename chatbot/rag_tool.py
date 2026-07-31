@@ -1,18 +1,3 @@
-"""
-chatbot/rag_tool.py
-RAG pipeline for hospital FAQ / general info, using:
-    - Hugging Face embeddings (sentence-transformers, free & local)
-    - FAISS vector store (local, no external DB needed)
-
-This becomes the 5th tool for the LangChain agent, so it can answer
-questions like "What are your OPD hours?" or "What's your cancellation
-policy?" grounded in real clinic data instead of hallucinating.
-
-Build the index first:
-    python manage.py build_knowledge_base
-    python manage.py shell -c "from chatbot.rag_tool import build_vectorstore; build_vectorstore()"
-"""
-
 import os
 
 from django.conf import settings
