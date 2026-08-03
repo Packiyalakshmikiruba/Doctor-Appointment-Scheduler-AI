@@ -16,6 +16,7 @@ from hospital.models import (
 from patients.models import Patient
 from appointments.models import Appointment
 from billing.models import Bill
+
 # =====================================================
 # ML MODEL LOADING
 # =====================================================
